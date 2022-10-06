@@ -117,7 +117,7 @@ rubella_uk_1986_1987 <- read.table(
     "data-raw\\serobook_data\\Rubella-UK.dat",
     header = TRUE
 )
-rubella_uk_1986_1987 %>%
+rubella_uk_1986_1987 <- rubella_uk_1986_1987 %>%
     mutate(age = Age, pos = Pos, tot = Pos + Neg, .keep = "none")
 use_data(rubella_uk_1986_1987, overwrite = TRUE)
 
