@@ -1,10 +1,10 @@
-#' Serological survey data of infectious diseases
-#'
-#' These samples are cross-sectional surveys providing information about
-#' whether or not the individual has been infected before that time point.
-#' The data is taken from "Modeling Infectious Disease Parameters Based on
-#' Serological and Social Contact Data" - N. Hens et al. 2013
-#' data are normalized and cleaned for the purpose of this package
+# Serological survey data of infectious diseases
+#
+# These samples are cross-sectional surveys providing information about
+# whether or not the individual has been infected before that time point.
+# The data is taken from "Modeling Infectious Disease Parameters Based on
+# Serological and Social Contact Data" - N. Hens et al. 2013
+# data are normalized and cleaned for the purpose of this package
 
 
 #' Hepatitis A serological data from Belgium in 1993 and 1994 (aggregated)
