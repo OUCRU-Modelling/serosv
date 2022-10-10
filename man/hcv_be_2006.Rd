@@ -18,8 +18,7 @@ M., Molenberghs, G., Van Damme, P. and Buntinx, F. (2006), Evidence for
 a substantial role of sharing of injecting paraphernalia other than
 syringes/needles to the spread of hepatitis C among injecting drug users.
 Journal of Viral Hepatitis, 13: 560-570.
-\link[https://doi.org/10.1111/j.1365-2893.2006.00725.x]
-{https://doi.org/10.1111/j.1365-2893.2006.00725.x}
+\link[https://doi.org/10.1111/j.1365-2893.2006.00725.x]{https://doi.org/10.1111/j.1365-2893.2006.00725.x}
 }
 \usage{
 hcv_be_2006

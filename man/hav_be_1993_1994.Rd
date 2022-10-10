@@ -15,8 +15,7 @@ A data frame with 3 variables:
 \source{
 Beutels, M., Van Damme, P., Aelvoet, W. et al. Prevalence of
 hepatitis A, B and C in the Flemish population. Eur J Epidemiol 13,
-275–280 (1997). \link[https://doi.org/10.1023/A:1007393405966]
-{https://doi.org/10.1023/A:1007393405966}
+275–280 (1997). \link[https://doi.org/10.1023/A:1007393405966]{https://doi.org/10.1023/A:1007393405966}
 }
 \usage{
 hav_be_1993_1994
@@ -24,5 +23,11 @@ hav_be_1993_1994
 \description{
 A study of the prevalence of HAV antibodies conducted in the Flemish
 Community of Belgium in 1993 and early 1994
+}
+\examples{
+library(serosv)
+age <- hav_be_1993_1994$age
+seroprev <- hav_be_1993_1994$pos / hav_be_1993_1994$tot
+plot(age, seroprev)
 }
 \keyword{datasets}

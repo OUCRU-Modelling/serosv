@@ -20,8 +20,7 @@
 #' }
 #' @source Beutels, M., Van Damme, P., Aelvoet, W. et al. Prevalence of
 #' hepatitis A, B and C in the Flemish population. Eur J Epidemiol 13,
-#' 275–280 (1997). \link[https://doi.org/10.1023/A:1007393405966]
-#' {https://doi.org/10.1023/A:1007393405966}
+#' 275–280 (1997). \link[https://doi.org/10.1023/A:1007393405966]{https://doi.org/10.1023/A:1007393405966}
 "hav_be_1993_1994"
 
 #' Hepatitis A serological data from Belgium in 2002 (line listing)
@@ -38,8 +37,7 @@
 #' @source Thiry, N., Beutels, P., Shkedy, Z. et al. The seroepidemiology
 #' of primary varicella-zoster virus infection in Flanders (Belgium).
 #' Eur J Pediatr 161, 588–593 (2002).
-#' \link[https://doi.org/10.1007/s00431-002-1053-2]
-#' {https://doi.org/10.1007/s00431-002-1053-2}
+#' \link[https://doi.org/10.1007/s00431-002-1053-2]{https://doi.org/10.1007/s00431-002-1053-2}
 "hav_be_2002"
 
 #' Hepatitis A serological data from Bulgaria in 1964 (aggregated)
@@ -95,8 +93,7 @@
 #' a substantial role of sharing of injecting paraphernalia other than
 #' syringes/needles to the spread of hepatitis C among injecting drug users.
 #' Journal of Viral Hepatitis, 13: 560-570.
-#' \link[https://doi.org/10.1111/j.1365-2893.2006.00725.x]
-#' {https://doi.org/10.1111/j.1365-2893.2006.00725.x}
+#' \link[https://doi.org/10.1111/j.1365-2893.2006.00725.x]{https://doi.org/10.1111/j.1365-2893.2006.00725.x}
 "hcv_be_2006"
 
 #' Mumps serological data from the UK in 1986 and 1987 (aggregated)
@@ -113,8 +110,7 @@
 #' }
 #' @source  Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
 #' antibody to measles, mumps, and rubella by age. British Medical Journal
-#' 1988; 297 :770 \link[https://doi.org/10.1136/bmj.297.6651.770]
-#' {https://doi.org/10.1136/bmj.297.6651.770}
+#' 1988; 297 :770 \link[https://doi.org/10.1136/bmj.297.6651.770]{https://doi.org/10.1136/bmj.297.6651.770}
 "mumps_uk_1986_1987"
 
 #' Parvo B19 serological data from Belgium from 2001-2003 (line listing)
@@ -136,8 +132,7 @@
 #' B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
 #' European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 #' of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
-#' \link[http://doi.org/10.1017/S0950268807009661]
-#' {http://doi.org/10.1017/S0950268807009661}
+#' \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 "parvob19_be_2001_2003"
 
 #' Parvo B19 serological data from England and Wales in 1996 (line listing)
@@ -159,8 +154,7 @@
 #' B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
 #' European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 #' of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
-#' \link[http://doi.org/10.1017/S0950268807009661]
-#' {http://doi.org/10.1017/S0950268807009661}
+#' \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 "parvob19_ew_1996"
 
 #' Parvo B19 serological data from Finland from 1997-1998 (line listing)
@@ -182,8 +176,7 @@
 #' B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
 #' European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 #' of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
-#' \link[http://doi.org/10.1017/S0950268807009661]
-#' {http://doi.org/10.1017/S0950268807009661}
+#' \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 "parvob19_fi_1997_1998"
 
 #' Parvo B19 serological data from Italy from 2003-2004 (line listing)
@@ -205,8 +198,7 @@
 #' B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
 #' European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 #' of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
-#' \link[http://doi.org/10.1017/S0950268807009661]
-#' {http://doi.org/10.1017/S0950268807009661}
+#' \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 "parvob19_it_2003_2004"
 
 #' Parvo B19 serological data from Poland from 1995-2004 (line listing)
@@ -228,8 +220,7 @@
 #' B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
 #' European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 #' of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
-#' \link[http://doi.org/10.1017/S0950268807009661]
-#' {http://doi.org/10.1017/S0950268807009661}
+#' \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 "parvob19_pl_1995_2004"
 
 #' Rubella serological data from the UK in 1986 and 1987 (aggregated)
@@ -245,8 +236,7 @@
 #' }
 #' @source  Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
 #' antibody to measles, mumps, and rubella by age. British Medical Journal
-#' 1988; 297 :770 \link[https://doi.org/10.1136/bmj.297.6651.770]
-#' {https://doi.org/10.1136/bmj.297.6651.770}
+#' 1988; 297 :770 \link[https://doi.org/10.1136/bmj.297.6651.770]{https://doi.org/10.1136/bmj.297.6651.770}
 "rubella_uk_1986_1987"
 
 #' Tuberculosis serological data from the Netherlands 1966-1973 (aggregated)
@@ -265,8 +255,7 @@
 #' @source Nagelkerke, N., Heisterkamp, S., Borgdorff, M., Broekmans, J. and
 #' Van Houwelingen, H. (1999), Semi-parametric estimation of age–time specific
 #' infection incidence from serial prevalence data. Statist. Med., 18: 307-320.
-#' \link[https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z]
-#' {https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z}
+#' \link[https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z]{https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z}
 "tb_nl_1966_1973"
 
 #' VZV serological data from Belgium (Flanders) from 1999-2000 (aggregated)
@@ -284,8 +273,7 @@
 #' @source Thiry, N., Beutels, P., Shkedy, Z. et al. The seroepidemiology
 #' of primary varicella-zoster virus infection in Flanders (Belgium).
 #' Eur J Pediatr 161, 588–593 (2002).
-#' \link[https://doi.org/10.1007/s00431-002-1053-2]
-#' {https://doi.org/10.1007/s00431-002-1053-2}
+#' \link[https://doi.org/10.1007/s00431-002-1053-2]{https://doi.org/10.1007/s00431-002-1053-2}
 "vzv_be_1999_2000"
 
 #' VZV serological data from Belgium from 2001-2003 (line listing)
@@ -304,6 +292,5 @@
 #' B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
 #' European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 #' of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
-#' \link[http://doi.org/10.1017/S0950268807009661]
-#' {http://doi.org/10.1017/S0950268807009661}
+#' \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 "vzv_be_2001_2003"
