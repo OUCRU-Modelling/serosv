@@ -14,9 +14,10 @@ A data frame with 4 variables:
 }
 }
 \source{
-<Mukomolov, S., et al. Viral hepatitis in Russian federation. An
-analytical overview. Technical Report 213 (3), 3rd edn. St Petersburg Pasteur
-Institute, St Petersburg, 2000.>
+Mukomolov, S., L. Shliakhtenko, I. Levakova, and E. Shargorodskaya.
+Viral hepatitis in Russian federation. An analytical overview. Technical
+Report 213 (3), 3rd edn. St Petersburg Pasteur Institute,
+St Petersburg, 2000.
 }
 \usage{
 hbv_ru_1999

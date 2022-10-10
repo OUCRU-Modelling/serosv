@@ -13,7 +13,10 @@ A data frame with 3 variables:
 }
 }
 \source{
-<https://doi.org/10.1023/A:1007393405966>
+Beutels, M., Van Damme, P., Aelvoet, W. et al. Prevalence of
+hepatitis A, B and C in the Flemish population. Eur J Epidemiol 13,
+275–280 (1997). \link[https://doi.org/10.1023/A:1007393405966]
+{https://doi.org/10.1023/A:1007393405966}
 }
 \usage{
 hav_be_1993_1994

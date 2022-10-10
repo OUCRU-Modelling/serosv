@@ -13,7 +13,11 @@ A data frame with 3 variables:
 }
 }
 \source{
-<https://doi.org/10.1007/s00431-002-1053-2>
+Thiry, N., Beutels, P., Shkedy, Z. et al. The seroepidemiology
+of primary varicella-zoster virus infection in Flanders (Belgium).
+Eur J Pediatr 161, 588–593 (2002).
+\link[https://doi.org/10.1007/s00431-002-1053-2]
+{https://doi.org/10.1007/s00431-002-1053-2}
 }
 \usage{
 vzv_be_1999_2000
