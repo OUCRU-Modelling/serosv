@@ -29,4 +29,16 @@ were interviewed by means of a standardized face-to-face interview and
 information on their socio-demographic status, drug use history, drug use,
 and related risk behavior was recorded
 }
+\examples{
+# Reproduce Fig 4.3, p. 66
+dur <- hcv_be_2006$dur
+pos <- hcv_be_2006$pos
+tot <- hcv_be_2006$tot
+plot(
+  dur, pos / tot,
+  cex = 0.07 * tot, pch = 16, xlab = "duration of injection (years)",
+  ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+)
+
+}
 \keyword{datasets}

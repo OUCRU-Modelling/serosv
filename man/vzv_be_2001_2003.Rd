@@ -15,9 +15,9 @@ A data frame with 4 variables:
 }
 \source{
 MOSSONG, J., N. HENS, V. FRIEDERICHS, I. DAVIDKIN, M. BROMAN,
-B. LITWINSKA, J. SIENNICKA, et al. “Parvovirus B19 Infection in Five
+B. LITWINSKA, J. SIENNICKA, et al. "Parvovirus B19 Infection in Five
 European Countries: Seroepidemiology, Force of Infection and Maternal Risk
-of Infection.” Epidemiology and Infection 136, no. 8 (2008): 1059–68.
+of Infection." Epidemiology and Infection 136, no. 8 (2008): 1059-68.
 \link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 }
 \usage{
@@ -26,5 +26,18 @@ vzv_be_2001_2003
 \description{
 The survey is the same as the one used to study the seroprevalence of
 parvovirus B19 in Belgium, as described above.
+}
+\examples{
+# Reproduce Fig 4.7 (right panel), p.71
+library(dplyr)
+df <- vzv_be_2001_2003 \%>\%
+  mutate(age = round(age)) \%>\%
+  group_by(age) \%>\%
+  summarise(pos = sum(seropositive), tot = n())
+plot(df$age, df$pos / df$tot,
+  cex = 0.036 * df$tot, pch = 19, xlab = "age", ylab = "seroprevalence",
+  xlim = c(0, 45), ylim = c(0, 1)
+)
+
 }
 \keyword{datasets}

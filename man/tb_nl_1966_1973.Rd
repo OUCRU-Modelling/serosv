@@ -16,7 +16,7 @@ A data frame with 5 variables:
 }
 \source{
 Nagelkerke, N., Heisterkamp, S., Borgdorff, M., Broekmans, J. and
-Van Houwelingen, H. (1999), Semi-parametric estimation of age–time specific
+Van Houwelingen, H. (1999), Semi-parametric estimation of age-time specific
 infection incidence from serial prevalence data. Statist. Med., 18: 307-320.
 \link[https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z]{https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z}
 }
@@ -26,5 +26,22 @@ tb_nl_1966_1973
 \description{
 A study of tuberculosis conducted in the Netherlands. Schoolchildren, aged
 between 6 and 18 years, were tested using the tuberculin skin test.
+}
+\examples{
+# Reproduce Fig 4.6, p.70
+age <- tb_nl_1966_1973$age
+birthyr <- tb_nl_1966_1973$birthyr
+pos <- tb_nl_1966_1973$pos
+tot <- tb_nl_1966_1973$tot
+# left panel
+plot(age, pos / tot,
+  pch = 16, cex = 0.00005 * tot, xlab = "age",
+  ylab = "prevalence", xlim = c(6, 18)
+)
+# right panel
+plot(birthyr, pos / tot,
+  pch = 16, cex = 0.00005 * tot, xlab = "year", ylab = "prevalence"
+)
+
 }
 \keyword{datasets}

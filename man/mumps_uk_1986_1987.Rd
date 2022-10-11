@@ -25,4 +25,15 @@ a large survey of prevalence of antibodies to mumps and rubella viruses in
 the UK. The survey, covering subjects from 1 to over 65 years of age,
 provides information on the prevalence of antibody by age
 }
+\examples{
+# Reproduce Fig 4.4 (left panel), p. 67
+age <- mumps_uk_1986_1987$age
+pos <- mumps_uk_1986_1987$pos
+tot <- mumps_uk_1986_1987$tot
+plot(age, pos / tot,
+  cex = 0.008 * tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+  xlim = c(0, 45), ylim = c(0, 1)
+)
+
+}
 \keyword{datasets}

@@ -26,4 +26,21 @@ hbv_ru_1999
 A seroprevalence study conducted in St. Petersburg
 (more information in the book)
 }
+\examples{
+# Reproduce Fig 4.2, p. 65
+library(dplyr)
+hbv_ru_1999$age <- trunc(hbv_ru_1999$age / 1) * 1
+hbv_ru_1999$age[hbv_ru_1999$age > 40] <- trunc(
+  hbv_ru_1999$age[hbv_ru_1999$age > 40] / 5
+) * 5
+df <- hbv_ru_1999 \%>\%
+  group_by(age) \%>\%
+  summarise(pos = sum(pos), tot = sum(tot))
+plot(
+  df$age, df$pos / df$tot,
+  cex = 0.05 * df$tot, pch = 16, xlab = "age",
+  ylab = "seroprevalence", xlim = c(0, 72)
+)
+
+}
 \keyword{datasets}
