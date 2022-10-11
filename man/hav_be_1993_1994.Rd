@@ -13,7 +13,9 @@ A data frame with 3 variables:
 }
 }
 \source{
-<https://doi.org/10.1023/A:1007393405966>
+Beutels, M., Van Damme, P., Aelvoet, W. et al. Prevalence of
+hepatitis A, B and C in the Flemish population. Eur J Epidemiol 13,
+275-280 (1997). \link[https://doi.org/10.1023/A:1007393405966]{https://doi.org/10.1023/A:1007393405966}
 }
 \usage{
 hav_be_1993_1994
@@ -21,5 +23,17 @@ hav_be_1993_1994
 \description{
 A study of the prevalence of HAV antibodies conducted in the Flemish
 Community of Belgium in 1993 and early 1994
+}
+\examples{
+# Reproduce Fig 4.1 (upper left panel), p. 63
+age <- hav_be_1993_1994$age
+pos <- hav_be_1993_1994$pos
+tot <- hav_be_1993_1994$tot
+plot(
+  age, pos / tot,
+  pty = "s", cex = 0.06 * tot, pch = 16, xlab = "age",
+  ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+)
+
 }
 \keyword{datasets}

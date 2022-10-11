@@ -13,7 +13,12 @@ A data frame with 3 variables:
 }
 }
 \source{
-<https://doi.org/10.1111/j.1365-2893.2006.00725.x>
+Mathei, C., Shkedy, Z., Denis, B., Kabali, C., Aerts,
+M., Molenberghs, G., Van Damme, P. and Buntinx, F. (2006), Evidence for
+a substantial role of sharing of injecting paraphernalia other than
+syringes/needles to the spread of hepatitis C among injecting drug users.
+Journal of Viral Hepatitis, 13: 560-570.
+\link[https://doi.org/10.1111/j.1365-2893.2006.00725.x]{https://doi.org/10.1111/j.1365-2893.2006.00725.x}
 }
 \usage{
 hcv_be_2006
@@ -23,5 +28,17 @@ A study of HCV infection among injecting drug users. All injecting drug users
 were interviewed by means of a standardized face-to-face interview and
 information on their socio-demographic status, drug use history, drug use,
 and related risk behavior was recorded
+}
+\examples{
+# Reproduce Fig 4.3, p. 66
+dur <- hcv_be_2006$dur
+pos <- hcv_be_2006$pos
+tot <- hcv_be_2006$tot
+plot(
+  dur, pos / tot,
+  cex = 0.07 * tot, pch = 16, xlab = "duration of injection (years)",
+  ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+)
+
 }
 \keyword{datasets}

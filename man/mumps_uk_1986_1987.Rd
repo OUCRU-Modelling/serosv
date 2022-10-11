@@ -13,7 +13,9 @@ A data frame with 3 variables:
 }
 }
 \source{
-<https://doi.org/10.1136/bmj.297.6651.770>
+Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
+antibody to measles, mumps, and rubella by age. British Medical Journal
+1988; 297 :770 \link[https://doi.org/10.1136/bmj.297.6651.770]{https://doi.org/10.1136/bmj.297.6651.770}
 }
 \usage{
 mumps_uk_1986_1987
@@ -22,5 +24,16 @@ mumps_uk_1986_1987
 a large survey of prevalence of antibodies to mumps and rubella viruses in
 the UK. The survey, covering subjects from 1 to over 65 years of age,
 provides information on the prevalence of antibody by age
+}
+\examples{
+# Reproduce Fig 4.4 (left panel), p. 67
+age <- mumps_uk_1986_1987$age
+pos <- mumps_uk_1986_1987$pos
+tot <- mumps_uk_1986_1987$tot
+plot(age, pos / tot,
+  cex = 0.008 * tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+  xlim = c(0, 45), ylim = c(0, 1)
+)
+
 }
 \keyword{datasets}

@@ -15,7 +15,11 @@ A data frame with 5 variables:
 }
 }
 \source{
-<http://doi.org/10.1017/S0950268807009661>
+MOSSONG, J., N. HENS, V. FRIEDERICHS, I. DAVIDKIN, M. BROMAN,
+B. LITWINSKA, J. SIENNICKA, et al. "Parvovirus B19 Infection in Five
+European Countries: Seroepidemiology, Force of Infection and Maternal Risk
+of Infection." Epidemiology and Infection 136, no. 8 (2008): 1059-68.
+\link[http://doi.org/10.1017/S0950268807009661]{http://doi.org/10.1017/S0950268807009661}
 }
 \usage{
 parvob19_ew_1996
@@ -25,5 +29,21 @@ A seroprevalence survey testing for parvovirus B19 IgG antibody, performed on
 large representative national serum banks in Belgium, England and Wales,
 Finland, Italy, and Poland. The sera were collected between 1995 and 2004 and
 were obtained from residual sera submitted for routine laboratory testing.
+}
+\examples{
+# Reproduce Fig 4.5 (right upper panel), p. 68
+# NB: This figure will look different to that of in the book, since we
+# believe that the original authors has made some errors in specifying
+# the sample size of the dots.
+library(dplyr)
+df <- parvob19_ew_1996 \%>\%
+  mutate(age = round(age)) \%>\%
+  group_by(age) \%>\%
+  summarise(pos = sum(seropositive), tot = n())
+plot(df$age, df$pos / df$tot,
+  cex = 0.02 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+  xlim = c(0, 82), ylim = c(0, 1)
+)
+
 }
 \keyword{datasets}
