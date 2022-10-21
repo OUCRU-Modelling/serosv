@@ -129,7 +129,7 @@
 #' St Petersburg, 2000.
 "hbv_ru_1999"
 
-#' Hepatitis C serological data from Belgium in 2006 (aggregated)
+#' Hepatitis C serological data from Belgium in 2006 (line listing)
 #'
 #' A study of HCV infection among injecting drug users. All injecting drug users
 #' were interviewed by means of a standardized face-to-face interview and
@@ -139,18 +139,33 @@
 #' @format A data frame with 3 variables:
 #' \describe{
 #'  \item{dur}{Duration of injection/Exposure time (years)}
-#'  \item{pos}{Number of seropositive individuals}
-#'  \item{tot}{Total number of individuals surveyed}
+#'  \item{seropositive}{If the individual is seropositive or not}
 #' }
 #'
 #' @examples
 #' # Reproduce Fig 4.3, p. 66
-#' dur <- hcv_be_2006$dur
-#' pos <- hcv_be_2006$pos
-#' tot <- hcv_be_2006$tot
+#' library(dplyr)
+#' # snapping age to aggregated age group
+#' # (credit: https://stackoverflow.com/a/12861810)
+#' groups <- c(0.5:24.5)
+#' range <- 0.5
+#' low <- findInterval(hcv_be_2006$dur, groups)
+#' high <- low + 1
+#' low_diff <- hcv_be_2006$dur - groups[ifelse(low == 0, NA, low)]
+#' high_diff <- groups[ifelse(high == 0, NA, high)] - hcv_be_2006$dur
+#' mins <- pmin(low_diff, high_diff, na.rm = TRUE)
+#' pick <- ifelse(!is.na(low_diff) & mins == low_diff, low, high)
+#' hcv_be_2006$dur <- ifelse(
+#'   mins <= range + .Machine$double.eps, groups[pick], hcv_be_2006$dur
+#' )
+#' hcv_be_2006 <- hcv_be_2006 %>%
+#'   group_by(dur) %>%
+#'   summarise(tot = n(), pos = sum(seropositive))
+#'
 #' plot(
-#'   dur, pos / tot,
-#'   cex = 0.07 * tot, pch = 16, xlab = "duration of injection (years)",
+#'   hcv_be_2006$dur, hcv_be_2006$pos / hcv_be_2006$tot,
+#'   cex = 0.1 * hcv_be_2006$tot, pch = 16,
+#'   xlab = "duration of injection (years)",
 #'   ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
 #' )
 #'
