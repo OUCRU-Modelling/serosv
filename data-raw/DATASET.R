@@ -48,11 +48,11 @@ use_data(hbv_ru_1999, overwrite = TRUE)
 ################ HEPATITIS C ################
 ## HCV in Belgium in 2006
 hcv_be_2006 <- read.table(
-    "data-raw\\serobook_datasets\\hcvdat.txt",
-    header = FALSE
+    "data-raw\\serobook_datasets\\hcv.txt",
+    header = TRUE
 )
 hcv_be_2006 <- hcv_be_2006 %>%
-    mutate(dur = V1, pos = V2 * V4, tot = V2, .keep = "none")
+    mutate(dur = d, seropositive = infect, .keep = "none")
 use_data(hcv_be_2006, overwrite = TRUE)
 
 
