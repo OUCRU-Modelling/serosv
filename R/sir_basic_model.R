@@ -57,9 +57,8 @@ plot_SIR_basic <- function(df)
 #   beta=0.0005,
 #   nu=1,
 #   N=5000,
-#   p=0.6
+#   p=0
 # )
 # times <- seq(0, 250, by=0.1)
 # df = get_SIR_basic(times, state, parameters)
 # plot_SIR_basic(df)
-
