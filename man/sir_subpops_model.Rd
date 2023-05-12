@@ -29,7 +29,7 @@ In \code{parameters}:
 
 - \code{mu}: natural death rate (1/L).
 
-- \code{beta}: transmission rate (= lambda/I)
+- \code{beta}: transmission rate w.r.t population (beta tilde)
 
 - \code{nu}: recovery rate
 

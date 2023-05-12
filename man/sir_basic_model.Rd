@@ -31,23 +31,20 @@ In \code{parameters}:
 
  - \code{mu}: natural death rate (= 1/life expectancy)
 
- - \code{beta}: transmission rate (= lambda/I)
+ - \code{beta}: transmission rate
 
  - \code{nu}: recovery rate
-
- - \code{N}: total population
 
  - \code{p}: percent of population vaccinated at birth
 }
 \examples{
 state <- c(S=4999, I=1, R=0)
 parameters <- c(
-  mu=1/75,
-  alpha=0,
-  beta=0.0005,
-  nu=1,
-  N=5000,
-  p=0
+  mu=1/75, # 1 divided by life expectancy (75 years old)
+  alpha=0, # no disease-related death
+  beta=0.0005, # transmission rate
+  nu=1, # 1 year for infected to recover
+  p=0 # no vaccination at birth
 )
 times <- seq(0, 250, by=0.1)
 model <- sir_basic_model(times, state, parameters)

@@ -15,11 +15,12 @@ RoxygenNote: 7.2.3
 Imports:
     deSolve
 Suggests: 
-    dplyr
+    dplyr,
+    testthat (>= 3.0.0)
 Collate: 
     'data.R'
     'hello.R'
-    'meisr_model.R'
+    'mseir_model.R'
     'sir_basic_model.R'
     'sir_static_model.R'
     'sir_subpops_model.R'
