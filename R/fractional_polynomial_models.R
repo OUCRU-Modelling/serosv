@@ -1,18 +1,11 @@
-# same function but now with powergrid as parameter
-# mc=monotonicity constraint, assumes x is ordered
-pow<-seq(-2,3,0.1)
-
 is_monotone <- function(model) {
   preds <- predict(model, type = "response")
   all(diff(preds) >= 0) || all(diff(preds) <= 0)
-  # (sum(diff(predict(model))<0)==0)
+  # alternative: (sum(diff(predict(model))<0)==0)
 }
 
-# keep
-formulate(c(-2,-2, 0, 0, 0))
-
 formulate <- function(powers) {
-  equation <- "cbind(pos,tot-pos)~-1"
+  equation <- "cbind(pos,tot-pos)~"
   prev_term <- ""
 
   for (i in 1:length(powers)) {
@@ -91,45 +84,17 @@ find_best_frac <- function(df, p, mc, n){
   return(list(power=p_best, deviance=d_best, model=glm_best))
 }
 
-# p_state <- rep(list(pow), 3)
-# p_state[1]
-
-seq(5, 1, -1)
-
-best_model <- hb93 %>%
-  find_best_frac(p=seq(-2,3,0.05), mc=T, n=2)
-# model <- list()
-
-foi.num<-function(x,p)
+# assuming age is sorted!!
+estimate_foi <- function(age,p)
 {
-  grid<-sort(unique(x))
-  pgrid<-(p[order(x)])[duplicated(sort(x))==F]
-  dp<-diff(pgrid)/diff(grid)
-  foi<-approx((grid[-1]+grid[-length(grid)])/2,dp,grid[c(-1,-length(grid))])$y/(1-pgrid[c(-1,-length(grid))])
-  return(list(grid=grid[c(-1,-length(grid))],foi=foi))
+  dp<-diff(p)/diff(age)
+  foi <- approx(
+    (age[-1]+age[-length(age)])/2,
+    dp,
+    age[c(-1,-length(age))]
+  )$y/(1-p[c(-1,-length(age))])
+  return(list(age=age[c(-1,-length(age))],foi=foi))
 }
-
-x <- hb93$age
-p <- fitted$info$fitted.values
-grid <- sort(unique(x))
-pgrid<-(p[order(x)])[duplicated(sort(x))==F]
-dp<-diff(pgrid)/diff(grid)
-foi <- approx(
-  (grid[-1]+grid[-length(grid)])/2,
-  dp,
-  grid[c(-1,-length(grid))])$y/(1-pgrid[c(-1,-length(grid))])
-
-grid[c(-1, -length(grid))]
-
-help("approx")
-
-hb93$age
-
-
-model_fp <- fp_model(best_model$power)
-fitted <- model_fp$fit(hb93)
-model <- glm(cbind(hb93$pos,hb93$tot-hb93$pos) ~ I(hb93$age^1.25) + I(hb93$age^1.3), family=binomial(link="logit"))
-foi <- foi.num(hb93$age, model$fitted.values)
 
 fp_model <- function(p) {
   model <- list()
@@ -140,25 +105,46 @@ fp_model <- function(p) {
         family=binomial(link="logit")
       )
       X <- generate_X(age)
-      print(X)
-      model$sp <- 1 - model$info$fitted.values
-      model$foi <- X%*%model$info$coefficients
-      model$df <- df
+      model$sp  <- model$info$fitted.values
+      model$foi <- est_foi(age, model$info$fitted.values)$foi
+      model$df  <- df
       model
     })
-  }
-  generate_X <- function(age) {
-    X <- matrix(nrow=length(age), ncol=length(p))
-    if (length(p) > 1) {
-      for (i in 1:length(p)) {
-        X[,i] <- i * age^(p[i]-1)
-      }
-    }
-    -X
   }
   model
 }
 
-m <- matrix(nrow = 10, ncol=5)
-m[,2] <- 88
-m
+plot_p_foi_wrt_age <- function(model)
+{
+  CEX_SCALER <- 4 # arbitrary number for better visual
+
+  with(model$df, {
+    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
+    plot(
+      age,
+      pos/tot,
+      cex=CEX_SCALER*tot/max(tot),
+      xlab="age", ylab="seroprevalence",
+      xlim=c(0, max(age)), ylim=c(0,1)
+    )
+    lines(age, model$sp, lwd=2)
+    lines(age, model$foi, lwd=2, lty=2)
+    axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
+    mtext(side=4, "force of infection", las=3, line=2)
+  })
+}
+
+hbe_best <- hav_be_1993_1994 %>%
+  find_best_frac(p=seq(-2,3,0.1), mc=T, n=2)
+hbe_best
+model_hbe <- fp_model(hbe_best$power)
+model_hbe_fitted <- model_hbe$fit(hav_be_1993_1994)
+model_hbe_est <- estimate_foi(hav_be_1993_1994$age, model_hbe_fitted$info$fitted.values)
+
+plot_p_foi_wrt_age(model_hbe_fitted)
+lines(model_hbe_est$age, model_hbe_est$foi, lwd=2, lty=2)
+axis(side=4, at=round(seq(0.0, max(model_hbe_est$foi), length.out=3), 2))
+mtext(side=4, "force of infection", las=3, line=2)
+
+
+
