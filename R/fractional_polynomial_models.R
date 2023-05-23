@@ -1,7 +1,5 @@
 is_monotone <- function(model) {
-  preds <- predict(model, type = "response")
-  all(diff(preds) >= 0) || all(diff(preds) <= 0)
-  # alternative: (sum(diff(predict(model))<0)==0)
+  (sum(diff(predict(model))<0)==0)
 }
 
 formulate <- function(powers) {
@@ -22,7 +20,27 @@ formulate <- function(powers) {
   equation
 }
 
-find_best_frac <- function(df, p, mc, n){
+#' Returns the powers of the GLM fitted model which has the lowest deviance score.
+#'
+#' Refers to section 6.2.
+#'
+#' @param df the data to be fitted. MUST have `pos`, `tot`, and `age` columns.
+#'
+#' @param p a powers sequence.
+#'
+#' @param mc indicates if the returned model should be monotonic.
+#'
+#' @param degree the degree of the model. Recommended to be <= 2.
+#'
+#' @param link the link function. Defaulted to "logit".
+#'
+#' @examples
+#' hbe_best <- hav_be_1993_1994 %>%
+#'   find_best_fp_powers(p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog")
+#' hbe_best
+#'
+#' @export
+find_best_fp_powers <- function(df, p, mc, degree, link="logit"){
   pos <- df$pos
   tot <- df$tot
   age <- df$age
@@ -33,13 +51,13 @@ find_best_frac <- function(df, p, mc, n){
   #----
   min_p <- 1
   max_p <- length(p)
-  state <- rep(min_p, n)
-  i <- n
+  state <- rep(min_p, degree)
+  i <- degree
   #----
 
   get_cur_p <- function(cur_state) {
     cur_p <- c()
-    for (i in 1:n) {
+    for (i in 1:degree) {
       cur_p <- c(cur_p, p[cur_state[i]])
     }
     cur_p
@@ -47,14 +65,14 @@ find_best_frac <- function(df, p, mc, n){
 
   repeat {
     if (
-      (i < n && state[i] == max_p)
-      || (i == n && state[i] == max_p+1)
+      (i < degree && state[i] == max_p)
+      || (i == degree && state[i] == max_p+1)
     ) {
       if (i-1 == 0) break
       if (state[i-1] < max_p) {
         state[i-1] <- state[i-1]+1
-        for (j in i:n) state[j] <- state[i-1]
-        i <- n
+        for (j in i:degree) state[j] <- state[i-1]
+        i <- degree
       } else {
         i <- i-1
         next
@@ -65,7 +83,7 @@ find_best_frac <- function(df, p, mc, n){
 
     glm_cur <- glm(
       as.formula(formulate(p_cur)),
-      family=binomial(link="logit")
+      family=binomial(link=link)
     )
     if (glm_cur$converged == TRUE) {
       d_cur <- deviance(glm_cur)
@@ -85,66 +103,45 @@ find_best_frac <- function(df, p, mc, n){
 }
 
 # assuming age is sorted!!
-estimate_foi <- function(age,p)
+estimate_foi <- function(age, sp)
 {
-  dp<-diff(p)/diff(age)
+  dsp <- diff(sp)/diff(age)
   foi <- approx(
     (age[-1]+age[-length(age)])/2,
-    dp,
+    dsp,
     age[c(-1,-length(age))]
   )$y/(1-p[c(-1,-length(age))])
-  return(list(age=age[c(-1,-length(age))],foi=foi))
+
+  foi
 }
 
-fp_model <- function(p) {
+#' A fractional polynomial model.
+#'
+#' Refers to section 6.2.
+#'
+#' @param p the powers of the predictor.
+#'
+#' @param link the link function for model. Defaulted to "logit".
+#'
+#' @examples
+#' model <- fp_model(c(1.5, 1.6), link="cloglog")
+#' model
+#'
+#' @export
+fp_model <- function(p, link="logit") {
   model <- list()
   model$fit <- function(df) {
     with(df, {
       model$info <- glm(
         as.formula(formulate(p)),
-        family=binomial(link="logit")
+        family=binomial(link=link)
       )
       X <- generate_X(age)
       model$sp  <- model$info$fitted.values
-      model$foi <- est_foi(age, model$info$fitted.values)$foi
+      model$foi <- estimate_foi(age, model$info$fitted.values)
       model$df  <- df
       model
     })
   }
   model
 }
-
-plot_p_foi_wrt_age <- function(model)
-{
-  CEX_SCALER <- 4 # arbitrary number for better visual
-
-  with(model$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, model$sp, lwd=2)
-    lines(age, model$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
-  })
-}
-
-hbe_best <- hav_be_1993_1994 %>%
-  find_best_frac(p=seq(-2,3,0.1), mc=T, n=2)
-hbe_best
-model_hbe <- fp_model(hbe_best$power)
-model_hbe_fitted <- model_hbe$fit(hav_be_1993_1994)
-model_hbe_est <- estimate_foi(hav_be_1993_1994$age, model_hbe_fitted$info$fitted.values)
-
-plot_p_foi_wrt_age(model_hbe_fitted)
-lines(model_hbe_est$age, model_hbe_est$foi, lwd=2, lty=2)
-axis(side=4, at=round(seq(0.0, max(model_hbe_est$foi), length.out=3), 2))
-mtext(side=4, "force of infection", las=3, line=2)
-
-
-

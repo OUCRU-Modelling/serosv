@@ -1,4 +1,16 @@
-
+#' Plot the prevalence and force of infection against age.
+#'
+#' Refers to section 6.1.2.
+#'
+#' @param model a model returned from this package's function.
+#'
+#' @examples
+#' model <- weibull_model()
+#' hcv_df %>%
+#'   model$fit() %>%
+#'   plot_p_foi_wrt_dur()
+#'
+#' @export
 plot_p_foi_wrt_dur <- function(model)
 {
   CEX_SCALER <- 4 # arbitrary number for better visual
@@ -19,26 +31,16 @@ plot_p_foi_wrt_dur <- function(model)
   })
 }
 
-detransform <- function(hcv_df) {
-  hcv_dur <- c()
-  hcv_sp <- c()
-
-  for (i in 1:nrow(hcv_df)) {
-    row <- hcv_df[i, ]
-    hcv_dur <- c(hcv_dur, rep(row$age, row$tot))
-    if (row$pos > 0) {
-      hcv_sp <- c(hcv_sp, rep(1, row$pos))
-    }
-    if (row$tot - row$pos > 0) {
-      hcv_sp <- c(hcv_sp, rep(0, row$tot - row$pos))
-    }
-  }
-  data.frame(
-    dur = hcv_dur,
-    seropositive = hcv_sp
-  )
-}
-
+#' The Weibull model.
+#'
+#' Refers to section 6.1.2.
+#'
+#' @examples
+#' hbe_best <- hav_be_1993_1994 %>%
+#'   find_best_fp_powers(p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog")
+#' hbe_best
+#'
+#' @export
 weibull_model <- function()
 {
   model <- list()
@@ -62,7 +64,18 @@ weibull_model <- function()
   model
 }
 
-library(dplyr)
+
+#' Transform the hcv_be_2006 dataframe.
+#'
+#' @param df the hcv_be_2006 dataframe.
+#'
+#' @examples
+#' hcv_df <- transform_hcv(hcv_be_2006)
+#' hcv_df
+#'
+#' @importFrom dplyr group_by
+#'
+#' @export
 transform_hcv <- function(df) {
   # df$dur <- ceiling(df$dur)
   df_agg <- df %>%
@@ -74,8 +87,6 @@ transform_hcv <- function(df) {
   names(df_agg)[names(df_agg) == "dur"] <- "age"
   df_agg
 }
-hcv_df <- transform_hcv(hcv_be_2006)
-hcv_df
 
 detransform <- function(hcv_df) {
   hcv_dur <- c()
@@ -96,13 +107,3 @@ detransform <- function(hcv_df) {
     seropositive = hcv_sp
   )
 }
-
-model_wei <- weibull_model()
-
-hcv_df %>%
-  model_wei$fit() %>%
-  plot_p_foi_wrt_dur()
-
-fitted_model <- model_wei$fit(hcv_df)
-fitted_model$info
-
