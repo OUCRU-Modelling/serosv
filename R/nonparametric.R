@@ -44,3 +44,48 @@ lp_model <- function(kern="tcub", nn=0, h=0, deg=2) {
   }
   model
 }
+
+#' Plotting GCV values with respect to different nn-s and h-s parameters.
+#'
+#' Refers to section 7.2.
+#'
+#' @param df The dataframe. MUST have `age`, `pos`, `tot` columns.
+#'
+#' @param nn_seq Nearest neighbor sequence.
+#'
+#' @param h_seq Smoothing parameter sequence.
+#'
+#' @param kern Weight function, default = "tcub".
+#' Other choices are "rect", "trwt", "tria", "epan", "bisq" and "gauss".
+#' Choices may be restricted when derivatives are required;
+#' e.g. for confidence bands and some bandwidth selectors.
+#'
+#' @param deg Degree of polynomial to use. Default: 2.
+#'
+#' @examples
+#' plot_gcv(
+#'   mumps_uk_1986_1987,
+#'   nn_seq = seq(0.2, 0.8, by=0.1),
+#'   h_seq = seq(5, 25, by=1)
+#' )
+#'
+#' @importFrom locfit gcvplot
+#'
+#' @export
+plot_gcv <- function(df, nn_seq, h_seq, kern="tcub", deg=2) {
+  par(mfrow=c(1,2),lwd=2,las=1,cex.axis=1,cex.lab=1.1,mgp=c(2,0.5, 0),mar=c(3.1,3.1,3.1,3))
+
+  with(df, {
+    y <- pos/tot
+    res = cbind(nn_seq, summary(gcvplot(y~age, family="binomial", alpha=nn_seq)))
+    plot(res[,1],res[,3],type="n",xlab="nn (% Neighbors)",ylab=" ")
+    lines(res[,1],res[,3])
+    mtext(side=2, "GCV", las=3, line=2.4, cex=0.9)
+
+    h_seq_ <- cbind(rep(0, length(h_seq)), h_seq)
+    res=cbind(h_seq_[,2],summary(gcvplot(y~age,family="binomial",alpha=h_seq_)))
+    plot(res[,1],res[,3],type="n",xlab="h (Bandwidth)",ylab=" ")
+    lines(res[,1],res[,3])
+    mtext(side=2, "GCV", las=3, line=3, cex=0.9)
+  })
+}
