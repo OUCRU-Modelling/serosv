@@ -33,9 +33,9 @@ lp_model <- function(kern="tcub", nn=0, h=0, deg=2) {
   model$fit <- function(df) {
     with(c(df, model$parameters), {
       y <- pos/tot
-      predictor <- lp(age, deg=deg, nn=nn, h=h)
-      lpfit   <- locfit(y~predictor, family="binomial", kern=kern)
-      lpfitd1 <- locfit(y~predictor, family="binomial", kern=kern, deriv=1)
+      estimator <- lp(age, deg=deg, nn=nn, h=h)
+      lpfit   <- locfit(y~estimator, family="binomial", kern=kern)
+      lpfitd1 <- locfit(y~estimator, family="binomial", kern=kern, deriv=1)
       model$sp <- fitted(lpfit)
       model$foi <- fitted(lpfitd1) * fitted(lpfit)
       model$df <- df
@@ -44,6 +44,13 @@ lp_model <- function(kern="tcub", nn=0, h=0, deg=2) {
   }
   model
 }
+windows(record=TRUE, width=5, height=5)
+par(las=1,cex.axis=1.1,cex.lab=1.1,lwd=3,mgp=c(3, 0.5, 0))
+
+model <- lp_model(h=14)
+mumps_uk_1986_1987 %>%
+  model$fit() %>%
+  plot_p_foi_wrt_age()
 
 #' Plotting GCV values with respect to different nn-s and h-s parameters.
 #'
