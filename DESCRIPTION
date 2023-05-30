@@ -15,6 +15,7 @@ RoxygenNote: 7.2.3
 Imports:
     deSolve
 Suggests: 
+    covr,
     dplyr,
     testthat (>= 3.0.0)
 Collate: 
