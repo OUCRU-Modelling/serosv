@@ -24,3 +24,4 @@ Collate:
     'sir_basic_model.R'
     'sir_static_model.R'
     'sir_subpops_model.R'
+Config/testthat/edition: 3
