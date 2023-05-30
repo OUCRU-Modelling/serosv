@@ -32,7 +32,6 @@ expit <- function(x)
 ### library Semipar: Ruppert et al. (2003)
 library(SemiPar)
 
-
 vzv_be_2001_2003 <- read.table(
   "/Users/thanhlongb/Projects/oucru/the-book/RCodeBook/Chapter4/VZV-B19-BE.dat",
   header = TRUE)
@@ -43,25 +42,32 @@ vzv_be_2001_2003 <- vzv_be_2001_2003 %>%
   ) %>%
   filter(!is.na(seropositive)) %>%
   relocate(gender, .after = seropositive)
-use_data(vzv_be_2001_2003, overwrite = TRUE)
+# use_data(vzv_be_2001_2003, overwrite = TRUE)
 
-head(vzv_be_2001_2003)
+vzv_be_2001_2003 <- vzv_be_2001_2003[order(vzv_be_2001_2003$age), ]
+
+vzv_be_2001_2003
 
 sp_model <- function(k, deg) {
   model <- list()
   model$parameters <- list(k=k, deg=deg)
   model$fit <- function(df) {
+    y = df$seropositive
     with(c(df, model$parameters), {
       n <- length(age)
-      # params naming must match for `spm()` to work
-      y <- seropositive
-      a <- age
-      knr <- k
-      # -----====
+      # Workaround as `spm()` get values from environment rather than passed in
+      assign("y_", seropositive, envir = globalenv())
+      assign("a_", age, envir = globalenv())
+      assign("k_", k, envir = globalenv())
+      assign("d_", deg, envir = globalenv())
+      # ----
       model$info <- spm(
-        y~f(a, degree=deg, basis="trunc.poly", knots=default.knots(a, knr)),
+        y_~f(a_, degree=d_, basis="trunc.poly", knots=default.knots(a_, k_)),
         family="binomial"
       )
+      # clean up
+      for (i in c("y_", "a_", "k_", "d_")) rm(i, envir = globalenv())
+      # ----
       u_k <- outer(age, default.knots(age, k), basis_fn)*t(
         matrix(
           rep(model$info$fit$coefficients$random$dummy.group.vec.Handan, n),
@@ -70,7 +76,7 @@ sp_model <- function(k, deg) {
       )
       model$semi_param_part <- apply(u_k, 1, sum)
       model$param_part <- (cbind(1, age, age^2, age^3)[, 1:(1+deg)]) %*% model$info$fit$coefficients$fixed
-      model$sp <- expit(model$semi_param_part + model$semi_param_part)
+      model$sp <- expit(model$param_part + model$semi_param_part)
       model$df <- df
       model
     })
@@ -78,32 +84,46 @@ sp_model <- function(k, deg) {
   model
 }
 
-model <- sp_model(k=3, deg=2)
+model <- sp_model(k=100, deg=2)
 model_fitted <- model$fit(vzv_be_2001_2003)
-
-
-plot(a, sp, ylim=c(0,1), xlab="age", type="l", lwd=2, ylab=expression(pi(age)))
-lines(a, expit(semi_param_part), lty=3, lwd=2)
-lines(a, expit(param_part), lty=2, lwd=2)
-
-foi.num<-function(x,p)
-{
-  grid<-sort(unique(x))
-  pgrid<-(p[order(x)])[duplicated(sort(x))==F]
-  dp<-diff(pgrid)/diff(grid)
-  foi<-approx((grid[-1]+grid[-length(grid)])/2,dp,grid[c(-1,-length(grid))])$y/(1-pgrid[c(-1,-length(grid))])
-  return(list(grid=grid[c(-1,-length(grid))],foi=foi))
-}
-
 model_fitted$foi <- foi.num(vzv_be_2001_2003$age, model_fitted$sp)
-
-length(expit(model_fitted$semi_param_part + model_fitted$param_part))
-length(model_fitted$foi)
 
 with(model_fitted, {
   par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
   plot(df$age, sp, ylim=c(0,1), xlab="age", type="l", lwd=2, ylab="sp")
   lines(foi$grid, foi$foi, lwd=2, lty=2)
-  axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
+  axis(side=4, at=round(seq(0.0, max(foi$foi), length.out=3), 2))
   mtext(side=4, "force of infection", las=3, line=2)
 })
+
+BICf <- function(fit)
+{
+  return(fit$deviance+log(length(fit$y))*(fit$nl.df+2))
+}
+
+best_smooth_spline <- function(df, d_seq, link) {
+  # d_seq: sequence of degrees of freedom
+  best_d <- NULL
+  best_BIC <- NULL
+  for (d in d_seq) {
+    fit <- with(df, {
+      gam(seropositive~s(age, df=d),family=binomial(link=link))
+    })
+    current_BIC <- BICf(fit)
+    if (is.null(best_BIC) || current_BIC < best_BIC) {
+      best_BIC <- current_BIC
+      best_d <- d
+    }
+  }
+
+  c(best_d, best_BIC)
+}
+
+library(gam)
+best <- best_smooth_spline(
+  vzv_be_2001_2003,
+  d_seq=seq(1, 10, by=0.5),
+  link="cloglog"
+  )
+best
+
