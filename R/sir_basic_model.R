@@ -61,18 +61,3 @@ sir_basic_model <- function(times, state, parameters)
 {
   as.data.frame(ode(y=state,times=times,func=sir_basic,parms=parameters))
 }
-
-# state <- c(S=4999, I=1, R=0)
-# parameters <- c(
-#   mu=1/75,
-#   alpha=0,
-#   beta=0.0005,
-#   nu=1,
-#   p=0
-# )
-# times <- seq(0, 1000, by=0.1)
-#
-# output <- sir_basic_model(times, state, parameters)
-# tail(output, 5)
-# length(output$s)
-# output[nrow(output)]
