@@ -1,6 +1,6 @@
 library(testthat)
 
-test_that("sir_basic_model returns same result as in the book", {
+test_that("sir_basic_model returns expected results", {
   S_equilibrium = 2026.67
   I_equilibrium =   39.12
   state <- c(S=4999, I=1, R=0)
