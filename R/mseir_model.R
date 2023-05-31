@@ -36,10 +36,10 @@ mseir_model <- function(a, gamma, lambda, sigma, nu)
     )
   data.frame(
     a =  c(0, a),
-    ma = c(1, ma),
-    sa = c(0, sa),
-    ea = c(0, ea),
-    ia = c(0, ia),
-    ra = c(0, ma - sa - ea - ia)
+    m = c(1, ma),
+    s = c(0, sa),
+    e = c(0, ea),
+    i = c(0, ia),
+    r = c(0, 1 - ma - sa - ea - ia)
   )
 }
