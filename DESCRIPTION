@@ -26,3 +26,4 @@ Collate:
     'sir_static_model.R'
     'sir_subpops_model.R'
 Config/testthat/edition: 3
+URL: https://oucru-modelling.github.io/serosv/
