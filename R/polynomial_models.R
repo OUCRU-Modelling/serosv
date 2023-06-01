@@ -1,34 +1,19 @@
-#' Plot the prevalence and force of infection against age.
-#'
-#' Refers to section 6.1.
-#'
-#' @param model a model returned from this package's function.
-#'
-#' @examples
-#' model <- polynomial_model(degree=3)
-#' hav_be_1993_1994 %>%
-#'   model$fit() %>%
-#'   plot_p_foi_wrt_age()
-#'
-#' @export
-plot_p_foi_wrt_age <- function(model)
-{
-  CEX_SCALER <- 4 # arbitrary number for better visual
+predictor <- function(degree) {
+  formula <- "cbind(tot-pos, pos)~-1"
+  for (i in 1:degree) {
+    formula <- paste0(formula, "+I(age^", i, ")")
+  }
+  formula
+}
 
-  with(model$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, model$sp, lwd=2)
-    lines(age, model$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
-  })
+X <- function(age, degree) {
+  X <- matrix(rep(1, length(age)), ncol = 1)
+  if (degree > 1) {
+    for (i in 2:degree) {
+      X <- cbind(X, i * age^(i-1))
+    }
+  }
+  -X
 }
 
 #' A polynomial model.
@@ -43,39 +28,49 @@ plot_p_foi_wrt_age <- function(model)
 #' grenfell_anderson_model <- polynomial_model(degree=3)
 #'
 #' @export
-polynomial_model <- function(degree) {
+polynomial_model <- function(age, pos, tot, deg=1) {
   model <- list()
-  model$fit <- function(df) {
-    with(df, {
-      model$info <- glm(
-        as.formula(linear_predictor_str()),
-        family=binomial(link="log")
-      )
-      X <- generate_X(age)
-      model$sp <- 1 - model$info$fitted.values
-      model$foi <- X%*%model$info$coefficients
-      model$df <- df
-      model
-    })
-  }
-  linear_predictor_str <- function() {
-    formula <- "cbind(tot-pos, pos)~-1"
-    for (i in 1:degree) {
-      formula <- paste0(formula, "+I(age^", i, ")")
-    }
-    formula
-  }
-  generate_X <- function(age) {
-    X <- matrix(rep(1, length(age)), ncol = 1)
-    if (degree > 1) {
-      for (i in 2:degree) {
-        X <- cbind(X, i * age^(i-1))
-      }
-    }
-    -X
-  }
+
+  f <- predictor(deg)
+  model$info <- glm(
+    as.formula(f),
+    family=binomial(link="log")
+  )
+  X <- X(age, deg)
+  model$sp <- 1 - model$info$fitted.values
+  model$foi <- X%*%model$info$coefficients
+  model$df <- list(age=age, pos=pos, tot=tot)
+
+  class(model) <- "polynomial_model"
   model
 }
+
+plot.polynomial_model <- function(x, ...) {
+  CEX_SCALER <- 4 # arbitrary number for better visual
+
+  with(x$df, {
+    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
+    plot(
+      age,
+      pos/tot,
+      cex=CEX_SCALER*tot/max(tot),
+      xlab="age", ylab="seroprevalence",
+      xlim=c(0, max(age)), ylim=c(0,1)
+    )
+    lines(age, x$sp, lwd=2)
+    lines(age, x$foi, lwd=2, lty=2)
+    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
+    mtext(side=4, "force of infection", las=3, line=2)
+  })
+}
+
+# df <- hav_bg_1964
+# with(df, {
+#   polynomial_model(age, pos, tot, deg=2) %>%
+#     plot()
+# })
+
+library(stats4)
 
 #' The Farrington (1990) model.
 #'
@@ -91,31 +86,73 @@ polynomial_model <- function(degree) {
 #' @importFrom stats4 mle
 #'
 #' @export
-farrington_model <- function(parameters)
+farrington_model <- function(age, pos, tot, start, fixed=list())
 {
-  model <- list()
-  model$parameters <- parameters
-  model$fit <- function(df) {
-    with(c(df, parameters), {
-      farrington <- function(alpha,beta,gamma) {
-        p=1-exp((alpha/beta)*age*exp(-beta*age)
-                +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)-gamma*age)
-        ll=pos*log(p)+(tot-pos)*log(1-p)
-        return(-sum(ll))
-      }
-
-      model$info <- mle(farrington, start=as.list(parameters))
-      alpha <- coef(model$info)[1]
-      beta  <- coef(model$info)[2]
-      gamma <- coef(model$info)[3]
-      model$sp <- 1-exp(
-        (alpha/beta)*age*exp(-beta*age)
-        +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)
-        -gamma*age)
-      model$foi <- (alpha*age-gamma)*exp(-beta*age)+gamma
-      model$df <- df
-      model
-    })
+  farrington <- function(alpha,beta,gamma) {
+    p=1-exp((alpha/beta)*age*exp(-beta*age)
+            +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)-gamma*age)
+    ll=pos*log(p)+(tot-pos)*log(1-p)
+    return(-sum(ll))
   }
+
+  model <- list()
+
+  model$info <- mle(farrington, fixed=fixed, start=start)
+  alpha <- coef(model$info)[1]
+  beta  <- coef(model$info)[2]
+  gamma <- coef(model$info)[3]
+  model$sp <- 1-exp(
+    (alpha/beta)*age*exp(-beta*age)
+    +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)
+    -gamma*age)
+  model$foi <- (alpha*age-gamma)*exp(-beta*age)+gamma
+  model$df <- list(age=age, pos=pos, tot=tot)
+
+  class(model) <- "farrington_model"
   model
 }
+
+plot.farrington_model <- function(x, ...) {
+  CEX_SCALER <- 4 # arbitrary number for better visual
+
+  with(x$df, {
+    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
+    plot(
+      age,
+      pos/tot,
+      cex=CEX_SCALER*tot/max(tot),
+      xlab="age", ylab="seroprevalence",
+      xlim=c(0, max(age)), ylim=c(0,1)
+    )
+    lines(age, x$sp, lwd=2)
+    lines(age, x$foi, lwd=2, lty=2)
+    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
+    mtext(side=4, "force of infection", las=3, line=2)
+  })
+}
+
+# df <- rubella_uk_1986_1987
+#
+# model1 <- with(df, {
+#   farrington_model(
+#     age=age, pos=pos, tot=tot,
+#     start=list(alpha=0.07,beta=0.1,gamma=0.03)
+#   )
+# })
+#
+# model2 <- with(df, {
+#   farrington_model(
+#     age=age, pos=pos, tot=tot,
+#     start=list(alpha=0.07,beta=0.1),
+#     fixed=list(gamma=0)
+#   )
+# })
+#
+# plot(model1)
+# plot(model2)
+#
+# a <- model2$info
+# methods(class = class(a))
+# show(a)
+# coef(a)[3]
+
