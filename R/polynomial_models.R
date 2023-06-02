@@ -6,16 +6,6 @@ predictor <- function(degree) {
   formula
 }
 
-X <- function(age, degree) {
-  X <- matrix(rep(1, length(age)), ncol = 1)
-  if (degree > 1) {
-    for (i in 2:degree) {
-      X <- cbind(X, i * age^(i-1))
-    }
-  }
-  -X
-}
-
 #' A polynomial model.
 #'
 #' Refers to section 6.1.1.
@@ -23,9 +13,12 @@ X <- function(age, degree) {
 #' @param degree the degree of the model.
 #'
 #' @examples
-#' muench_model <- polynomial_model(degree=1)
-#' griffiths_model <- polynomial_model(degree=2)
-#' grenfell_anderson_model <- polynomial_model(degree=3)
+#' df <- hav_bg_1964
+#' model <- polynomial_model(
+#'   df$age, df$pos, df$tot,
+#'   deg=2
+#'   )
+#' plot(model)
 #'
 #' @export
 polynomial_model <- function(age, pos, tot, deg=1) {
@@ -64,14 +57,6 @@ plot.polynomial_model <- function(x, ...) {
   })
 }
 
-# df <- hav_bg_1964
-# with(df, {
-#   polynomial_model(age, pos, tot, deg=2) %>%
-#     plot()
-# })
-
-library(stats4)
-
 #' The Farrington (1990) model.
 #'
 #' Refers to section 6.1.2.
@@ -79,9 +64,12 @@ library(stats4)
 #' @param parameters the parameters of the model.
 #'
 #' @examples
-#' parameters <- c(alpha=0.07,beta=0.1,gamma=0.03)
-#' model <- farrington_model(parameters)
-#' model
+#' df <- rubella_uk_1986_1987
+#' model <- farrington_model(
+#'   df$age, df$pos, df$tot,
+#'   start=list(alpha=0.07,beta=0.1,gamma=0.03)
+#'   )
+#' plot(model)
 #'
 #' @importFrom stats4 mle
 #'
@@ -130,29 +118,3 @@ plot.farrington_model <- function(x, ...) {
     mtext(side=4, "force of infection", las=3, line=2)
   })
 }
-
-# df <- rubella_uk_1986_1987
-#
-# model1 <- with(df, {
-#   farrington_model(
-#     age=age, pos=pos, tot=tot,
-#     start=list(alpha=0.07,beta=0.1,gamma=0.03)
-#   )
-# })
-#
-# model2 <- with(df, {
-#   farrington_model(
-#     age=age, pos=pos, tot=tot,
-#     start=list(alpha=0.07,beta=0.1),
-#     fixed=list(gamma=0)
-#   )
-# })
-#
-# plot(model1)
-# plot(model2)
-#
-# a <- model2$info
-# methods(class = class(a))
-# show(a)
-# coef(a)[3]
-

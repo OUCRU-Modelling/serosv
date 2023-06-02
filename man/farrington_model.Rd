@@ -4,7 +4,7 @@
 \alias{farrington_model}
 \title{The Farrington (1990) model.}
 \usage{
-farrington_model(parameters)
+farrington_model(age, pos, tot, start, fixed = list())
 }
 \arguments{
 \item{parameters}{the parameters of the model.}

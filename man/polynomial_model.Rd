@@ -4,7 +4,7 @@
 \alias{polynomial_model}
 \title{A polynomial model.}
 \usage{
-polynomial_model(degree)
+polynomial_model(age, pos, tot, deg = 1)
 }
 \arguments{
 \item{degree}{the degree of the model.}

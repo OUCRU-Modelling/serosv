@@ -2,17 +2,17 @@ is_monotone <- function(model) {
   (sum(diff(predict(model))<0)==0)
 }
 
-formulate <- function(powers) {
+formulate <- function(p) {
   equation <- "cbind(pos,tot-pos)~"
   prev_term <- ""
 
-  for (i in 1:length(powers)) {
-    if (i > 1 && powers[i] == powers[i-1]) {
+  for (i in 1:length(p)) {
+    if (i > 1 && p[i] == p[i-1]) {
       cur_term <- paste0("I(", prev_term, "*log(age))")
-    } else if (powers[i] == 0) {
+    } else if (p[i] == 0) {
       cur_term <- "log(age)"
     } else {
-      cur_term <- paste0("I(age^", powers[i], ")")
+      cur_term <- paste0("I(age^", p[i], ")")
     }
     equation <- paste0(equation, "+", cur_term)
     prev_term <- cur_term
@@ -40,11 +40,7 @@ formulate <- function(powers) {
 #' hbe_best
 #'
 #' @export
-find_best_fp_powers <- function(df, p, mc, degree, link="logit"){
-  pos <- df$pos
-  tot <- df$tot
-  age <- df$age
-  #----
+find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
   glm_best <- NULL
   d_best <- NULL
   p_best <- NULL
@@ -99,20 +95,7 @@ find_best_fp_powers <- function(df, p, mc, degree, link="logit"){
     if (sum(state != max_p) == 0) break
     state[i] <- state[i]+1
   }
-  return(list(power=p_best, deviance=d_best, model=glm_best))
-}
-
-# assuming age is sorted!!
-estimate_foi <- function(age, sp)
-{
-  dsp <- diff(sp)/diff(age)
-  foi <- approx(
-    (age[-1]+age[-length(age)])/2,
-    dsp,
-    age[c(-1,-length(age))]
-  )$y/(1-p[c(-1,-length(age))])
-
-  foi
+  return(list(p=p_best, deviance=d_best, model=glm_best))
 }
 
 #' A fractional polynomial model.
@@ -128,20 +111,40 @@ estimate_foi <- function(age, sp)
 #' model
 #'
 #' @export
-fp_model <- function(p, link="logit") {
+fp_model <- function(age, pos, tot, p, link="logit") {
   model <- list()
-  model$fit <- function(df) {
-    with(df, {
-      model$info <- glm(
-        as.formula(formulate(p)),
-        family=binomial(link=link)
-      )
-      X <- generate_X(age)
-      model$sp  <- model$info$fitted.values
-      model$foi <- estimate_foi(age, model$info$fitted.values)
-      model$df  <- df
-      model
-    })
-  }
+
+  model$info <- glm(
+    as.formula(formulate(p)),
+    family=binomial(link=link)
+  )
+  # X <- X(age)
+  model$sp  <- model$info$fitted.values
+  model$foi <- estimate_foi(
+    age=age,
+    sp=model$info$fitted.values
+  )
+  model$df <- list(age=age, pos=pos, tot=tot)
+
+  class(model) <- "fp_model"
   model
+}
+
+plot.fp_model <- function(x, ...) {
+  CEX_SCALER <- 4 # arbitrary number for better visual
+
+  with(x$df, {
+    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
+    plot(
+      age,
+      pos/tot,
+      cex=CEX_SCALER*tot/max(tot),
+      xlab="age", ylab="seroprevalence",
+      xlim=c(0, max(age)), ylim=c(0,1)
+    )
+    lines(age, x$sp, lwd=2)
+    lines(age[c(-1,-length(age))], x$foi, lwd=2, lty=2)
+    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
+    mtext(side=4, "force of infection", las=3, line=2)
+  })
 }

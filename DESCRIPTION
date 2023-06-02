@@ -20,10 +20,13 @@ Suggests:
     testthat (>= 3.0.0)
 Collate: 
     'data.R'
-    'hello.R'
     'mseir_model.R'
     'sir_basic_model.R'
     'sir_static_model.R'
     'sir_subpops_model.R'
+    'fractional_polynomial_models.R'
+    'polynomial_models.R'
+    'utils.R'
+    'weibull_model.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/
