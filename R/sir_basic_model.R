@@ -1,6 +1,3 @@
-# install.packages("deSolve")
-require(deSolve)
-
 sir_basic <- function(t, state, parameters)
 {
   with(as.list(c(state, parameters)), {
