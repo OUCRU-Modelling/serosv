@@ -7,7 +7,13 @@
 polynomial_model(age, pos, tot, deg = 1)
 }
 \arguments{
-\item{degree}{the degree of the model.}
+\item{age}{the age vector.}
+
+\item{pos}{the pos vector.}
+
+\item{tot}{the tot vector.}
+
+\item{deg}{the degree of the model.}
 }
 \description{
 Refers to section 6.1.1.

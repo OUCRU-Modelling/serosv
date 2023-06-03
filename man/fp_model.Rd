@@ -7,6 +7,12 @@
 fp_model(age, pos, tot, p, link = "logit")
 }
 \arguments{
+\item{age}{the age vector.}
+
+\item{pos}{the pos vector.}
+
+\item{tot}{the tot vector.}
+
 \item{p}{the powers of the predictor.}
 
 \item{link}{the link function for model. Defaulted to "logit".}
@@ -15,7 +21,10 @@ fp_model(age, pos, tot, p, link = "logit")
 Refers to section 6.2.
 }
 \examples{
-model <- fp_model(c(1.5, 1.6), link="cloglog")
+df <- hav_be_1993_1994
+model <- fp_model(
+  df$age, df$pos, df$tot,
+  p=c(1.5, 1.6), link="cloglog")
 plot(model)
 
 }

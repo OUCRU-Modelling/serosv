@@ -28,7 +28,9 @@ est_foi <- function(t, sp)
 #' hcv_df
 #'
 #' @importFrom dplyr group_by
+#' @importFrom dplyr n
 #' @importFrom dplyr summarize
+#' @import magrittr
 #'
 #' @export
 transform <- function(t, spos) {

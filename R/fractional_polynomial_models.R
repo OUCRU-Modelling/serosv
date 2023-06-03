@@ -24,23 +24,23 @@ formulate <- function(p) {
 #'
 #' Refers to section 6.2.
 #'
-#' @param df the data to be fitted. MUST have `pos`, `tot`, and `age` columns.
-#'
+#' @param age the age vector.
+#' @param pos the pos vector.
+#' @param tot the tot vector.
 #' @param p a powers sequence.
-#'
 #' @param mc indicates if the returned model should be monotonic.
-#'
 #' @param degree the degree of the model. Recommended to be <= 2.
-#'
 #' @param link the link function. Defaulted to "logit".
 #'
 #' @examples
 #' df <- hav_be_1993_1994
 #' best_p <- find_best_fp_powers(
 #'   df$age, df$pos, df$tot,
-#'   p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog"
+#'   p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
 #'  )
 #' best_p
+#'
+#' @import stats
 #'
 #' @export
 find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
@@ -105,12 +105,17 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #'
 #' Refers to section 6.2.
 #'
+#' @param age the age vector.
+#' @param pos the pos vector.
+#' @param tot the tot vector.
 #' @param p the powers of the predictor.
-#'
 #' @param link the link function for model. Defaulted to "logit".
 #'
 #' @examples
-#' model <- fp_model(c(1.5, 1.6), link="cloglog")
+#' df <- hav_be_1993_1994
+#' model <- fp_model(
+#'   df$age, df$pos, df$tot,
+#'   p=c(1.5, 1.6), link="cloglog")
 #' plot(model)
 #'
 #' @export
@@ -132,6 +137,12 @@ fp_model <- function(age, pos, tot, p, link="logit") {
   model
 }
 
+#' plot() overloading for fractional polynomial model
+#'
+#' @param x the fractional polynomial model object.
+#' @param ... arbitrary params.
+#'
+#' @export
 plot.fp_model <- function(x, ...) {
   CEX_SCALER <- 4 # arbitrary number for better visual
 

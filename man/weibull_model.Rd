@@ -6,6 +6,11 @@
 \usage{
 weibull_model(t, spos)
 }
+\arguments{
+\item{t}{the time vector.}
+
+\item{spos}{the seropositive vector.}
+}
 \description{
 Refers to section 6.1.2.
 }

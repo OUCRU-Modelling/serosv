@@ -2,6 +2,9 @@
 #'
 #' Refers to section 6.1.2.
 #'
+#' @param t the time vector.
+#' @param spos the seropositive vector.
+#'
 #' @examples
 #' df <- hcv_be_2006[order(hcv_be_2006$dur), ]
 #' model <- weibull_model(
@@ -29,6 +32,12 @@ weibull_model <- function(t, spos)
   model
 }
 
+#' plot() overloading for Weibull model
+#'
+#' @param x the Weibull model object.
+#' @param ... arbitrary params.
+#'
+#' @export
 plot.weibull_model <- function(x, ...) {
   CEX_SCALER <- 4 # arbitrary number for better visual
 

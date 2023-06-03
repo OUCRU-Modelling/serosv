@@ -20,7 +20,10 @@ predictor <- function(degree) {
 #'
 #' Refers to section 6.1.1.
 #'
-#' @param degree the degree of the model.
+#' @param age the age vector.
+#' @param pos the pos vector.
+#' @param tot the tot vector.
+#' @param deg the degree of the model.
 #'
 #' @examples
 #' df <- hav_bg_1964
@@ -48,6 +51,12 @@ polynomial_model <- function(age, pos, tot, deg=1) {
   model
 }
 
+#' plot() overloading for polynomial model
+#'
+#' @param x the polynomial model object.
+#' @param ... arbitrary params.
+#'
+#' @export
 plot.polynomial_model <- function(x, ...) {
   CEX_SCALER <- 4 # arbitrary number for better visual
 
@@ -71,7 +80,13 @@ plot.polynomial_model <- function(x, ...) {
 #'
 #' Refers to section 6.1.2.
 #'
-#' @param parameters the parameters of the model.
+#' @param age the age vector.
+#' @param pos the pos vector.
+#' @param tot the tot vector.
+#' @param start Named list of vectors or single vector.
+#' Initial values for optimizer.
+#' @param fixed Named list of vectors or single vector.
+#' Parameter values to keep fixed during optimization.
 #'
 #' @examples
 #' df <- rubella_uk_1986_1987
@@ -96,9 +111,9 @@ farrington_model <- function(age, pos, tot, start, fixed=list())
   model <- list()
 
   model$info <- mle(farrington, fixed=fixed, start=start)
-  alpha <- coef(model$info)[1]
-  beta  <- coef(model$info)[2]
-  gamma <- coef(model$info)[3]
+  alpha <- model$info@coef[1]
+  beta  <- model$info@coef[2]
+  gamma <- model$info@coef[3]
   model$sp <- 1-exp(
     (alpha/beta)*age*exp(-beta*age)
     +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)
@@ -110,6 +125,12 @@ farrington_model <- function(age, pos, tot, start, fixed=list())
   model
 }
 
+#' plot() overloading for Farrington model
+#'
+#' @param x the Farrington model object.
+#' @param ... arbitrary params.
+#'
+#' @export
 plot.farrington_model <- function(x, ...) {
   CEX_SCALER <- 4 # arbitrary number for better visual
 

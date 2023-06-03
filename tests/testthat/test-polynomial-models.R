@@ -14,9 +14,9 @@ test_that("farrington_model returns same result as in the book", {
       start=list(alpha=0.07,beta=0.1,gamma=0.03)
     ))
   actual <- c(
-    coef(model$info)[1],
-    coef(model$info)[2],
-    coef(model$info)[3]
+    model$info@coef[1],
+    model$info@coef[2],
+    model$info@coef[3]
     )
 
   expect_equal(actual, expected, tolerance=0.000001)

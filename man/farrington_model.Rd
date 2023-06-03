@@ -7,7 +7,17 @@
 farrington_model(age, pos, tot, start, fixed = list())
 }
 \arguments{
-\item{parameters}{the parameters of the model.}
+\item{age}{the age vector.}
+
+\item{pos}{the pos vector.}
+
+\item{tot}{the tot vector.}
+
+\item{start}{Named list of vectors or single vector.
+Initial values for optimizer.}
+
+\item{fixed}{Named list of vectors or single vector.
+Parameter values to keep fixed during optimization.}
 }
 \description{
 Refers to section 6.1.2.
