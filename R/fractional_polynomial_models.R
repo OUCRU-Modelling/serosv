@@ -111,7 +111,7 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #'
 #' @examples
 #' model <- fp_model(c(1.5, 1.6), link="cloglog")
-#' model
+#' plot(model)
 #'
 #' @export
 fp_model <- function(age, pos, tot, p, link="logit") {
@@ -121,10 +121,9 @@ fp_model <- function(age, pos, tot, p, link="logit") {
     as.formula(formulate(p)),
     family=binomial(link=link)
   )
-  # X <- X(age)
   model$sp  <- model$info$fitted.values
-  model$foi <- estimate_foi(
-    age=age,
+  model$foi <- est_foi(
+    t=age,
     sp=model$info$fitted.values
   )
   model$df <- list(age=age, pos=pos, tot=tot)

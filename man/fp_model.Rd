@@ -16,6 +16,6 @@ Refers to section 6.2.
 }
 \examples{
 model <- fp_model(c(1.5, 1.6), link="cloglog")
-model
+plot(model)
 
 }

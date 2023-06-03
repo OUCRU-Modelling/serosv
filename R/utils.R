@@ -1,31 +1,20 @@
-rename_col <- function(df, old, new)
-{
-  names(df)[names(df) == old] <- new
-  df
-}
+# rename_col <- function(df, old, new)
+# {
+#   names(df)[names(df) == old] <- new
+#   df
+# }
 
-estimate_foi <- function(age, sp)
+est_foi <- function(t, sp)
 {
-  dsp <- diff(sp)/diff(age)
+  dsp <- diff(sp)/diff(t)
   foi <- approx(
-    (age[-1]+age[-length(age)])/2,
+    (t[-1]+t[-length(t)])/2,
     dsp,
-    age[c(-1,-length(age))]
-  )$y/(1-sp[c(-1,-length(age))])
+    t[c(-1,-length(t))]
+  )$y/(1-sp[c(-1,-length(t))])
 
   foi
 }
-
-X <- function(age, degree) {
-  X_matrix <- matrix(rep(1, length(age)), ncol = 1)
-  if (degree > 1) {
-    for (i in 2:degree) {
-      X_matrix <- cbind(X_matrix, i * age^(i-1))
-    }
-  }
-  -X_matrix
-}
-
 
 #' Generate a dataframe with `t`, `pos` and `tot` columns from
 #' `t` and `seropositive` vectors.
@@ -84,22 +73,22 @@ transform <- function(t, spos) {
 #' hav_be_1993_1994 %>%
 #'   model$fit() %>%
 #'   plot_p_foi_wrt_age()
-plot_p_foi_wrt_age <- function(model)
-{
-  CEX_SCALER <- 4 # arbitrary number for better visual
-
-  with(model$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, model$sp, lwd=2)
-    lines(age, model$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
-  })
-}
+# plot_p_foi_wrt_age <- function(model)
+# {
+#   CEX_SCALER <- 4 # arbitrary number for better visual
+#
+#   with(model$df, {
+#     par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
+#     plot(
+#       age,
+#       pos/tot,
+#       cex=CEX_SCALER*tot/max(tot),
+#       xlab="age", ylab="seroprevalence",
+#       xlim=c(0, max(age)), ylim=c(0,1)
+#     )
+#     lines(age, model$sp, lwd=2)
+#     lines(age, model$foi, lwd=2, lty=2)
+#     axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
+#     mtext(side=4, "force of infection", las=3, line=2)
+#   })
+# }

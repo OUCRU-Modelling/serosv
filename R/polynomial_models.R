@@ -1,3 +1,13 @@
+X <- function(t, degree) {
+  X_matrix <- matrix(rep(1, length(t)), ncol = 1)
+  if (degree > 1) {
+    for (i in 2:degree) {
+      X_matrix <- cbind(X_matrix, i * t^(i-1))
+    }
+  }
+  -X_matrix
+}
+
 predictor <- function(degree) {
   formula <- "cbind(tot-pos, pos)~-1"
   for (i in 1:degree) {
