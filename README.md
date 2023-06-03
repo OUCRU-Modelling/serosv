@@ -7,7 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/OUCRU-Modelling/serosv/branch/main/graph/badge.svg)](https://app.codecov.io/gh/OUCRU-Modelling/serosv?branch=main)
-
+[![R-CMD-check](https://github.com/OUCRU-Modelling/serosv/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OUCRU-Modelling/serosv/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of serosv is to …
@@ -28,6 +28,11 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(serosv)
+#> 
+#> Attaching package: 'serosv'
+#> The following object is masked from 'package:base':
+#> 
+#>     transform
 ## basic example code
 ```
 
