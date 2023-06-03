@@ -13,8 +13,11 @@ farrington_model(age, pos, tot, start, fixed = list())
 Refers to section 6.1.2.
 }
 \examples{
-parameters <- c(alpha=0.07,beta=0.1,gamma=0.03)
-model <- farrington_model(parameters)
-model
+df <- rubella_uk_1986_1987
+model <- farrington_model(
+  df$age, df$pos, df$tot,
+  start=list(alpha=0.07,beta=0.1,gamma=0.03)
+  )
+plot(model)
 
 }

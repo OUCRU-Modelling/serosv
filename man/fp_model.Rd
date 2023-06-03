@@ -4,7 +4,7 @@
 \alias{fp_model}
 \title{A fractional polynomial model.}
 \usage{
-fp_model(p, link = "logit")
+fp_model(age, pos, tot, p, link = "logit")
 }
 \arguments{
 \item{p}{the powers of the predictor.}

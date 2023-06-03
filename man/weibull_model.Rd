@@ -4,14 +4,17 @@
 \alias{weibull_model}
 \title{The Weibull model.}
 \usage{
-weibull_model()
+weibull_model(t, spos)
 }
 \description{
 Refers to section 6.1.2.
 }
 \examples{
-hbe_best <- hav_be_1993_1994 \%>\%
-  find_best_fp_powers(p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog")
-hbe_best
+df <- hcv_be_2006[order(hcv_be_2006$dur), ]
+model <- weibull_model(
+  t=df$dur,
+  spos=df$seropositive
+  )
+plot(model)
 
 }

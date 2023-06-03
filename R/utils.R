@@ -27,19 +27,22 @@ X <- function(age, degree) {
 }
 
 
-#' Transform the hcv_be_2006 dataframe.
+#' Generate a dataframe with `t`, `pos` and `tot` columns from
+#' `t` and `seropositive` vectors.
 #'
-#' @param df the hcv_be_2006 dataframe.
+#' @param t the time vector.
+#' @param spos the seropositive vector.
 #'
 #' @examples
-#' hcv_df <- transform_hcv(hcv_be_2006)
+#' df <- hcv_be_2006
+#' hcv_df <- transform(df$dur, df$seropositive)
 #' hcv_df
 #'
 #' @importFrom dplyr group_by
+#' @importFrom dplyr summarize
 #'
 #' @export
-transform_hcv <- function(t, spos) {
-  # df$t <- ceiling(df$t)
+transform <- function(t, spos) {
   df <- data.frame(t, spos)
   df_agg <- df %>%
     group_by(t) %>%
@@ -47,29 +50,28 @@ transform_hcv <- function(t, spos) {
       pos = sum(spos),
       tot = n()
     )
-  names(df_agg)[names(df_agg) == "t"] <- "age"
   df_agg
 }
 
-detransform <- function(hcv_df) {
-  hcv_dur <- c()
-  hcv_sp <- c()
-
-  for (i in 1:nrow(hcv_df)) {
-    row <- hcv_df[i, ]
-    hcv_dur <- c(hcv_dur, rep(row$age, row$tot))
-    if (row$pos > 0) {
-      hcv_sp <- c(hcv_sp, rep(1, row$pos))
-    }
-    if (row$tot - row$pos > 0) {
-      hcv_sp <- c(hcv_sp, rep(0, row$tot - row$pos))
-    }
-  }
-  data.frame(
-    dur = hcv_dur,
-    seropositive = hcv_sp
-  )
-}
+# detransform <- function(hcv_df) {
+#   hcv_dur <- c()
+#   hcv_sp <- c()
+#
+#   for (i in 1:nrow(hcv_df)) {
+#     row <- hcv_df[i, ]
+#     hcv_dur <- c(hcv_dur, rep(row$age, row$tot))
+#     if (row$pos > 0) {
+#       hcv_sp <- c(hcv_sp, rep(1, row$pos))
+#     }
+#     if (row$tot - row$pos > 0) {
+#       hcv_sp <- c(hcv_sp, rep(0, row$tot - row$pos))
+#     }
+#   }
+#   data.frame(
+#     dur = hcv_dur,
+#     seropositive = hcv_sp
+#   )
+# }
 
 #' Plot the prevalence and force of infection against age.
 #'

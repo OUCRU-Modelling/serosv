@@ -4,11 +4,9 @@
 \alias{find_best_fp_powers}
 \title{Returns the powers of the GLM fitted model which has the lowest deviance score.}
 \usage{
-find_best_fp_powers(df, p, mc, degree, link = "logit")
+find_best_fp_powers(age, pos, tot, p, mc, degree, link = "logit")
 }
 \arguments{
-\item{df}{the data to be fitted. MUST have `pos`, `tot`, and `age` columns.}
-
 \item{p}{a powers sequence.}
 
 \item{mc}{indicates if the returned model should be monotonic.}
@@ -16,13 +14,18 @@ find_best_fp_powers(df, p, mc, degree, link = "logit")
 \item{degree}{the degree of the model. Recommended to be <= 2.}
 
 \item{link}{the link function. Defaulted to "logit".}
+
+\item{df}{the data to be fitted. MUST have `pos`, `tot`, and `age` columns.}
 }
 \description{
 Refers to section 6.2.
 }
 \examples{
-hbe_best <- hav_be_1993_1994 \%>\%
-  find_best_fp_powers(p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog")
-hbe_best
+df <- hav_be_1993_1994
+best_p <- find_best_fp_powers(
+  df$age, df$pos, df$tot,
+  p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog"
+ )
+best_p
 
 }

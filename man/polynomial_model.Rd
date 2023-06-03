@@ -13,8 +13,11 @@ polynomial_model(age, pos, tot, deg = 1)
 Refers to section 6.1.1.
 }
 \examples{
-muench_model <- polynomial_model(degree=1)
-griffiths_model <- polynomial_model(degree=2)
-grenfell_anderson_model <- polynomial_model(degree=3)
+df <- hav_bg_1964
+model <- polynomial_model(
+  df$age, df$pos, df$tot,
+  deg=2
+  )
+plot(model)
 
 }

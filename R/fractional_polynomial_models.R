@@ -35,9 +35,12 @@ formulate <- function(p) {
 #' @param link the link function. Defaulted to "logit".
 #'
 #' @examples
-#' hbe_best <- hav_be_1993_1994 %>%
-#'   find_best_fp_powers(p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog")
-#' hbe_best
+#' df <- hav_be_1993_1994
+#' best_p <- find_best_fp_powers(
+#'   df$age, df$pos, df$tot,
+#'   p=seq(-2,3,0.1), mc=F, degree=2, link="cloglog"
+#'  )
+#' best_p
 #'
 #' @export
 find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
