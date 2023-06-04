@@ -4,7 +4,7 @@
 \alias{lp_model}
 \title{A local polynomial model.}
 \usage{
-lp_model(kern = "tcub", nn = 0, h = 0, deg = 2)
+lp_model(age, pos, tot, kern = "tcub", nn = 0, h = 0, deg = 2)
 }
 \arguments{
 \item{kern}{Weight function, default = "tcub".
@@ -23,9 +23,11 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 Refers to section 7.1. and 7.2.
 }
 \examples{
-model <- lp_model()
-mumps_uk_1986_1987 \%>\%
-  model$fit() \%>\%
-  plot_p_foi_wrt_age()
+df <- mumps_uk_1986_1987
+model <- lp_model(
+  df$age, df$pos, df$tot,
+  nn=0.7, kern="tcub"
+  )
+plot(model)
 
 }

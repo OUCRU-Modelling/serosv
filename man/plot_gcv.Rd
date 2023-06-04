@@ -4,10 +4,14 @@
 \alias{plot_gcv}
 \title{Plotting GCV values with respect to different nn-s and h-s parameters.}
 \usage{
-plot_gcv(df, nn_seq, h_seq, kern = "tcub", deg = 2)
+plot_gcv(age, pos, tot, nn_seq, h_seq, kern = "tcub", deg = 2)
 }
 \arguments{
-\item{df}{The dataframe. MUST have `age`, `pos`, `tot` columns.}
+\item{age}{the age vector.}
+
+\item{pos}{the pos vector.}
+
+\item{tot}{the tot vector.#'}
 
 \item{nn_seq}{Nearest neighbor sequence.}
 
@@ -24,8 +28,9 @@ e.g. for confidence bands and some bandwidth selectors.}
 Refers to section 7.2.
 }
 \examples{
+df <- mumps_uk_1986_1987
 plot_gcv(
-  mumps_uk_1986_1987,
+  df$age, df$pos, df$tot,
   nn_seq = seq(0.2, 0.8, by=0.1),
   h_seq = seq(5, 25, by=1)
 )

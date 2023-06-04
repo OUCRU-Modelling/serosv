@@ -30,5 +30,6 @@ Collate:
     'polynomial_models.R'
     'utils.R'
     'weibull_model.R'
+    'nonparametric.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/
