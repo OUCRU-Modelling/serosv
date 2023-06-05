@@ -43,6 +43,9 @@
     <loc>https://oucru-modelling.github.io/serosv/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/lp_model.html</loc>
+  </url>
+  <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/mseir_model.html</loc>
   </url>
   <url>
@@ -70,10 +73,16 @@
     <loc>https://oucru-modelling.github.io/serosv/reference/plot.fp_model.html</loc>
   </url>
   <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/plot.lp_model.html</loc>
+  </url>
+  <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/plot.polynomial_model.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/plot.weibull_model.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/plot_gcv.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/polynomial_model.html</loc>
