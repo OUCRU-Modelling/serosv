@@ -16,7 +16,8 @@ Imports:
     deSolve,
     dplyr,
     stats4,
-    magrittr
+    magrittr,
+    locfit
 Suggests: 
     covr,
     testthat (>= 3.0.0)
@@ -30,5 +31,6 @@ Collate:
     'polynomial_models.R'
     'utils.R'
     'weibull_model.R'
+    'nonparametric.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/
