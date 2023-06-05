@@ -96,34 +96,96 @@ with(model_fitted, {
   mtext(side=4, "force of infection", las=3, line=2)
 })
 
-BICf <- function(fit)
-{
-  return(fit$deviance+log(length(fit$y))*(fit$nl.df+2))
-}
-
-best_smooth_spline <- function(df, d_seq, link) {
-  # d_seq: sequence of degrees of freedom
-  best_d <- NULL
-  best_BIC <- NULL
+best_smooth_spline <- function(t, spos, d_seq, link) {
+  best <- cbind()
   for (d in d_seq) {
-    fit <- with(df, {
-      gam(seropositive~s(age, df=d),family=binomial(link=link))
-    })
-    current_BIC <- BICf(fit)
-    if (is.null(best_BIC) || current_BIC < best_BIC) {
-      best_BIC <- current_BIC
-      best_d <- d
-    }
+    fit <- gam(spos~s(t, df=d),family=binomial(link=link))
+    best <- cbind(best, list(
+      BIC=unname(fit$deviance+log(length(fit$y))*(fit$nl.df+2)),
+      fit=fit,
+      d=d
+    ))
   }
 
-  c(best_d, best_BIC)
+  best[, which.min(best[1,])]
 }
 
 library(gam)
-best <- best_smooth_spline(
-  vzv_be_2001_2003,
+best_ss <- best_smooth_spline(
+  t=vzv_be_2001_2003$age,
+  spos=vzv_be_2001_2003$seropositive,
   d_seq=seq(1, 10, by=0.5),
   link="cloglog"
   )
-best
+best_ss
+
+detach(package:gam)
+library(mgcv)
+best_crs <- function(t, y, d_seq, link="logit") {
+  best <- cbind()
+
+  for (d in d_seq) {
+    fit <- gam(y~s(t, bs="cr"),family=binomial(link=link))
+    best <- cbind(best, list(
+      BIC=unname(fit$deviance+log(length(fit$y))*sum(fit$edf)),
+      fit=fit,
+      d=d
+    ))
+  }
+
+  # best[, which.min(best[1,])]
+  best
+}
+
+df <- vzv_be_2001_2003
+model <- gam(df$seropositive~s(df$age, bs="tp"),family=binomial(link="logit"))
+model$edf
+
+crs <- best_crs(
+  t=vzv_be_2001_2003$age,
+  y=vzv_be_2001_2003$seropositive,
+  d_seq=seq(1, 10, by=0.5),
+  link="cloglog"
+)
+crs$BIC
+
+# library(gam)
+best_ss <- best_smooth_spline(
+  t=vzv_be_2001_2003$age,
+  spos=vzv_be_2001_2003$seropositive,
+  d_seq=seq(1, 10, by=0.5),
+  link="cloglog"
+)
+best_ss
+
+
+# library(splines)
+# install.packages("pspline")
+library(pspline)
+library(face)
+best_b_spline <- function(t, spos, lambda_seq, deg=3, m=2, k=20, link="logit") {
+  best <- cbind()
+
+  for (lambda in lambda_seq) {
+    fit <- pspline.fit(
+      response=spos, lambda=80,
+      x.var=t, x.predicted=t, ps.intervals=k, degree=deg,
+      order=m, link=link, family="binomial"
+    )
+    best <- cbind(best, list(
+      BIC=unname(fit$dev+log((dim(fit$summary.predicted)[1]))*(fit$eff.df)),
+      fit=fit,
+      lambda=lambda
+    ))
+  }
+
+  best[, which.min(best[1,])]
+}
+
+# df <- parvob19_be_2001_2003
+# best_bs <- best_b_spline(
+#   t=df$age,
+#   spos=df$seropositive,
+#   lambda_seq=seq(50, 200, by=10)
+# )
 
