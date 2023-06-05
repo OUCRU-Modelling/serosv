@@ -1,7 +1,7 @@
 library(testthat)
 library(locfit)
 
-test_that("est_foi returns a numeric vector", {
+test_that("lp_model returns expected results", {
   expected_foi_summary <- c(0.0018361, 0.0856287, 0.107952, 0.294777)
   expected_sp_summary <- c(0.165227, 0.968281, 0.884160, 0.985884)
 

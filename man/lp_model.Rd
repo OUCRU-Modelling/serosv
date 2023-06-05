@@ -7,6 +7,12 @@
 lp_model(age, pos, tot, kern = "tcub", nn = 0, h = 0, deg = 2)
 }
 \arguments{
+\item{age}{the age vector.}
+
+\item{pos}{the pos vector.}
+
+\item{tot}{the tot vector.}
+
 \item{kern}{Weight function, default = "tcub".
 Other choices are "rect", "trwt", "tria", "epan", "bisq" and "gauss".
 Choices may be restricted when derivatives are required;

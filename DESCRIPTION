@@ -16,7 +16,8 @@ Imports:
     deSolve,
     dplyr,
     stats4,
-    magrittr
+    magrittr,
+    locfit
 Suggests: 
     covr,
     testthat (>= 3.0.0)
