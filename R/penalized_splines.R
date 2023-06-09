@@ -1,27 +1,28 @@
 
 # Penalized Likelihood Framework
-plot.plf <- function(x, round.by=NULL, x.title=NULL, y.title=NULL, ...) {
+plot.plf <- function(model, round.by=NULL, x.title=NULL, y.title=NULL, ...) {
   CEX_SCALER <- 4 # arbitrary number for better visual
 
-  tdf <- transform(x$df$t, x$df$spos, round.by)
-  names(tdf)[names(tdf) == "t"] <- "exposure"
+  tdf <- transform(model$df$t, model$df$spos, round.by)
+  names(tdf)[names(tdf) == "t"] <- "tt"
 
-  with(c(x$df, tdf), {
+  with(c(model$df, tdf), {
     par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
     plot(
-      exposure,
+      tt,
       pos/tot,
       cex=CEX_SCALER*tot/max(tot),
       xlab=ifelse(is.null(x.title), "exposure", x.title),
       ylab=ifelse(is.null(y.title), "seroprevalence", y.title),
-      xlim=c(0, max(exposure)), ylim=c(min(x$foi),1),
+      xlim=c(0, max(tt)),
+      ylim=c(min(model$foi, 0), 1),
       ...
     )
-    lines(t, x$sp, lwd=2)
-    lines(t[c(-1, -length(t))], x$foi, lwd=2, lty=2)
+    lines(t, model$sp, lwd=2)
+    lines(t[c(-1, -length(t))], model$foi, lwd=2, lty=2)
     axis(side=4, at=round(seq(
-      min(x$foi),
-      max(x$foi),
+      min(model$foi, 0),
+      ifelse(is.infinite(max(model$foi)), 1, max(model$foi)),
       length.out=5), 2))
     mtext(side=4, "force of infection", las=3, line=2)
   })
@@ -29,7 +30,7 @@ plot.plf <- function(x, round.by=NULL, x.title=NULL, y.title=NULL, ...) {
 
 ### library Semipar: Ruppert et al. (2003)
 library(SemiPar)
-tps <- function(x, y, k=3, deg=2) {
+ps <- function(x, y, k=3, deg=2) {
   basis_fn <- function(a, b) { (a-b)^deg*(a>b) }
   expit <- function(a) { exp(a)/(1+exp(a)) }
 
@@ -66,17 +67,18 @@ tps <- function(x, y, k=3, deg=2) {
   class(model) <- "plf"
   model
 }
-
+#
 # df <- vzv_be_2001_2003
-filter <- (df$age>0.5)&(df$age<40)&(!is.na(df$age))&!is.na(df$parvores)
-sdf <- df[filter,]
-sdf <- sdf[order(sdf$age), ]
-tps_fit <- tps(
-  x=sdf$age,
-  y=sdf$parvores,
-  k=4
-)
-plot(ps_fit, round.by=0)
+# filter <- (df$age>0.5)&(df$age<40)&(!is.na(df$age))&!is.na(df$parvores)
+# sdf <- df[filter,]
+# sdf <- sdf[order(sdf$age), ]
+# tps_fit <- tps(
+#   x=sdf$age,
+#   y=sdf$parvores,
+#   k=3
+# )
+# plot(tps_fit, round.by=0)
+# tps_fit$info$info$pen$knots
 
 #----------------------------------------------------------------------
 ss <- function(x, y, d=5, link="logit") {
@@ -89,13 +91,16 @@ ss <- function(x, y, d=5, link="logit") {
   model
 }
 
-# detach(package:mgcv)
-library(gam)
+df <- parvob19_be_2001_2003
+m <- gam::gam(df$seropositive~s(df$age, df=4),family=binomial(link="logit"))
+f <- est.foi(df$age, m$fitted.values)
+f$y
+
 ss_fit <- ss(
-  x=sdf$age,
-  y=sdf$parvores,
+  x=df$age,
+  y=df$seropositive,
 )
-plot(ss_fit, round.by = 0)
+plot(ss_fit, round.by=0)
 
 #----------------------------------------------------------------------
 bss <- function(x, y, lambda=20, k=20, deg=3, m=2, link="logit") {
@@ -112,15 +117,15 @@ bss <- function(x, y, lambda=20, k=20, deg=3, m=2, link="logit") {
   model
 }
 
-source("R/pspline.R")
-
-bss_fit <- bss(
-  x=sdf$age,
-  y=sdf$parvores,
-)
-plot(bss_fit, round.by = 0)
-
-
+# source("R/pspline.R")
+#
+# bss_fit <- bss(
+#   x=sdf$age,
+#   y=sdf$parvores,
+# )
+# plot(bss_fit, round.by = 0)
+#
+#
 
 #----------------------------------------------------------------------
 # detach(package:gam)
@@ -138,15 +143,15 @@ crs <- function(x, y, link="logit") {
 
 
 # df <- vzv_be_2001_2003
-df <- read.table("/Users/thanhlongb/Projects/oucru/the-book/RCodeBook/Chapter4/VZV-B19-BE.dat",header=T)
-filter <- (df$age>0.5)&(df$age<76)&(!is.na(df$age))&!is.na(df$parvores)
-sdf <- df[filter, ]
-sdf <- sdf[order(sdf$age), ]
-crs_fit <- crs(
-  x=sdf$age,
-  y=sdf$parvores,
-)
-plot(crs_fit, round.by=0)
+# df <- read.table("/Users/thanhlongb/Projects/oucru/the-book/RCodeBook/Chapter4/VZV-B19-BE.dat",header=T)
+# filter <- (df$age>0.5)&(df$age<76)&(!is.na(df$age))&!is.na(df$parvores)
+# sdf <- df[filter, ]
+# sdf <- sdf[order(sdf$age), ]
+# crs_fit <- crs(
+#   x=sdf$age,
+#   y=sdf$parvores,
+# )
+# plot(crs_fit, round.by=0)
 
 #----------------------------------------------------------------------
 
@@ -160,7 +165,7 @@ tps <- function(x, y, link="logit") {
   model
 }
 
-df <- vzv_be_2001_2003
+df <- parvob19_be_2001_2003
 filter <- (df$age>0.5)&(df$age<76)&(!is.na(df$age))&!is.na(df$seropositive)
 sdf <- df[filter,]
 sdf <- sdf[order(sdf$age), ]
@@ -168,5 +173,5 @@ tps_fit <- tps(
   x=sdf$age,
   y=sdf$parvores,
 )
-plot_cr(tps_fit, round.by=0)
+# plot_cr(tps_fit, round.by=0)
 

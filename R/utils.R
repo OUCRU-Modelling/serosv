@@ -1,9 +1,27 @@
-foi.num<-function(x,p) {
-  grid<-sort(unique(x))
-  pgrid<-(p[order(x)])[duplicated(sort(x))==F]
-  dp<-diff(pgrid)/diff(grid)
-  foi<-approx((grid[-1]+grid[-length(grid)])/2,dp,grid[c(-1,-length(grid))])$y/(1-pgrid[c(-1,-length(grid))])
-  return(list(grid=grid[c(-1,-length(grid))],foi=foi))
+est_foi <- function(t, sp)
+{
+  dsp <- diff(sp)/diff(t)
+  foi <- approx(
+    (t[-1]+t[-length(t)])/2,
+    dsp,
+    t[c(-1,-length(t))]
+  )$y/(1-sp[c(-1,-length(t))])
+
+  foi
+}
+
+est.foi <- function(t, sp)
+{
+  t_ <- sort(unique(t))
+  sp_ <- (sp[order(t)])[duplicated(sort(t))==F]
+  dsp <- diff(sp_)/diff(t_)
+  foi <- approx(
+    (t_[-1]+t_[-length(t_)])/2,
+    dsp,
+    t_[c(-1,-length(t_))]
+  )$y/(1-sp_[c(-1,-length(t_))])
+
+  list(x=t_, y=foi)
 }
 
 transform <- function(t, spos, round.by=NULL) {
