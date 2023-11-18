@@ -1,5 +1,8 @@
 comment: false
 
+ignore:
+  - "R/plots.R"
+
 coverage:
   status:
     project:

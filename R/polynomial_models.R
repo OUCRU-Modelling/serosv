@@ -51,31 +51,6 @@ polynomial_model <- function(age, pos, tot, deg=1) {
   model
 }
 
-#' plot() overloading for polynomial model
-#'
-#' @param x the polynomial model object.
-#' @param ... arbitrary params.
-#'
-#' @export
-plot.polynomial_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
-
-  with(x$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, x$sp, lwd=2)
-    lines(age, x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
-  })
-}
-
 #' The Farrington (1990) model.
 #'
 #' Refers to section 6.1.2.
@@ -125,27 +100,3 @@ farrington_model <- function(age, pos, tot, start, fixed=list())
   model
 }
 
-#' plot() overloading for Farrington model
-#'
-#' @param x the Farrington model object.
-#' @param ... arbitrary params.
-#'
-#' @export
-plot.farrington_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
-
-  with(x$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, x$sp, lwd=2)
-    lines(age, x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
-  })
-}
