@@ -32,5 +32,6 @@ Collate:
     'utils.R'
     'weibull_model.R'
     'nonparametric.R'
+    'plots.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/
