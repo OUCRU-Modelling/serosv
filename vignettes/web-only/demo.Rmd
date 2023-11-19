@@ -1,0 +1,77 @@
+---
+title: "serosv: model infectious disease parameters from serosurveys"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%",
+  dpi = 300,
+  warning = F,
+  fig.width = 5,
+  fig.height = 5
+)
+library(serosv)
+```
+
+
+## Farrington's model
+
+Use `farrington_model()` to fit a Farrington's model.
+
+```{r}
+rubella <- rubella_uk_1986_1987
+rubella$neg <- rubella$tot - rubella$pos
+
+farrington_md <- farrington_model(
+   rubella$age, rubella$pos, rubella$tot,
+   start=list(alpha=0.07,beta=0.1,gamma=0.03)
+   )
+plot(farrington_md)
+```
+
+## Weibull model
+
+Use `weibull_model()` to fit a Weibull model.
+
+```{r}
+hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
+dur <- hcv$dur
+infected <- hcv$seropositive
+
+wb_md <- weibull_model(
+   t = dur,
+   spos = infected
+   )
+plot(wb_md)
+```
+
+## Local estimation by polynomials
+
+Use `lp_model()` to fit a local estimation by polynomials.
+
+```{r, fig.width=5, fig.height=2.5}
+mump <- mumps_uk_1986_1987
+a = age <- mump$age
+pos <- mump$pos
+tot <- mump$tot
+y <- pos/tot
+
+plot_gcv(
+   age, pos, tot,
+   nn_seq = seq(0.2, 0.8, by=0.1),
+   h_seq = seq(5, 25, by=1)
+ )
+
+```
+
+```{r}
+lp1 <- lp_model(age, pos, tot, kern="tcub", nn=0.7, deg=2)
+
+plot(lp1)
+```

@@ -74,9 +74,9 @@ plot.weibull_model <- function(x, ...) {
       xlab="exposure", ylab="seroprevalence",
       xlim=c(0, max(exposure)), ylim=c(0,1)
     )
-    lines(t, model$sp, lwd=2)
-    lines(t, model$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(model$foi), length.out=10), 2))
+    lines(t, x$sp, lwd=2)
+    lines(t, x$foi, lwd=2, lty=2)
+    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=10), 2))
     mtext(side=4, "force of infection", las=3, line=2)
   })
 }
@@ -177,4 +177,6 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   plot(res[,1],res[,3],type="n",xlab="h (Bandwidth)",ylab=" ")
   lines(res[,1],res[,3])
   mtext(side=2, "GCV", las=3, line=3, cex=0.9)
+  # reset the plotting parameter back to its default state
+  par(mfrow = c(1, 1))
 }
