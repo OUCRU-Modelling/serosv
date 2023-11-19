@@ -40,6 +40,12 @@
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/web-only/demo.html">serosv: model infectious disease parameters from serosurveys</a>
+  </div>
+</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -57,41 +63,100 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of serosv is to …</p>
+<!-- badges: end -->
+<p><code>serosv</code> is an easy-to-use and efficient tool to estimate infectious diseases parameters (seroprevalence and force of infection) using serological data. The current version is based on the book “Modeling Infectious Disease Parameters Based on Serological and Social Contact Data – A Modern Statistical Perspective” by <a href="https://link.springer.com/book/10.1007/978-1-4614-4072-7" class="external-link">Hens et al., 2012 Springer</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of serosv from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of serosv with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"OUCRU-Modelling/serosv"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="feature-overview">Feature overview<a class="anchor" aria-label="anchor" href="#feature-overview"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<div class="section level3">
+<h3 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a>
+</h3>
+<p><code>serosv</code> contains 15 built-in serological datasets as provided by <a href="https://link.springer.com/book/10.1007/978-1-4614-4072-7" class="external-link">Hens et al., 2012 Springer</a>. Simply call the name to load a dataset, for example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
+</h3>
+<p>The following methods are available to estimate seroprevalence and force of infection.</p>
+<p>Parametric approaches:</p>
+<ul>
+<li>Polynomial models:
+<ul>
+<li>Muench’s model</li>
+<li>Griffiths’ model</li>
+<li>Grenfell and Anderson’s model</li>
+</ul>
+</li>
+<li>Nonlinear models:
+<ul>
+<li>Farrington’s model</li>
+<li>Weibull model</li>
+</ul>
+</li>
+<li>Fractional polynomial models</li>
+</ul>
+<p>Nonparametric approaches:</p>
+<ul>
+<li>Local estimation by polynomials</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="demo">Demo<a class="anchor" aria-label="anchor" href="#demo"></a>
+</h2>
+<p>Load the rubella in UK dataset.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'serosv'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     transform</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      speed           dist       </span></span>
-<span><span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span></span>
-<span><span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span></span>
-<span><span class="co">#&gt;  Median :15.0   Median : 36.00  </span></span>
-<span><span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span></span>
-<span><span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code>devtools::build_readme()</code> is handy for this. You could also use GitHub Actions to re-render <code>README.Rmd</code> every time you push. An example workflow can be found here: <a href="https://github.com/r-lib/actions/tree/v1/examples" class="external-link uri">https://github.com/r-lib/actions/tree/v1/examples</a>.</p>
-<p>You can also embed plots, for example:</p>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
+<span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span></code></pre></div>
+<p>Find the power for the best second degree fractional polynomial with monotonicity constraint and a logit link function. The power appears to be (-0.9,-0.9).</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">best_2d_mn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_best_fp_powers.html">find_best_fp_powers</a></span><span class="op">(</span></span>
+<span>  <span class="va">rubella</span><span class="op">$</span><span class="va">age</span>, <span class="va">rubella</span><span class="op">$</span><span class="va">pos</span>, <span class="va">rubella</span><span class="op">$</span><span class="va">tot</span>,</span>
+<span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">0.1</span><span class="op">)</span>, mc <span class="op">=</span> <span class="cn">T</span>, degree<span class="op">=</span><span class="fl">2</span>, link<span class="op">=</span><span class="st">"logit"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">best_2d_mn</span></span>
+<span><span class="co">#&gt; $p</span></span>
+<span><span class="co">#&gt; [1] -0.9 -0.9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $deviance</span></span>
+<span><span class="co">#&gt; [1] 37.57966</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:  glm(formula = as.formula(formulate(p_cur)), family = binomial(link = link))</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;               (Intercept)                I(age^-0.9)  </span></span>
+<span><span class="co">#&gt;                     4.342                     -4.696  </span></span>
+<span><span class="co">#&gt; I(I(age^-0.9) * log(age))  </span></span>
+<span><span class="co">#&gt;                    -9.845  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Degrees of Freedom: 43 Total (i.e. Null);  41 Residual</span></span>
+<span><span class="co">#&gt; Null Deviance:       1369 </span></span>
+<span><span class="co">#&gt; Residual Deviance: 37.58     AIC: 210.1</span></span></code></pre></div>
+<p>Finally, fit the second degree fractional polynomial.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fpmd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fp_model.html">fp_model</a></span><span class="op">(</span></span>
+<span>  <span class="va">rubella</span><span class="op">$</span><span class="va">age</span>, <span class="va">rubella</span><span class="op">$</span><span class="va">pos</span>, <span class="va">rubella</span><span class="op">$</span><span class="va">tot</span>,</span>
+<span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.9</span>, <span class="op">-</span><span class="fl">0.9</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fpmd</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
