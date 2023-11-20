@@ -2,28 +2,27 @@
 % Please edit documentation in R/polynomial_models.R
 \name{polynomial_model}
 \alias{polynomial_model}
-\title{A polynomial model.}
+\title{Polynomial models}
 \usage{
-polynomial_model(age, pos, tot, deg = 1)
+polynomial_model(age, positive, negative, k, type)
 }
 \arguments{
-\item{age}{the age vector.}
+\item{age}{the age vector}
 
-\item{pos}{the pos vector.}
+\item{positive}{the positive vector}
 
-\item{tot}{the tot vector.}
+\item{negative}{the negative vector}
 
-\item{deg}{the degree of the model.}
+\item{k}{degree of the model}
+
+\item{type}{name of method}
 }
 \description{
-Refers to section 6.1.1.
+Refers to section 6.1.1
 }
 \examples{
-df <- hav_bg_1964
-model <- polynomial_model(
-  df$age, df$pos, df$tot,
-  deg=2
-  )
-plot(model)
+a <- hav_bg_1964
+a$neg <- a$tot - a$pos
+model <- polynomial_model(a$age, a$pos, a$neg, type = "Muench")
 
 }

@@ -1,11 +1,27 @@
 Package: serosv
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Model Infectious Disease Parameters from Serosurveys
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(
+    person(
+      "Nguyen", "Pham Nguyen The", email = "nguyenpnt@oucru.org", role = c("aut", "cre")
+    ),
+    person(
+      "Long", "Bui Thanh", role = "aut"
+    ),
+    person(
+      "Tuyen", "Huynh", email = "tuyenhn@oucru.org", role = "aut"
+    ),
+    person(
+      "Thinh", "Ong", email = "thinhop@oucru.org", role = "aut",
+      comment = c(ORCID = "0000-0001-6772-9291")
+    ),
+    person(
+      "Marc", "Choisy", email = "mchoisy@oucru.org", role = "aut",
+      comment = c(ORCID = "0000-0002-5187-6390")
+    )
+  )
+Description: An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

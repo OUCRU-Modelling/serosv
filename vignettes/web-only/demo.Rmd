@@ -108,7 +108,7 @@ y <- pos/tot
 
 Use `plot_gcv()` to show GCV curves for the nearest neighbor method (left) and constant bandwidth (right).
 
-```{r, fig.width=5, fig.height=2.5}
+```{r, fig.width=6, fig.height=2}
 plot_gcv(
    age, pos, tot,
    nn_seq = seq(0.2, 0.8, by=0.1),

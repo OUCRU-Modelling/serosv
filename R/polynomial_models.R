@@ -19,9 +19,10 @@ X <- function(t, degree) {
 #'
 #' @examples
 #' a <- hav_bg_1964
-#' a$neg <- a$tot -a$pos
-#' model <- polynomial_model(a$age,a$pos,a$neg, type = "Muench")
+#' a$neg <- a$tot - a$pos
+#' model <- polynomial_model(a$age, a$pos, a$neg, type = "Muench")
 #'
+#' @export
 polynomial_model <- function(age,positive,negative,k,type){
   Age <- as.numeric(age)
   Pos <- as.numeric(positive)
