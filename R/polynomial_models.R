@@ -8,45 +8,44 @@ X <- function(t, degree) {
   -X_matrix
 }
 
-predictor <- function(degree) {
-  formula <- "cbind(tot-pos, pos)~-1"
-  for (i in 1:degree) {
-    formula <- paste0(formula, "+I(age^", i, ")")
-  }
-  formula
-}
-
-#' A polynomial model.
+#' Polynomial models
 #'
-#' Refers to section 6.1.1.
-#'
-#' @param age the age vector.
-#' @param pos the pos vector.
-#' @param tot the tot vector.
-#' @param deg the degree of the model.
+#'Refers to section 6.1.1
+#' @param age the age vector
+#' @param positive the positive vector
+#' @param negative the negative vector
+#' @param k  degree of the model
+#' @param type name of method
 #'
 #' @examples
-#' df <- hav_bg_1964
-#' model <- polynomial_model(
-#'   df$age, df$pos, df$tot,
-#'   deg=2
-#'   )
-#' plot(model)
+#' a <- hav_bg_1964
+#' a$neg <- a$tot -a$pos
+#' model <- polynomial_model(a$age,a$pos,a$neg, type = "Muench")
 #'
-#' @export
-polynomial_model <- function(age, pos, tot, deg=1) {
+polynomial_model <- function(age,positive,negative,k,type){
+  Age <- as.numeric(age)
+  Pos <- as.numeric(positive)
+  Neg <- as.numeric(negative)
+  df <- data.frame(cbind(Age, Pos,Neg))
   model <- list()
-
-  f <- predictor(deg)
-  model$info <- glm(
-    as.formula(f),
-    family=binomial(link="log")
-  )
-  X <- X(age, deg)
+  if(missing(k)){
+    k <- switch(type,
+                "Muench" = 1 ,
+                "Griffith" = 2,
+                "Grenfell" = 3)}
+  age <- function(k){
+    if(k>1){
+      formula<- paste0("I","(",paste("Age", 2:k,sep = "^"),")",collapse = "+")
+      paste0("cbind(Neg,Pos)"," ~","-1+Age+",formula)
+    } else {
+      paste0("cbind(Neg,Pos)"," ~","-1+Age")
+    }
+  }
+  model$info <- glm(age(k), family=binomial(link="log"),df)
+  X <- X(Age, k)
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
-  model$df <- list(age=age, pos=pos, tot=tot)
-
+  model$df <- list(Age=Age, Pos=Pos, Tot= Pos + Neg)
   class(model) <- "polynomial_model"
   model
 }

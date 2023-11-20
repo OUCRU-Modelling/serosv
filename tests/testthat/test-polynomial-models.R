@@ -27,24 +27,38 @@ test_that("polynomial_model returns same result as in the book (Muench)", {
 
   df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, df$pos, df$tot,
-    deg=1
-    )
+    df$age, df$pos, df$tot - df$pos,
+    type= "Muench"
+  )
   actual <- unname(c(
     coef(model$info)[1]
-    ))
+  ))
 
   expect_equal(actual, expected, tolerance=0.000001)
 })
 
+test_that("polynomial_model returns same result as in the book (Muench)", {
+  expected <- c(-0.0505004)
+
+  df <- hav_bg_1964
+  model <- polynomial_model(
+    df$age, df$pos, df$tot - df$pos,
+    k = 1
+  )
+  actual <- unname(c(
+    coef(model$info)[1]
+  ))
+
+  expect_equal(actual, expected, tolerance=0.000001)
+})
 
 test_that("polynomial_model returns same result as in the book (Griffiths)", {
   expected <- c(-0.0442615740, -0.0001888796)
 
   df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, df$pos, df$tot,
-    deg=2
+    df$age, df$pos, df$tot - df$pos,
+    type = "Griffith"
   )
   actual <- unname(c(
     coef(model$info)[1],
@@ -55,13 +69,47 @@ test_that("polynomial_model returns same result as in the book (Griffiths)", {
 })
 
 
+
+test_that("polynomial_model returns same result as in the book (Griffiths)", {
+  expected <- c(-0.0442615740, -0.0001888796)
+
+  df <- hav_bg_1964
+  model <- polynomial_model(
+    df$age, df$pos, df$tot - df$pos,
+    k = 2
+  )
+  actual <- unname(c(
+    coef(model$info)[1],
+    coef(model$info)[2]
+  ))
+
+  expect_equal(actual, expected, tolerance=0.000001)
+})
+
 test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
   expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)
 
   df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, df$pos, df$tot,
-    deg=3
+    df$age, df$pos, df$tot-df$pos,
+    type = "Grenfell"
+  )
+  actual <- unname(c(
+    coef(model$info)[1],
+    coef(model$info)[2],
+    coef(model$info)[3]
+  ))
+
+  expect_equal(actual, expected, tolerance=0.000001)
+})
+
+test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
+  expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)
+
+  df <- hav_bg_1964
+  model <- polynomial_model(
+    df$age, df$pos, df$tot-df$pos,
+    k = 3
   )
   actual <- unname(c(
     coef(model$info)[1],
