@@ -2,7 +2,6 @@ library(dplyr)
 library(magrittr)
 library(usethis)
 
-
 ################ HEPATITIS A ################
 ## HAV in Belgium (Flanders) in 1993-1994
 hav_be_1993_1994 <- read.table(
@@ -168,25 +167,28 @@ use_data(vzv_be_2001_2003, overwrite = TRUE)
 
 ################ RUBELLA & MUMPS  UK ################
 rubella_mumps_uk <- read.table(
-    "data-raw\\serobook_datasets\\Rubella-Mumps-UK.dat",
+    "data-raw/serobook_datasets/Rubella-Mumps-UK.dat",
     header = TRUE
   ) %>%
   mutate(
-    age = as.numeric(Age)
+    age = as.numeric(Age),
+    .keep  = "unused"
   )
 use_data(rubella_mumps_uk, overwrite=TRUE)
 
 ################ VARICELLA ZOSTER VIRUS & PARVOVIRUS B19 BELGIUM ################
 vzv_parvo_be  <- read.table(
-    "data-raw\\serobook_datasets\\VZV-B19-BE.dat",
+    "data-raw/serobook_datasets/VZV-B19-BE.dat",
     header = TRUE
   ) %>%
-  clean_names() %>%
   mutate(
-    VZVmUIml = vz_vm_u_iml,
+    id = ID,
+    gender = sex,
     parvo_res = parvores,
-    vzv_res = vz_vres,
-    gender = sex
-  )
+    vzv_res = VZVres,
+    .keep  = "unused"
+  )%>%
+  relocate(id, .before = age) %>%
+  relocate(gender, .after = age)
 use_data(vzv_parvo_be, overwrite=TRUE)
 
