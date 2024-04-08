@@ -526,7 +526,6 @@
 #'  \item{PP}{Number of individuals positive to rubella and mumps}
 #' }
 #'
-#' @examples
 #'
 #' @source  Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
 #' antibody to measles, mumps, and rubella by age. British Medical Journal
@@ -545,7 +544,6 @@
 #'  \item{vzv_res}{If an individual is positive for VZV}
 #' }
 #'
-#' @examples
 #'
 #' @source MOSSONG, J., N. HENS, V. FRIEDERICHS, I. DAVIDKIN, M. BROMAN,
 #' B. LITWINSKA, J. SIENNICKA, et al. "Parvovirus B19 Infection in Five

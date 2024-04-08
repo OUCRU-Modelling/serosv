@@ -135,6 +135,120 @@ plot.lp_model <- function(x, ...) {
   })
 }
 
+
+#### Bivariate Dale model ####
+#' plot() overloading for bivariate_dale_model
+#'
+#' @param x the bivariate_dale_model object
+#' @param ... arbitrary params including y1, y2 (label for predictors), plot_type ("ci" or "sp")
+#'
+#' @import patchwork ggplot2
+#' @importFrom stringr str_interp
+#'
+#' @return patchwork object
+#' @export
+#'
+#' @examples
+#' plot(model, y1 = "Parvo B19", y2 = "VZV", plot_type = "sp")
+plot.bivariate_dale_model <- function(x, ...) {
+  y1 <- if (is.null(list(...)[["y1"]])) "Y1" else list(...)$y1
+  y2 <- if (is.null(list(...)[["y2"]])) "Y2" else list(...)$y2
+  plot_type <- if (is.null(list(...)[["plot_type"]])) "ci" else list(...)$plot_type
+
+  ci_plot <- function(age, ci, title="Marginal seroprevalence", ylabel="Seroprevalence"){
+    ci_df <- data.frame(val = ci[1,], lower_bound = ci[2,], upper_bound = ci[3,])
+    ggplot()+
+      ggtitle(title) +
+      # geom_point(size = 7*(pos)/max(tot), shape = 1)+
+      labs(y="Seroprevalence", x="Age")+
+      coord_cartesian(xlim=c(0, max(age)), ylim=c(0, max(ci_df$val)))+
+      geom_smooth(aes(x = age, y = ci_df$val, ymin = ci_df$lower_bound, ymax = ci_df$upper_bound), stat="identity",
+                  col = "blueviolet",fill = "royalblue1",
+                  lwd = .5) +
+      scale_y_continuous(
+        name = ylabel
+      )
+  }
+
+  cond_plot <- function(age, sp, foi, title = "Conditional and Marginal Seroprevalence and FOI"){
+    sp <- data.frame(sp)
+    foi <- data.frame(foi)
+    ggplot(mapping = aes(x = age)) +
+      ggtitle(title) +
+      labs(y="Seroprevalence", x="Age")+
+      coord_cartesian(xlim=c(0, max(age)), ylim=c(0, 1))+
+      scale_colour_manual(
+        values = c("Marginal"="royalblue1",
+                   "Conditioning on occurence"="#1ce8bc",
+                   "Conditioning on non-occurence"="#fc0328")
+      )+
+      scale_linetype_manual(
+        values = c("Seroprevalence"="solid", "FOI"="dashed")
+      )+
+      geom_line(aes(y = sp[,1], col="Marginal", linetype = "Seroprevalence")) +
+      geom_line(aes(y = sp[,2], col ="Conditioning on occurence", linetype = "Seroprevalence")) +
+      geom_line(aes(y = sp[,3], col ="Conditioning on non-occurence", linetype = "Seroprevalence")) +
+      geom_line(aes(x = age[c(-1, -length(age))], y = foi[,1], col ="Marginal", linetype = "FOI")) +
+      geom_line(aes(x = age[c(-1, -length(age))], y = foi[,2], col ="Conditioning on occurence", linetype = "FOI")) +
+      geom_line(aes(x = age[c(-1, -length(age))], y = foi[,3], col ="Conditioning on non-occurence", linetype = "FOI")) +
+      scale_y_continuous(
+        name = "Seroprevalence",
+        sec.axis = sec_axis(~.*1, name = " Force of infection")
+      )
+
+  }
+
+  data_points_layer <- function(age, pos, tot){
+    geom_point(aes(x = age, y = pos/ tot), size = 7*(pos)/max(tot), shape = 1)
+  }
+
+  plot_list <- list()
+
+  # --- Plot marginal seroprevalence and CI
+  plot_list[["y1m"]] <- ci_plot(age = x$df$age, ci = x$ci$y1m, title = str_interp("Marginal seroprevalence of ${y1}")) +
+    data_points_layer(age = x$df$age, pos=rowSums(x$df$y[,c("PN", "PP")]),tot=rowSums(x$df$y))
+
+  plot_list[["y2m"]] <- ci_plot(age = x$df$age, ci = x$ci$y2m, title = str_interp("Marginal seroprevalence of ${y2}")) +
+    data_points_layer(age = x$df$age, pos=rowSums(x$df$y[,c("NP", "PP")]),tot=rowSums(x$df$y))
+
+  plot_list[["or"]] <- ci_plot(age = x$df$age, ci = x$ci$or, title = "Odd ratio", ylabel = "Odd ratio") +
+    geom_hline(aes(yintercept = 1), col = "#fc0328", lwd = 0.5, linetype="dashed")
+
+  # --- Plot conditional vs marginal sp and FOI
+  plot_list[["y1condy2"]] <- cond_plot(age = x$df$age,
+                                       sp = x$sp[c("y1m", "y1condy2pos", "y1condy2neg")],
+                                       foi = x$foi[c("y1m", "y1condy2pos", "y1condy2neg")],
+                                       title = str_interp("SP and FOI for ${y1} given ${y2}"))
+
+  plot_list[["y2condy1"]] <- cond_plot(age = x$df$age,
+                                       sp = x$sp[c("y2m", "y2condy1pos", "y2condy1neg")],
+                                       foi = x$foi[c("y2m", "y2condy1pos", "y2condy1neg")],
+                                       title = str_interp("SP and FOI for ${y2} given ${y1}"))
+
+
+  # --- Plot joint sp and FOI
+  plot_list[["joint"]] <- ci_plot(age = x$df$age, ci = x$ci$pi11, title = "Joint Seroprevalence and FOI") +
+    geom_line(aes(x = x$df$age[c(-1, -length(x$df$age))], y = x$foi$joint),
+              col ="blueviolet", linetype="dashed") +
+    data_points_layer(age = x$df$age, pos = x$df$y$PP, tot = rowSums(x$df$y))
+
+  # --- Return plots depending on options
+  if (plot_type == "ci"){
+    return(
+      wrap_plots(plot_list[c("y1m", "y2m", "or")]) + guide_area() + plot_layout(guides = "collect")
+      & theme(plot.title = element_text(size = "11"))
+    )
+  }else if (plot_type == "sp"){
+    return(
+      wrap_plots(plot_list[c("y1condy2", "y2condy1", "joint")]) + guide_area() + plot_layout(guides = "collect")
+      & theme(plot.title = element_text(size = "11"))
+    )
+  }else{
+    return(plot_list)
+  }
+
+}
+
 #### GCV values ####
 #' Plotting GCV values with respect to different nn-s and h-s parameters.
 #'
