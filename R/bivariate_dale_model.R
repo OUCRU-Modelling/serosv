@@ -8,7 +8,7 @@
 #' @param monotonized whether to monotonize seroprevalence or not
 #' @param sparopt smoothing parameter for VGAM model
 #'
-#' @importFrom VGAM s vgam predictors binom2.or fitted
+#' @importFrom VGAM s vgam predictors binom2.or fitted deviance
 #' @importFrom locfit expit
 #'
 #' @examples
@@ -115,11 +115,22 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
 
 
   for (i in 1:length(spar_seq)){
+    skip <- FALSE
     suppressWarnings(
       {
-        fit <- vgam(y~s(a,spar=spar_seq[i]),family=binom2.or(zero = NULL))
+        tryCatch({
+          fit <- vgam(y~s(a,spar=spar_seq[i]),family=binom2.or(zero = NULL))
+        }, error = function(e){
+          skip <- TRUE
+        })
       }
     )
+
+    if(skip){
+      # skip sparopt that returns error
+      out[i,] <- c(spar_seq[i],0, 0)
+      next
+    }
     out[i,] <- c(spar_seq[i],
                  BICf(fit),
                  AIC(fit) # use built in funcition for AIC
@@ -146,7 +157,8 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
 #' @param data - dataframe being transformed
 #' @param y1 - serostatus for y1
 #' @param y2 - serostatus for y2
-#' @param age - individual's age, rounded if continuous
+#' @param age - individual's age
+#' @param discrete_age - round age so it is discrete
 #'
 #' @import dplyr magrittr
 #' @return transformed matrix
@@ -154,13 +166,17 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
 #' @examples
 #' data <- vzv_parvo_be
 #' data <- generate_quad_matrix(data, parvo_res, vzv_res, age)
-generate_quad_matrix <- function (data, y1, y2, age){
+#' @export
+generate_quad_matrix <- function (data, y1, y2, age, discrete_age = F){
   # handle continuous age
-  if(typeof(data$age) == "double") {data$age <- round(data$age)}
+  if(discrete_age) {data$age <- round(data$age)}
 
   data %>%
+    dplyr::filter(!is.na(age), !is.na({{y1}}), !is.na({{y2}}) ) %>%
     group_by({{age}}) %>%
-    dplyr::filter(!is.na({{y1}}), !is.na({{y2}})) %>%
+    mutate(
+      age = as.numeric(age)
+    ) %>%
     summarize(
       NN = sum({{y1}} == 0 & {{y2}} == 0),
       NP = sum({{y1}} == 0 & {{y2}} == 1),

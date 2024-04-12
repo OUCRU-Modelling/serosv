@@ -4,7 +4,7 @@
 \alias{generate_quad_matrix}
 \title{Generate the (NN, NP, PN, PP) matrix from line-listing data}
 \usage{
-generate_quad_matrix(data, y1, y2, age)
+generate_quad_matrix(data, y1, y2, age, discrete_age = F)
 }
 \arguments{
 \item{data}{- dataframe being transformed}
@@ -13,7 +13,9 @@ generate_quad_matrix(data, y1, y2, age)
 
 \item{y2}{- serostatus for y2}
 
-\item{age}{- individual's age, rounded if continuous}
+\item{age}{- individual's age}
+
+\item{discrete_age}{- round age so it is discrete}
 }
 \value{
 transformed matrix

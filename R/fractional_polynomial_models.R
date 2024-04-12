@@ -40,7 +40,7 @@ formulate <- function(p) {
 #'  )
 #' best_p
 #'
-#' @import stats
+#' @importFrom stats glm binomial formula deviance
 #'
 #' @export
 find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
