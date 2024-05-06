@@ -17,7 +17,6 @@
 #' plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "sp")
 #'
 #' @export
-
 bivariate_dale_model <- function (age, y, constant_or = F, monotonized=T, sparopt=0){
   if(constant_or){
     constr <-  list(
@@ -128,7 +127,8 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
 
     if(skip){
       # skip sparopt that returns error
-      out[i,] <- c(spar_seq[i],0, 0)
+      # make it return inf so sparopt that gives error is never selected
+      out[i,] <- c(spar_seq[i],Inf, Inf)
       next
     }
     out[i,] <- c(spar_seq[i],
