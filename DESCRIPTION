@@ -33,7 +33,11 @@ Imports:
     dplyr,
     stats4,
     magrittr,
-    locfit
+    locfit, 
+    VGAM,
+    ggplot2,
+    patchwork,
+    stringr
 Suggests: 
     covr,
     testthat (>= 3.0.0)

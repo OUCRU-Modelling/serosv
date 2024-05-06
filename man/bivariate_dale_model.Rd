@@ -22,7 +22,7 @@ Refers to section 12.2
 }
 \examples{
 data <- rubella_mumps_uk
-model <- bivariate_dale_model(age = data$age, y = data[, c("NN", "NP", "PN", "PP")], monotonized=T)
+model <- bivariate_dale_model(age = data$age, y = data[, c("NN", "NP", "PN", "PP")], monotonized=TRUE)
 plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "sp")
 
 }

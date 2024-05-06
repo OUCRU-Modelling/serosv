@@ -7,7 +7,8 @@
 \format{
 A data frame with 7 variables:
 \describe{
- \item{id}
+ \item{id}{ID of individual}
+ \item{age}{Age of individual}
  \item{gender}{Gender of individual}
  \item{parvouml}{Parvo B19 antibody units per ml}
  \item{parvo_res}{If an individual is positive for parvovirus B19}

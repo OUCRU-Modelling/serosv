@@ -9,7 +9,7 @@ test_that("bivariate dale model returns the same result as original code", {
 
   # --- Get result from package
   data <- rubella_mumps_uk
-  model <- bivariate_dale_model(age = data$age, y = data[, c("NN", "NP", "PN", "PP")], monotonized=T)
+  model <- bivariate_dale_model(age = data$age, y = data[, c("NN", "NP", "PN", "PP")], monotonized=TRUE)
 
   actual <- unname(coef(model$info))
   actual <- append(actual, deviance(model$info))

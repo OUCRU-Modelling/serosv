@@ -147,9 +147,6 @@ plot.lp_model <- function(x, ...) {
 #'
 #' @return patchwork object
 #' @export
-#'
-#' @examples
-#' plot(model, y1 = "Parvo B19", y2 = "VZV", plot_type = "sp")
 plot.bivariate_dale_model <- function(x, ...) {
   y1 <- if (is.null(list(...)[["y1"]])) "Y1" else list(...)$y1
   y2 <- if (is.null(list(...)[["y2"]])) "Y2" else list(...)$y2

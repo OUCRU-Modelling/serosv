@@ -17,6 +17,3 @@ patchwork object
 \description{
 plot() overloading for bivariate_dale_model
 }
-\examples{
-plot(model, y1 = "Parvo B19", y2 = "VZV", plot_type = "sp")
-}
