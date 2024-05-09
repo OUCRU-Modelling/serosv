@@ -40,6 +40,8 @@ Imports:
     stringr
 Suggests: 
     covr,
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Collate: 
     'data.R'
@@ -57,3 +59,4 @@ Collate:
     'compute_ci.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/
+VignetteBuilder: knitr

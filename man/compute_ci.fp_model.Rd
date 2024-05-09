@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_ci.R
 \name{compute_ci.fp_model}
 \alias{compute_ci.fp_model}
-\title{Compute confidence interval}
+\title{Compute confidence interval for fractional polynomial model}
 \usage{
 compute_ci.fp_model(x, ci = 0.95, le = 100, ...)
 }
@@ -16,5 +16,5 @@ compute_ci.fp_model(x, ci = 0.95, le = 100, ...)
 \item{...}{- arbitrary argument}
 }
 \description{
-Compute confidence interval
+Compute confidence interval for fractional polynomial model
 }

@@ -2,3 +2,75 @@ url: https://oucru-modelling.github.io/serosv/
 template:
   bootstrap: 5
 
+reference:
+- title: Dataset
+  contents:
+  - hav_be_1993_1994
+  - hav_be_2002
+  - hav_bg_1964
+  - hbv_ru_1999
+  - hcv_be_2006
+  - mumps_uk_1986_1987
+  - parvob19_be_2001_2003
+  - parvob19_ew_1996
+  - parvob19_fi_1997_1998
+  - parvob19_it_2003_2004
+  - parvob19_pl_1995_2004
+  - rubella_mumps_uk
+  - rubella_uk_1986_1987
+  - tb_nl_1966_1973
+  - vzv_be_1999_2000
+  - vzv_be_2001_2003
+  - vzv_parvo_be
+
+- title: Models
+  contents:
+  - sir_basic_model
+  - sir_static_model
+  - sir_subpops_model
+  - mseir_model
+  - polynomial_model
+  - farrington_model
+  - weibull_model
+  - fp_model
+  - lp_model
+  - bivariate_dale_model
+
+- title: Plotting functions
+  contents:
+  - plot_gcv
+  - plot.polynomial_model
+  - plot.farrington_model
+  - plot.weibull_model
+  - plot.fp_model
+  - plot.lp_model
+  - plot.bivariate_dale_model
+  - set_plot_style
+
+- title: Other utilities
+  contents:
+  - transform
+  - generate_quad_matrix
+  - compute_ci
+  - compute_ci.fp_model
+  - compute_ci.lp_model
+  - compute_ci.weibull_model
+  - find_best_bdm_param
+  - find_best_fp_powers
+
+articles:
+- title: Fitting data
+  navbar: ~
+  contents:
+  - parametric_model
+  - nonparametric_model
+  - semiparametric_model
+  - hierarchical_model
+  - model_quantitative_data
+  - model_multivariate_data
+  - age_time_dependent
+- title: Utilities
+  navbar: Utilities
+  contents:
+  - data_transformation
+  - visualizing_model

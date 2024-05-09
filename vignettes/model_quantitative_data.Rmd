@@ -1,0 +1,27 @@
+---
+title: "Modeling directly from antibody levels"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Modeling directly from antibody levels}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, output=FALSE}
+library(serosv)
+```
+
+## Mixture model
+
+*Work in progress*
+
+## Hierarchical mixture model
+
+*Work in progress*

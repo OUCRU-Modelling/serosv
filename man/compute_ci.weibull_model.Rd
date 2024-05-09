@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_ci.R
 \name{compute_ci.weibull_model}
 \alias{compute_ci.weibull_model}
-\title{Compute confidence interval}
+\title{Compute confidence interval for Weibull model}
 \usage{
 compute_ci.weibull_model(x, ci = 0.95, ...)
 }
@@ -14,5 +14,5 @@ compute_ci.weibull_model(x, ci = 0.95, ...)
 \item{...}{- arbitrary argument}
 }
 \description{
-Compute confidence interval
+Compute confidence interval for Weibull model
 }

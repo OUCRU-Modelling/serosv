@@ -1,0 +1,130 @@
+---
+title: "Parametric models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Parametric models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, output=FALSE}
+library(serosv)
+```
+
+## Polynomial models
+
+Refer to `Chapter 6.1.1`
+
+Use `polynomial_model()` to fit a polynomial model.
+
+We will use the `Hepatitis A` data from Belgium 1993--1994 for this example.
+
+```{r}
+a <- hav_bg_1964
+neg <- a$tot -a$pos
+pos <- a$pos
+age <- a$age
+tot <- a$tot
+```
+
+### Muench model
+
+**Muench**'s model can be estimated by either defining `k = 1` (a degree one linear predictor) or setting the `type = "Muench"`.
+
+```{r}
+muench1 <- polynomial_model(age, pos, neg, k = 1)
+summary(muench1$info)
+
+muench2 <- polynomial_model(age, pos, neg, type = "Muench")
+summary(muench2$info)
+```
+
+We can plot any model with the `plot()` function.
+
+```{r}
+plot(muench2) 
+```
+
+### Griffith model
+
+Similarly, we can estimate **Griffith**'s model.
+
+```{r}
+gf_model <- polynomial_model(age, pos, neg, type = "Griffith")
+plot(gf_model)
+```
+
+### Grenfell and Anderson model
+
+And Grenfell and Anderson's model.
+
+```{r}
+grf_model <- polynomial_model(age,pos,neg,type = "Grenfell")
+plot(grf_model)
+```
+
+## Nonlinear models
+
+Refer to `Chapter 6.1.2`
+
+### Farrington model
+
+Use `farrington_model()` to fit a **Farrington**'s model.
+
+```{r, warning=FALSE}
+rubella <- rubella_uk_1986_1987
+rubella$neg <- rubella$tot - rubella$pos
+
+farrington_md <- farrington_model(
+   rubella$age, rubella$pos, rubella$tot,
+   start=list(alpha=0.07,beta=0.1,gamma=0.03)
+   )
+plot(farrington_md)
+```
+
+### Weibull model
+
+Use `weibull_model()` to fit a Weibull model.
+
+```{r}
+hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
+dur <- hcv$dur
+infected <- hcv$seropositive
+
+wb_md <- weibull_model(
+   t = dur,
+   spos = infected
+   )
+plot(wb_md) 
+```
+
+## Fractional polynomial model
+
+Refer to `Chapter 6.2`
+
+Use `find_best_fp_powers()` to find the powers which gives the lowest deviance score
+
+```{r, warning=FALSE}
+hav <- hav_be_1993_1994
+best_p <- find_best_fp_powers(
+  hav$age, hav$pos, hav$tot,
+  p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
+)
+best_p
+```
+
+Use `fp_model()` to fit a fractional polynomial model
+
+```{r}
+model <- fp_model(
+  hav$age, hav$pos, hav$tot,
+  p=c(1.5, 1.6), link="cloglog")
+plot(model)
+```

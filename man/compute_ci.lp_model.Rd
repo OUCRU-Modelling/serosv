@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_ci.R
 \name{compute_ci.lp_model}
 \alias{compute_ci.lp_model}
-\title{Compute confidence interval}
+\title{Compute confidence interval for local polynomial model}
 \usage{
 compute_ci.lp_model(x, ci = 0.95, ...)
 }
@@ -14,5 +14,5 @@ compute_ci.lp_model(x, ci = 0.95, ...)
 \item{...}{- arbitrary arguments}
 }
 \description{
-Compute confidence interval
+Compute confidence interval for local polynomial model
 }
