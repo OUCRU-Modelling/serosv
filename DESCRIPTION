@@ -54,5 +54,6 @@ Collate:
     'nonparametric.R'
     'bivariate_dale_model.R'
     'plots.R'
+    'compute_ci.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/

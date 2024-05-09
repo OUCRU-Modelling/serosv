@@ -1,27 +1,84 @@
+#' Helper to adjust styling of a plot
+#'
+#' @param sero - color for seroprevalence line
+#' @param ci - color for confidence interval
+#' @param foi - color for force of infection line
+#' @param sero_line - linetype for seroprevalence line
+#' @param foi_line - linetype for force of infection line
+#'
+#' @export
+set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed"){
+    list(
+      scale_colour_manual(
+        values = c("sero" = sero, "foi" = foi)
+      ),
+      scale_linetype_manual(
+        values = c("sero" = sero_line, "foi" = foi_line)
+      ),
+      scale_fill_manual(
+        values = c("ci" =ci)
+      ),
+      labs(linetype = "Line", colour = "Line", fill="Fill color")
+    )
+}
+
+#--- Helper function for plotting
+plot_util <- function(age, pos, tot, sero, foi){
+  plot <- ggplot(data = data.frame(age, pos, tot), aes(x = age, y = pos/tot)) +
+    geom_point(size = 20*(pos)/max(tot), shape = 1)+
+    labs(y="Seroprevalence", x="Age")+
+    coord_cartesian(xlim=c(0,max(age)), ylim=c(0, 1)) +
+    scale_y_continuous(
+      name = "Seroprevalence",
+      sec.axis = sec_axis(~.*1, name = " Force of infection")
+    ) + set_plot_style()
+
+  # === Add seroprevalence layer
+  if (class(sero) == "data.frame"){
+    # --- Sero is dataframe when confidence interval is computed
+    plot <- plot + geom_smooth(aes_auto(sero, col = "sero", linetype="sero",
+                                        fill = "ci"), data=sero,
+                               stat="identity",lwd=0.5)
+  }else{
+    # --- Simply plot seroprevalence line if CI cannot be computed
+    plot <- plot + geom_line(aes(x = age, y = sero, col = "sero", linetype="sero"),
+                             stat="identity",lwd=0.5)
+  }
+
+  # === Add foi layers
+  if (class(foi) == "data.frame"){
+    # --- Handle cases like that of weibull model
+    plot <- plot + geom_line(aes_auto(foi, col = "foi", linetype="foi"), data=foi,
+                               stat="identity",lwd=0.5)
+  }else if (length(age) != length(foi)){
+    # --- handle some cases when length of age differs from length of foi
+    age <- age[c(-1,-length(age))]
+    foi <- data.frame(x = age, y = foi)
+    plot <- plot + geom_line(aes_auto(foi, col = "foi", linetype="foi"), data = foi,
+                             lwd = 0.5)
+  }else{
+    # --- Simply plot foi
+    plot <- plot + geom_line(aes(x = age, y = foi, col = "foi", linetype="foi"),
+                lwd = 0.5)
+  }
+  plot
+}
+
 #### Polynomial model ####
 #' plot() overloading for polynomial model
 #'
-#' @param x the polynomial model object.
+#' @param x the polynomial model object
 #' @param ... arbitrary params.
+#' @import ggplot2
 #'
 #' @export
 plot.polynomial_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
+  out.DF <- compute_ci(x)
 
   with(x$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, x$sp, lwd=2)
-    lines(age, x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
+    plot_util(age = x$df$Age, pos = x$df$Pos, tot = x$df$Tot, sero = out.DF, foi = as.numeric(x$foi))
   })
+
 }
 
 #### Non-linear ####
@@ -34,21 +91,10 @@ plot.polynomial_model <- function(x, ...) {
 #'
 #' @export
 plot.farrington_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
+  # out.DF <- compute_ci(x)
 
   with(x$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, x$sp, lwd=2)
-    lines(age, x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
+    plot_util(age = age, pos = pos, tot = tot, sero = x$sp, foi = x$foi)
   })
 }
 
@@ -60,25 +106,11 @@ plot.farrington_model <- function(x, ...) {
 #'
 #' @export
 plot.weibull_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
-
   df_ <- transform(x$df$t, x$df$spos)
   names(df_)[names(df_) == "t"] <- "exposure"
 
-  with(c(x$df, df_), {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      exposure,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="exposure", ylab="seroprevalence",
-      xlim=c(0, max(exposure)), ylim=c(0,1)
-    )
-    lines(t, x$sp, lwd=2)
-    lines(t, x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=10), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
-  })
+  out.DF <- compute_ci.weibull_model(x)
+  plot_util(age = df_$exposure, pos = df_$pos, tot = df_$tot, sero = out.DF, foi = data.frame(x = x$df$t, y = x$foi))
 }
 
 #### Fractional polynomial model ####
@@ -89,21 +121,10 @@ plot.weibull_model <- function(x, ...) {
 #'
 #' @export
 plot.fp_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
+  out.DF <- compute_ci.fp_model(x)
 
   with(x$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, x$sp, lwd=2)
-    lines(age[c(-1,-length(age))], x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
+    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi)
   })
 }
 
@@ -117,21 +138,10 @@ plot.fp_model <- function(x, ...) {
 #'
 #' @export
 plot.lp_model <- function(x, ...) {
-  CEX_SCALER <- 4 # arbitrary number for better visual
+  out.DF <- compute_ci.lp_model(x)
 
   with(x$df, {
-    par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-    plot(
-      age,
-      pos/tot,
-      cex=CEX_SCALER*tot/max(tot),
-      xlab="age", ylab="seroprevalence",
-      xlim=c(0, max(age)), ylim=c(0,1)
-    )
-    lines(age, x$sp, lwd=2)
-    lines(age, x$foi, lwd=2, lty=2)
-    axis(side=4, at=round(seq(0.0, max(x$foi), length.out=3), 2))
-    mtext(side=4, "force of infection", las=3, line=2)
+    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi)
   })
 }
 
@@ -270,24 +280,27 @@ plot.bivariate_dale_model <- function(x, ...) {
 #'   h_seq = seq(5, 25, by=1)
 #' )
 #'
-#' @import locfit
+#' @import locfit patchwork ggplot2
 #' @import graphics
 #'
 #' @export
 plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
-  par(mfrow=c(1,2),lwd=2,las=1,cex.axis=1,cex.lab=1.1,mgp=c(2,0.5, 0),mar=c(3.1,3.1,3.1,3))
-
   y <- pos/tot
-  res = cbind(nn_seq, summary(gcvplot(y~age, family="binomial", alpha=nn_seq)))
-  plot(res[,1],res[,3],type="n",xlab="nn (% Neighbors)",ylab=" ")
-  lines(res[,1],res[,3])
-  mtext(side=2, "GCV", las=3, line=2.4, cex=0.9)
 
+  # --- Plot for nn seq
+  res <-  cbind(nn_seq, summary(gcvplot(y~age, family="binomial", alpha=nn_seq)))
+  nn_plot <- ggplot() +
+    geom_line(aes(x = res[,1], y = res[,3]), col = "royalblue") +
+    labs(x="nn (% Neighbors)", y="GCV")
+
+
+  # --- Plot for h seq
   h_seq_ <- cbind(rep(0, length(h_seq)), h_seq)
-  res=cbind(h_seq_[,2],summary(gcvplot(y~age,family="binomial",alpha=h_seq_)))
-  plot(res[,1],res[,3],type="n",xlab="h (Bandwidth)",ylab=" ")
-  lines(res[,1],res[,3])
-  mtext(side=2, "GCV", las=3, line=3, cex=0.9)
-  # reset the plotting parameter back to its default state
-  par(mfrow = c(1, 1))
+  h_res <- cbind(h_seq_[,2],summary(gcvplot(y~age,family="binomial",alpha=h_seq_)))
+  h_plot <- ggplot() +
+    geom_line(aes(x = h_res[,1], y = h_res[,3]), col = "royalblue") +
+    labs(x="h (Bandwidth)", y="GCV")
+
+  # --- Combine 2 plots
+  nn_plot + h_plot + plot_layout(ncol=2)
 }
