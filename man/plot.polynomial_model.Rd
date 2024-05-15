@@ -7,7 +7,7 @@
 \method{plot}{polynomial_model}(x, ...)
 }
 \arguments{
-\item{x}{the polynomial model object.}
+\item{x}{the polynomial model object}
 
 \item{...}{arbitrary params.}
 }
