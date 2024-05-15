@@ -35,12 +35,12 @@ formulate <- function(p) {
 #' @examples
 #' df <- hav_be_1993_1994
 #' best_p <- find_best_fp_powers(
-#'   df$age, df$pos, df$tot,
-#'   p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-#'  )
+#' df$age, df$pos, df$tot,
+#' p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
+#' )
 #' best_p
 #'
-#' @import stats
+#' @importFrom stats glm binomial formula
 #'
 #' @export
 find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
@@ -85,7 +85,8 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
       family=binomial(link=link)
     )
     if (glm_cur$converged == TRUE) {
-      d_cur <- deviance(glm_cur)
+      # d_cur <- deviance(glm_cur)
+      d_cur <- glm_cur$deviance
       if (is.null(glm_best) || d_cur < d_best) {
         if ((mc && is_monotone(glm_cur)) | !mc) {
           glm_best <- glm_cur

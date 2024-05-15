@@ -16,6 +16,28 @@ est_foi <- function(t, sp)
   foi
 }
 
+pava<- function(pos=pos,tot=rep(1,length(pos)))
+{
+  gi<- pos/tot
+  pai1 <- pai2 <- gi
+  N <- length(pai1)
+  ni<-tot
+  for(i in 1:(N - 1)) {
+    if(pai2[i] > pai2[i + 1]) {
+      pool <- (ni[i]*pai1[i] + ni[i+1]*pai1[i + 1])/(ni[i]+ni[i+1])
+      pai2[i:(i + 1)] <- pool
+      k <- i + 1
+      for(j in (k - 1):1) {
+        if(pai2[j] > pai2[k]) {
+          pool.2 <- sum(ni[j:k]*pai1[j:k])/(sum(ni[j:k]))
+          pai2[j:k] <- pool.2
+        }
+      }
+    }
+  }
+  return(list(pai1=pai1,pai2=pai2))
+}
+
 #' Generate a dataframe with `t`, `pos` and `tot` columns from
 #' `t` and `seropositive` vectors.
 #'
