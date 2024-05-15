@@ -24,7 +24,17 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/web-only/demo.html">serosv: model infectious disease parameters from serosurveys</a>
+    <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
+    <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
+    <a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a>
+    <a class="dropdown-item" href="../articles/hierarchical_model.html">Hierarchical Bayesian models</a>
+    <a class="dropdown-item" href="../articles/model_quantitative_data.html">Modeling directly from antibody levels</a>
+    <a class="dropdown-item" href="../articles/model_multivariate_data.html">Model multivariate serological data</a>
+    <a class="dropdown-item" href="../articles/age_time_dependent.html">Estimating Age-Time Dependent Prevalence and FOI</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Utilities</h6>
+    <a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a>
+    <a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -41,7 +51,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="dataset">Dataset<a class="anchor" aria-label="anchor" href="#dataset"></a></h2>
       
       
 
@@ -52,36 +62,6 @@
       
 
       <dl><dt>
-          
-          <code><a href="bivariate_dale_model.html">bivariate_dale_model()</a></code> 
-        </dt>
-        <dd>A bivariate Dale model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="farrington_model.html">farrington_model()</a></code> 
-        </dt>
-        <dd>The Farrington (1990) model.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_best_bdm_param.html">find_best_bdm_param()</a></code> 
-        </dt>
-        <dd>Find best smoothing parameter for Bivariate Dale model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_best_fp_powers.html">find_best_fp_powers()</a></code> 
-        </dt>
-        <dd>Returns the powers of the GLM fitted model which has the lowest deviance score.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fp_model.html">fp_model()</a></code> 
-        </dt>
-        <dd>A fractional polynomial model.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="generate_quad_matrix.html">generate_quad_matrix()</a></code> 
-        </dt>
-        <dd>Generate the (NN, NP, PN, PP) matrix from line-listing data</dd>
-      </dl><dl><dt>
           
           <code><a href="hav_be_1993_1994.html">hav_be_1993_1994</a></code> 
         </dt>
@@ -106,16 +86,6 @@
           <code><a href="hcv_be_2006.html">hcv_be_2006</a></code> 
         </dt>
         <dd>Hepatitis C serological data from Belgium in 2006 (line listing)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="lp_model.html">lp_model()</a></code> 
-        </dt>
-        <dd>A local polynomial model.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mseir_model.html">mseir_model()</a></code> 
-        </dt>
-        <dd>MSEIR model</dd>
       </dl><dl><dt>
           
           <code><a href="mumps_uk_1986_1987.html">mumps_uk_1986_1987</a></code> 
@@ -148,46 +118,6 @@
         <dd>Parvo B19 serological data from Poland from 1995-2004 (line listing)</dd>
       </dl><dl><dt>
           
-          <code><a href="plot.bivariate_dale_model.html">plot(<i>&lt;bivariate_dale_model&gt;</i>)</a></code> 
-        </dt>
-        <dd>plot() overloading for bivariate_dale_model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot.farrington_model.html">plot(<i>&lt;farrington_model&gt;</i>)</a></code> 
-        </dt>
-        <dd>plot() overloading for Farrington model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot.fp_model.html">plot(<i>&lt;fp_model&gt;</i>)</a></code> 
-        </dt>
-        <dd>plot() overloading for fractional polynomial model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot.lp_model.html">plot(<i>&lt;lp_model&gt;</i>)</a></code> 
-        </dt>
-        <dd>plot() overloading for local polynomial model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot.polynomial_model.html">plot(<i>&lt;polynomial_model&gt;</i>)</a></code> 
-        </dt>
-        <dd>plot() overloading for polynomial model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot.weibull_model.html">plot(<i>&lt;weibull_model&gt;</i>)</a></code> 
-        </dt>
-        <dd>plot() overloading for Weibull model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="plot_gcv.html">plot_gcv()</a></code> 
-        </dt>
-        <dd>Plotting GCV values with respect to different nn-s and h-s parameters.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="polynomial_model.html">polynomial_model()</a></code> 
-        </dt>
-        <dd>Polynomial models</dd>
-      </dl><dl><dt>
-          
           <code><a href="rubella_mumps_uk.html">rubella_mumps_uk</a></code> 
         </dt>
         <dd>Rubella - Mumps data from the UK (aggregated)</dd>
@@ -197,6 +127,37 @@
         </dt>
         <dd>Rubella serological data from the UK in 1986 and 1987 (aggregated)</dd>
       </dl><dl><dt>
+          
+          <code><a href="tb_nl_1966_1973.html">tb_nl_1966_1973</a></code> 
+        </dt>
+        <dd>Tuberculosis serological data from the Netherlands 1966-1973 (aggregated)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="vzv_be_1999_2000.html">vzv_be_1999_2000</a></code> 
+        </dt>
+        <dd>VZV serological data from Belgium (Flanders) from 1999-2000 (aggregated)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="vzv_be_2001_2003.html">vzv_be_2001_2003</a></code> 
+        </dt>
+        <dd>VZV serological data from Belgium from 2001-2003 (line listing)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="vzv_parvo_be.html">vzv_parvo_be</a></code> 
+        </dt>
+        <dd>VZV and Parvovirus B19 serological data in Belgium (line listing)</dd>
+      </dl></div><div class="section level2">
+      <h2 id="models">Models<a class="anchor" aria-label="anchor" href="#models"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="sir_basic_model.html">sir_basic_model()</a></code> 
         </dt>
@@ -213,36 +174,144 @@
         <dd>SIR Model with Interacting Subpopulations</dd>
       </dl><dl><dt>
           
-          <code><a href="tb_nl_1966_1973.html">tb_nl_1966_1973</a></code> 
+          <code><a href="mseir_model.html">mseir_model()</a></code> 
         </dt>
-        <dd>Tuberculosis serological data from the Netherlands 1966-1973 (aggregated)</dd>
+        <dd>MSEIR model</dd>
       </dl><dl><dt>
+          
+          <code><a href="polynomial_model.html">polynomial_model()</a></code> 
+        </dt>
+        <dd>Polynomial models</dd>
+      </dl><dl><dt>
+          
+          <code><a href="farrington_model.html">farrington_model()</a></code> 
+        </dt>
+        <dd>The Farrington (1990) model.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="weibull_model.html">weibull_model()</a></code> 
+        </dt>
+        <dd>The Weibull model.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fp_model.html">fp_model()</a></code> 
+        </dt>
+        <dd>A fractional polynomial model.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="lp_model.html">lp_model()</a></code> 
+        </dt>
+        <dd>A local polynomial model.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="bivariate_dale_model.html">bivariate_dale_model()</a></code> 
+        </dt>
+        <dd>A bivariate Dale model</dd>
+      </dl></div><div class="section level2">
+      <h2 id="plotting-functions">Plotting functions<a class="anchor" aria-label="anchor" href="#plotting-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="plot_gcv.html">plot_gcv()</a></code> 
+        </dt>
+        <dd>Plotting GCV values with respect to different nn-s and h-s parameters.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.polynomial_model.html">plot(<i>&lt;polynomial_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>plot() overloading for polynomial model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.farrington_model.html">plot(<i>&lt;farrington_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>plot() overloading for Farrington model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.weibull_model.html">plot(<i>&lt;weibull_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>plot() overloading for Weibull model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.fp_model.html">plot(<i>&lt;fp_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>plot() overloading for fractional polynomial model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.lp_model.html">plot(<i>&lt;lp_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>plot() overloading for local polynomial model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.bivariate_dale_model.html">plot(<i>&lt;bivariate_dale_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>plot() overloading for bivariate_dale_model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="set_plot_style.html">set_plot_style()</a></code> 
+        </dt>
+        <dd>Helper to adjust styling of a plot</dd>
+      </dl></div><div class="section level2">
+      <h2 id="other-utilities">Other utilities<a class="anchor" aria-label="anchor" href="#other-utilities"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="transform.html">transform()</a></code> 
         </dt>
         <dd>Generate a dataframe with `t`, `pos` and `tot` columns from `t` and `seropositive` vectors.</dd>
       </dl><dl><dt>
           
-          <code><a href="vzv_be_1999_2000.html">vzv_be_1999_2000</a></code> 
+          <code><a href="generate_quad_matrix.html">generate_quad_matrix()</a></code> 
         </dt>
-        <dd>VZV serological data from Belgium (Flanders) from 1999-2000 (aggregated)</dd>
+        <dd>Generate the (NN, NP, PN, PP) matrix from line-listing data</dd>
       </dl><dl><dt>
           
-          <code><a href="vzv_be_2001_2003.html">vzv_be_2001_2003</a></code> 
+          <code><a href="compute_ci.html">compute_ci()</a></code> 
         </dt>
-        <dd>VZV serological data from Belgium from 2001-2003 (line listing)</dd>
+        <dd>Compute confidence interval</dd>
       </dl><dl><dt>
           
-          <code><a href="vzv_parvo_be.html">vzv_parvo_be</a></code> 
+          <code><a href="compute_ci.fp_model.html">compute_ci.fp_model()</a></code> 
         </dt>
-        <dd>VZV and Parvovirus B19 serological data in Belgium (line listing)</dd>
+        <dd>Compute confidence interval for fractional polynomial model</dd>
       </dl><dl><dt>
           
-          <code><a href="weibull_model.html">weibull_model()</a></code> 
+          <code><a href="compute_ci.lp_model.html">compute_ci.lp_model()</a></code> 
         </dt>
-        <dd>The Weibull model.</dd>
+        <dd>Compute confidence interval for local polynomial model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_ci.weibull_model.html">compute_ci.weibull_model()</a></code> 
+        </dt>
+        <dd>Compute confidence interval for Weibull model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_best_bdm_param.html">find_best_bdm_param()</a></code> 
+        </dt>
+        <dd>Find best smoothing parameter for Bivariate Dale model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_best_fp_powers.html">find_best_fp_powers()</a></code> 
+        </dt>
+        <dd>Returns the powers of the GLM fitted model which has the lowest deviance score.</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
