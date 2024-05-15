@@ -22,13 +22,22 @@
     <loc>https://oucru-modelling.github.io/serosv/index.html</loc>
   </url>
   <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/bivariate_dale_model.html</loc>
+  </url>
+  <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/farrington_model.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/find_best_bdm_param.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/fp_model.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/generate_quad_matrix.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/hav_be_1993_1994.html</loc>
@@ -73,6 +82,9 @@
     <loc>https://oucru-modelling.github.io/serosv/reference/parvob19_pl_1995_2004.html</loc>
   </url>
   <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/plot.bivariate_dale_model.html</loc>
+  </url>
+  <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/plot.farrington_model.html</loc>
   </url>
   <url>
@@ -92,6 +104,9 @@
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/polynomial_model.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/rubella_mumps_uk.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/rubella_uk_1986_1987.html</loc>
@@ -116,6 +131,9 @@
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/vzv_be_2001_2003.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/vzv_parvo_be.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/weibull_model.html</loc>
