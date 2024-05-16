@@ -118,7 +118,7 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
     suppressWarnings(
       {
         tryCatch({
-          fit <- vgam(y~s(a,spar=spar_seq[i]),family=binom2.or(zero = NULL))
+          fit <- vgam(y~VGAM::s(a,spar=spar_seq[i]),family=binom2.or(zero = NULL))
         }, error = function(e){
           skip <- TRUE
         })

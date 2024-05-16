@@ -103,4 +103,63 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 }
 
 
+#' Compute confidence interval for GLMM
+#'
+#' @param x - serosv models
+#' @param ci - confidence interval
+#' @param ... - arbitrary arguments
+#' @export
+compute_ci.glmm_ps_model <- function(x,ci = 0.95, ...){
+  m <- 1
+
+  p <- (1 - ci) / 2
+  link_inv <- x$info$gam$family$linkinv
+  dataset <- x$info$gam$model[,1:2]
+  n <- nrow(dataset) - length(x$info$gam$coefficients)
+  ages <- dataset[2]
+
+  mod <- predict.gam(x$info$gam, data.frame(a = ages), se.fit = TRUE) |>
+    extract(c("fit", "se.fit")) %>%
+    c(age = list(ages), .) |>
+    as_tibble() |>
+    mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
+           upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
+           fit = m * link_inv(fit)) |>
+    select(- se.fit)
+
+  out.DF <- data.frame(x = ages, y = mod$fit,
+                       ymin= mod$lwr, ymax = mod$upr)
+  out.FOI <- data.frame(x = x$df$age[c(-1, -length(x$df$age) )],
+                        y = est_foi(ages[[1]], mod$fit),
+                        ymin= est_foi(ages[[1]],mod$lwr),
+                        ymax = est_foi(ages[[1]],mod$upr)
+                        )
+
+  return(list(out.DF, out.FOI))
+}
+
+#' Compute confidence interval for mixture model
+#'
+#' @param x - serosv mixture_model object
+#' @param ci - confidence interval
+#' @param ... - arbitrary arguments
+#' @export
+compute_ci.mixture_model <- function(x,ci = 0.95, ...){
+
+  susceptible <- x$info$parameters[1, ]
+  infected <- x$info$parameters[2, ]
+
+  lower_q <- (1 - ci)/2
+  upper_q <- 1 - lower_q
+  susceptible <- list(lower_bound = qnorm(lower_q, mean = susceptible$mu, sd = susceptible$sigma),
+                      upper_bound = qnorm(upper_q, mean = susceptible$mu, sd = susceptible$sigma))
+
+  infected <- list(lower_bound = qnorm(lower_q, mean = infected$mu, sd = infected$sigma),
+                      upper_bound = qnorm(upper_q, mean = infected$mu, sd = infected$sigma))
+
+  return(list(susceptible= susceptible, infected=infected))
+}
+
+
+
 

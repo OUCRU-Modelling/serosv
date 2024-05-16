@@ -64,7 +64,7 @@ Plot fitted line and confidence interval
 plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "ci")
 ```
 
-## Format the plot
+## Customize the plot
 
 Function `set_plot_style()` is provided to customize some attributes of the plot.
 

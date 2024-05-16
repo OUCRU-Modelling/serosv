@@ -6,6 +6,10 @@
 
 est_foi <- function(t, sp)
 {
+  # handle duplicated t
+  sp<-(sp[order(t)])[duplicated(sort(t))==F]
+  t<-sort(unique(t))
+
   dsp <- diff(sp)/diff(t)
   foi <- approx(
     (t[-1]+t[-length(t)])/2,

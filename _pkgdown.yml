@@ -34,6 +34,8 @@ reference:
   - weibull_model
   - fp_model
   - lp_model
+  - glmm_ps_model
+  - mixture_model
   - bivariate_dale_model
 
 - title: Plotting functions
@@ -44,6 +46,8 @@ reference:
   - plot.weibull_model
   - plot.fp_model
   - plot.lp_model
+  - plot.glmm_ps_model
+  - plot.mixture_model
   - plot.bivariate_dale_model
   - set_plot_style
 
@@ -55,6 +59,8 @@ reference:
   - compute_ci.fp_model
   - compute_ci.lp_model
   - compute_ci.weibull_model
+  - compute_ci.glmm_ps_model
+  - compute_ci.mixture_model
   - find_best_bdm_param
   - find_best_fp_powers
 

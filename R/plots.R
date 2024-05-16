@@ -47,9 +47,15 @@ plot_util <- function(age, pos, tot, sero, foi){
 
   # === Add foi layers
   if (class(foi) == "data.frame"){
-    # --- Handle cases like that of weibull model
-    plot <- plot + geom_line(aes_auto(foi, col = "foi", linetype="foi"), data=foi,
+    if ("ymax" %in% colnames(foi)){
+      # --- Handle cases like that of weibull model
+      plot <- plot + geom_smooth(aes_auto(foi, col = "foi", linetype="foi", fill="ci"), data=foi,
                                stat="identity",lwd=0.5)
+    }else{
+      # --- Handle cases like that of weibull model
+      plot <- plot + geom_line(aes_auto(foi, col = "foi", linetype="foi"), data=foi,
+                               stat="identity",lwd=0.5)
+    }
   }else if (length(age) != length(foi)){
     # --- handle some cases when length of age differs from length of foi
     age <- age[c(-1,-length(age))]
@@ -143,6 +149,82 @@ plot.lp_model <- function(x, ...) {
   with(x$df, {
     plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi)
   })
+}
+
+#### Penalized splines ####
+
+#' plot() overloading for penalized spline fitted with GLMM
+#'
+#' @param x the glmm_ps_model object
+#' @param ... arbitrary params.
+#'
+#' @export
+plot.glmm_ps_model <- function(x, ...){
+  ci <- compute_ci.glmm_ps_model(x)
+
+  out.DF <- ci[[1]]
+  out.FOI <- ci[[2]]
+
+  with(x$df, {
+    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = out.FOI)
+  })
+
+}
+
+#### Mixture model ####
+#' plot() overloading for mixture model
+#'
+#' @param x the mixture_model
+#' @param ... arbitrary params.
+#'
+#' @export
+plot.mixture_model <- function(x, ...){
+  ci_layer <- function(x, y, xmin, xmax, fill="royalblue1"){
+    idx_lim <- which(x>xmin & x<xmax)
+    x <- x[idx_lim]
+    y <- y[idx_lim]
+
+    # add values to make sure shape is filled at y=0
+    x <- c(x[1], x, x[length(x)])
+    y <- c(0, y, 0)
+    geom_polygon(aes(x=x, y=y), fill = fill, alpha=0.3)
+  }
+
+  ci <- compute_ci.mixture_model(x)
+
+  with(x$df, {
+    # ---- code to compute probability density from mixgroup output
+    ntot <- sum(count)
+    m <- length(count)
+    iwid <- antibody_level[2:(m - 1)] - antibody_level[1:(m - 2)]
+    iwid <- c(2 * iwid[1], iwid, 2 * iwid[m - 2])
+    idens <- (count/iwid)/ntot
+    # ---- end code from mixdist
+
+
+    # --- Get plotting data from parameter to have prettier plot =))
+    x_coord <- seq(min(antibody_level), max(antibody_level[is.finite(antibody_level)]), length.out=100)
+    fitted_susceptible <- dnorm(x_coord, x$info$parameters[1, ]$mu, x$info$parameters[1, ]$sigma)*x$info$parameters[1, ]$pi
+    fitted_infected <- dnorm(x_coord, x$info$parameters[2, ]$mu, x$info$parameters[2, ]$sigma)*x$info$parameters[2, ]$pi
+
+
+    ggplot() +
+      ci_layer(x = x_coord, y = fitted_susceptible, xmin = ci$susceptible$lower_bound,
+               xmax = ci$susceptible$upper_bound, fill="forestgreen") +
+      ci_layer(x = x_coord, y = fitted_infected, xmin = ci$infected$lower_bound,
+               xmax = ci$infected$upper_bound, fill="blueviolet") +
+      geom_step(aes(x=antibody_level-iwid, y = idens)) +
+      geom_line(aes(x=x_coord, y=fitted_susceptible, col = "susceptible")) +
+      geom_line(aes(x=x_coord, y=fitted_infected, col = "infected")) +
+      annotate("segment", x=x$info$parameters[1, ]$mu, y=0.01, yend=-0.01, colour="#fc0328",)+
+      annotate("segment", x=x$info$parameters[2, ]$mu, y=0.01, yend=-0.01, colour="#fc0328",)+
+      labs(x="Log(Antibody level+1)", y="Probability Density") +
+      scale_color_manual(
+        values = c("susceptible"= "forestgreen", "infected"="blueviolet")
+      )+
+      coord_cartesian(xlim = c(0, max(antibody_level[is.finite(antibody_level)])) ,ylim = c(0, max(idens)))
+  })
+
 }
 
 
@@ -255,6 +337,9 @@ plot.bivariate_dale_model <- function(x, ...) {
   }
 
 }
+
+
+
 
 #### GCV values ####
 #' Plotting GCV values with respect to different nn-s and h-s parameters.

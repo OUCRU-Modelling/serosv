@@ -68,7 +68,7 @@ use_data(mumps_uk_1986_1987, overwrite = TRUE)
 
 ################ PARVOVIRUS B19 ################
 parvob19_eu_1995_2004 <- read.table(
-    "data-raw\\serobook_datasets\\B19-countries.dat",
+    "data-raw/serobook_datasets/B19-countries.dat",
     header = TRUE
 )
 parvob19_eu_1995_2004 <- parvob19_eu_1995_2004 %>%
@@ -153,7 +153,7 @@ use_data(vzv_be_1999_2000, overwrite = TRUE)
 
 ## VZV in Belgium in 2001-2003
 vzv_be_2001_2003 <- read.table(
-    "data-raw\\serobook_datasets\\VZV-B19-BE.dat",
+    "data-raw/serobook_datasets/VZV-B19-BE.dat",
     header = TRUE
 )
 vzv_be_2001_2003 <- vzv_be_2001_2003 %>%

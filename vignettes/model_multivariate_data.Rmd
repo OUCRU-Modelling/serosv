@@ -47,6 +47,6 @@ plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "sp")
 
 For line listing data `vzv_parvo_be` , use `generate_quad_matrix()` function to create the (NN, NP, PN, PP) for fitting the model
 
-```{r, eval = F}
+```{r}
 generate_quad_matrix(vzv_parvo_be, vzv_res, parvo_res, age, discrete_age = F)
 ```

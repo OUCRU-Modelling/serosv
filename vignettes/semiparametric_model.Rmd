@@ -26,11 +26,20 @@ Refer to Chapter `8.2.1`
 
 *Work in progress*
 
-### Generalized likelihood framework
+### Generalized Linear Mixture Model framework
 
 Refer to Chapter `8.2.2`
 
-*Work in progress*
+```{r}
+data <- parvob19_be_2001_2003
+
+glmm <- glmm_ps_model(data$age, data$seropositive, s = "tp") 
+glmm$info$gam
+```
+
+```{r}
+plot(glmm)
+```
 
 ## Adaptive spline smoothing
 
