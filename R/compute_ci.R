@@ -9,6 +9,8 @@ compute_ci <- function(x, ci = 0.95, ...){
 #' @param le - number of data for computing confidence interval
 #' @param ... - arbitrary argument
 #'
+#' @importFrom stats qt predict.glm
+#'
 #' @export
 compute_ci <- function(x, ci = 0.95, le = 100, ...){
   p <- (1 - ci) / 2
@@ -102,7 +104,8 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
   out.DF
 }
 
-
+# TODO: remove this after testing
+# maybe used the merged version
 #' Compute confidence interval for GLMM
 #'
 #' @param x - serosv models
@@ -138,11 +141,57 @@ compute_ci.glmm_ps_model <- function(x,ci = 0.95, ...){
   return(list(out.DF, out.FOI))
 }
 
+#' Compute confidence interval for penalized_spline_model
+#'
+#' @param x - serosv models
+#' @param ci - confidence interval
+#' @param ... - arbitrary arguments
+#'
+#' @export
+compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
+  m <- 1
+  p <- (1 - ci) / 2
+  if(x$framework == "ps"){
+    link_inv <- x$info$family$linkinv
+    dataset <- x$info$model[,1:2]
+    n <- nrow(dataset) - length(x$info$gam$coefficients)
+    gam_obj <- x$info
+  }else{
+    link_inv <- x$info$gam$family$linkinv
+    dataset <- x$info$gam$model[,1:2]
+    n <- nrow(dataset) - length(x$info$gam$coefficients)
+    gam_obj <- x$info$gam
+  }
+
+  ages <- dataset[2]
+
+  mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE) |>
+    extract(c("fit", "se.fit")) %>%
+    c(age = list(ages), .) |>
+    as_tibble() |>
+    mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
+           upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
+           fit = m * link_inv(fit)) |>
+    select(- se.fit)
+
+  out.DF <- data.frame(x = ages, y = mod$fit,
+                       ymin= mod$lwr, ymax = mod$upr)
+  out.FOI <- data.frame(x = x$df$age[c(-1, -length(x$df$age) )],
+                        y = est_foi(ages[[1]], mod$fit),
+                        ymin= est_foi(ages[[1]],mod$lwr),
+                        ymax = est_foi(ages[[1]],mod$upr)
+  )
+
+  return(list(out.DF, out.FOI))
+}
+
 #' Compute confidence interval for mixture model
 #'
 #' @param x - serosv mixture_model object
 #' @param ci - confidence interval
 #' @param ... - arbitrary arguments
+#' @importFrom stats qnorm
+#'
 #' @export
 compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 

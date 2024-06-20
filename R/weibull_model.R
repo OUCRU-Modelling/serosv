@@ -5,6 +5,8 @@
 #' @param t the time vector.
 #' @param spos the seropositive vector.
 #'
+#' @importFrom stats coef
+#'
 #' @examples
 #' df <- hcv_be_2006[order(hcv_be_2006$dur), ]
 #' model <- weibull_model(

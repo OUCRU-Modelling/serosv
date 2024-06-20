@@ -4,7 +4,7 @@
 #' @param breaks - number of intervals which the antibody_level are grouped into
 #' @param pi - proportion of susceptible, infected
 #' @param mu - a vector of means of component distributions (vector of 2 numbers in ascending order)
-#' @param sigma-  a vector of standard deviations of component distributions (vector of 2 number)
+#' @param sigma -  a vector of standard deviations of component distributions (vector of 2 number)
 #'
 #' @importFrom mixdist mix mixgroup mixparam
 #'

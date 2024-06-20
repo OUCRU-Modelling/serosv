@@ -10,10 +10,12 @@
 #'
 #' @importFrom VGAM s vgam predictors binom2.or fitted deviance
 #' @importFrom locfit expit
+#' @importFrom stats quantile approx
 #'
 #' @examples
 #' data <- rubella_mumps_uk
-#' model <- bivariate_dale_model(age = data$age, y = data[, c("NN", "NP", "PN", "PP")], monotonized=TRUE)
+#' model <- bivariate_dale_model(age = data$age,
+#'         y = data[, c("NN", "NP", "PN", "PP")], monotonized=TRUE)
 #' plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "sp")
 #'
 #' @export
@@ -186,7 +188,7 @@ generate_quad_matrix <- function (data, y1, y2, age, discrete_age = F){
     )
 }
 
-# --- Compute confidence interval
+# Helper function to compute confidence interval
 ci<-function(x){
   quantile(x,prob=c(0.025,0.975),na.rm=T)
 }

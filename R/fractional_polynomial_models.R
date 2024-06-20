@@ -40,7 +40,7 @@ formulate <- function(p) {
 #' )
 #' best_p
 #'
-#' @importFrom stats glm binomial formula
+#' @importFrom stats glm binomial as.formula
 #'
 #' @export
 find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
@@ -111,6 +111,8 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #' @param tot the tot vector.
 #' @param p the powers of the predictor.
 #' @param link the link function for model. Defaulted to "logit".
+#'
+#' @importFrom stats predict as.formula
 #'
 #' @examples
 #' df <- hav_be_1993_1994

@@ -152,7 +152,8 @@ plot.lp_model <- function(x, ...) {
 }
 
 #### Penalized splines ####
-
+# Maybe use the merged one instead
+# TODO: remove this after testing
 #' plot() overloading for penalized spline fitted with GLMM
 #'
 #' @param x the glmm_ps_model object
@@ -170,6 +171,25 @@ plot.glmm_ps_model <- function(x, ...){
   })
 
 }
+
+#' plot() overloading for penalized spline
+#'
+#' @param x the penalized_spline_model object
+#' @param ... arbitrary params.
+#'
+#' @export
+plot.penalized_spline_model <- function(x, ...){
+  ci <- compute_ci.penalized_spline_model(x)
+
+  out.DF <- ci[[1]]
+  out.FOI <- ci[[2]]
+
+  with(x$df, {
+    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = out.FOI)
+  })
+
+}
+
 
 #### Mixture model ####
 #' plot() overloading for mixture model

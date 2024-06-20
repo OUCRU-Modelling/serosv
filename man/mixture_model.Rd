@@ -21,7 +21,7 @@ mixture_model(
 
 \item{mu}{- a vector of means of component distributions (vector of 2 numbers in ascending order)}
 
-\item{sigma-}{a vector of standard deviations of component distributions (vector of 2 number)}
+\item{sigma}{-  a vector of standard deviations of component distributions (vector of 2 number)}
 }
 \description{
 Fit a mixture model to classify serostatus
