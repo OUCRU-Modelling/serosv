@@ -20,7 +20,7 @@ library(serosv)
 
 ## Aggregate data
 
-Use function `transform()` to convert line listing data (data with `t`, `seropositive` columns) to aggregated data (data with `t`, `pos`, `tot` columns)
+Use function `transform_data()` to convert line listing data (data with `t`, `seropositive` columns) to aggregated data (data with `t`, `pos`, `tot` columns)
 
 Arguments:
 
@@ -30,7 +30,7 @@ Arguments:
 
 ```{r}
 linelisting_data <- hcv_be_2006
-aggregated_data <- transform(linelisting_data$dur, linelisting_data$seropositive)
+aggregated_data <- transform_data(linelisting_data$dur, linelisting_data$seropositive)
 aggregated_data
 ```
 

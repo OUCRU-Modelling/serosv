@@ -26,12 +26,12 @@ Refer to Chapter `8.2.1`
 
 ```{r}
 data <- parvob19_be_2001_2003
-ps <- penalized_spline_model(data$age, data$seropositive, s = "tp", framework = "ps") 
-ps$info
+pl <- penalized_spline_model(data$age, data$seropositive, s = "tp", framework = "pl") 
+pl$info
 ```
 
 ```{r}
-plot(ps)
+plot(pl)
 ```
 
 ### Generalized Linear Mixture Model framework

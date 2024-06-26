@@ -4,7 +4,7 @@
 \alias{penalized_spline_model}
 \title{Penalized Spline model}
 \usage{
-penalized_spline_model(age, res, s = "bs", link = "logit", framework = "ps")
+penalized_spline_model(age, res, s = "bs", link = "logit", framework = "pl")
 }
 \arguments{
 \item{age}{the age vector}
@@ -15,7 +15,7 @@ penalized_spline_model(age, res, s = "bs", link = "logit", framework = "ps")
 
 \item{link}{link function to use}
 
-\item{framework}{which approach to fit the model ("ps" for penalized spline framework, "glmm" for generalized linear mixed model framework)}
+\item{framework}{which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)}
 }
 \value{
 a penalized_spline_model object

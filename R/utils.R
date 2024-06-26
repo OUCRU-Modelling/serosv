@@ -50,7 +50,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #'
 #' @examples
 #' df <- hcv_be_2006
-#' hcv_df <- transform(df$dur, df$seropositive)
+#' hcv_df <- transform_data(df$dur, df$seropositive)
 #' hcv_df
 #'
 #' @importFrom dplyr group_by
@@ -59,7 +59,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #' @import magrittr
 #'
 #' @export
-transform <- function(t, spos) {
+transform_data <- function(t, spos) {
   df <- data.frame(t, spos)
   df_agg <- df %>%
     group_by(t) %>%
