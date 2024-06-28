@@ -17,3 +17,23 @@ test_that("bivariate dale model returns the same result as original code", {
 
   expect_equal(expected, actual, tolerance = 0.00001)
 })
+
+test_that("test finding sparopt for bdm", {
+  # --- Expected values obtained using the code for the paper
+  expected <- c(
+    # sparopt by BIC
+    0,
+    # sparopt by AIC
+    0
+  )
+
+  # --- Get result from package
+  data <- rubella_mumps_uk
+  sparopt_df <- find_best_bdm_param(age = data$age, y = data[, c("NN", "NP", "PN", "PP")])
+  actual <- c(
+    sparopt_df[sparopt_df$Methods == "BIC", 3],
+    sparopt_df[sparopt_df$Methods == "AIC", 3]
+  )
+
+  expect_equal(expected, actual, tolerance = 0.00001)
+})

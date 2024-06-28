@@ -4,12 +4,12 @@
 \alias{penalized_spline_model}
 \title{Penalized Spline model}
 \usage{
-penalized_spline_model(age, res, s = "bs", link = "logit", framework = "pl")
+penalized_spline_model(age, spos, s = "bs", link = "logit", framework = "pl")
 }
 \arguments{
 \item{age}{the age vector}
 
-\item{res}{the serostatus vector}
+\item{spos}{the seropositive vector}
 
 \item{s}{smoothing basis to use}
 

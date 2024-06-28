@@ -106,12 +106,7 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
       VGAM::deviance(fit)+log( dim(y)[1])*(3*dim(y)[1]-df.residual(fit))
     )
   }
-  # TODO: compute UBRE for vgam
-  # UBRE<-function(fit){
-  #   return(
-  #     VGAM::deviance(fit)+log(dim(y)[1])*(3*dim(y)[1]-df.residual(fit))
-  #     )
-  #   }
+
   out<-matrix(NA,ncol=3,nrow = length(spar_seq))
 
 

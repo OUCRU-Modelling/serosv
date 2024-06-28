@@ -1,5 +1,4 @@
 library(testthat)
-library(dplyr)
 
 test_that("transform_data returns a data frame", {
   df <- transform_data(c(1, 2, 3), c(1, 0, 1))

@@ -34,7 +34,7 @@ plot_util <- function(age, pos, tot, sero, foi){
     ) + set_plot_style()
 
   # === Add seroprevalence layer
-  if (class(sero) == "data.frame"){
+  if (is(sero, "data.frame")){
     # --- Sero is dataframe when confidence interval is computed
     plot <- plot + geom_smooth(aes_auto(sero, col = "sero", linetype="sero",
                                         fill = "ci"), data=sero,
@@ -46,7 +46,7 @@ plot_util <- function(age, pos, tot, sero, foi){
   }
 
   # === Add foi layers
-  if (class(foi) == "data.frame"){
+  if (is(foi, "data.frame")){
     if ("ymax" %in% colnames(foi)){
       # --- Handle cases like that of weibull model
       plot <- plot + geom_smooth(aes_auto(foi, col = "foi", linetype="foi", fill="ci"), data=foi,
