@@ -119,7 +119,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   if(x$framework == "pl"){
     link_inv <- x$info$family$linkinv
     dataset <- x$info$model[,1:2]
-    n <- nrow(dataset) - length(x$info$gam$coefficients)
+    n <- nrow(dataset) - length(x$info$coefficients)
     gam_obj <- x$info
   }else{
     link_inv <- x$info$gam$family$linkinv
@@ -129,6 +129,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   }
 
   ages <- dataset[2]
+  # print(head(ages))
 
   mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE) |>
     extract(c("fit", "se.fit")) %>%
@@ -139,13 +140,15 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
            fit = m * link_inv(fit)) |>
     select(- se.fit)
 
-  out.DF <- data.frame(x = ages, y = mod$fit,
+  out.DF <- data.frame(x = dataset[[2]], y = mod$fit,
                        ymin= mod$lwr, ymax = mod$upr)
   out.FOI <- data.frame(x = x$df$age[c(-1, -length(x$df$age) )],
                         y = est_foi(ages[[1]], mod$fit),
                         ymin= est_foi(ages[[1]],mod$lwr),
                         ymax = est_foi(ages[[1]],mod$upr)
   )
+
+  # print(head(out.DF))
 
   return(list(out.DF, out.FOI))
 }

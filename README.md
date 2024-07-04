@@ -66,6 +66,8 @@ Load the rubella in UK dataset.
 
 ``` r
 library(serosv)
+#> Warning: replacing previous import 'VGAM::deviance' by 'stats::deviance' when
+#> loading 'serosv'
 #> 
 #> Attaching package: 'serosv'
 #> The following object is masked from 'package:base':

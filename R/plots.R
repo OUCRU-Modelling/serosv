@@ -36,7 +36,10 @@ plot_util <- function(age, pos, tot, sero, foi){
   # === Add seroprevalence layer
   if (is(sero, "data.frame")){
     # --- Sero is dataframe when confidence interval is computed
-    plot <- plot + geom_smooth(aes_auto(sero, col = "sero", linetype="sero",
+    # plot <- plot + geom_smooth(aes_auto(sero, col = "sero", linetype="sero",
+    #                                     fill = "ci"), data=sero,
+    #                            stat="identity",lwd=0.5)
+    plot <- plot + geom_smooth(aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
                                         fill = "ci"), data=sero,
                                stat="identity",lwd=0.5)
   }else{
@@ -48,19 +51,21 @@ plot_util <- function(age, pos, tot, sero, foi){
   # === Add foi layers
   if (is(foi, "data.frame")){
     if ("ymax" %in% colnames(foi)){
-      # --- Handle cases like that of weibull model
-      plot <- plot + geom_smooth(aes_auto(foi, col = "foi", linetype="foi", fill="ci"), data=foi,
+      # --- Handle cases where FOI is a data.frame (with CI)
+      # plot <- plot + geom_smooth(aes_auto(foi, col = "foi", linetype="foi", fill="ci"), data=foi,
+      #                          stat="identity",lwd=0.5)
+      plot <- plot + geom_smooth(aes(x = x, y=y, ymin =ymin, ymax = ymax, col = "foi", linetype="foi", fill="ci"), data=foi,
                                stat="identity",lwd=0.5)
     }else{
-      # --- Handle cases like that of weibull model
-      plot <- plot + geom_line(aes_auto(foi, col = "foi", linetype="foi"), data=foi,
+      # --- Handle cases where CI for FOI is not computable
+      plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data=foi,
                                stat="identity",lwd=0.5)
     }
   }else if (length(age) != length(foi)){
     # --- handle some cases when length of age differs from length of foi
     age <- age[c(-1,-length(age))]
     foi <- data.frame(x = age, y = foi)
-    plot <- plot + geom_line(aes_auto(foi, col = "foi", linetype="foi"), data = foi,
+    plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data = foi,
                              lwd = 0.5)
   }else{
     # --- Simply plot foi
@@ -163,6 +168,9 @@ plot.penalized_spline_model <- function(x, ...){
 
   out.DF <- ci[[1]]
   out.FOI <- ci[[2]]
+
+  # print(head(out.DF))
+  # print(head(out.FOI))
 
   with(x$df, {
     plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = out.FOI)
