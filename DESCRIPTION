@@ -39,7 +39,8 @@ Imports:
     patchwork,
     stringr,
     mgcv,
-    mixdist
+    mixdist,
+    methods
 Suggests: 
     covr,
     knitr,

@@ -14,10 +14,26 @@
 #'
 #' @examples
 #' data <- parvob19_be_2001_2003
-#' mod <- penalized_spline_model(data$age, data$seropositive, framework="glmm")
+#' mod <- penalized_spline_model(data$age, status = data$seropositive, framework="glmm")
 #' mod$gam$info
-penalized_spline_model <- function(age, spos, s = "bs", link = "logit", framework = "pl"){
+penalized_spline_model <- function(age, pos=NULL,tot=NULL,status=NULL, s = "bs", link = "logit", framework = "pl"){
+  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
+  age <- as.numeric(age)
+
+  # check input whether it is line-listing or aggregated data
+  if (!is.null(pos) & !is.null(tot)){
+    pos <- as.numeric(pos)
+    tot <- as.numeric(tot)
+    model$datatype <- "aggregated"
+  }else{
+    pos <- as.numeric(status)
+    tot <- rep(1, length(pos))
+    model$datatype <- "linelisting"
+  }
+
+  # s <- mgcv:::s
+  spos <- pos/tot
 
   if (framework == "pl"){
     model$info <- mgcv::gam(spos ~ s(age, bs = s), family = binomial(link = link))
@@ -29,12 +45,8 @@ penalized_spline_model <- function(age, spos, s = "bs", link = "logit", framewor
     stop(paste0('Invalid value for framework. Expected "pl" or "glmm", got ', framework))
   }
 
-  model$foi <- est_foi(age, model$sp)
-
   # aggregate data after fitting for plotting
-  data <- transform_data(age, spos)
-
-  model$df <- data.frame(age=data$t, pos = data$pos, tot = data$tot)
+  model$df <- data.frame(age=age, pos = pos, tot = tot)
   model$foi <- est_foi(age, model$sp)
   model$framework <- framework
 

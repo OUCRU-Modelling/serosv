@@ -22,6 +22,26 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
     )
 }
 
+# ==== Helper function to compute plot data ====
+plot_data <- function(x){
+  if(x$datatype == "linelisting"){
+    # transform data before plotting
+    df_ <- transform_data(x$df$age, x$df$pos)
+    age <- df_$t
+    pos <- df_$pos
+    tot <- df_$tot
+    # use pre-aggregated age for FOI
+  }else if (x$datatype == "aggregated"){
+    age <- x$df$age
+    pos <- x$df$pos
+    tot <- x$df$tot
+  }
+
+  return(data.frame(
+    "age" = age, "pos" = pos, "tot" = tot
+  ))
+}
+
 #=== Helper function for plotting =====
 plot_util <- function(age, pos, tot, sero, foi){
   plot <- ggplot(data = data.frame(age, pos, tot), aes(x = age, y = pos/tot)) +
@@ -35,13 +55,15 @@ plot_util <- function(age, pos, tot, sero, foi){
 
   # === Add seroprevalence layer
   if (is(sero, "data.frame")){
-    # --- Sero is dataframe when confidence interval is computed
-    # plot <- plot + geom_smooth(aes_auto(sero, col = "sero", linetype="sero",
-    #                                     fill = "ci"), data=sero,
-    #                            stat="identity",lwd=0.5)
-    plot <- plot + geom_smooth(aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
-                                        fill = "ci"), data=sero,
+    if("ymax" %in% colnames(sero)){
+      plot <- plot + geom_smooth(aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
+                                     fill = "ci"), data=sero,
+                                 stat="identity",lwd=0.5)
+    }else{
+      # --- Handle cases where CI for seroprevalence is not computable & length of age for foi differs from provided age vector
+      plot <- plot + geom_line(aes(x = x, y = y, col = "sero", linetype="sero"), data = sero,
                                stat="identity",lwd=0.5)
+    }
   }else{
     # --- Simply plot seroprevalence line if CI cannot be computed
     plot <- plot + geom_line(aes(x = age, y = sero, col = "sero", linetype="sero"),
@@ -57,7 +79,7 @@ plot_util <- function(age, pos, tot, sero, foi){
       plot <- plot + geom_smooth(aes(x = x, y=y, ymin =ymin, ymax = ymax, col = "foi", linetype="foi", fill="ci"), data=foi,
                                stat="identity",lwd=0.5)
     }else{
-      # --- Handle cases where CI for FOI is not computable
+      # --- Handle cases where CI for FOI is not computable & length of age for foi differs from provided age vector
       plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data=foi,
                                stat="identity",lwd=0.5)
     }
@@ -81,13 +103,23 @@ plot_util <- function(age, pos, tot, sero, foi){
 #' @param x the polynomial model object
 #' @param ... arbitrary params.
 #' @import ggplot2
+#' @importFrom methods is
 #'
 #' @export
 plot.polynomial_model <- function(x, ...) {
   out.DF <- compute_ci(x)
 
+  if(x$datatype == "linelisting"){
+    # use pre-aggregated age for FOI
+    foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  }else if (x$datatype == "aggregated"){
+    foi <- as.numeric(x$foi)
+  }
+
+  to_plot <- plot_data(x)
+
   with(x$df, {
-    plot_util(age = x$df$Age, pos = x$df$Pos, tot = x$df$Tot, sero = out.DF, foi = as.numeric(x$foi))
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = foi)
   })
 
 }
@@ -99,13 +131,26 @@ plot.polynomial_model <- function(x, ...) {
 #'
 #' @param x the Farrington model object.
 #' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
 #'
 #' @export
 plot.farrington_model <- function(x, ...) {
   # out.DF <- compute_ci(x)
 
+  to_plot <- plot_data(x)
+
+  if(x$datatype == "linelisting"){
+    # use pre-aggregated age for FOI & sero
+    foi <- data.frame(x = x$df$age, y = x$foi)
+    sero <- data.frame(x = x$df$age, y = x$sp)
+  }else if (x$datatype == "aggregated"){
+    foi <- x$foi
+    sero <- x$sp
+  }
+
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = x$sp, foi = x$foi)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = sero, foi = foi)
   })
 }
 
@@ -114,14 +159,26 @@ plot.farrington_model <- function(x, ...) {
 #'
 #' @param x the Weibull model object.
 #' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
 #'
 #' @export
 plot.weibull_model <- function(x, ...) {
-  df_ <- transform_data(x$df$t, x$df$spos)
-  names(df_)[names(df_) == "t"] <- "exposure"
+  # df_ <- transform_data(x$df$t, x$df$spos)
+  # names(df_)[names(df_) == "t"] <- "exposure"
 
   out.DF <- compute_ci.weibull_model(x)
-  plot_util(age = df_$exposure, pos = df_$pos, tot = df_$tot, sero = out.DF, foi = data.frame(x = x$df$t, y = x$foi))
+
+  to_plot <- plot_data(x)
+
+  if(x$datatype == "linelisting"){
+    # use pre-aggregated age for FOI & sero
+    foi <- data.frame(x = x$df$age, y = x$foi)
+  }else if (x$datatype == "aggregated"){
+    foi <- x$foi
+  }
+
+  plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi))
 }
 
 #### Fractional polynomial model ####
@@ -129,13 +186,16 @@ plot.weibull_model <- function(x, ...) {
 #'
 #' @param x the fractional polynomial model object.
 #' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
 #'
 #' @export
 plot.fp_model <- function(x, ...) {
   out.DF <- compute_ci.fp_model(x)
+  to_plot <- plot_data(x)
 
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = x$foi)
   })
 }
 
@@ -146,13 +206,23 @@ plot.fp_model <- function(x, ...) {
 #'
 #' @param x the local polynomial model object.
 #' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
 #'
 #' @export
 plot.lp_model <- function(x, ...) {
   out.DF <- compute_ci.lp_model(x)
+  to_plot <- plot_data(x)
+
+  if(x$datatype == "linelisting"){
+    # use pre-aggregated age for FOI
+    foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  }else if (x$datatype == "aggregated"){
+    foi <- x$foi
+  }
 
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = foi)
   })
 }
 
@@ -161,6 +231,8 @@ plot.lp_model <- function(x, ...) {
 #'
 #' @param x the penalized_spline_model object
 #' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
 #'
 #' @export
 plot.penalized_spline_model <- function(x, ...){
@@ -169,11 +241,10 @@ plot.penalized_spline_model <- function(x, ...){
   out.DF <- ci[[1]]
   out.FOI <- ci[[2]]
 
-  # print(head(out.DF))
-  # print(head(out.FOI))
+  to_plot <- plot_data(x)
 
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = out.FOI)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = out.FOI)
   })
 
 }
@@ -184,6 +255,7 @@ plot.penalized_spline_model <- function(x, ...){
 #'
 #' @param x the mixture_model
 #' @param ... arbitrary params.
+#' @import ggplot2
 #'
 #' @export
 plot.mixture_model <- function(x, ...){

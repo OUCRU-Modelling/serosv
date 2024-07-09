@@ -30,6 +30,7 @@ bivariate_dale_model <- function (age, y, constant_or = F, monotonized=T, sparop
   }
 
   model <- list()
+  s <- VGAM:::s
   model$info <-  vgam(cbind(y$NN, y$NP, y$PN, y$PP) ~ s(age, spar=sparopt),
                       family=binom2.or(zero = NULL),
                       constraints = constr)
@@ -115,7 +116,8 @@ find_best_bdm_param <- function(age, y, spar_seq = seq(0,0.1,0.001)){
     suppressWarnings(
       {
         tryCatch({
-          fit <- vgam(y~VGAM::s(a,spar=spar_seq[i]),family=binom2.or(zero = NULL))
+          s <- VGAM:::s
+          fit <- vgam(y~s(a,spar=spar_seq[i]),family=binom2.or(zero = NULL))
         }, error = function(e){
           skip <- TRUE
         })
@@ -216,6 +218,7 @@ bdm_bootstrapping <- function(x, y, runs=1000, sparopt = 0, constraint=T){
       constr <- NULL
     }
 
+    s <- VGAM:::s
     bdm_fit <- vgam(
       cbind(sample_y$NN, sample_y$NP, sample_y$PN, sample_y$PP) ~ s(sample_x, spar=sparopt),
       family=binom2.or(zero = NULL),

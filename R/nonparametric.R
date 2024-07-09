@@ -3,8 +3,9 @@
 #' Refers to section 7.1. and 7.2.
 #'
 #' @param age the age vector.
-#' @param pos the pos vector.
-#' @param tot the tot vector.
+#' @param pos the positive count vector (optional if status is provided).
+#' @param tot the total count vector (optional if status is provided).
+#' @param status the serostatus vector (optional if pos & tot are provided).
 #' @param kern Weight function, default = "tcub".
 #' Other choices are "rect", "trwt", "tria", "epan", "bisq" and "gauss".
 #' Choices may be restricted when derivatives are required;
@@ -17,7 +18,7 @@
 #' @examples
 #' df <- mumps_uk_1986_1987
 #' model <- lp_model(
-#'   df$age, df$pos, df$tot,
+#'   df$age, pos = df$pos, tot = df$tot,
 #'   nn=0.7, kern="tcub"
 #'   )
 #' plot(model)
@@ -28,12 +29,25 @@
 #'
 #' @export
 # library(locfit)
-lp_model <- function(age, pos, tot, kern="tcub", nn=0, h=0, deg=2) {
+lp_model <- function(age, pos=NULL, tot=NULL, status=NULL, kern="tcub", nn=0, h=0, deg=2) {
   if (missing(nn) & missing(h)) {
     nn <- 0.7 # default nn from lp()
   }
 
+  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
+  age <- as.numeric(age)
+
+  # check input whether it is line-listing or aggregated data
+  if (!is.null(pos) & !is.null(tot)){
+    pos <- as.numeric(pos)
+    tot <- as.numeric(tot)
+    model$datatype <- "aggregated"
+  }else{
+    pos <- as.numeric(status)
+    tot <- rep(1, length(pos))
+    model$datatype <- "linelisting"
+  }
 
   y <- pos/tot
   estimator <- lp(age, deg=deg, nn=nn, h=h)

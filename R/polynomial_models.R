@@ -10,25 +10,50 @@ X <- function(t, degree) {
 
 #' Polynomial models
 #'
-#'Refers to section 6.1.1
-#' @param age the age vector
-#' @param positive the positive vector
-#' @param negative the negative vector
-#' @param k  degree of the model
-#' @param type name of method
+#' Refers to section 6.1.1
+#' @description
+#' Either `status` (treated as line-listing dataset) or  `pos` & `tot` (treated as aggregated dataset) must be provided
+#'
+#' @param age the age vector.
+#' @param pos the positive count vector (optional if status is provided).
+#' @param tot the total count vector (optional if status is provided).
+#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param k  degree of the model.
+#' @param type name of method.
 #'
 #' @examples
-#' a <- hav_bg_1964
-#' a$neg <- a$tot - a$pos
-#' model <- polynomial_model(a$age, a$pos, a$neg, type = "Muench")
+#' data <- parvob19_fi_1997_1998 %>% arrange(age)
+#' aggregated <- transform_data(data$age, data$seropositive)
+#'
+#' # fit with aggregated data
+#' model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
+#' # fit with linelisting data
+#' model <- polynomial_model(data$age, status = data$seropositive)
+#'
+#' @return a polynomial_model object
 #'
 #' @export
-polynomial_model <- function(age,positive,negative,k,type){
-  Age <- as.numeric(age)
-  Pos <- as.numeric(positive)
-  Neg <- as.numeric(negative)
-  df <- data.frame(cbind(Age, Pos,Neg))
+polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL){
+  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
+
   model <- list()
+  Pos <- NULL
+  Neg <- NULL
+
+  # check input whether it is line-listing or aggregated data
+  if (!is.null(pos) & !is.null(tot)){
+    Pos <- as.numeric(pos)
+    Neg <- as.numeric(tot) - Pos
+    model$datatype <- "aggregated"
+  }else{
+    Pos <- as.numeric(status)
+    Neg <- 1 - Pos
+    model$datatype <- "linelisting"
+  }
+
+  Age <- as.numeric(age)
+
+  df <- data.frame(cbind(Age, Pos,Neg))
   if(missing(k)){
     k <- switch(type,
                 "Muench" = 1 ,
@@ -46,7 +71,7 @@ polynomial_model <- function(age,positive,negative,k,type){
   X <- X(Age, k)
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
-  model$df <- list(Age=Age, Pos=Pos, Tot= Pos + Neg)
+  model$df <- list(age=Age, pos=Pos, tot= Pos + Neg)
   class(model) <- "polynomial_model"
   model
 }
@@ -56,8 +81,9 @@ polynomial_model <- function(age,positive,negative,k,type){
 #' Refers to section 6.1.2.
 #'
 #' @param age the age vector.
-#' @param pos the pos vector.
-#' @param tot the tot vector.
+#' @param pos the positive count vector (optional if status is provided).
+#' @param tot the total count vector (optional if status is provided).
+#' @param status the serostatus vector (optional if pos & tot are provided).
 #' @param start Named list of vectors or single vector.
 #' Initial values for optimizer.
 #' @param fixed Named list of vectors or single vector.
@@ -66,7 +92,7 @@ polynomial_model <- function(age,positive,negative,k,type){
 #' @examples
 #' df <- rubella_uk_1986_1987
 #' model <- farrington_model(
-#'   df$age, df$pos, df$tot,
+#'   df$age, pos = df$pos, tot = df$tot,
 #'   start=list(alpha=0.07,beta=0.1,gamma=0.03)
 #'   )
 #' plot(model)
@@ -74,16 +100,32 @@ polynomial_model <- function(age,positive,negative,k,type){
 #' @importFrom stats4 mle
 #'
 #' @export
-farrington_model <- function(age, pos, tot, start, fixed=list())
+farrington_model <- function(age, start,pos=NULL,tot=NULL,status=NULL, fixed=list())
 {
+  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
+  model <- list()
+  age <- as.numeric(age)
+
+  # check input whether it is line-listing or aggregated data
+  if (!is.null(pos) & !is.null(tot)){
+    pos <- as.numeric(pos)
+    tot <- as.numeric(tot)
+    model$datatype <- "aggregated"
+  }else{
+    pos <- as.numeric(status)
+    tot <- rep(1, length(pos))
+    model$datatype <- "linelisting"
+  }
+
+  # print(head(pos))
+  # print(head(tot))
+
   farrington <- function(alpha,beta,gamma) {
     p=1-exp((alpha/beta)*age*exp(-beta*age)
             +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)-gamma*age)
     ll=pos*log(p)+(tot-pos)*log(1-p)
     return(-sum(ll))
   }
-
-  model <- list()
 
   model$info <- mle(farrington, fixed=fixed, start=start)
   alpha <- model$info@coef[1]

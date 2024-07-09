@@ -4,18 +4,26 @@
 \alias{penalized_spline_model}
 \title{Penalized Spline model}
 \usage{
-penalized_spline_model(age, spos, s = "bs", link = "logit", framework = "pl")
+penalized_spline_model(
+  age,
+  pos = NULL,
+  tot = NULL,
+  status = NULL,
+  s = "bs",
+  link = "logit",
+  framework = "pl"
+)
 }
 \arguments{
 \item{age}{the age vector}
-
-\item{spos}{the seropositive vector}
 
 \item{s}{smoothing basis to use}
 
 \item{link}{link function to use}
 
 \item{framework}{which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)}
+
+\item{spos}{the seropositive vector}
 }
 \value{
 a penalized_spline_model object
@@ -25,6 +33,6 @@ Penalized Spline model
 }
 \examples{
 data <- parvob19_be_2001_2003
-mod <- penalized_spline_model(data$age, data$seropositive, framework="glmm")
+mod <- penalized_spline_model(data$age, status = data$seropositive, framework="glmm")
 mod$gam$info
 }

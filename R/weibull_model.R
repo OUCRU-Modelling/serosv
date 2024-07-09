@@ -3,7 +3,9 @@
 #' Refers to section 6.1.2.
 #'
 #' @param t the time vector.
-#' @param spos the seropositive vector.
+#' @param pos the positive count vector (optional if status is provided).
+#' @param tot the total count vector (optional if status is provided).
+#' @param status the serostatus vector (optional if pos & tot are provided).
 #'
 #' @importFrom stats coef
 #'
@@ -16,10 +18,24 @@
 #' plot(model)
 #'
 #' @export
-weibull_model <- function(t, spos)
+weibull_model <- function(t, status=NULL, pos=NULL, tot=NULL)
 {
+  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
+  t <- as.numeric(t)
 
+  # check input whether it is line-listing or aggregated data
+  if (!is.null(pos) & !is.null(tot)){
+    pos <- as.numeric(pos)
+    tot <- as.numeric(tot)
+    model$datatype <- "aggregated"
+  }else{
+    pos <- as.numeric(status)
+    tot <- rep(1, length(pos))
+    model$datatype <- "linelisting"
+  }
+
+  spos <- pos/tot
   model$info <- glm(
     spos~log(t),
     family=binomial(link="cloglog")
@@ -28,7 +44,7 @@ weibull_model <- function(t, spos)
   b1 <- coef(model$info)[2]
   model$foi <- exp(b0)*b1*exp(log(t))^(b1-1)
   model$sp <- 1-exp(-exp(b0)*t^b1)
-  model$df <- data.frame(t=t, spos=spos)
+  model$df <- data.frame(age=t, pos=pos, tot=tot)
 
   class(model) <- "weibull_model"
   model

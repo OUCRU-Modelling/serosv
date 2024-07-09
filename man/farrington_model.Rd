@@ -4,17 +4,26 @@
 \alias{farrington_model}
 \title{The Farrington (1990) model.}
 \usage{
-farrington_model(age, pos, tot, start, fixed = list())
+farrington_model(
+  age,
+  start,
+  pos = NULL,
+  tot = NULL,
+  status = NULL,
+  fixed = list()
+)
 }
 \arguments{
 \item{age}{the age vector.}
 
-\item{pos}{the pos vector.}
-
-\item{tot}{the tot vector.}
-
 \item{start}{Named list of vectors or single vector.
 Initial values for optimizer.}
+
+\item{pos}{the positive count vector (optional if status is provided).}
+
+\item{tot}{the total count vector (optional if status is provided).}
+
+\item{status}{the serostatus vector (optional if pos & tot are provided).}
 
 \item{fixed}{Named list of vectors or single vector.
 Parameter values to keep fixed during optimization.}
@@ -25,7 +34,7 @@ Refers to section 6.1.2.
 \examples{
 df <- rubella_uk_1986_1987
 model <- farrington_model(
-  df$age, df$pos, df$tot,
+  df$age, pos = df$pos, tot = df$tot,
   start=list(alpha=0.07,beta=0.1,gamma=0.03)
   )
 plot(model)

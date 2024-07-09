@@ -84,7 +84,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
            fit = link_inv(fit)) %>%
     select(-se.fit)
 
-  out.DF <- data.frame(x = x$df$t, y = n1$fit,
+  out.DF <- data.frame(x = x$df$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
 }
 
@@ -109,6 +109,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' @param x - serosv models
 #' @param ci - confidence interval
 #' @param ... - arbitrary arguments
+#' @importFrom mgcv predict.gam
 #'
 #' @export
 compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
@@ -131,18 +132,20 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   ages <- dataset[2]
   # print(head(ages))
 
-  mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE) |>
+  mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE)  %>%
     extract(c("fit", "se.fit")) %>%
-    c(age = list(ages), .) |>
-    as_tibble() |>
+    c(age = list(ages), .)  %>%
+    as_tibble()  %>%
     mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
            upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
-           fit = m * link_inv(fit)) |>
+           fit = m * link_inv(fit))  %>%
     select(- se.fit)
 
   out.DF <- data.frame(x = dataset[[2]], y = mod$fit,
                        ymin= mod$lwr, ymax = mod$upr)
-  out.FOI <- data.frame(x = x$df$age[c(-1, -length(x$df$age) )],
+  foi_x <- sort(unique(ages[[1]]))
+  foi_x <- foi_x[c(-1, -length(foi_x) )]
+  out.FOI <- data.frame(x = foi_x,
                         y = est_foi(ages[[1]], mod$fit),
                         ymin= est_foi(ages[[1]],mod$lwr),
                         ymax = est_foi(ages[[1]],mod$upr)

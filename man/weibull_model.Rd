@@ -4,12 +4,16 @@
 \alias{weibull_model}
 \title{The Weibull model.}
 \usage{
-weibull_model(t, spos)
+weibull_model(t, status = NULL, pos = NULL, tot = NULL)
 }
 \arguments{
 \item{t}{the time vector.}
 
-\item{spos}{the seropositive vector.}
+\item{status}{the serostatus vector (optional if pos & tot are provided).}
+
+\item{pos}{the positive count vector (optional if status is provided).}
+
+\item{tot}{the total count vector (optional if status is provided).}
 }
 \description{
 Refers to section 6.1.2.

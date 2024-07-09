@@ -4,25 +4,37 @@
 \alias{polynomial_model}
 \title{Polynomial models}
 \usage{
-polynomial_model(age, positive, negative, k, type)
+polynomial_model(age, k, type, pos = NULL, tot = NULL, status = NULL)
 }
 \arguments{
-\item{age}{the age vector}
+\item{age}{the age vector.}
 
-\item{positive}{the positive vector}
+\item{k}{degree of the model.}
 
-\item{negative}{the negative vector}
+\item{type}{name of method.}
 
-\item{k}{degree of the model}
+\item{pos}{the positive count vector (optional if status is provided).}
 
-\item{type}{name of method}
+\item{tot}{the total count vector (optional if status is provided).}
+
+\item{status}{the serostatus vector (optional if pos & tot are provided).}
+}
+\value{
+a polynomial_model object
 }
 \description{
+Either `status` (treated as line-listing dataset) or  `pos` & `tot` (treated as aggregated dataset) must be provided
+}
+\details{
 Refers to section 6.1.1
 }
 \examples{
-a <- hav_bg_1964
-a$neg <- a$tot - a$pos
-model <- polynomial_model(a$age, a$pos, a$neg, type = "Muench")
+data <- parvob19_fi_1997_1998 \%>\% arrange(age)
+aggregated <- transform_data(data$age, data$seropositive)
+
+# fit with aggregated data
+model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
+# fit with linelisting data
+model <- polynomial_model(data$age, status = data$seropositive)
 
 }
