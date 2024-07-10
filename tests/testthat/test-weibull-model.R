@@ -5,7 +5,7 @@ test_that("weibull_model returns same result as in the book", {
   df <- hcv_be_2006[order(hcv_be_2006$dur), ]
   model <- weibull_model(
     t=df$dur,
-    spos=df$seropositive
+    status=df$seropositive
   )
   actual_coefs <- unname(c(
     coef(model$info)[1], # intercept

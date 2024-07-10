@@ -26,7 +26,7 @@ Refer to Chapter `8.2.1`
 
 ```{r}
 data <- parvob19_be_2001_2003
-pl <- penalized_spline_model(data$age, data$seropositive, s = "tp", framework = "pl") 
+pl <- penalized_spline_model(data$age, status = data$seropositive, s = "tp", framework = "pl") 
 pl$info
 ```
 
@@ -40,7 +40,7 @@ Refer to Chapter `8.2.2`
 
 ```{r}
 data <- parvob19_be_2001_2003
-glmm <- penalized_spline_model(data$age, data$seropositive, s = "tp", framework = "glmm") 
+glmm <- penalized_spline_model(data$age, status = data$seropositive, s = "tp", framework = "glmm") 
 glmm$info$gam
 ```
 

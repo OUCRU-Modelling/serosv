@@ -7,7 +7,7 @@ test_that("lp_model returns expected results", {
 
   df <- mumps_uk_1986_1987
   model <- lp_model(
-      df$age, df$pos, df$tot,
+      df$age, pos = df$pos, tot = df$tot,
       nn=0.7, kern="tcub"
     )
 
