@@ -1,0 +1,173 @@
+---
+title: "Parametric models"
+bibliography: references.bib
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+editor: visual
+echo: true
+warning: false
+message: false
+---
+
+```{r,message = TRUE}
+library(serosv)
+```
+
+# Polynomial model
+
+Refer to `Chapter 6.1.1`
+
+[@muench_derivation_1934] suggested to model the infection process with so-called "catalytic model", in which the distribution of the time spent in the susceptible class in SIR model is exponential with rate $\beta$. The prevalence $\pi(a) = k\{1 - e^{(-\beta a)}\}$ , where 1 - k is the proportion of the population staying uninfected for lifetime.
+
+Use `polynomial_model()` to fit a polynomial model. For example, using `Hepatitis A` data from Belgium 1993–1994.
+
+```{r}
+a <- hav_bg_1964
+neg <- a$tot -a$pos
+pos <- a$pos
+age <- a$age
+tot <- a$tot
+head(a)
+```
+
+## Muench model
+
+Muench's model with age-independent force of infection $\lambda(a) = \beta$ was estimated using a GLM for which the linear predictor was $\eta(a) = \beta a$.
+
+Muench’s model can be estimated by either defining *k* = 1 (a degree one linear predictor) or setting the *type* = "Muench".
+
+::: columns
+::: {.column width="50%"}
+```{r}
+muench1 <- polynomial_model(age, pos, neg, 
+                            k = 1)
+summary(muench1$info)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+muench2 <- polynomial_model(age, pos, neg, 
+                            type = "Muench")
+summary(muench2$info)
+```
+:::
+:::
+
+We can plot any model with the `plot()` function.
+
+```{r}
+plot(muench2)
+```
+
+## Griffith model
+
+Griffiths’ model with linear force of infection $\lambda(a) = \beta_1 + 2\beta_2a$ was estimated using a GLM for which the linear predictor was $\eta(a) = \beta_1 + \beta_2a^{2}$.
+
+```{r}
+gf_model <- polynomial_model(age, pos, neg, type = "Griffith")
+plot(gf_model)
+```
+
+## Grenfell and Anderson model
+
+[@grenfell_estimation_1985] extended the models of Muench and Griffiths further and used polynomial functions to model the force of infection. Their model assumed that $\pi(a) = 1 - e^{-\sum_i\beta_ia^{i}}$. Using GLM with log - link, the force of infection $\lambda(a) = \sum\beta_iia^{i-1}$
+
+Griffiths’ model with quadratic force of infection $\lambda(a) = \beta_1 + 2\beta_2a^{}+3\beta_3a^{2}$ was estimated using a GLM for which the linear predictor was $\eta(a) = \beta_1 + \beta_2a^{2} + \beta_3a^{3}$.
+
+```{r}
+grf_model <- polynomial_model(age,pos,neg,type = "Grenfell")
+plot(grf_model)
+```
+
+# Nonlinear models
+
+Refer to `Chapter 6.1.2`
+
+## Farrington model
+
+In farrington model, the force of infection was defined non-negative for all a $\lambda(a) \geq 0$ and increases to a peak in a linear fashion followed by an exponential decrease:
+
+$\lambda(a) = (\alpha a - \gamma)e^{-\beta a}+\gamma$
+
+And using a nonlinear model for $\pi(a)$
+
+$\pi(a) = 1 - e^{-\intop\nolimits_{0}^{a} \lambda(s)}$ = $1 - e^{\{\frac\alpha\beta\ a e^{-\beta a} + \frac1\beta(\frac\alpha\beta - \gamma)(e^{-\beta a} - 1) - \gamma a\}}$
+
+```{r}
+rubella <- rubella_uk_1986_1987
+rubella$neg <- rubella$tot - rubella$pos
+
+farrington_md <- farrington_model(
+   rubella$age, rubella$pos, rubella$tot,
+   start=list(alpha=0.07,beta=0.1,gamma=0.03)
+   )
+plot(farrington_md)
+```
+
+## Weibull
+
+For a Weibull model, the prevalence is given by exposure time or duration (d), which was defined as the difference between the age at first injection and age at test.
+
+$\pi(d) = 1 - e^{-\beta_0d^{\beta1}}$
+
+The model was reformulated as a GLM model with log - log link and linear predictor using log(d)
+
+$\eta(d) = log(\beta_0) + \beta_1 log(d)$
+
+The Weibull model implies that the force of infection is a monotone function of the exposure time:
+
+$\lambda(d) = \beta_0 \beta_1 d^{\beta_1 -1}$
+
+```{r}
+hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
+dur <- hcv$dur
+infected <- hcv$seropositive
+
+wb_md <- weibull_model(
+   t = dur,
+   spos = infected
+   )
+plot(wb_md) 
+```
+
+# Fractional polynomial model
+
+Refer to `Chapter 6.2`
+
+Fractional polynomials is a natural extension of polynomial models. In the context of binary respones, a fractional polynomial (FP) of degree for the linear predictor is defined as
+
+$\eta_m(a,\beta,p_1,p_2...p_m) = \sum_{i=0}^{m} \beta_iH_i(a)$
+
+where m is an integer, p $p_1 \leq p_2 \leq ... \leq p_m$ is a sequence of powers, and $H_i(a)$ is a transformation given by
+
+$H_i(a)$ = $\begin{equation}\begin{cases} a^{P_i} & \text{if $p_i \neq p_{i-1}$,} \\H_{i-1}(a) log(a) & \text{if $p_i = p_{i-1}$,} \end{cases}\end{equation}$
+
+The estimation of fractional polynomials is a two-step procedure: **best powers selection** and **intercept and slopes estimation**.
+
+**Best powers selection**
+
+Use `find_best_fp_powers()` to find the powers which gives the lowest deviance score
+
+```{r}
+hav <- hav_be_1993_1994
+best_p <- find_best_fp_powers(
+  hav$age, hav$pos, hav$tot,
+  p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
+)
+best_p
+```
+
+**Intercept and slopes estimation**
+
+Use fp_model() to fit a fractional polynomial model
+
+```{r}
+model <- fp_model(
+  hav$age, hav$pos, hav$tot,
+  p=c(1.5, 1.6), link="cloglog")
+plot(model)
+```
