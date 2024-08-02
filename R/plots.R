@@ -307,6 +307,22 @@ plot.mixture_model <- function(x, ...){
 
 }
 
+#### Estimate sero from mixture model #####
+#' plot() overloading for result of estimate_from_mixture
+#'
+#' @param x the mixture_model
+#' @param ... arbitrary params.
+#' @import ggplot2
+#'
+#' @export
+plot.estimate_from_mixture <- function(x, ... ){
+  age <- x$df$age
+  ggplot()+
+    geom_line(aes(x = age, y = x$sp, col = "sero", linetype = "sero")) +
+    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi) +
+    set_plot_style()
+}
+
 
 #### Bivariate Dale model ####
 #' plot() overloading for bivariate_dale_model

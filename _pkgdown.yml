@@ -36,6 +36,7 @@ reference:
   - lp_model
   - penalized_spline_model
   - mixture_model
+  - estimate_from_mixture
   - bivariate_dale_model
 
 - title: Plotting functions
@@ -48,6 +49,7 @@ reference:
   - plot.lp_model
   - plot.penalized_spline_model
   - plot.mixture_model
+  - plot.estimate_from_mixture
   - plot.bivariate_dale_model
   - set_plot_style
 

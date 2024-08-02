@@ -22,7 +22,7 @@ library(serosv)
 
 Refer to `Chapter 7.1`
 
-#### Proposed model
+**Proposed model**
 
 Within the local polynomial framework, the linear predictor $\eta(a)$ is approximated locally at one particular value $a_0$ for age by a line (local linear) or a parabola (local quadratic).
 
@@ -48,7 +48,7 @@ $$
 
 -   Where $\delta \{ \hat{\beta}_0(a_0) \} = \frac{dg^{-1} \{ \hat{\beta}_0(a_0) \} } {d\hat{\beta}_0(a_0)}$
 
-#### Fitting data
+**Fitting data**
 
 ```{r}
 mump <- mumps_uk_1986_1987

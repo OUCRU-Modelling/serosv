@@ -2,6 +2,7 @@
 title: "Parametric models"
 output: rmarkdown::html_vignette
 bibliography: references.bib
+link-citations: TRUE
 vignette: >
   %\VignetteIndexEntry{Parametric models}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +38,7 @@ tot <- a$tot
 
 ### Muench model
 
-#### Proposed model
+**Proposed model**
 
 [@muench_derivation_1934] suggested to model the infection process with so-called "catalytic model", in which the distribution of the time spent in the susceptible class in SIR model is exponential with rate $\beta$
 
@@ -47,13 +48,17 @@ $$
 
 Where:
 
+-   $\pi$ is the seroprevalence at age $a$
+
+<!-- -->
+
 -   $1 - k$ is the proportion of population that stay uninfected for a lifetime
 
 -   $a$ is the variable age
 
 Under this catalytic model and assuming that $k = 1$, force infection would be $\lambda(a) = \beta$
 
-#### Fitting data
+**Fitting data**
 
 **Muench**'s model can be estimated by either defining `k = 1` (a degree one linear predictor, note that it is irrelevant to the k in the proposed model) or setting the `type = "Muench"`.
 
@@ -73,7 +78,7 @@ plot(muench2)
 
 ### Griffith model
 
-#### Proposed model
+**Proposed model**
 
 Griffith proposed a model for force of infection as followed
 
@@ -83,7 +88,7 @@ $$
 
 Which can be estimated using a GLM where the for which the linear predictor was $\eta(a) = \beta_1 + \beta_2a^{2}$
 
-#### Fitting data
+**Fitting data**
 
 Similarly, we can estimate **Griffith**'s model either by defining `k = 2`, or setting the `type = "Griffith"`
 
@@ -94,7 +99,7 @@ plot(gf_model)
 
 ### Grenfell and Anderson model
 
-#### Proposed model
+**Proposed model**
 
 [@grenfell_estimation_1985] extended the models of Muench and Griffiths further suggest the use of higher order polynomial functions to model the force of infection which assumes prevalence model as followed
 
@@ -104,7 +109,7 @@ $$
 
 Which implies that force of infection equals $\lambda(a) = \Sigma \beta_i i a^{i-1}$
 
-#### Fitting data
+**Fitting data**
 
 And Grenfell and Anderson's model.
 
@@ -113,15 +118,17 @@ grf_model <- polynomial_model(age, pos = pos, tot = tot, type = "Grenfell")
 plot(grf_model)
 ```
 
+------------------------------------------------------------------------
+
 ## Nonlinear models
 
 Refer to `Chapter 6.1.2`
 
 ### Farrington model
 
-#### Proposed model
+**Proposed model**
 
-Farrington's model the force of infection was defined non-negative for all a $\lambda(a) \geq 0$ and increases to a peak in a linear fashion followed by an exponential decrease
+Fo Farrington's model, the force of infection was defined non-negative for all a $\lambda(a) \geq 0$ and increases to a peak in a linear fashion followed by an exponential decrease
 
 $$
 \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma
@@ -135,7 +142,7 @@ $$
 \pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\ = 1 - exp\{ \frac{\alpha}{\beta}ae^{-\beta a} + \frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma a \}
 $$
 
-#### Fitting data
+**Fitting data**
 
 Use `farrington_model()` to fit a **Farrington**'s model.
 
@@ -152,7 +159,7 @@ plot(farrington_md)
 
 ### Weibull model
 
-#### Proposed model
+**Proposed model**
 
 For a Weibull model, the prevalence is given by
 
@@ -172,7 +179,7 @@ $$
 \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1}
 $$
 
-#### Fitting data
+**Fitting data**
 
 Use `weibull_model()` to fit a Weibull model.
 
@@ -188,11 +195,13 @@ wb_md <- weibull_model(
 plot(wb_md) 
 ```
 
+------------------------------------------------------------------------
+
 ## Fractional polynomial model
 
 Refer to `Chapter 6.2`
 
-#### Proposed model
+**Proposed model**
 
 Fractional polynomial model generalize conventional polynomial class of functions. In the context of binary responses, a fractional polynomial of degree $m$ for the linear predictor is defined as followed
 
@@ -209,7 +218,7 @@ H_i = \begin{cases}
 \end{cases}
 $$
 
-#### Best power selection
+**Best power selection**
 
 Use `find_best_fp_powers()` to find the powers which gives the lowest deviance score
 
@@ -222,7 +231,7 @@ best_p <- find_best_fp_powers(
 best_p
 ```
 
-#### Fitting data
+**Fitting data**
 
 Use `fp_model()` to fit a fractional polynomial model
 
