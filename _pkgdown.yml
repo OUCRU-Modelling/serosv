@@ -37,7 +37,6 @@ reference:
   - penalized_spline_model
   - mixture_model
   - estimate_from_mixture
-  - bivariate_dale_model
 
 - title: Plotting functions
   contents:
@@ -50,20 +49,17 @@ reference:
   - plot.penalized_spline_model
   - plot.mixture_model
   - plot.estimate_from_mixture
-  - plot.bivariate_dale_model
   - set_plot_style
 
 - title: Other utilities
   contents:
   - transform_data
-  - generate_quad_matrix
   - compute_ci
   - compute_ci.fp_model
   - compute_ci.lp_model
   - compute_ci.weibull_model
   - compute_ci.penalized_spline_model
   - compute_ci.mixture_model
-  - find_best_bdm_param
   - find_best_fp_powers
 
 articles:
@@ -75,8 +71,6 @@ articles:
   - semiparametric_model
   - hierarchical_model
   - model_quantitative_data
-  - model_multivariate_data
-  - age_time_dependent
 - title: Utilities
   navbar: Utilities
   contents:

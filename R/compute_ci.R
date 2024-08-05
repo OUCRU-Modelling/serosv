@@ -10,6 +10,7 @@ compute_ci <- function(x, ci = 0.95, ...){
 #' @param ... - arbitrary argument
 #'
 #' @importFrom stats qt predict.glm
+#' @import dplyr
 #'
 #' @export
 compute_ci <- function(x, ci = 0.95, le = 100, ...){
@@ -39,6 +40,8 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @param le - number of data for computing confidence interval
 #' @param ... - arbitrary argument
 #'
+#' @import dplyr
+#'
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
   p <- (1 - ci) / 2
@@ -66,6 +69,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' @param ci - confidence interval
 #' @param ... - arbitrary argument
 #'
+#' @import dplyr
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   p <- (1 - ci) / 2
@@ -110,6 +114,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' @param ci - confidence interval
 #' @param ... - arbitrary arguments
 #' @importFrom mgcv predict.gam
+#' @import dplyr
 #'
 #' @export
 compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){

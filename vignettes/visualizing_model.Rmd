@@ -42,27 +42,6 @@ farrington_md <- farrington_model(
 plot(farrington_md)
 ```
 
-### Multivariate model
-
-For `bivariate_dale_model`, `plot` function would have optional additional arguments for labeling or formatting the plot
-
-```{r}
-data <- rubella_mumps_uk
-model <- bivariate_dale_model(age = data$age, y = data[, c("NN", "NP", "PN", "PP")], monotonized=TRUE)
-```
-
-Plot seroprevalence and FOI
-
-```{r, fig.width=7, fig.height=5}
-plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "sp")
-```
-
-Plot fitted line and confidence interval
-
-```{r, fig.width=7, fig.height=5}
-plot(model, y1 = "Rubella", y2 = "Mumps", plot_type = "ci")
-```
-
 ## Customize the plot
 
 Function `set_plot_style()` is provided to customize some attributes of the plot.

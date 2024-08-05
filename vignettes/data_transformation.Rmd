@@ -33,21 +33,3 @@ linelisting_data <- hcv_be_2006
 aggregated_data <- transform_data(linelisting_data$dur, linelisting_data$seropositive)
 aggregated_data
 ```
-
-For multivariate data, use `generate_quad_matrix()` to create [`NP`, `PN`, `NN`, `PP`] matrix from linelisting data
-
-Arguments:
-
--   `data` linelisting data table
-
--   `y1` variable for serostatus of first disease
-
--   `y2` variable for serostatus of second disease
-
--   `discrete_age` whether to round age so it is discrete
-
-```{r}
-multivariate_data <- vzv_parvo_be
-matrix_data <- generate_quad_matrix(multivariate_data, parvo_res, vzv_res, age)
-matrix_data
-```

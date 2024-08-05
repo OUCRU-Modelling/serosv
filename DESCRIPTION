@@ -61,7 +61,6 @@ Collate:
     'nonparametric.R'
     'semiparametric_models.R'
     'mixture_model.R'
-    'bivariate_dale_model.R'
     'plots.R'
     'compute_ci.R'
 Config/testthat/edition: 3
