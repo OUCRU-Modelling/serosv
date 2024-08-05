@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 library(serosv)
 ```
 
-## Penalized splines
+## Penalized splines {#sec-penalized-splines}
 
 **Proposed model**
 
@@ -107,7 +107,7 @@ A first approach to fit the model is by maximizing the following penalized likel
 ```
 Where:
 
--   $X\beta + Zu$ is the linear predictor (refer to \@ref(penalized-splines))
+-   $X\beta + Zu$ is the linear predictor (refer to \@ref(sec-penalized-splines))
 
 -   $D$ is a known semi-definite penalty matrix [@Wahba1978], [@Green1993]
 

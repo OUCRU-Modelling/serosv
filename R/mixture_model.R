@@ -68,7 +68,7 @@ estimate_from_mixture <- function(age, antibody_level, mixture_model, s="ps", sp
   mu_i <- mixture_model$info$parameters$mu[2]
 
   # Fit mu(a)
-  model$info <-gam(log(data + 1) ~ s(age, bs = "ps", sp=83), family = gaussian())
+  model$info <-gam(log_antibody ~ s(age, bs = "ps", sp=83), family = gaussian())
 
   # compute sp = [mu(a) - mu_s] / mu_i - mu_s
   # call pava to monotonize sp

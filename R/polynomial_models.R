@@ -28,7 +28,7 @@ X <- function(t, degree) {
 #' # fit with aggregated data
 #' model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
 #' # fit with linelisting data
-#' model <- polynomial_model(data$age, status = data$seropositive)
+#' model <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
 #'
 #' @return a polynomial_model object
 #'

@@ -16,7 +16,7 @@
 #' data <- parvob19_be_2001_2003
 #' mod <- penalized_spline_model(data$age, status = data$seropositive, framework="glmm")
 #' mod$gam$info
-penalized_spline_model <- function(age, pos=NULL,tot=NULL,status=NULL, s = "bs", link = "logit", framework = "pl"){
+penalized_spline_model <- function(age, pos=NULL,tot=NULL,status=NULL, s = "bs", link = "logit", framework = "pl", sp = NULL){
   stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
   age <- as.numeric(age)
@@ -36,10 +36,10 @@ penalized_spline_model <- function(age, pos=NULL,tot=NULL,status=NULL, s = "bs",
   spos <- pos/tot
 
   if (framework == "pl"){
-    model$info <- mgcv::gam(spos ~ s(age, bs = s), family = binomial(link = link))
+    model$info <- mgcv::gam(spos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
     model$sp <- model$info$fitted.values
   }else if(framework == "glmm"){
-    model$info <- mgcv::gamm(spos ~ s(age, bs = s), family = binomial(link = link))
+    model$info <- mgcv::gamm(spos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
     model$sp <- model$info$gam$fitted.values
   }else{
     stop(paste0('Invalid value for framework. Expected "pl" or "glmm", got ', framework))

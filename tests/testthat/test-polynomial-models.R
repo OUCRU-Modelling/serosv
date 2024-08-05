@@ -22,6 +22,24 @@ test_that("farrington_model returns same result as in the book", {
   expect_equal(actual, expected, tolerance=0.000001)
 })
 
+test_that("farrington_model works with linelisting data", {
+  df <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age),]
+
+  expect_no_error(
+    suppressWarnings(farrington_model(
+      df$age, status = df$seropositive,
+      start=list(alpha=0.07,beta=0.1,gamma=0.03)
+    ))
+  )
+})
+
+
+test_that("polynomial_model works with line listing data", {
+
+  data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age),]
+  expect_no_error(polynomial_model(data$age, status = data$seropositive, type = "Muench"))
+})
+
 test_that("polynomial_model returns same result as in the book (Muench)", {
   expected <- c(-0.0505004)
 

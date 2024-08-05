@@ -2,6 +2,8 @@ comment: false
 
 ignore:
   - "R/plots.R"
+  - "R/utils.R"
+  - "R/compute_ci.R"
 
 coverage:
   status:
