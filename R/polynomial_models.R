@@ -22,7 +22,7 @@ X <- function(t, degree) {
 #' @param type name of method.
 #'
 #' @examples
-#' data <- parvob19_fi_1997_1998 %>% arrange(age)
+#' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
 #' aggregated <- transform_data(data$age, data$seropositive)
 #'
 #' # fit with aggregated data

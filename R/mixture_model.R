@@ -7,6 +7,7 @@
 #' @param sigma -  a vector of standard deviations of component distributions (vector of 2 number)
 #'
 #' @importFrom mixdist mix mixgroup mixparam
+#' @importFrom stats fitted
 #'
 #' @export
 #'
@@ -41,6 +42,7 @@ mixture_model <- function (antibody_level, breaks=40, pi=c(0.2, 0.8), mu=c(2,6),
 #' @param sp - smoothing parameter
 #'
 #' @import mgcv
+#' @importFrom stats approx gaussian
 #'
 #' @return estimated_from_mixture object
 #' @export

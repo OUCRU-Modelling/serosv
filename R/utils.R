@@ -4,6 +4,15 @@
 #   df
 # }
 
+
+#' Estimate force of infection
+#'
+#' @param t - time (in this case age) vector
+#' @param sp - seroprevalence vector
+#'
+#' @importFrom stats approx
+#'
+#' @return computed foi vector
 est_foi <- function(t, sp)
 {
   # handle duplicated t

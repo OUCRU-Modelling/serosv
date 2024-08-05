@@ -29,12 +29,12 @@ Either `status` (treated as line-listing dataset) or  `pos` & `tot` (treated as 
 Refers to section 6.1.1
 }
 \examples{
-data <- parvob19_fi_1997_1998 \%>\% arrange(age)
+data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
 aggregated <- transform_data(data$age, data$seropositive)
 
 # fit with aggregated data
 model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
 # fit with linelisting data
-model <- polynomial_model(data$age, status = data$seropositive)
+model <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
 
 }

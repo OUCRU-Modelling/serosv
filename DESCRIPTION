@@ -34,10 +34,8 @@ Imports:
     stats4,
     magrittr,
     locfit, 
-    VGAM,
     ggplot2,
     patchwork,
-    stringr,
     mgcv,
     mixdist,
     methods
@@ -45,6 +43,7 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
+    bookdown,
     testthat (>= 3.0.0),
     https,
     http

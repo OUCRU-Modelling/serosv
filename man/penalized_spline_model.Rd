@@ -11,11 +11,18 @@ penalized_spline_model(
   status = NULL,
   s = "bs",
   link = "logit",
-  framework = "pl"
+  framework = "pl",
+  sp = NULL
 )
 }
 \arguments{
 \item{age}{the age vector}
+
+\item{pos}{the positive count vector (optional if status is provided).}
+
+\item{tot}{the total count vector (optional if status is provided).}
+
+\item{status}{the serostatus vector (optional if pos & tot are provided).}
 
 \item{s}{smoothing basis to use}
 
@@ -23,7 +30,7 @@ penalized_spline_model(
 
 \item{framework}{which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)}
 
-\item{spos}{the seropositive vector}
+\item{sp}{smoothing parameter}
 }
 \value{
 a penalized_spline_model object

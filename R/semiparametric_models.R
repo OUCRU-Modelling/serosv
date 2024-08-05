@@ -1,8 +1,11 @@
 #' Penalized Spline model
 #'
 #' @param age the age vector
-#' @param spos the seropositive vector
+#' @param pos the positive count vector (optional if status is provided).
+#' @param tot the total count vector (optional if status is provided).
+#' @param status the serostatus vector (optional if pos & tot are provided).
 #' @param s smoothing basis to use
+#' @param sp smoothing parameter
 #' @param link link function to use
 #' @param framework which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)
 #'

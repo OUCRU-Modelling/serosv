@@ -26,6 +26,7 @@
 #' @importFrom locfit locfit
 #' @importFrom locfit lp
 #' @importFrom graphics par
+#' @importFrom stats fitted
 #'
 #' @export
 # library(locfit)
