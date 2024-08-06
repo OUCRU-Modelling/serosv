@@ -317,10 +317,22 @@ plot.mixture_model <- function(x, ...){
 #' @export
 plot.estimate_from_mixture <- function(x, ... ){
   age <- x$df$age
-  ggplot()+
+
+  returned_plot <- ggplot()
+
+  if(!is.null(x$df$threshold_status)){
+    aggregated <- transform_data(round(x$df$age), x$df$threshold_status)
+
+    returned_plot <-  returned_plot +
+      geom_point(aes( x = t, y = pos/tot, size = 20*(pos)/max(tot) ), data = aggregated,
+                 shape = 1, show.legend = FALSE)
+  }
+
+  returned_plot <- returned_plot +
     geom_line(aes(x = age, y = x$sp, col = "sero", linetype = "sero")) +
-    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi) +
-    set_plot_style()
+    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)
+
+  returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")
 }
 
 

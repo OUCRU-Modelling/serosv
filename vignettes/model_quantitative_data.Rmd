@@ -51,7 +51,8 @@ To fit the mixture data, use `mixture_model` function
 
 ```{r}
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
-data <- df$VZVmIUml[order(df$age)]
+df <- df[order(df$age),]
+data <- df$VZVmIUml
 model <- mixture_model(antibody_level = data)
 model$info
 ```
@@ -63,7 +64,7 @@ plot(model)
 sero-prevalence and FOI can then be esimated using function `estimate_from_mixture`
 
 ```{r}
-est_mixture <- estimate_from_mixture(df$age[order(df$age)], data, mixture_model = model)
+est_mixture <- estimate_from_mixture(df$age, data, mixture_model = model, threshold_status = df$seropositive, sp=83, monotonize = FALSE)
 plot(est_mixture)
 ```
 
