@@ -44,9 +44,7 @@ Suggests:
     knitr,
     rmarkdown,
     bookdown,
-    testthat (>= 3.0.0),
-    https,
-    http
+    testthat (>= 3.0.0)
 Collate: 
     'data.R'
     'mseir_model.R'

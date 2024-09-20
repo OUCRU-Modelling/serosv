@@ -67,7 +67,3 @@ sero-prevalence and FOI can then be esimated using function `estimate_from_mixtu
 est_mixture <- estimate_from_mixture(df$age, data, mixture_model = model, threshold_status = df$seropositive, sp=83, monotonize = FALSE)
 plot(est_mixture)
 ```
-
-## Hierarchical mixture model
-
-*Work in progress*

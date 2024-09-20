@@ -4,20 +4,30 @@
 \alias{polynomial_model}
 \title{Polynomial models}
 \usage{
-polynomial_model(age, k, type, pos = NULL, tot = NULL, status = NULL)
+polynomial_model(
+  age,
+  k,
+  type,
+  pos = NULL,
+  tot = NULL,
+  status = NULL,
+  link = "log"
+)
 }
 \arguments{
 \item{age}{the age vector.}
 
 \item{k}{degree of the model.}
 
-\item{type}{name of method.}
+\item{type}{name of method (Muench, Giffith, Grenfell).}
 
 \item{pos}{the positive count vector (optional if status is provided).}
 
 \item{tot}{the total count vector (optional if status is provided).}
 
 \item{status}{the serostatus vector (optional if pos & tot are provided).}
+
+\item{link}{link function.}
 }
 \value{
 a polynomial_model object
@@ -36,5 +46,6 @@ aggregated <- transform_data(data$age, data$seropositive)
 model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
 # fit with linelisting data
 model <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
+plot(model)
 
 }

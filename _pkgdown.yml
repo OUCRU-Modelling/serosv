@@ -53,6 +53,7 @@ reference:
 
 - title: Other utilities
   contents:
+  - est_foi
   - transform_data
   - compute_ci
   - compute_ci.fp_model

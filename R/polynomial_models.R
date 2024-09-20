@@ -19,7 +19,8 @@ X <- function(t, degree) {
 #' @param tot the total count vector (optional if status is provided).
 #' @param status the serostatus vector (optional if pos & tot are provided).
 #' @param k  degree of the model.
-#' @param type name of method.
+#' @param type name of method (Muench, Giffith, Grenfell).
+#' @param link link function.
 #'
 #' @examples
 #' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
@@ -29,11 +30,12 @@ X <- function(t, degree) {
 #' model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
 #' # fit with linelisting data
 #' model <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
+#' plot(model)
 #'
 #' @return a polynomial_model object
 #'
 #' @export
-polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL){
+polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL, link = "log"){
   stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
 
   model <- list()
@@ -67,7 +69,7 @@ polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL){
       paste0("cbind(Neg,Pos)"," ~","-1+Age")
     }
   }
-  model$info <- glm(age(k), family=binomial(link="log"),df)
+  model$info <- glm(age(k), family=binomial(link=link),df)
   X <- X(Age, k)
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients

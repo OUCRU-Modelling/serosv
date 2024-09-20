@@ -24,11 +24,12 @@ mixture_model(
 \item{sigma}{-  a vector of standard deviations of component distributions (vector of 2 number)}
 }
 \description{
-Fit a mixture model to classify serostatus
+Refers to section 11.1 - 11.4
 }
 \examples{
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
 data <- df$VZVmIUml[order(df$age)]
 model <- mixture_model(antibody_level = data)
 model$info
+plot(model)
 }

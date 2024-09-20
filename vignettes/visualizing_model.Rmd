@@ -30,7 +30,7 @@ model <- fp_model(
 plot(model)
 ```
 
-If implementation for confidence interval calculation is not yet implemented, `plot` function would simply visualize seroprevalence line
+If implementation for confidence interval calculation is not yet available, `plot` function would simply visualize seroprevalence line
 
 ```{r, warning=FALSE}
 rubella <- rubella_uk_1986_1987

@@ -4,10 +4,12 @@
 \alias{plot.lp_model}
 \title{plot() overloading for local polynomial model}
 \usage{
-\method{plot}{lp_model}(x, ...)
+\method{plot}{lp_model}(x, cex = 20, ...)
 }
 \arguments{
 \item{x}{the local polynomial model object.}
+
+\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }

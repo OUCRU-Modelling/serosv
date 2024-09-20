@@ -4,10 +4,12 @@
 \alias{plot.penalized_spline_model}
 \title{plot() overloading for penalized spline}
 \usage{
-\method{plot}{penalized_spline_model}(x, ...)
+\method{plot}{penalized_spline_model}(x, cex = 20, ...)
 }
 \arguments{
 \item{x}{the penalized_spline_model object}
+
+\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }
