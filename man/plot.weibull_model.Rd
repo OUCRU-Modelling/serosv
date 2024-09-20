@@ -4,12 +4,10 @@
 \alias{plot.weibull_model}
 \title{plot() overloading for Weibull model}
 \usage{
-\method{plot}{weibull_model}(x, cex = 20, ...)
+\method{plot}{weibull_model}(x, ...)
 }
 \arguments{
 \item{x}{the Weibull model object.}
-
-\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }

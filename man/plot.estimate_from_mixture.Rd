@@ -4,12 +4,10 @@
 \alias{plot.estimate_from_mixture}
 \title{plot() overloading for result of estimate_from_mixture}
 \usage{
-\method{plot}{estimate_from_mixture}(x, cex = 20, ...)
+\method{plot}{estimate_from_mixture}(x, ...)
 }
 \arguments{
 \item{x}{the mixture_model}
-
-\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }

@@ -97,17 +97,23 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
   plot
 }
 
+# Force using the generic plot function to override
+plot <- function(x, ...) {
+  UseMethod("plot")
+}
+
 #### Polynomial model ####
 #' plot() overloading for polynomial model
 #'
 #' @param x the polynomial model object
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
 #'
 #' @export
-plot.polynomial_model <- function(x, cex = 20, ...) {
+plot.polynomial_model <- function(x, ...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
   out.DF <- compute_ci(x)
 
   if(x$datatype == "linelisting"){
@@ -131,16 +137,17 @@ plot.polynomial_model <- function(x, cex = 20, ...) {
 #' plot() overloading for Farrington model
 #'
 #' @param x the Farrington model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
 #'
 #' @export
-plot.farrington_model <- function(x, cex = 20,...) {
+plot.farrington_model <- function(x,...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
   # out.DF <- compute_ci(x)
 
   to_plot <- plot_data(x)
+
 
   if(x$datatype == "linelisting"){
     # use pre-aggregated age for FOI & sero
@@ -160,15 +167,15 @@ plot.farrington_model <- function(x, cex = 20,...) {
 #' plot() overloading for Weibull model
 #'
 #' @param x the Weibull model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
 #'
 #' @export
-plot.weibull_model <- function(x, cex=20, ...) {
+plot.weibull_model <- function(x, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
 
   out.DF <- compute_ci.weibull_model(x)
 
@@ -188,13 +195,14 @@ plot.weibull_model <- function(x, cex=20, ...) {
 #' plot() overloading for fractional polynomial model
 #'
 #' @param x the fractional polynomial model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
 #'
 #' @export
-plot.fp_model <- function(x, cex = 20,...) {
+plot.fp_model <- function(x,...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
   out.DF <- compute_ci.fp_model(x)
   to_plot <- plot_data(x)
 
@@ -209,13 +217,14 @@ plot.fp_model <- function(x, cex = 20,...) {
 #' plot() overloading for local polynomial model
 #'
 #' @param x the local polynomial model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
 #'
 #' @export
-plot.lp_model <- function(x, cex=20, ...) {
+plot.lp_model <- function(x, ...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
   out.DF <- compute_ci.lp_model(x)
   to_plot <- plot_data(x)
 
@@ -231,17 +240,35 @@ plot.lp_model <- function(x, cex=20, ...) {
   })
 }
 
-#### Penalized splines ####
-#' plot() overloading for penalized spline
+#### Hierarchical Bayesian model ####
+#' plot() overloading for hierarchical_bayesian_model
 #'
-#' @param x the penalized_spline_model object
-#' @param cex adjust radius for seroprevalence data points
+#' @param x hierarchical_bayesian_model object created by serosv.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
 #'
 #' @export
-plot.penalized_spline_model <- function(x,cex=20, ...){
+plot.hierarchical_bayesian_model <- function(x,  ...){
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
+  with(x$df, {
+    plot_util(age = age, pos = pos, tot = tot, sero = x$sp, foi = x$foi, cex=cex)
+  })
+}
+
+
+#### Penalized splines ####
+#' plot() overloading for penalized spline
+#'
+#' @param x the penalized_spline_model object
+#' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
+#'
+#' @export
+plot.penalized_spline_model <- function(x, ...){
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
   ci <- compute_ci.penalized_spline_model(x)
 
   out.DF <- ci[[1]]
@@ -250,7 +277,7 @@ plot.penalized_spline_model <- function(x,cex=20, ...){
   to_plot <- plot_data(x)
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = out.FOI, cex=20)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = out.FOI, cex=cex)
   })
 
 }
@@ -317,12 +344,12 @@ plot.mixture_model <- function(x, ...){
 #' plot() overloading for result of estimate_from_mixture
 #'
 #' @param x the mixture_model
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #'
 #' @export
-plot.estimate_from_mixture <- function(x,cex=20, ... ){
+plot.estimate_from_mixture <- function(x, ... ){
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
   age <- x$df$age
 
   returned_plot <- ggplot()
