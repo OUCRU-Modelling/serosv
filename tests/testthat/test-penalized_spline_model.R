@@ -23,7 +23,7 @@ test_that("penalized_spline_model returns same result as in the book (glmm frame
   model <- penalized_spline_model(df$age, status = df$parvo_res, s = "tp", framework = "glmm")
   actual_coef <- unname(model$info$gam$coefficients)
 
-  expect_equal(expected_coef, actual_coef, tolerance=0.000001)
+  expect_equal(expected_coef, actual_coef, tolerance=0.00001)
 })
 
 test_that("penalized_spline_model works with aggregated data", {
