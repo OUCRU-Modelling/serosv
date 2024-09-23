@@ -16,10 +16,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Nguyen Pham Nguyen The \email{nguyenpnt@oucru.org}
+\strong{Maintainer}: Anh Phan \email{anhptq@oucru.org}
 
 Authors:
 \itemize{
+  \item Nguyen Pham Nguyen The \email{nguyenpnt@oucru.org}
   \item Long Bui Thanh
   \item Tuyen Huynh \email{tuyenhn@oucru.org}
   \item Thinh Ong \email{thinhop@oucru.org} (\href{https://orcid.org/0000-0001-6772-9291}{ORCID})

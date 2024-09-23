@@ -24,7 +24,7 @@ hierarchical_bayesian_model(
 
 \item{status}{the serostatus vector (optional if pos & tot are provided).}
 
-\item{type}{type of model ("far2", "far3" or "log-logistic")}
+\item{type}{type of model ("far2", "far3" or "log_logistic")}
 
 \item{chains}{number of Markov chains}
 
@@ -36,8 +36,11 @@ hierarchical_bayesian_model(
 a hierarchical_bayesian_model object
 }
 \description{
-Hierarchical Bayesian Model
+Refers to section 10.3
 }
 \examples{
-bayesian_model(age = age,pos = pos,tot = tot)
+df <- mumps_uk_1986_1987
+model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+model$info
+plot(model)
 }

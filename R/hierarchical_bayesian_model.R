@@ -1,10 +1,12 @@
-#'Hierarchical Bayesian Model
+#' Hierarchical Bayesian Model
+#'
+#' Refers to section 10.3
 #'
 #' @param age the age vector
 #' @param pos the positive count vector (optional if status is provided).
 #' @param tot the total count vector (optional if status is provided).
 #' @param status the serostatus vector (optional if pos & tot are provided).
-#' @param type type of model ("far2", "far3" or "log-logistic")
+#' @param type type of model ("far2", "far3" or "log_logistic")
 #' @param chains number of Markov chains
 #' @param warmup number of warmup runs
 #' @param iter number of iterations
@@ -16,7 +18,9 @@
 #' @export
 #'
 #' @examples
-#' model <- bayesian_model(age = age,pos = pos,tot = tot)
+#' df <- mumps_uk_1986_1987
+#' model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+#' model$info
 #' plot(model)
 hierarchical_bayesian_model <- function(age,pos=NULL,tot=NULL, status=NULL,
                             type="far3",chains = 1,warmup = 1500,iter = 5000){
@@ -103,6 +107,7 @@ hierarchical_bayesian_model <- function(age,pos=NULL,tot=NULL, status=NULL,
   model$sp <- theta$sp
   model$foi <- theta$foi
   model$df <- data.frame(age = age, tot = tot, pos = pos)
+  model$type <- type
 
   class(model) <- "hierarchical_bayesian_model"
 

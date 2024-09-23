@@ -18,6 +18,119 @@ knitr::opts_chunk$set(
 library(serosv)
 ```
 
-## Farrington 
+## Parametric Bayesian framework
 
-## Log-logistic
+Currently, `serosv` only has models under parametric Bayesian framework
+
+**Proposed approach**
+
+Prevalence has a parametric form $\pi(a_i, \alpha)$ where $\alpha$ is a parameter vector
+
+One can constraint the parameter space of the prior distribution $P(\alpha)$ in order to achieve the desired monotonicity of the posterior distribution $P(\pi_1, \pi_2, ..., \pi_m|y,n)$
+
+Where:
+
+-   $n = (n_1, n_2, ..., n_m)$ and $n_i$ is the sample size at age $a_i$
+
+<!-- -->
+
+-   $y = (y_1, y_2, ..., y_m)$ and $y_i$ is the number of infected individual from the $n_i$ sampled subjects
+
+### Farrington
+
+Refer to `Chapter 10.3.1`
+
+**Proposed model**
+
+The model for prevalence is as followed
+
+$$
+\pi (a) = 1 - exp\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} + \frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2 a} - 1) -\alpha_3 a \}
+$$
+
+For likelihood model, independent binomial distribution are assumed for the number of infected individuals at age $a_i$
+
+$$
+y_i \sim Bin(n_i, \pi_i), \text{  for } i = 1,2,3,...m
+$$
+
+The constraint on the parameter space can be incorporated by assuming truncated normal distribution for the components of $\alpha$, $\alpha = (\alpha_1, \alpha_2, \alpha_3)$ in $\pi_i = \pi(a_i,\alpha)$
+
+$$
+\alpha_j \sim \text{truncated  } \mathcal{N}(\mu_j, \tau_j), \text{ } j = 1,2,3
+$$
+
+The joint posterior distribution for $\alpha$ can be derived by combining the likelihood and prior as followed
+
+$$
+P(\alpha|y) \propto \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha)) \prod^3_{i=1}-\frac{1}{\tau_j}\text{exp}(\frac{1}{2\tau^2_j} (\alpha_j - \mu_j)^2)
+$$
+
+-   Where the flat hyperprior distribution is defined as followed:
+
+    -   $\mu_j \sim \mathcal{N}(0, 10000)$
+
+    -   $\tau^{-2}_j \sim \Gamma(100,100)$
+
+The full conditional distribution of $\alpha_i$ is thus $$
+P(\alpha_i|\alpha_j,\alpha_k, k, j \neq i) \propto  -\frac{1}{\tau_i}\text{exp}(\frac{1}{2\tau^2_i} (\alpha_i - \mu_i)^2) \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha))
+$$
+
+**Fitting data**
+
+To fit Farrington model, use `hierarchical_bayesian_model()` and define `type = "far2"` or `type = "far3"` where
+
+-   `type = "far2"` refers to Farrington model with 2 parameters ($\alpha_3 = 0$)
+
+-   `type = "far3"` refers to Farrington model with 3 parameters ($\alpha_3 > 0$)
+
+```{r}
+df <- mumps_uk_1986_1987
+model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+
+model$info
+plot(model)
+```
+
+### Log-logistic
+
+**Proposed approach**
+
+The model for seroprevalence is as followed
+
+$$
+\pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ } \alpha, \beta > 0
+$$
+
+The likelihood is specified to be the same as Farrington model ($y_i \sim Bin(n_i, \pi_i)$) with
+
+$$
+\text{logit}(\pi(a)) = \alpha_2 + \alpha_1\log(a)
+$$
+
+-   Where $\alpha_2 = \text{log}(\beta)$
+
+The prior model of $\alpha_1$ is specified as $\alpha_1 \sim \text{truncated  } \mathcal{N}(\mu_1, \tau_1)$ with flat hyperprior as in Farrington model
+
+$\beta$ is constrained to be positive by specifying $\alpha_2 \sim \mathcal{N}(\mu_2, \tau_2)$
+
+The full conditional distribution of $\alpha_1$ is thus
+
+$$
+P(\alpha_1|\alpha_2) \propto -\frac{1}{\tau_1} \text{exp} (\frac{1}{2 \tau_1^2} (\alpha_1 - \mu_1)^2)
+\prod_{i=1}^m \text{Bin}(y_i|n_i,\pi(a_i, \alpha_1, \alpha_2) )
+$$
+
+And $\alpha_2$ can be derived in the same way
+
+**Fitting data**
+
+To fit Log-logistic model, use `hierarchical_bayesian_model()` and define `type = "log_logistic"`
+
+```{r}
+df <- rubella_uk_1986_1987
+model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="log_logistic")
+
+model$type
+plot(model)
+```

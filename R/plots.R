@@ -98,9 +98,9 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
 }
 
 # Force using the generic plot function to override
-plot <- function(x, ...) {
-  UseMethod("plot")
-}
+# plot <- function(x, ...) {
+#   UseMethod("plot")
+# }
 
 #### Polynomial model ####
 #' plot() overloading for polynomial model
@@ -109,6 +109,7 @@ plot <- function(x, ...) {
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
 plot.polynomial_model <- function(x, ...) {
@@ -140,6 +141,7 @@ plot.polynomial_model <- function(x, ...) {
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
 plot.farrington_model <- function(x,...) {
@@ -170,6 +172,7 @@ plot.farrington_model <- function(x,...) {
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
 plot.weibull_model <- function(x, ...) {
@@ -198,6 +201,7 @@ plot.weibull_model <- function(x, ...) {
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
 plot.fp_model <- function(x,...) {
@@ -219,6 +223,7 @@ plot.fp_model <- function(x,...) {
 #' @param x the local polynomial model object.
 #' @param ... arbitrary params.
 #' @import ggplot2
+#' @importFrom graphics plot
 #' @importFrom methods is
 #'
 #' @export
@@ -246,6 +251,7 @@ plot.lp_model <- function(x, ...) {
 #' @param x hierarchical_bayesian_model object created by serosv.
 #' @param ... arbitrary params.
 #' @import ggplot2
+#' @importFrom graphics plot
 #' @importFrom methods is
 #'
 #' @export
@@ -264,6 +270,7 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #' @param x the penalized_spline_model object
 #' @param ... arbitrary params.
 #' @import ggplot2
+#' @importFrom graphics plot
 #' @importFrom methods is
 #'
 #' @export
@@ -288,6 +295,7 @@ plot.penalized_spline_model <- function(x, ...){
 #'
 #' @param x the mixture_model
 #' @param ... arbitrary params.
+#' @importFrom graphics plot
 #' @import ggplot2
 #'
 #' @export
@@ -345,6 +353,7 @@ plot.mixture_model <- function(x, ...){
 #'
 #' @param x the mixture_model
 #' @param ... arbitrary params.
+#' @importFrom graphics plot
 #' @import ggplot2
 #'
 #' @export
