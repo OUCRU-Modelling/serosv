@@ -4,10 +4,12 @@
 \alias{plot.fp_model}
 \title{plot() overloading for fractional polynomial model}
 \usage{
-\method{plot}{fp_model}(x, ...)
+\method{plot}{fp_model}(x, cex = 20, ...)
 }
 \arguments{
 \item{x}{the fractional polynomial model object.}
+
+\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }

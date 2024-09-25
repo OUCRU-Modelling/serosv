@@ -15,7 +15,7 @@ A data frame with 3 variables:
 \source{
 Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
 antibody to measles, mumps, and rubella by age. British Medical Journal
-1988; 297 :770 \link[https://doi.org/10.1136/bmj.297.6651.770]{https://doi.org/10.1136/bmj.297.6651.770}
+1988; 297 :770 \url{https://doi.org/10.1136/bmj.297.6651.770}
 }
 \usage{
 mumps_uk_1986_1987

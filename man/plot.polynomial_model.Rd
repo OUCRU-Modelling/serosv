@@ -4,10 +4,12 @@
 \alias{plot.polynomial_model}
 \title{plot() overloading for polynomial model}
 \usage{
-\method{plot}{polynomial_model}(x, ...)
+\method{plot}{polynomial_model}(x, cex = 20, ...)
 }
 \arguments{
 \item{x}{the polynomial model object}
+
+\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }

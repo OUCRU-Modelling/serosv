@@ -16,7 +16,7 @@ A data frame with 3 variables:
 Keiding, Niels. "Age-Specific Incidence and Prevalence: A
 Statistical Perspective." Journal of the Royal Statistical Society.
 Series A (Statistics in Society) 154, no. 3 (1991): 371-412.
-\link[https://doi.org/10.2307/2983150]{https://doi.org/10.2307/2983150}
+\url{https://doi.org/10.2307/2983150}
 }
 \usage{
 hav_bg_1964

@@ -1,6 +1,8 @@
 ---
 title: "Parametric models"
 output: rmarkdown::html_vignette
+bibliography: references.bib
+link-citations: TRUE
 vignette: >
   %\VignetteIndexEntry{Parametric models}
   %\VignetteEngine{knitr::rmarkdown}
@@ -36,13 +38,35 @@ tot <- a$tot
 
 ### Muench model
 
-**Muench**'s model can be estimated by either defining `k = 1` (a degree one linear predictor) or setting the `type = "Muench"`.
+**Proposed model**
+
+[@muench_derivation_1934] suggested to model the infection process with so-called "catalytic model", in which the distribution of the time spent in the susceptible class in SIR model is exponential with rate $\beta$
+
+$$
+\pi(a) = k(1 - e^{-\beta a} )
+$$
+
+Where:
+
+-   $\pi$ is the seroprevalence at age $a$
+
+<!-- -->
+
+-   $1 - k$ is the proportion of population that stay uninfected for a lifetime
+
+-   $a$ is the variable age
+
+Under this catalytic model and assuming that $k = 1$, force infection would be $\lambda(a) = \beta$
+
+**Fitting data**
+
+**Muench**'s model can be estimated by either defining `k = 1` (a degree one linear predictor, note that it is irrelevant to the k in the proposed model) or setting the `type = "Muench"`.
 
 ```{r}
-muench1 <- polynomial_model(age, pos, neg, k = 1)
+muench1 <- polynomial_model(age, pos = pos, tot = tot, k = 1)
 summary(muench1$info)
 
-muench2 <- polynomial_model(age, pos, neg, type = "Muench")
+muench2 <- polynomial_model(age, pos = pos, tot = tot, type = "Muench")
 summary(muench2$info)
 ```
 
@@ -54,27 +78,71 @@ plot(muench2)
 
 ### Griffith model
 
-Similarly, we can estimate **Griffith**'s model.
+**Proposed model**
+
+Griffith proposed a model for force of infection as followed
+
+$$
+ \lambda(a) = \beta_1 + 2\beta_2a  
+$$
+
+Which can be estimated using a GLM where the for which the linear predictor was $\eta(a) = \beta_1 + \beta_2a^{2}$
+
+**Fitting data**
+
+Similarly, we can estimate **Griffith**'s model either by defining `k = 2`, or setting the `type = "Griffith"`
 
 ```{r}
-gf_model <- polynomial_model(age, pos, neg, type = "Griffith")
+gf_model <- polynomial_model(age, pos = pos, tot = tot, type = "Griffith")
 plot(gf_model)
 ```
 
 ### Grenfell and Anderson model
 
+**Proposed model**
+
+[@grenfell_estimation_1985] extended the models of Muench and Griffiths further suggest the use of higher order polynomial functions to model the force of infection which assumes prevalence model as followed
+
+$$
+\pi(a)  = 1 - e^{-\Sigma_i \beta_i a^i}
+$$
+
+Which implies that force of infection equals $\lambda(a) = \Sigma \beta_i i a^{i-1}$
+
+**Fitting data**
+
 And Grenfell and Anderson's model.
 
 ```{r}
-grf_model <- polynomial_model(age,pos,neg,type = "Grenfell")
+grf_model <- polynomial_model(age, pos = pos, tot = tot, type = "Grenfell")
 plot(grf_model)
 ```
+
+------------------------------------------------------------------------
 
 ## Nonlinear models
 
 Refer to `Chapter 6.1.2`
 
 ### Farrington model
+
+**Proposed model**
+
+Fo Farrington's model, the force of infection was defined non-negative for all a $\lambda(a) \geq 0$ and increases to a peak in a linear fashion followed by an exponential decrease
+
+$$
+\lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma
+$$
+
+Where $\gamma$ is called the long term residual for FOI, as $a \rightarrow \infty$ , $\lambda (a) \rightarrow \gamma$
+
+Integrating $\lambda(a)$ would results in the following non-linear model for prevalence
+
+$$
+\pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\ = 1 - exp\{ \frac{\alpha}{\beta}ae^{-\beta a} + \frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma a \}
+$$
+
+**Fitting data**
 
 Use `farrington_model()` to fit a **Farrington**'s model.
 
@@ -83,13 +151,35 @@ rubella <- rubella_uk_1986_1987
 rubella$neg <- rubella$tot - rubella$pos
 
 farrington_md <- farrington_model(
-   rubella$age, rubella$pos, rubella$tot,
+   rubella$age, pos = rubella$pos, tot = rubella$tot,
    start=list(alpha=0.07,beta=0.1,gamma=0.03)
    )
 plot(farrington_md)
 ```
 
 ### Weibull model
+
+**Proposed model**
+
+For a Weibull model, the prevalence is given by
+
+$$
+\pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}} 
+$$
+
+Where $d$ is exposure time (difference between age of injection and age at test)
+
+The model was reformulated as a GLM model with log - log link and linear predictor using log(d)
+
+$$\eta(d) = log(\beta_0) + \beta_1 log(d)$$
+
+Thus implies that the force of infection is a monotone function of the exposure time as followed
+
+$$
+\lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1}
+$$
+
+**Fitting data**
 
 Use `weibull_model()` to fit a Weibull model.
 
@@ -100,31 +190,54 @@ infected <- hcv$seropositive
 
 wb_md <- weibull_model(
    t = dur,
-   spos = infected
+   status = infected
    )
 plot(wb_md) 
 ```
 
+------------------------------------------------------------------------
+
 ## Fractional polynomial model
 
 Refer to `Chapter 6.2`
+
+**Proposed model**
+
+Fractional polynomial model generalize conventional polynomial class of functions. In the context of binary responses, a fractional polynomial of degree $m$ for the linear predictor is defined as followed
+
+$$
+\eta_m(a, \beta, p_1, p_2, ...,p_m) = \Sigma^m_{i=0} \beta_i H_i(a)
+$$
+
+Where $m$ is an integer, $p_1 \le p_2 \le... \le p_m$ is a sequence of powers, and $H_i(a)$ is a transformation given by
+
+$$
+H_i = \begin{cases}
+ a^{p_i} & \text{ if } p_i \neq p_{i-1},
+ \\ H_{i-1}(a) \times log(a)  & \text{ if } p_i = p_{i-1},
+\end{cases}
+$$
+
+**Best power selection**
 
 Use `find_best_fp_powers()` to find the powers which gives the lowest deviance score
 
 ```{r, warning=FALSE}
 hav <- hav_be_1993_1994
 best_p <- find_best_fp_powers(
-  hav$age, hav$pos, hav$tot,
+  hav$age, pos = hav$pos,tot = hav$tot,
   p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
 )
 best_p
 ```
 
+**Fitting data**
+
 Use `fp_model()` to fit a fractional polynomial model
 
 ```{r}
 model <- fp_model(
-  hav$age, hav$pos, hav$tot,
+  hav$age, pos = hav$pos, tot = hav$tot,
   p=c(1.5, 1.6), link="cloglog")
 plot(model)
 ```

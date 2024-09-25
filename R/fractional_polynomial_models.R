@@ -40,7 +40,7 @@ formulate <- function(p) {
 #' )
 #' best_p
 #'
-#' @importFrom stats glm binomial formula
+#' @importFrom stats glm binomial as.formula
 #'
 #' @export
 find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
@@ -107,21 +107,37 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #' Refers to section 6.2.
 #'
 #' @param age the age vector.
-#' @param pos the pos vector.
-#' @param tot the tot vector.
+#' @param pos the positive count vector (optional if status is provided).
+#' @param tot the total count vector (optional if status is provided).
+#' @param status the serostatus vector (optional if pos & tot are provided).
 #' @param p the powers of the predictor.
 #' @param link the link function for model. Defaulted to "logit".
+#'
+#' @importFrom stats predict as.formula
 #'
 #' @examples
 #' df <- hav_be_1993_1994
 #' model <- fp_model(
-#'   df$age, df$pos, df$tot,
+#'   df$age, pos = df$pos, tot = df$tot,
 #'   p=c(1.5, 1.6), link="cloglog")
 #' plot(model)
 #'
 #' @export
-fp_model <- function(age, pos, tot, p, link="logit") {
+fp_model <- function(age,p, pos=NULL, tot=NULL, status = NULL,  link="logit") {
+  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
+  age <- as.numeric(age)
+
+  # check input whether it is line-listing or aggregated data
+  if (!is.null(pos) & !is.null(tot)){
+    pos <- as.numeric(pos)
+    tot <- as.numeric(tot)
+    model$datatype <- "aggregated"
+  }else{
+    pos <- as.numeric(status)
+    tot <- rep(1, length(pos))
+    model$datatype <- "linelisting"
+  }
 
   model$info <- glm(
     as.formula(formulate(p)),

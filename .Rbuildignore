@@ -6,9 +6,11 @@
 ^LICENSE\.md$
 ^.github$
 ^codecov\.yml$
+^.covrignore
 ^README\.Rmd$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^test_pkg$
 ^vignettes/web-only

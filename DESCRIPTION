@@ -34,14 +34,16 @@ Imports:
     stats4,
     magrittr,
     locfit, 
-    VGAM,
     ggplot2,
     patchwork,
-    stringr
+    mgcv,
+    mixdist,
+    methods
 Suggests: 
     covr,
     knitr,
     rmarkdown,
+    bookdown,
     testthat (>= 3.0.0)
 Collate: 
     'data.R'
@@ -54,7 +56,8 @@ Collate:
     'utils.R'
     'weibull_model.R'
     'nonparametric.R'
-    'bivariate_dale_model.R'
+    'semiparametric_models.R'
+    'mixture_model.R'
     'plots.R'
     'compute_ci.R'
 Config/testthat/edition: 3

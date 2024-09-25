@@ -1,10 +1,17 @@
 ---
 title: "Semiparametric model"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    base_format: rmarkdown::html_vignette
+bibliography: references.bib
+link-citations: TRUE
 vignette: >
   %\VignetteIndexEntry{Semiparametric model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+pkgdown:
+  as_is: true
 ---
 
 ```{r, include = FALSE}
@@ -18,22 +25,159 @@ knitr::opts_chunk$set(
 library(serosv)
 ```
 
-## Penalized splines
+## Penalized splines {#sec-penalized-splines}
+
+**Proposed model**
+
+```{=html}
+<details>
+  <summary> <code> Penalized splines </code> </summary>
+```
+A general model relating the prevalence to age can be written as a GLM
+
+$$
+g(P(Y_i = 1| a _i)) = g(\pi(a_i)) = \eta(a_i)
+$$
+
+-   Where $g$ is the link function and $\eta$ is the linear predictor
+
+The linear predictor can be estimated semi-parametrically using penalized spline with truncated power basis functions of degree $p$ and fixed knots $\kappa_1,..., \kappa_k$ as followed
+
+$$
+\eta(a_i) = \beta_0 + \beta_1a_i + ... + \beta_p a_i^p + \Sigma_{k=1}^ku_k(a_i - \kappa_k)^p_+
+$$
+
+-   Where
+
+    $$
+    (a_i - \kappa_k)^p_+ = \begin{cases} 
+    0, & a_i \le \kappa_k \\ 
+    (a_i - \kappa_k)^p, & a_i > \kappa_k
+    \end{cases} $$
+
+In matrix notation, the mean structure model for $\eta(a_i)$ becomes
+
+$$
+\eta = X\beta + Zu
+$$
+
+Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $u = [u_1 u_2 ... u_k]^T$ are the regression with corresponding design matrices
+
+$$
+X = \begin{bmatrix}
+1 & a_1 & a_1^2 & ... & a_1^p \\
+1 & a_2 & a_2^2 & ... & a_2^p \\
+\vdots & \vdots & \vdots & \dots & \vdots \\
+1 & a_N & a_N^2 & ... & a_N^p
+\end{bmatrix}, Z = \begin{bmatrix} 
+(a_1 - \kappa_1 )_+^p & (a_1 - \kappa_2 )_+^p & \dots & (a_1 - \kappa_k)_+^p \\
+(a_2 - \kappa_1 )_+^p & (a_2 - \kappa_2 )_+^p & \dots & (a_2 - \kappa_k)_+^p \\
+\vdots & \vdots & \dots & \vdots \\
+(a_N - \kappa_1 )_+^p & (a_N - \kappa_2 )_+^p & \dots & (a_N - \kappa_k)_+^p
+\end{bmatrix}
+$$
+
+FOI can then be derived as
+
+$$
+\hat{\lambda}(a_i) = [\hat{\beta_1} , 2\hat{\beta_2}a_i, ..., p \hat{\beta} a_i ^{p-1} + \Sigma^k_{k=1} p \hat{u}_k(a_i - \kappa_k)^{p-1}_+] \delta(\hat{\eta}(a_i))
+$$
+
+-   Where $\delta(.)$ is determined by the link function use in the model
+
+</details>
+
+------------------------------------------------------------------------
 
 ### Penalized likelihood framework
 
 Refer to Chapter `8.2.1`
 
-*Work in progress*
+**Proposed approach**
 
-### Generalized likelihood framework
+A first approach to fit the model is by maximizing the following penalized likelihood
+
+```{=tex}
+\begin{equation}
+\phi^{-1}[y^T(X\beta + Zu ) -  1^Tc(X\beta + Zu )] - \frac{1}{2}\lambda^2 
+\begin{bmatrix} \beta \\u \end{bmatrix}^T D\begin{bmatrix} \beta \\u \end{bmatrix}
+
+(\#eq:penlikelihood)
+\end{equation}
+```
+Where:
+
+-   $X\beta + Zu$ is the linear predictor (refer to \@ref(sec-penalized-splines))
+
+-   $D$ is a known semi-definite penalty matrix [@Wahba1978], [@Green1993]
+
+-   $y$ is the response vector
+
+-   1 the unit vector, $c(.)$ is determined by the link function used
+
+-   $\lambda$ is the smoothing parameter (larger values --\> smoother curves)
+
+-   $\phi$ is the overdispersion parameter and equals 1 if there is no overdispersion
+
+**Data fitting**
+
+To fit the data using the penalized likelihood framework, specify `framework = "pl"`
+
+Basis function can be defined via the `s` parameter, some values for s includes:
+
+-   `"tp"` thin plate regression splines
+
+-   `"cr"` cubic regression splines
+
+-   `"ps"` P-splines proposed by [@Eilers1996]
+
+-   `"ad"` for Adaptive smoothers
+
+For more options, refer to the [mgcv documentation](https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/smooth.terms.html) [@Wood2017]
+
+```{r}
+data <- parvob19_be_2001_2003
+pl <- penalized_spline_model(data$age, status = data$seropositive, s = "tp", framework = "pl") 
+pl$info
+```
+
+```{r, fig.width=7, fig.height=4}
+plot(pl)
+```
+
+------------------------------------------------------------------------
+
+### Generalized Linear Mixture Model framework
 
 Refer to Chapter `8.2.2`
 
-*Work in progress*
+**Proposed approach**
 
-## Adaptive spline smoothing
+Looking back at \@ref(eq:penlikelihood), a constraint for $u$ would be $\Sigma_ku_k^2 < C$ for some positive value $C$
 
-Refer to chapter `8.4`
+This is equivalent to choosing $(\beta, u)$ to maximise \@ref(eq:penlikelihood) with $D = diag(0, 1)$ where $0$ denotes zero vector length $p+1$ and 1 denotes the unit vector of length $K$
 
-*Work in progress*
+For a fixed value for $\lambda$ this is equivalent to fitting the following generalized linear mixed model [@Ruppert2003 , @Wand2003, @Ngo2004]
+
+$$
+f(y|u) = exp\{ \phi^{-1} [y^T(X\beta + Zu) - c(X\beta + Zu)] + 1^Tc(y)\},\\
+u \sim N(0, G) 
+$$
+
+-   With similar notations as before and $G = \sigma^2_uI_{K \times K}$
+
+Thus $Z$ is penalized by assuming the corresponding coefficients $u$ are random effect with $u \sim N(0, \sigma^2_uI)$.
+
+**Data fitting**
+
+To fit the data using the penalized likelihood framework, specify `framework = "glmm"`
+
+```{r}
+data <- parvob19_be_2001_2003
+glmm <- penalized_spline_model(data$age, status = data$seropositive, s = "tp", framework = "glmm") 
+glmm$info$gam
+```
+
+```{r, fig.width=7, fig.height=4}
+plot(glmm)
+```

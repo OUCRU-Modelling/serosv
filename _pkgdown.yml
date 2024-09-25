@@ -34,7 +34,9 @@ reference:
   - weibull_model
   - fp_model
   - lp_model
-  - bivariate_dale_model
+  - penalized_spline_model
+  - mixture_model
+  - estimate_from_mixture
 
 - title: Plotting functions
   contents:
@@ -44,18 +46,21 @@ reference:
   - plot.weibull_model
   - plot.fp_model
   - plot.lp_model
-  - plot.bivariate_dale_model
+  - plot.penalized_spline_model
+  - plot.mixture_model
+  - plot.estimate_from_mixture
   - set_plot_style
 
 - title: Other utilities
   contents:
-  - transform
-  - generate_quad_matrix
+  - est_foi
+  - transform_data
   - compute_ci
   - compute_ci.fp_model
   - compute_ci.lp_model
   - compute_ci.weibull_model
-  - find_best_bdm_param
+  - compute_ci.penalized_spline_model
+  - compute_ci.mixture_model
   - find_best_fp_powers
 
 articles:
@@ -67,8 +72,6 @@ articles:
   - semiparametric_model
   - hierarchical_model
   - model_quantitative_data
-  - model_multivariate_data
-  - age_time_dependent
 - title: Utilities
   navbar: Utilities
   contents:
