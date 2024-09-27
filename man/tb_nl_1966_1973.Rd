@@ -18,7 +18,7 @@ A data frame with 5 variables:
 Nagelkerke, N., Heisterkamp, S., Borgdorff, M., Broekmans, J. and
 Van Houwelingen, H. (1999), Semi-parametric estimation of age-time specific
 infection incidence from serial prevalence data. Statist. Med., 18: 307-320.
-\url{https://doi.org/10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z}
+\doi{doi:10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z}
 }
 \usage{
 tb_nl_1966_1973

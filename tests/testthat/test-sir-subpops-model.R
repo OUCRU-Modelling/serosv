@@ -27,7 +27,7 @@ test_that("sir_subpops_model returns expected results", {
   )
   times<-seq(0,10000,by=10)
 
-  output <- sir_subpops_model(times, state, parameters)
+  output <- sir_subpops_model(times, state, parameters)$output
   actual <- as.list(tail(output, 1))
 
   expect_equal(actual, expected, tolerance = 0.000001)

@@ -59,5 +59,10 @@ sir_basic <- function(t, state, parameters)
 #' @export
 sir_basic_model <- function(times, state, parameters)
 {
-  as.data.frame(ode(y=state,times=times,func=sir_basic,parms=parameters))
+  model <- list()
+  model$parameters <- parameters
+  model$output <- as.data.frame(ode(y=state,times=times,func=sir_basic,parms=parameters))
+
+  class(model) <- "sir_basic_model"
+  model
 }

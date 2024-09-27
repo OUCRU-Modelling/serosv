@@ -10,7 +10,7 @@ test_that("sir_static_model returns expected results", {
   parameters <- c(lambda = 0.1, nu=36.5)
   times <- seq(0, 40, by=0.01)
 
-  output <- sir_static_model(times, state, parameters)
+  output <- sir_static_model(times, state, parameters)$output
   actual <- as.list(tail(output, 1))
 
   expect_equal(actual, expected, tolerance = 0.000001)

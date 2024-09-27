@@ -21,6 +21,8 @@
 #' @export
 mseir_model <- function(a, gamma, lambda, sigma, nu)
 {
+
+
   ma  <- exp(-gamma*a)
   sa  <- (gamma/(gamma-lambda))*(exp(-lambda*a)-exp(-gamma*a))
   ea  <- ((lambda*gamma)/(gamma-lambda))*
@@ -34,7 +36,11 @@ mseir_model <- function(a, gamma, lambda, sigma, nu)
       +((exp(-nu*a)-exp(-lambda*a))/((lambda-gamma)*(lambda-sigma)*(lambda-nu)))
       +((exp(-nu*a)-exp(-gamma*a))/((gamma-lambda)*(gamma-sigma)*(gamma-nu)))
     )
-  data.frame(
+
+
+  model <- list()
+  model$parameters <- list(gamma = gamma, lambda = lambda, sigma = sigma, nu = nu)
+  model$output <- data.frame(
     a =  c(0, a),
     m = c(1, ma),
     s = c(0, sa),
@@ -42,4 +48,7 @@ mseir_model <- function(a, gamma, lambda, sigma, nu)
     i = c(0, ia),
     r = c(0, 1 - ma - sa - ea - ia)
   )
+
+  class(model) <- "mseir_model"
+  model
 }

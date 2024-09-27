@@ -4,10 +4,10 @@
 \alias{sir_static_model}
 \title{SIR static model (age-heterogeneous, endemic equilibrium)}
 \usage{
-sir_static_model(times, state, parameters)
+sir_static_model(a, state, parameters)
 }
 \arguments{
-\item{times}{time sequence.}
+\item{a}{age sequence.}
 
 \item{state}{the initial state of the system.}
 

@@ -19,7 +19,7 @@ MOSSONG, J., N. HENS, V. FRIEDERICHS, I. DAVIDKIN, M. BROMAN,
 B. LITWINSKA, J. SIENNICKA, et al. "Parvovirus B19 Infection in Five
 European Countries: Seroepidemiology, Force of Infection and Maternal Risk
 of Infection." Epidemiology and Infection 136, no. 8 (2008): 1059-68.
-\url{http://doi.org/10.1017/S0950268807009661}
+\doi{doi:10.1017/S0950268807009661}
 }
 \usage{
 parvob19_fi_1997_1998
