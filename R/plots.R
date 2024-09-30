@@ -126,7 +126,7 @@ plot.sir_basic_model <- function(x, ...){
         labels = c("S"="susceptible", "I"="infected", "R"="recovered")
       ),
       labs( x = "Time",
-            y = "Fraction",
+            y = "Count",
             colour = "Compartment")
     )
 }

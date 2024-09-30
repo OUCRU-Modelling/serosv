@@ -6,7 +6,7 @@
 \alias{serosv-package}
 \title{serosv: model infectious disease parameters}
 \description{
-An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data. Currently implemented models include parametric models (polynomial_model(), fp_model()), nonparametric models (lp_model()), semiparametric models (penalized_splines_model()), hierarchical models(hierarchical_bayesian_model()) The package is based on the book "Modeling Infectious Disease Parameters Based on Serological and Social Contact Data: A Modern Statistical Perspective" (Hens, Niel & Shkedy, Ziv & Aerts, Marc & Faes, Christel & Damme, Pierre & Beutels, Philippe., 2013) \doi{10.1007/978-1-4614-4072-7}.
+An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data. Implemented models include SIR models (basic_sir_model(), static_sir_model(), mseir_model(), sir_subpops_model()), parametric models (polynomial_model(), fp_model()), nonparametric models (lp_model()), semiparametric models (penalized_splines_model()), hierarchical models (hierarchical_bayesian_model()) The package is based on the book "Modeling Infectious Disease Parameters Based on Serological and Social Contact Data: A Modern Statistical Perspective" (Hens, Niel & Shkedy, Ziv & Aerts, Marc & Faes, Christel & Damme, Pierre & Beutels, Philippe., 2013) \doi{10.1007/978-1-4614-4072-7}.
 }
 \seealso{
 Useful links:
@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Anh Phan \email{anhptq@oucru.org}
+\strong{Maintainer}: Anh Phan Truong Quynh \email{anhptq@oucru.org}
 
 Authors:
 \itemize{
