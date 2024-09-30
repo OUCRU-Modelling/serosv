@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Model Infectious Disease Parameters from Serosurveys">
-<meta name="description" content="An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data.">
-<meta property="og:description" content="An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data.">
+<meta name="description" content='An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data. Implemented models include SIR models (basic_sir_model(), static_sir_model(), mseir_model(), sir_subpops_model()), parametric models (polynomial_model(), fp_model()), nonparametric models (lp_model()), semiparametric models (penalized_splines_model()), hierarchical models (hierarchical_bayesian_model()) The package is based on the book "Modeling Infectious Disease Parameters Based on Serological and Social Contact Data: A Modern Statistical Perspective" (Hens, Niel &amp; Shkedy, Ziv &amp; Aerts, Marc &amp; Faes, Christel &amp; Damme, Pierre &amp; Beutels, Philippe., 2013) &lt;doi:10.1007/978-1-4614-4072-7&gt;.'>
+<meta property="og:description" content='An easy-to-use and efficient tool to estimate infectious diseases parameters using serological data. Implemented models include SIR models (basic_sir_model(), static_sir_model(), mseir_model(), sir_subpops_model()), parametric models (polynomial_model(), fp_model()), nonparametric models (lp_model()), semiparametric models (penalized_splines_model()), hierarchical models (hierarchical_bayesian_model()) The package is based on the book "Modeling Infectious Disease Parameters Based on Serological and Social Contact Data: A Modern Statistical Perspective" (Hens, Niel &amp; Shkedy, Ziv &amp; Aerts, Marc &amp; Faes, Christel &amp; Damme, Pierre &amp; Beutels, Philippe., 2013) &lt;doi:10.1007/978-1-4614-4072-7&gt;.'>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,7 +35,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/parametric_model.html">Parametric models</a></li>
+<li><a class="dropdown-item" href="articles/sir_model.html">SIR model</a></li>
+    <li><a class="dropdown-item" href="articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="articles/semiparametric_model.html">Semiparametric model</a></li>
     <li><a class="dropdown-item" href="articles/hierarchical_model.html">Hierarchical Bayesian models</a></li>
@@ -180,8 +181,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Nguyen Pham Nguyen The <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Nguyen Pham Nguyen The <br><small class="roles"> Author </small>  </li>
 <li>Long Bui Thanh <br><small class="roles"> Author </small>  </li>
+<li>Anh Phan Truong Quynh <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Tuyen Huynh <br><small class="roles"> Author </small>  </li>
 <li>Thinh Ong <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6772-9291" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Marc Choisy <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5187-6390" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
@@ -201,7 +203,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
+  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Anh Phan Truong Quynh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
 </div>
 
 <div class="pkgdown-footer-right">

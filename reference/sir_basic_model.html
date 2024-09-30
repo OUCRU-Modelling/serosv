@@ -18,7 +18,8 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
+    <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/hierarchical_model.html">Hierarchical Bayesian models</a></li>
@@ -95,6 +96,11 @@
 <span class="r-in"><span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">250</span>, by<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">sir_basic_model</span><span class="op">(</span><span class="va">times</span>, <span class="va">state</span>, <span class="va">parameters</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         mu      alpha       beta         nu          p </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.01333333 0.00000000 0.00050000 1.00000000 0.00000000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       time         S            I            R</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      0.0 4999.0000 1.000000e+00    0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      0.1 4998.7320 1.160221e+00    0.1077427</span>
@@ -2597,6 +2603,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2499 249.8 2066.8063 3.825848e+01 2894.9352228</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2500 249.9 2066.7597 3.833529e+01 2894.9050181</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2501 250.0 2066.7053 3.841217e+01 2894.8825333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sir_basic_model"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -2605,7 +2614,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
+  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Anh Phan Truong Quynh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
 </div>
 
 <div class="pkgdown-footer-right">

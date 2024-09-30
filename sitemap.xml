@@ -9,6 +9,7 @@
 <url><loc>https://oucru-modelling.github.io/serosv/articles/nonparametric_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/parametric_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/semiparametric_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/articles/sir_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/visualizing_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/authors.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/index.html</loc></url>
@@ -28,6 +29,7 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/hav_bg_1964.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/hbv_ru_1999.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/hcv_be_2006.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/hierarchical_bayesian_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/index.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/lp_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/mixture_model.html</loc></url>
@@ -42,15 +44,21 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.estimate_from_mixture.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.farrington_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.fp_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/plot.hierarchical_bayesian_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.lp_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.mixture_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/plot.mseir_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.penalized_spline_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.polynomial_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/plot.sir_basic_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/plot.sir_static_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/plot.sir_subpops_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot.weibull_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot_gcv.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/polynomial_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/rubella_mumps_uk.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/rubella_uk_1986_1987.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/serosv-package.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/set_plot_style.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/sir_basic_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/sir_static_model.html</loc></url>

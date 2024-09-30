@@ -18,7 +18,8 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
+    <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/hierarchical_model.html">Hierarchical Bayesian models</a></li>
@@ -87,6 +88,21 @@
 <span class="r-in"><span>  nu<span class="op">=</span><span class="fl">36.5</span>      <span class="co"># 10 days in the infected class</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters$gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters$lambda</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters$sigma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 26.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters$nu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 36.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             a            m          s            e            i         r</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    0.000000 1.000000e+00 0.00000000 0.0000000000 0.0000000000 0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    1.000000 1.353353e-01 0.75932830 0.0057834028 0.0041067171 0.0954463</span>
@@ -589,6 +605,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 499 19.923848 4.947272e-18 0.02066303 0.0001597451 0.0001147261 0.9790625</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 500 19.961924 4.584513e-18 0.02050628 0.0001585333 0.0001138557 0.9792213</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 501 20.000000 4.248354e-18 0.02035071 0.0001573306 0.0001129920 0.9793790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mseir_model"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -597,7 +616,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
+  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Anh Phan Truong Quynh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
 </div>
 
 <div class="pkgdown-footer-right">

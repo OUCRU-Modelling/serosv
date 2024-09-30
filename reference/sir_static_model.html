@@ -18,7 +18,8 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
+    <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/hierarchical_model.html">Hierarchical Bayesian models</a></li>
@@ -49,15 +50,15 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sir_static_model</span><span class="op">(</span><span class="va">times</span>, <span class="va">state</span>, <span class="va">parameters</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sir_static_model</span><span class="op">(</span><span class="va">a</span>, <span class="va">state</span>, <span class="va">parameters</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-times">times<a class="anchor" aria-label="anchor" href="#arg-times"></a></dt>
-<dd><p>time sequence.</p></dd>
+<dl><dt id="arg-a">a<a class="anchor" aria-label="anchor" href="#arg-a"></a></dt>
+<dd><p>age sequence.</p></dd>
 
 
 <dt id="arg-state">state<a class="anchor" aria-label="anchor" href="#arg-state"></a></dt>
@@ -89,6 +90,11 @@
 <span class="r-in"><span><span class="va">ages</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by<span class="op">=</span><span class="fl">0.01</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">=</span> <span class="fu">sir_static_model</span><span class="op">(</span><span class="va">ages</span>, <span class="va">state</span>, <span class="va">parameters</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parameters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   lambda       nu </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.05000 26.07143 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       time          s            i           r</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     0.00 0.99000000 1.000000e-02 0.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     0.01 0.98950512 8.139822e-03 0.002355054</span>
@@ -9091,6 +9097,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8999 89.98 0.01100891 2.115354e-05 0.988969939</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9000 89.99 0.01100340 2.114297e-05 0.988975452</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9001 90.00 0.01099790 2.113240e-05 0.988980963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sir_static_model"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -9099,7 +9108,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
+  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Anh Phan Truong Quynh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
 </div>
 
 <div class="pkgdown-footer-right">
