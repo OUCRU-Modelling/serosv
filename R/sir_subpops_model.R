@@ -95,7 +95,12 @@ sir_subpop <- function(t, state, parameters) {
 #'
 #' @export
 sir_subpops_model <- function(times, state, parameters) {
-  as.data.frame(
+  model <- list()
+  model$parameters <- parameters
+  model$output <- as.data.frame(
     ode(y=state,times=times,func=sir_subpop,parms=parameters)
   )
+
+  class(model) <- "sir_subpops_model"
+  model
 }

@@ -15,7 +15,7 @@ test_that("mseir_model returns expected results", {
     lambda=0.2,  # 5 years in the susceptible class
     sigma=26.07, # 14 days in the latent class
     nu=36.5      # 10 days in the infected class
-  )
+  )$output
   actual <- as.list(tail(output, 1))
 
   expect_equal(actual, expected, tolerance = 0.000001)

@@ -4,12 +4,10 @@
 \alias{plot.farrington_model}
 \title{plot() overloading for Farrington model}
 \usage{
-\method{plot}{farrington_model}(x, cex = 20, ...)
+\method{plot}{farrington_model}(x, ...)
 }
 \arguments{
 \item{x}{the Farrington model object.}
-
-\item{cex}{adjust radius for seroprevalence data points}
 
 \item{...}{arbitrary params.}
 }

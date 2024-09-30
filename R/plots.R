@@ -97,17 +97,140 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
   plot
 }
 
+# Force using the generic plot function to override
+# plot <- function(x, ...) {
+#   UseMethod("plot")
+# }
+
+#### SIR model ####
+
+#' plot() overloading for SIR model
+#'
+#' @param x the sir_basic_model object.
+#' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
+#' @importFrom graphics plot
+#'
+#' @export
+plot.sir_basic_model <- function(x, ...){
+  comp_lvl <-  c("S", "I", "R")
+
+  ggplot(x$output) +
+    geom_line(aes(x = time, y = S, color = factor("S", levels = comp_lvl))) +
+    geom_line(aes(x = time, y = I, color = factor("I", levels = comp_lvl))) +
+    geom_line(aes(x = time, y = R, color = factor("R", levels = comp_lvl))) +
+    list(
+      scale_colour_manual(
+        values = c("S" = "blueviolet", "I" = "#fc0328", "R" = "royalblue1"),
+        labels = c("S"="susceptible", "I"="infected", "R"="recovered")
+      ),
+      labs( x = "Time",
+            y = "Count",
+            colour = "Compartment")
+    )
+}
+
+#' plot() overloading for SIR static model
+#'
+#' @param x the sir_static_model object.
+#' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
+#' @importFrom graphics plot
+#'
+#' @export
+plot.sir_static_model <- function(x, ...){
+  comp_lvl <-  c("s", "i", "r")
+
+  ggplot(x$output) +
+    geom_line(aes(x = time, y = s, color = factor("s", levels = comp_lvl))) +
+    geom_line(aes(x = time, y = i, color = factor("i", levels = comp_lvl))) +
+    geom_line(aes(x = time, y = r, color = factor("r", levels = comp_lvl))) +
+    list(
+      scale_colour_manual(
+        values = c("s" = "blueviolet", "i" = "#fc0328", "r" = "royalblue1"),
+        labels = c("s"="susceptible", "i"="infected", "r"="recovered")
+      ),
+      labs(
+        colour = "Compartment",
+        x = "Age",
+        y = "Fraction")
+    )
+}
+
+
+#' plot() overloading for SIR sub populations model
+#'
+#' @param x the sir_subpops_models object.
+#' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
+#' @importFrom graphics plot
+#'
+#' @export
+plot.sir_subpops_model <- function(x, ...){
+  comp_lvl <-  c("s", "i", "r")
+
+  # using for loop here would not work due to ggplot lazy eval
+  subpop_plots <- lapply(1:x$parameters$k, function(subpop) {
+    ggplot(x$output) +
+      geom_line(aes(x = time, y = get(paste0("s", subpop)), color = factor("s", levels = comp_lvl))) +
+      geom_line(aes(x = time, y = get(paste0("i", subpop)), color = factor("i", levels = comp_lvl))) +
+      geom_line(aes(x = time, y = get(paste0("r", subpop)), color = factor("r", levels = comp_lvl))) +
+      scale_colour_manual(
+        values = c("s" = "blueviolet", "i" = "#fc0328", "r" = "royalblue1"),
+        labels = c("s"="susceptible", "i"="infected", "r"="recovered")
+      ) +
+      labs(title= paste0("Plot for subpopulation ", subpop),
+           x = "Time",
+           y = "Fraction",
+           colour = "Compartment")
+  })
+
+  names(subpop_plots) <- paste0("subpop_", 1:x$parameters$k)
+  subpop_plots
+}
+
+#' plot() overloading for MSEIR model
+#'
+#' @param x the mseir_model object.
+#' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom methods is
+#' @importFrom graphics plot
+#'
+#' @export
+plot.mseir_model <- function(x, ...){
+  # make leveled factor to force legend show color in order
+  comp_lvl <- c("m", "s", "e", "i", "r")
+
+  ggplot(x$output) +
+    geom_line(aes(x = a, y = m, color = factor("m", levels = comp_lvl))) +
+    geom_line(aes(x = a, y = s, color = factor("s", levels = comp_lvl))) +
+    geom_line(aes(x = a, y = e, color = factor("e", levels = comp_lvl))) +
+    geom_line(aes(x = a, y = i, color = factor("i", levels = comp_lvl))) +
+    geom_line(aes(x = a, y = r, color = factor("r", levels = comp_lvl))) +
+    scale_colour_manual(
+      values = c("m"="#3ea379","s" = "blueviolet", "e"="#3e45a3", "i" = "#fc0328", "r" = "royalblue1"),
+      labels = c("m"="maternal immunity", "s"="susceptible", "e"="exposed", "i"="infected", "r"="recovered")
+    ) +
+    labs(x = "Age", y = "Fraction", color = "Compartment")
+}
+
 #### Polynomial model ####
 #' plot() overloading for polynomial model
 #'
 #' @param x the polynomial model object
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
-plot.polynomial_model <- function(x, cex = 20, ...) {
+plot.polynomial_model <- function(x, ...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
   out.DF <- compute_ci(x)
 
   if(x$datatype == "linelisting"){
@@ -131,16 +254,18 @@ plot.polynomial_model <- function(x, cex = 20, ...) {
 #' plot() overloading for Farrington model
 #'
 #' @param x the Farrington model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
-plot.farrington_model <- function(x, cex = 20,...) {
+plot.farrington_model <- function(x,...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
   # out.DF <- compute_ci(x)
 
   to_plot <- plot_data(x)
+
 
   if(x$datatype == "linelisting"){
     # use pre-aggregated age for FOI & sero
@@ -160,15 +285,16 @@ plot.farrington_model <- function(x, cex = 20,...) {
 #' plot() overloading for Weibull model
 #'
 #' @param x the Weibull model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
-plot.weibull_model <- function(x, cex=20, ...) {
+plot.weibull_model <- function(x, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
 
   out.DF <- compute_ci.weibull_model(x)
 
@@ -188,13 +314,15 @@ plot.weibull_model <- function(x, cex=20, ...) {
 #' plot() overloading for fractional polynomial model
 #'
 #' @param x the fractional polynomial model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
+#' @importFrom graphics plot
 #'
 #' @export
-plot.fp_model <- function(x, cex = 20,...) {
+plot.fp_model <- function(x,...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
   out.DF <- compute_ci.fp_model(x)
   to_plot <- plot_data(x)
 
@@ -209,13 +337,15 @@ plot.fp_model <- function(x, cex = 20,...) {
 #' plot() overloading for local polynomial model
 #'
 #' @param x the local polynomial model object.
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
+#' @importFrom graphics plot
 #' @importFrom methods is
 #'
 #' @export
-plot.lp_model <- function(x, cex=20, ...) {
+plot.lp_model <- function(x, ...) {
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
   out.DF <- compute_ci.lp_model(x)
   to_plot <- plot_data(x)
 
@@ -231,17 +361,37 @@ plot.lp_model <- function(x, cex=20, ...) {
   })
 }
 
+#### Hierarchical Bayesian model ####
+#' plot() overloading for hierarchical_bayesian_model
+#'
+#' @param x hierarchical_bayesian_model object created by serosv.
+#' @param ... arbitrary params.
+#' @import ggplot2
+#' @importFrom graphics plot
+#' @importFrom methods is
+#'
+#' @export
+plot.hierarchical_bayesian_model <- function(x,  ...){
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+
+  with(x$df, {
+    plot_util(age = age, pos = pos, tot = tot, sero = x$sp, foi = x$foi, cex=cex)
+  })
+}
+
+
 #### Penalized splines ####
 #' plot() overloading for penalized spline
 #'
 #' @param x the penalized_spline_model object
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
 #' @import ggplot2
+#' @importFrom graphics plot
 #' @importFrom methods is
 #'
 #' @export
-plot.penalized_spline_model <- function(x,cex=20, ...){
+plot.penalized_spline_model <- function(x, ...){
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
   ci <- compute_ci.penalized_spline_model(x)
 
   out.DF <- ci[[1]]
@@ -250,7 +400,7 @@ plot.penalized_spline_model <- function(x,cex=20, ...){
   to_plot <- plot_data(x)
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = out.FOI, cex=20)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = out.FOI, cex=cex)
   })
 
 }
@@ -261,6 +411,7 @@ plot.penalized_spline_model <- function(x,cex=20, ...){
 #'
 #' @param x the mixture_model
 #' @param ... arbitrary params.
+#' @importFrom graphics plot
 #' @import ggplot2
 #'
 #' @export
@@ -317,12 +468,13 @@ plot.mixture_model <- function(x, ...){
 #' plot() overloading for result of estimate_from_mixture
 #'
 #' @param x the mixture_model
-#' @param cex adjust radius for seroprevalence data points
 #' @param ... arbitrary params.
+#' @importFrom graphics plot
 #' @import ggplot2
 #'
 #' @export
-plot.estimate_from_mixture <- function(x,cex=20, ... ){
+plot.estimate_from_mixture <- function(x, ... ){
+  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
   age <- x$df$age
 
   returned_plot <- ggplot()

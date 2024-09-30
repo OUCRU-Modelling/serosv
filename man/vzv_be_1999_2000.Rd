@@ -16,7 +16,7 @@ A data frame with 3 variables:
 Thiry, N., Beutels, P., Shkedy, Z. et al. The seroepidemiology
 of primary varicella-zoster virus infection in Flanders (Belgium).
 Eur J Pediatr 161, 588-593 (2002).
-\url{https://doi.org/10.1007/s00431-002-1053-2}
+\doi{doi:10.1007/s00431-002-1053-2}
 }
 \usage{
 vzv_be_1999_2000

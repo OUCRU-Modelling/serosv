@@ -27,7 +27,9 @@ test_that("estimate_from_mixture returns expected result", {
   data <- df$VZVmIUml[order(df$age)]
   model <- mixture_model(data)
 
-  est_mixture <- estimate_from_mixture(df$age[order(df$age)], data, mixture_model = model)
-
+  # est_mixture <- estimate_from_mixture(df$age[order(df$age)], data, mixture_model = model)
+  expect_no_error(
+    estimate_from_mixture(df$age[order(df$age)], data, mixture_model = model)
+  )
 
 })

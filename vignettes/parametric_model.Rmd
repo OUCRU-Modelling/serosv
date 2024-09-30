@@ -128,7 +128,7 @@ Refer to `Chapter 6.1.2`
 
 **Proposed model**
 
-Fo Farrington's model, the force of infection was defined non-negative for all a $\lambda(a) \geq 0$ and increases to a peak in a linear fashion followed by an exponential decrease
+For Farrington's model, the force of infection was defined non-negative for all a $\lambda(a) \geq 0$ and increases to a peak in a linear fashion followed by an exponential decrease
 
 $$
 \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma

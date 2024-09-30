@@ -7,3 +7,4 @@
 docs
 inst/doc
 test_pkg
+rstan_code

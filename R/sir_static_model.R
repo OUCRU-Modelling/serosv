@@ -27,7 +27,7 @@ sir_static <- function(t, state, parameters)
 #'
 #'   - \code{nu}: recovery rate
 #'
-#' @param times time sequence.
+#' @param a age sequence.
 #'
 #' @param state the initial state of the system.
 #'
@@ -44,7 +44,13 @@ sir_static <- function(t, state, parameters)
 #' model
 #'
 #' @export
-sir_static_model <- function(times, state, parameters)
+sir_static_model <- function(a, state, parameters)
 {
-  as.data.frame(ode(y=state,times=times,func=sir_static,parms=parameters))
+
+  model <- list()
+  model$parameters <- parameters
+  model$output <- as.data.frame(ode(y=state,times=a,func=sir_static,parms=parameters))
+
+  class(model) <- "sir_static_model"
+  model
 }

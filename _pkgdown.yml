@@ -34,6 +34,7 @@ reference:
   - weibull_model
   - fp_model
   - lp_model
+  - hierarchical_bayesian_model
   - penalized_spline_model
   - mixture_model
   - estimate_from_mixture
@@ -46,6 +47,11 @@ reference:
   - plot.weibull_model
   - plot.fp_model
   - plot.lp_model
+  - plot.mseir_model
+  - plot.sir_basic_model
+  - plot.sir_static_model
+  - plot.sir_subpops_model
+  - plot.hierarchical_bayesian_model
   - plot.penalized_spline_model
   - plot.mixture_model
   - plot.estimate_from_mixture
@@ -53,6 +59,7 @@ reference:
 
 - title: Other utilities
   contents:
+  - serosv-package
   - est_foi
   - transform_data
   - compute_ci
@@ -67,6 +74,7 @@ articles:
 - title: Fitting data
   navbar: ~
   contents:
+  - sir_model
   - parametric_model
   - nonparametric_model
   - semiparametric_model

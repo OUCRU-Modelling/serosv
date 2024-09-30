@@ -41,3 +41,5 @@ jobs:
           needs: check
       - name: Check R package
         uses: r-lib/actions/check-r-package@v2
+        with:
+          error-on: '"error"'

@@ -119,7 +119,7 @@ Where:
 
 -   $\phi$ is the overdispersion parameter and equals 1 if there is no overdispersion
 
-**Data fitting**
+**Fitting data**
 
 To fit the data using the penalized likelihood framework, specify `framework = "pl"`
 
@@ -168,7 +168,7 @@ $$
 
 Thus $Z$ is penalized by assuming the corresponding coefficients $u$ are random effect with $u \sim N(0, \sigma^2_uI)$.
 
-**Data fitting**
+**Fitting data**
 
 To fit the data using the penalized likelihood framework, specify `framework = "glmm"`
 
