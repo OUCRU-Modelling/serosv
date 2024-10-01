@@ -1,7 +1,7 @@
 Package: serosv
 Type: Package
 Title: Model Infectious Disease Parameters from Serosurveys
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(
     person(
       "Anh", "Phan Truong Quynh", email = "anhptq@oucru.org", role = c("aut", "cre")
