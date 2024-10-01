@@ -79,7 +79,7 @@ Collate:
     'plots.R'
     'compute_ci.R'
 Config/testthat/edition: 3
-URL: https://oucru-modelling.github.io/serosv/
+URL: https://oucru-modelling.github.io/serosv/, https://github.com/OUCRU-Modelling/serosv
 VignetteBuilder: knitr
 Biarch: true
 LinkingTo: 
@@ -90,3 +90,4 @@ LinkingTo:
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 SystemRequirements: GNU make
+BugReports: https://github.com/OUCRU-Modelling/serosv/issues
