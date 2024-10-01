@@ -18,6 +18,7 @@
 #' )
 #' model
 #'
+#' @return mseir_model object
 #' @export
 mseir_model <- function(a, gamma, lambda, sigma, nu)
 {

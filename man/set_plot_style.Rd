@@ -23,6 +23,9 @@ set_plot_style(
 
 \item{foi_line}{- linetype for force of infection line}
 }
+\value{
+list of updated aesthetic values
+}
 \description{
 Helper to adjust styling of a plot
 }

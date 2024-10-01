@@ -15,6 +15,9 @@ compute_ci.fp_model(x, ci = 0.95, le = 100, ...)
 
 \item{...}{- arbitrary argument}
 }
+\value{
+confidence interval dataframe
+}
 \description{
 Compute confidence interval for fractional polynomial model
 }

@@ -13,6 +13,9 @@ compute_ci.mixture_model(x, ci = 0.95, ...)
 
 \item{...}{- arbitrary arguments}
 }
+\value{
+confidence interval dataframe
+}
 \description{
 Compute confidence interval for mixture model
 }

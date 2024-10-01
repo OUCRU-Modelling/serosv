@@ -13,6 +13,9 @@ sir_basic_model(times, state, parameters)
 
 \item{parameters}{the parameters of the model.}
 }
+\value{
+sir_basic_model object
+}
 \description{
 Refers to section 3.1.3.
 }

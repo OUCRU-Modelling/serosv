@@ -43,6 +43,7 @@ sir_static <- function(t, state, parameters)
 #' model = sir_static_model(ages, state, parameters)
 #' model
 #'
+#' @return sir_static_model object
 #' @export
 sir_static_model <- function(a, state, parameters)
 {

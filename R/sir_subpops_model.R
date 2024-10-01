@@ -93,6 +93,8 @@ sir_subpop <- function(t, state, parameters) {
 #' model <- sir_subpops_model(times, state, parameters)
 #' model
 #'
+#' @return sir_subpops_model object
+#'
 #' @export
 sir_subpops_model <- function(times, state, parameters) {
   model <- list()

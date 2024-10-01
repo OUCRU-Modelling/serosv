@@ -55,7 +55,7 @@ sir_basic <- function(t, state, parameters)
 #' model
 #'
 #' @importFrom deSolve ode
-#'
+#' @return sir_basic_model object
 #' @export
 sir_basic_model <- function(times, state, parameters)
 {

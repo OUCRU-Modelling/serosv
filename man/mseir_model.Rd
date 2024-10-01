@@ -17,6 +17,9 @@ mseir_model(a, gamma, lambda, sigma, nu)
 
 \item{nu}{time in infected class.}
 }
+\value{
+mseir_model object
+}
 \description{
 Refers to section 3.4.
 }

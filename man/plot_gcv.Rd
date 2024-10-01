@@ -24,6 +24,9 @@ e.g. for confidence bands and some bandwidth selectors.}
 
 \item{deg}{Degree of polynomial to use. Default: 2.}
 }
+\value{
+plot of gcv value
+}
 \description{
 Refers to section 7.2.
 }

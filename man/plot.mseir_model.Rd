@@ -11,6 +11,9 @@
 
 \item{...}{arbitrary params.}
 }
+\value{
+ggplot object
+}
 \description{
 plot() overloading for MSEIR model
 }

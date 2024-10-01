@@ -13,6 +13,9 @@ compute_ci.lp_model(x, ci = 0.95, ...)
 
 \item{...}{- arbitrary arguments}
 }
+\value{
+confidence interval dataframe
+}
 \description{
 Compute confidence interval for local polynomial model
 }

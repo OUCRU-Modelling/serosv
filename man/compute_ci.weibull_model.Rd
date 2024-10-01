@@ -13,6 +13,9 @@ compute_ci.weibull_model(x, ci = 0.95, ...)
 
 \item{...}{- arbitrary argument}
 }
+\value{
+confidence interval dataframe
+}
 \description{
 Compute confidence interval for Weibull model
 }

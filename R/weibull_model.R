@@ -17,6 +17,7 @@
 #'   )
 #' plot(model)
 #'
+#' @return weibull_model object
 #' @export
 weibull_model <- function(t, status=NULL, pos=NULL, tot=NULL)
 {

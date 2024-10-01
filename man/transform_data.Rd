@@ -12,6 +12,9 @@ transform_data(t, spos)
 
 \item{spos}{the seropositive vector.}
 }
+\value{
+dataframe in aggregated format
+}
 \description{
 Generate a dataframe with `t`, `pos` and `tot` columns from
 `t` and `seropositive` vectors.

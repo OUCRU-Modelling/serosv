@@ -13,6 +13,9 @@ sir_static_model(a, state, parameters)
 
 \item{parameters}{the model's parameter.}
 }
+\value{
+sir_static_model object
+}
 \description{
 Refers to section 3.2.2.
 }

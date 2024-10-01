@@ -28,8 +28,8 @@
 #' @importFrom graphics par
 #' @importFrom stats fitted
 #'
+#' @return lp_model object
 #' @export
-# library(locfit)
 lp_model <- function(age, pos=NULL, tot=NULL, status=NULL, kern="tcub", nn=0, h=0, deg=2) {
   if (missing(nn) & missing(h)) {
     nn <- 0.7 # default nn from lp()

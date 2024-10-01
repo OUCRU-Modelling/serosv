@@ -36,6 +36,9 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 
 \item{deg}{Degree of polynomial to use. Default: 2.}
 }
+\value{
+lp_model object
+}
 \description{
 Refers to section 7.1. and 7.2.
 }

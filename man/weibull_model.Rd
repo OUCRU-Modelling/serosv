@@ -15,6 +15,9 @@ weibull_model(t, status = NULL, pos = NULL, tot = NULL)
 
 \item{tot}{the total count vector (optional if status is provided).}
 }
+\value{
+weibull_model object
+}
 \description{
 Refers to section 6.1.2.
 }

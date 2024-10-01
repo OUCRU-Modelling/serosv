@@ -1,7 +1,3 @@
-compute_ci <- function(x, ci = 0.95, ...){
-  UseMethod("compute_ci")
-}
-
 #' Compute confidence interval
 #'
 #' @param x - serosv models
@@ -11,6 +7,8 @@ compute_ci <- function(x, ci = 0.95, ...){
 #'
 #' @importFrom stats qt predict.glm
 #' @import dplyr
+#'
+#' @return confidence interval dataframe
 #'
 #' @export
 compute_ci <- function(x, ci = 0.95, le = 100, ...){
@@ -41,7 +39,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... - arbitrary argument
 #'
 #' @import dplyr
-#'
+#' @return confidence interval dataframe
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
   p <- (1 - ci) / 2
@@ -70,6 +68,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... - arbitrary argument
 #'
 #' @import dplyr
+#' @return confidence interval dataframe
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   p <- (1 - ci) / 2
@@ -98,6 +97,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 #' @param x - serosv models
 #' @param ci - confidence interval
 #' @param ... - arbitrary arguments
+#' @return confidence interval dataframe
 #' @export
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
@@ -116,6 +116,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
+#' @return confidence interval dataframe
 #' @export
 compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   m <- 1
@@ -168,6 +169,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
 #' @param ... - arbitrary arguments
 #' @importFrom stats qnorm
 #'
+#' @return confidence interval dataframe
 #' @export
 compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 

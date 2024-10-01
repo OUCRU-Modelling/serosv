@@ -12,7 +12,7 @@
 #' @importFrom stats fitted
 #'
 #' @export
-#'
+#' @return mixture_model object
 #' @examples
 #' df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
 #' data <- df$VZVmIUml[order(df$age)]

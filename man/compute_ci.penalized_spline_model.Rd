@@ -13,6 +13,9 @@ compute_ci.penalized_spline_model(x, ci = 0.95, ...)
 
 \item{...}{- arbitrary arguments}
 }
+\value{
+confidence interval dataframe
+}
 \description{
 Compute confidence interval for penalized_spline_model
 }

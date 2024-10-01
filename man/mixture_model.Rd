@@ -23,6 +23,9 @@ mixture_model(
 
 \item{sigma}{-  a vector of standard deviations of component distributions (vector of 2 number)}
 }
+\value{
+mixture_model object
+}
 \description{
 Refers to section 11.1 - 11.4
 }

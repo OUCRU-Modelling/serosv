@@ -15,6 +15,9 @@ compute_ci(x, ci = 0.95, le = 100, ...)
 
 \item{...}{- arbitrary argument}
 }
+\value{
+confidence interval dataframe
+}
 \description{
 Compute confidence interval
 }

@@ -6,6 +6,7 @@
 #' @param sero_line - linetype for seroprevalence line
 #' @param foi_line - linetype for force of infection line
 #'
+#' @return list of updated aesthetic values
 #' @export
 set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed"){
     list(
@@ -112,6 +113,7 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.sir_basic_model <- function(x, ...){
   comp_lvl <-  c("S", "I", "R")
@@ -139,6 +141,7 @@ plot.sir_basic_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.sir_static_model <- function(x, ...){
   comp_lvl <-  c("s", "i", "r")
@@ -200,6 +203,7 @@ plot.sir_subpops_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.mseir_model <- function(x, ...){
   # make leveled factor to force legend show color in order
@@ -227,6 +231,7 @@ plot.mseir_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.polynomial_model <- function(x, ...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -259,6 +264,7 @@ plot.polynomial_model <- function(x, ...) {
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.farrington_model <- function(x,...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -290,6 +296,7 @@ plot.farrington_model <- function(x,...) {
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.weibull_model <- function(x, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
@@ -319,6 +326,7 @@ plot.weibull_model <- function(x, ...) {
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.fp_model <- function(x,...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -342,6 +350,7 @@ plot.fp_model <- function(x,...) {
 #' @importFrom graphics plot
 #' @importFrom methods is
 #'
+#' @return ggplot object
 #' @export
 plot.lp_model <- function(x, ...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -370,6 +379,7 @@ plot.lp_model <- function(x, ...) {
 #' @importFrom graphics plot
 #' @importFrom methods is
 #'
+#' @return ggplot object
 #' @export
 plot.hierarchical_bayesian_model <- function(x,  ...){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -389,6 +399,7 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #' @importFrom graphics plot
 #' @importFrom methods is
 #'
+#' @return ggplot object
 #' @export
 plot.penalized_spline_model <- function(x, ...){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -414,6 +425,7 @@ plot.penalized_spline_model <- function(x, ...){
 #' @importFrom graphics plot
 #' @import ggplot2
 #'
+#' @return ggplot object
 #' @export
 plot.mixture_model <- function(x, ...){
   ci_layer <- function(x, y, xmin, xmax, fill="royalblue1"){
@@ -522,6 +534,7 @@ plot.estimate_from_mixture <- function(x, ... ){
 #' @import locfit patchwork ggplot2
 #' @import graphics
 #'
+#' @return plot of gcv value
 #' @export
 plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   y <- pos/tot

@@ -68,12 +68,13 @@ Load the rubella in UK dataset.
 
 ```{r}
 library(serosv)
-rubella <- rubella_uk_1986_1987
 ```
 
 Find the power for the best second degree fractional polynomial with monotonicity constraint and a logit link function. The power appears to be (-0.9,-0.9).
 
 ```{r}
+rubella <- rubella_uk_1986_1987
+
 best_2d_mn <- find_best_fp_powers(
   rubella$age, rubella$pos, rubella$tot,
   p=seq(-2,3,0.1), mc = T, degree=2, link="logit"
