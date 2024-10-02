@@ -12,6 +12,8 @@ An easy-to-use and efficient tool to estimate infectious diseases parameters usi
 Useful links:
 \itemize{
   \item \url{https://oucru-modelling.github.io/serosv/}
+  \item \url{https://github.com/OUCRU-Modelling/serosv}
+  \item Report bugs at \url{https://github.com/OUCRU-Modelling/serosv/issues}
 }
 
 }

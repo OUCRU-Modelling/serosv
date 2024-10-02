@@ -17,3 +17,5 @@
 ^rstan_code$
 ^cran-comments\.md$
 ^revdep$
+^docs$
+^CRAN-SUBMISSION$

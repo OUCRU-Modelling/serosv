@@ -45,6 +45,9 @@ plot_data <- function(x){
 
 #=== Helper function for plotting =====
 plot_util <- function(age, pos, tot, sero, foi, cex = 20){
+  # resolve no visible binding
+  x <- y <- ymin <- ymax <- NULL
+
   plot <- ggplot(data = data.frame(age, pos, tot), aes(x = age, y = pos/tot)) +
     geom_point(size = cex*(pos)/max(tot), shape = 1)+
     labs(y="Seroprevalence", x="Age")+
@@ -117,6 +120,7 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
 #' @export
 plot.sir_basic_model <- function(x, ...){
   comp_lvl <-  c("S", "I", "R")
+  time <- S <- I <- R <- NULL
 
   ggplot(x$output) +
     geom_line(aes(x = time, y = S, color = factor("S", levels = comp_lvl))) +
@@ -145,6 +149,7 @@ plot.sir_basic_model <- function(x, ...){
 #' @export
 plot.sir_static_model <- function(x, ...){
   comp_lvl <-  c("s", "i", "r")
+  time <- s <- i <- r <- NULL
 
   ggplot(x$output) +
     geom_line(aes(x = time, y = s, color = factor("s", levels = comp_lvl))) +
@@ -173,6 +178,7 @@ plot.sir_static_model <- function(x, ...){
 #'
 #' @export
 plot.sir_subpops_model <- function(x, ...){
+  time <- s <- i <- r <- NULL
   comp_lvl <-  c("s", "i", "r")
 
   # using for loop here would not work due to ggplot lazy eval
@@ -206,6 +212,7 @@ plot.sir_subpops_model <- function(x, ...){
 #' @return ggplot object
 #' @export
 plot.mseir_model <- function(x, ...){
+  a <- m <- s <- e <- i <- r <- NULL
   # make leveled factor to force legend show color in order
   comp_lvl <- c("m", "s", "e", "i", "r")
 
@@ -493,12 +500,16 @@ plot.estimate_from_mixture <- function(x, ... ){
 
   if(!is.null(x$df$threshold_status)){
     aggregated <- transform_data(round(x$df$age), x$df$threshold_status)
+    # resolve no visible binding note
+    t <- pos <- tot <- NULL
 
     returned_plot <-  returned_plot +
       geom_point(aes( x = t, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
                  shape = 1, show.legend = FALSE)
   }
 
+  # resolve no visible binding note
+  foi <- foi_x <- NULL
   returned_plot <- returned_plot +
     geom_line(aes(x = age, y = x$sp, col = "sero", linetype = "sero")) +
     geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)

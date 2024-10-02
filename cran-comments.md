@@ -1,41 +1,19 @@
 ## R CMD check results
-
-* checking R code for possible problems ... [24s] NOTE
-compute_ci: no visible binding for global variable '.'
-compute_ci: no visible binding for global variable 'fit'
-compute_ci: no visible binding for global variable 'se.fit'
-compute_ci.fp_model: no visible binding for global variable '.'
-compute_ci.fp_model: no visible binding for global variable 'fit'
-compute_ci.fp_model: no visible binding for global variable 'se.fit'
-compute_ci.penalized_spline_model: no visible binding for global
-  variable '.'
-compute_ci.penalized_spline_model: no visible binding for global
-  variable 'fit'
-compute_ci.penalized_spline_model: no visible binding for global
-  variable 'se.fit'
-compute_ci.weibull_model: no visible binding for global variable '.'
-compute_ci.weibull_model: no visible binding for global variable 'fit'
-compute_ci.weibull_model: no visible binding for global variable
-  'se.fit'
-plot.estimate_from_mixture: no visible binding for global variable
-  'pos'
-plot.estimate_from_mixture: no visible binding for global variable
-  'tot'
-plot.estimate_from_mixture: no visible binding for global variable
-  'foi_x'
-plot.estimate_from_mixture: no visible binding for global variable
-  'foi'
-  
 Examples with CPU (user + system) or elapsed time > 10s
                              user system elapsed
 hierarchical_bayesian_model 29.17   0.03   29.43
 sir_subpops_model           12.00   0.66   12.65
 
-0 errors | 0 warnings | 2 note
+checking installed package size ... NOTE
+installed size is  5.2Mb
+sub-directories of 1Mb or more:
+  doc    1.2Mb
+  libs   3.1Mb
 
-* The variables said to have no visible binding are variables of input dataframe accessed via tidyverse syntax. As the input must be the specified object, the dataframe should always have these variables.
+0 errors | 0 warnings | 2 notes
 
 * Function hierarchical_bayesian_model and sir_subpops_model are supposed to have a long run time due to sampling process and iterative nature of the function
+* doc directories are for the documentation and code examples. libs contains the compiled C++ code necessary for the package.
 
 * This is a new release.
 

@@ -239,5 +239,6 @@ Use `fp_model()` to fit a fractional polynomial model
 model <- fp_model(
   hav$age, pos = hav$pos, tot = hav$tot,
   p=c(1.5, 1.6), link="cloglog")
+compute_ci.fp_model(model)
 plot(model)
 ```

@@ -61,6 +61,7 @@ reference:
   contents:
   - serosv-package
   - est_foi
+  - pava
   - transform_data
   - compute_ci
   - compute_ci.fp_model

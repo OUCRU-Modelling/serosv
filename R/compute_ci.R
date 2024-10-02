@@ -12,6 +12,9 @@
 #'
 #' @export
 compute_ci <- function(x, ci = 0.95, le = 100, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- x$info$data
@@ -20,15 +23,15 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
   ages <- seq(age_range[1], age_range[2], le = le)
 
   mod1 <- predict.glm(x$info,data.frame(Age = ages), se.fit = TRUE)
-  n1 <- mod1 |> extract(c("fit", "se.fit")) %>%
-    c(age = list(ages), .) %>%
-    as_tibble() |>
+  n1 <- mod1 %>% as_tibble() %>%  select(fit, se.fit) %>%
+    mutate(age = ages ) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
 
   out.DF <- data.frame(x = n1$age, y = 1- n1$fit, ymin= 1-  n1$lwr, ymax=1- n1$upr)
+  out.DF
 }
 
 #' Compute confidence interval for fractional polynomial model
@@ -42,6 +45,9 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @return confidence interval dataframe
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- data.frame(x$df)
@@ -51,14 +57,15 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 
   mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- data.frame(mod1)[,-3] %>%
-    c(age = list(ages), .) %>%
-    as_tibble() |>
+    mutate(age = ages) %>%
+    as_tibble() %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
   out.DF <- data.frame(x = n1$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
+  out.DF
 }
 
 #' Compute confidence interval for Weibull model
@@ -71,6 +78,9 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' @return confidence interval dataframe
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- x$info$model
@@ -79,9 +89,9 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   exposure_time <- dataset$`log(t)`
 
   mod1 <- predict.glm(x$info,data.frame("log(t)" = exposure_time), se.fit = TRUE)
-  n1 <- mod1 |> extract(c("fit", "se.fit")) %>%
-    c(exposure = list(exposure_time), .) %>%
-    as_tibble() |>
+  n1 <- mod1 %>% as_tibble() %>%
+    select(fit, se.fit) %>%
+    mutate(exposure = exposure_time) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
@@ -89,6 +99,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 
   out.DF <- data.frame(x = x$df$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
+  out.DF
 }
 
 
@@ -119,6 +130,9 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' @return confidence interval dataframe
 #' @export
 compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   m <- 1
   p <- (1 - ci) / 2
 
@@ -139,9 +153,9 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   # print(head(ages))
 
   mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE)  %>%
-    extract(c("fit", "se.fit")) %>%
-    c(age = list(ages), .)  %>%
     as_tibble()  %>%
+    select(fit, se.fit) %>%
+    mutate(age = ages)  %>%
     mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
            upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
            fit = m * link_inv(fit))  %>%
@@ -156,8 +170,6 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
                         ymin= est_foi(ages[[1]],mod$lwr),
                         ymax = est_foi(ages[[1]],mod$upr)
   )
-
-  # print(head(out.DF))
 
   return(list(out.DF, out.FOI))
 }
