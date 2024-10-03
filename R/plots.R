@@ -5,10 +5,11 @@
 #' @param foi - color for force of infection line
 #' @param sero_line - linetype for seroprevalence line
 #' @param foi_line - linetype for force of infection line
+#' @param xlab - x label
 #'
 #' @return list of updated aesthetic values
 #' @export
-set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed"){
+set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed", xlabel = "Age"){
     list(
       scale_colour_manual(
         values = c("sero" = sero, "foi" = foi)
@@ -19,7 +20,7 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
       scale_fill_manual(
         values = c("ci" =ci)
       ),
-      labs(linetype = "Line", colour = "Line", fill="Fill color")
+      labs(x=xlabel, linetype = "Line", colour = "Line", fill="Fill color")
     )
 }
 
@@ -321,7 +322,13 @@ plot.weibull_model <- function(x, ...) {
     foi <- x$foi
   }
 
-  plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi), cex = cex)
+  suppressMessages(
+    returned_plot <- plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
+                               sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi), cex = cex) +
+      set_plot_style(xlabel = "Exposure time")
+  )
+
+  returned_plot
 }
 
 #### Fractional polynomial model ####

@@ -73,6 +73,7 @@ sir_subpop <- function(t, state, parameters) {
 #' @param parameters the parameters of the model.
 #'
 #' @examples
+#' \dontrun{
 #' k <- 2
 #' state <- c(
 #'   s = c(0.8, 0.8),
@@ -92,6 +93,7 @@ sir_subpop <- function(t, state, parameters) {
 #' times<-seq(0,10000,by=0.5)
 #' model <- sir_subpops_model(times, state, parameters)
 #' model
+#' }
 #'
 #' @return sir_subpops_model object
 #'

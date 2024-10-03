@@ -39,6 +39,7 @@ In \code{parameters}:
 - \code{k}: number of subpopulations
 }
 \examples{
+\dontrun{
 k <- 2
 state <- c(
   s = c(0.8, 0.8),
@@ -58,5 +59,6 @@ parameters <- list(
 times<-seq(0,10000,by=0.5)
 model <- sir_subpops_model(times, state, parameters)
 model
+}
 
 }

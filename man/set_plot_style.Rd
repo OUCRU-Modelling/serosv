@@ -9,7 +9,8 @@ set_plot_style(
   ci = "royalblue1",
   foi = "#fc0328",
   sero_line = "solid",
-  foi_line = "dashed"
+  foi_line = "dashed",
+  xlabel = "Age"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ set_plot_style(
 \item{sero_line}{- linetype for seroprevalence line}
 
 \item{foi_line}{- linetype for force of infection line}
+
+\item{xlab}{- x label}
 }
 \value{
 list of updated aesthetic values

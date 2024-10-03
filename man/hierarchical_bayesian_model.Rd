@@ -39,8 +39,10 @@ a hierarchical_bayesian_model object
 Refers to section 10.3
 }
 \examples{
+\dontrun{
 df <- mumps_uk_1986_1987
 model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
 model$info
 plot(model)
+}
 }
