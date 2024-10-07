@@ -14,7 +14,7 @@ compute_ci.mixture_model(x, ci = 0.95, ...)
 \item{...}{- arbitrary arguments}
 }
 \value{
-confidence interval dataframe
+list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
 }
 \description{
 Compute confidence interval for mixture model

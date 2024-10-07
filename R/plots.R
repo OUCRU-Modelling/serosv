@@ -5,7 +5,7 @@
 #' @param foi - color for force of infection line
 #' @param sero_line - linetype for seroprevalence line
 #' @param foi_line - linetype for force of infection line
-#' @param xlab - x label
+#' @param xlabel - x label
 #'
 #' @return list of updated aesthetic values
 #' @export
@@ -177,6 +177,7 @@ plot.sir_static_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return list of ggplot objects, each object is the plot for the corresponding subpopulation
 #' @export
 plot.sir_subpops_model <- function(x, ...){
   time <- s <- i <- r <- NULL
@@ -497,6 +498,8 @@ plot.mixture_model <- function(x, ...){
 #' @param ... arbitrary params.
 #' @importFrom graphics plot
 #' @import ggplot2
+#'
+#' @return ggplot object
 #'
 #' @export
 plot.estimate_from_mixture <- function(x, ... ){

@@ -55,7 +55,11 @@ sir_basic <- function(t, state, parameters)
 #' model
 #'
 #' @importFrom deSolve ode
-#' @return sir_basic_model object
+#' @return list of class sir_basic_model with the following items
+#'   \item{parameters}{list of parameters used for fitting the model}
+#'   \item{output}{matrix of population for each compartment over time}
+#'
+#'
 #' @export
 sir_basic_model <- function(times, state, parameters)
 {

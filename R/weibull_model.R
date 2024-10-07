@@ -17,7 +17,15 @@
 #'   )
 #' plot(model)
 #'
-#' @return weibull_model object
+#' @return list of class weibull_model with the following items
+#'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{info}{fitted "glm" object}
+#'   \item{sp}{seroprevalence}
+#'   \item{foi}{force of infection}
+#'
+#' @seealso [stats::glm()] for more information on the fitted "glm" object
+#'
 #' @export
 weibull_model <- function(t, status=NULL, pos=NULL, tot=NULL)
 {

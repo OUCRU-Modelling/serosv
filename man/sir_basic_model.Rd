@@ -14,7 +14,9 @@ sir_basic_model(times, state, parameters)
 \item{parameters}{the parameters of the model.}
 }
 \value{
-sir_basic_model object
+list of class sir_basic_model with the following items
+  \item{parameters}{list of parameters used for fitting the model}
+  \item{output}{matrix of population for each compartment over time}
 }
 \description{
 Refers to section 3.1.3.

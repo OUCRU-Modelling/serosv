@@ -43,7 +43,11 @@ sir_static <- function(t, state, parameters)
 #' model = sir_static_model(ages, state, parameters)
 #' model
 #'
-#' @return sir_static_model object
+#' @return list of class sir_static_model with the following items
+#'   \item{parameters}{list of parameters used for fitting the model}
+#'   \item{output}{matrix of proportion for each compartment over time}
+#'
+#'
 #' @export
 sir_static_model <- function(a, state, parameters)
 {

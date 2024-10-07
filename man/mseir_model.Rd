@@ -18,7 +18,9 @@ mseir_model(a, gamma, lambda, sigma, nu)
 \item{nu}{time in infected class.}
 }
 \value{
-mseir_model object
+list of class mseir_model with the following parameters
+  \item{parameters}{list of parameters used for fitting the model}
+  \item{output}{matrix of proportion for each compartment over time}
 }
 \description{
 Refers to section 3.4.

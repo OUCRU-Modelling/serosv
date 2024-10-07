@@ -11,6 +11,9 @@
 
 \item{...}{arbitrary params.}
 }
+\value{
+ggplot object
+}
 \description{
 plot() overloading for result of estimate_from_mixture
 }

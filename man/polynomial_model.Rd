@@ -30,7 +30,12 @@ polynomial_model(
 \item{link}{link function.}
 }
 \value{
-a polynomial_model object
+a list of class polynomial_model with 5 items
+  \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+  \item{df}{the dataframe used for fitting the model}
+  \item{info}{fitted "glm" object}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
 }
 \description{
 Either `status` (treated as line-listing dataset) or  `pos` & `tot` (treated as aggregated dataset) must be provided

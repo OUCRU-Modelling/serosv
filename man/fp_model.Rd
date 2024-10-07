@@ -19,6 +19,14 @@ fp_model(age, p, pos = NULL, tot = NULL, status = NULL, link = "logit")
 
 \item{link}{the link function for model. Defaulted to "logit".}
 }
+\value{
+a list of class fp_model with 5 items
+  \item{datatype}{type of data used for fitting model (aggregated or linelisting)}
+  \item{df}{the dataframe used for fitting the model}
+  \item{info}{a fitted glm model}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
+}
 \description{
 Refers to section 6.2.
 }
@@ -29,4 +37,7 @@ model <- fp_model(
   p=c(1.5, 1.6), link="cloglog")
 plot(model)
 
+}
+\seealso{
+[stats::glm()] for more information on glm object
 }

@@ -8,7 +8,7 @@
 #' @importFrom stats qt predict.glm
 #' @import dplyr
 #'
-#' @return confidence interval dataframe
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #'
 #' @export
 compute_ci <- function(x, ci = 0.95, le = 100, ...){
@@ -42,7 +42,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... - arbitrary argument
 #'
 #' @import dplyr
-#' @return confidence interval dataframe
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
   # resolve no visible binding issue with CRAN check
@@ -75,7 +75,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... - arbitrary argument
 #'
 #' @import dplyr
-#' @return confidence interval dataframe
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   # resolve no visible binding issue with CRAN check
@@ -108,7 +108,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 #' @param x - serosv models
 #' @param ci - confidence interval
 #' @param ... - arbitrary arguments
-#' @return confidence interval dataframe
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
@@ -127,7 +127,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
-#' @return confidence interval dataframe
+#' @return list of confidence interval for seroprevalence and foi Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   # resolve no visible binding issue with CRAN check
@@ -181,7 +181,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
 #' @param ... - arbitrary arguments
 #' @importFrom stats qnorm
 #'
-#' @return confidence interval dataframe
+#' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
 #' @export
 compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 

@@ -33,13 +33,19 @@ hierarchical_bayesian_model(
 \item{iter}{number of iterations}
 }
 \value{
-a hierarchical_bayesian_model object
+a list of class hierarchical_bayesian_model with 6 items
+  \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+  \item{df}{the dataframe used for fitting the model}
+  \item{type}{type of bayesian model far2, far3 or log_logistic}
+  \item{info}{parameters for the fitted model}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
 }
 \description{
 Refers to section 10.3
 }
 \examples{
-\dontrun{
+\donttest{
 df <- mumps_uk_1986_1987
 model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
 model$info

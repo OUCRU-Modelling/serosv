@@ -14,11 +14,17 @@
 #' @importFrom rstan sampling summary
 #' @importFrom boot inv.logit
 #'
-#' @return a hierarchical_bayesian_model object
+#' @return a list of class hierarchical_bayesian_model with 6 items
+#'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{type}{type of bayesian model far2, far3 or log_logistic}
+#'   \item{info}{parameters for the fitted model}
+#'   \item{sp}{seroprevalence}
+#'   \item{foi}{force of infection}
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' df <- mumps_uk_1986_1987
 #' model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
 #' model$info
@@ -60,7 +66,7 @@ hierarchical_bayesian_model <- function(age,pos=NULL,tot=NULL, status=NULL,
     fit <- rstan::sampling(stanmodels$log_logistic, data=data, chains=chains,warmup=warmup, iter=iter)
   }
   else {
-    print('Model is not defined. Please choose "far3", "far2" or "log_logistic"')
+    stop('Model is not defined. Please choose "far3", "far2" or "log_logistic"')
   }
 
   model$info <- summary(fit)$summary

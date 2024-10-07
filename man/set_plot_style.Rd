@@ -24,7 +24,7 @@ set_plot_style(
 
 \item{foi_line}{- linetype for force of infection line}
 
-\item{xlab}{- x label}
+\item{xlabel}{- x label}
 }
 \value{
 list of updated aesthetic values

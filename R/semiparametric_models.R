@@ -12,7 +12,16 @@
 #' @import mgcv
 #' @importFrom stats binomial
 #'
-#' @return a penalized_spline_model object
+#' @return a list of class penalized_spline_model with 6 attributes
+#'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{framework}{either pl or glmm}
+#'   \item{info}{fitted "gam" model when framework is pl or "gamm" model when framework is glmm}
+#'   \item{sp}{seroprevalence}
+#'   \item{foi}{force of infection}
+#'
+#' @seealso [mgcv::gam()], [mgcv::gamm()] for more information the fitted gam and gamm model
+#'
 #' @export
 #'
 #' @examples

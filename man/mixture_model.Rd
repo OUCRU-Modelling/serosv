@@ -24,7 +24,11 @@ mixture_model(
 \item{sigma}{-  a vector of standard deviations of component distributions (vector of 2 number)}
 }
 \value{
-mixture_model object
+a list of class mixture_model with the following items
+  \item{df}{the dataframe used for fitting the model}
+  \item{info}{list of 3 items parameters, distribution and constraints for the fitted model}
+  \item{susceptible}{fitted distribution for susceptible}
+  \item{infected}{fitted distribution for infected}
 }
 \description{
 Refers to section 11.1 - 11.4

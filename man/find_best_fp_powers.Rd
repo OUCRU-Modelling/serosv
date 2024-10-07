@@ -21,6 +21,12 @@ find_best_fp_powers(age, pos, tot, p, mc, degree, link = "logit")
 
 \item{link}{the link function. Defaulted to "logit".}
 }
+\value{
+list of 3 elements:
+  \item{p}{The best power for fp model.}
+  \item{deviance}{Deviance of the best fitted model.}
+  \item{model}{The best model fitted}
+}
 \description{
 Refers to section 6.2.
 }

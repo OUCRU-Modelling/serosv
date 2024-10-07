@@ -12,7 +12,7 @@ pava(pos = pos, tot = rep(1, length(pos)))
 \item{tot}{the total count vector.}
 }
 \value{
-computed foi vector
+computed list of 2 items pai1 for original values and pai2 for monotonized value
 }
 \description{
 Monotonize seroprevalence

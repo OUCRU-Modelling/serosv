@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* add missing \value to .Rd files and add more detailed description for return value
+* remove unnecessary spaces in description field in DESCRIPTION file
+* change print() to stop()
+
+
 ## R CMD check results
 checking installed package size ... NOTE
 installed size is  5.2Mb
@@ -9,7 +16,6 @@ sub-directories of 1Mb or more:
 
 * doc directories are for the documentation and code examples. libs contains the compiled C++ code necessary for the package.
 
-* This is a new release.
 
 ## revdepcheck results
 

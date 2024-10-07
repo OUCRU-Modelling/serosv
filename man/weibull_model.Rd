@@ -16,7 +16,12 @@ weibull_model(t, status = NULL, pos = NULL, tot = NULL)
 \item{tot}{the total count vector (optional if status is provided).}
 }
 \value{
-weibull_model object
+list of class weibull_model with the following items
+  \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+  \item{df}{the dataframe used for fitting the model}
+  \item{info}{fitted "glm" object}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
 }
 \description{
 Refers to section 6.1.2.
@@ -29,4 +34,7 @@ model <- weibull_model(
   )
 plot(model)
 
+}
+\seealso{
+[stats::glm()] for more information on the fitted "glm" object
 }

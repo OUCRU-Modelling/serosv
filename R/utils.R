@@ -31,7 +31,7 @@ est_foi <- function(t, sp)
 #'
 #' @importFrom stats approx
 #'
-#' @return computed foi vector
+#' @return computed list of 2 items pai1 for original values and pai2 for monotonized value
 #' @export
 pava<- function(pos=pos,tot=rep(1,length(pos)))
 {

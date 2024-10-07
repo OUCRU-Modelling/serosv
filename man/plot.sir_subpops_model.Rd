@@ -11,6 +11,9 @@
 
 \item{...}{arbitrary params.}
 }
+\value{
+list of ggplot objects, each object is the plot for the corresponding subpopulation
+}
 \description{
 plot() overloading for SIR sub populations model
 }

@@ -28,7 +28,15 @@
 #' @importFrom graphics par
 #' @importFrom stats fitted
 #'
-#' @return lp_model object
+#' @return a list of class lp_model with 6 items
+#'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{pi}{fitted locfit object for pi}
+#'   \item{eta}{fitted locfit object for eta}
+#'   \item{sp}{seroprevalence}
+#'   \item{foi}{force of infection}
+#' @seealso [locfit::locfit()] for more information on the fitted locfit object
+#'
 #' @export
 lp_model <- function(age, pos=NULL, tot=NULL, status=NULL, kern="tcub", nn=0, h=0, deg=2) {
   if (missing(nn) & missing(h)) {
