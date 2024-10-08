@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,11 +47,13 @@
     <li><a class="dropdown-item" href="articles/visualizing_model.html">Model visualization</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/OUCRU-Modelling/serosv/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -116,18 +118,12 @@
 </h2>
 <p>Load the rubella in UK dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'VGAM::deviance' by 'stats::deviance' when</span></span>
-<span><span class="co">#&gt; loading 'serosv'</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'serosv'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     transform</span></span>
-<span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span></code></pre></div>
 <p>Find the power for the best second degree fractional polynomial with monotonicity constraint and a logit link function. The power appears to be (-0.9,-0.9).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">best_2d_mn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_best_fp_powers.html">find_best_fp_powers</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span>
+<span></span>
+<span><span class="va">best_2d_mn</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_best_fp_powers.html">find_best_fp_powers</a></span><span class="op">(</span></span>
 <span>  <span class="va">rubella</span><span class="op">$</span><span class="va">age</span>, <span class="va">rubella</span><span class="op">$</span><span class="va">pos</span>, <span class="va">rubella</span><span class="op">$</span><span class="va">tot</span>,</span>
 <span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">0.1</span><span class="op">)</span>, mc <span class="op">=</span> <span class="cn">T</span>, degree<span class="op">=</span><span class="fl">2</span>, link<span class="op">=</span><span class="st">"logit"</span></span>
 <span><span class="op">)</span></span>
@@ -159,10 +155,19 @@
 <span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.9</span>, <span class="op">-</span><span class="fl">0.9</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fpmd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
 </div>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=serosv" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/OUCRU-Modelling/serosv/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/OUCRU-Modelling/serosv/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -181,9 +186,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
+<li>Anh Phan Truong Quynh <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Nguyen Pham Nguyen The <br><small class="roles"> Author </small>  </li>
 <li>Long Bui Thanh <br><small class="roles"> Author </small>  </li>
-<li>Anh Phan Truong Quynh <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Tuyen Huynh <br><small class="roles"> Author </small>  </li>
 <li>Thinh Ong <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6772-9291" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Marc Choisy <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5187-6390" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
@@ -203,7 +208,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Nguyen Pham Nguyen The, Long Bui Thanh, Anh Phan Truong Quynh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
+  <p>Developed by Anh Phan Truong Quynh, Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
 </div>
 
 <div class="pkgdown-footer-right">
