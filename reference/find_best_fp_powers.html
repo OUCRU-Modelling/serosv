@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Returns the powers of the GLM fitted model which has the lowest deviance score.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/OUCRU-Modelling/serosv/blob/v1.0.0/R/fractional_polynomial_models.R" class="external-link"><code>R/fractional_polynomial_models.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OUCRU-Modelling/serosv/blob/main/R/fractional_polynomial_models.R" class="external-link"><code>R/fractional_polynomial_models.R</code></a></small>
       <div class="d-none name"><code>find_best_fp_powers.Rd</code></div>
     </div>
 
@@ -85,6 +85,19 @@
 
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
 <dd><p>the link function. Defaulted to "logit".</p></dd>
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>list of 3 elements:</p>
+<dl><dt>p</dt>
+<dd><p>The best power for fp model.</p></dd>
+
+  <dt>deviance</dt>
+<dd><p>Deviance of the best fitted model.</p></dd>
+
+  <dt>model</dt>
+<dd><p>The best model fitted</p></dd>
 
 </dl></div>
 
