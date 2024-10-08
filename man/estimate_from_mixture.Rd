@@ -30,8 +30,16 @@ estimate_from_mixture(
 \item{monotonize}{- whether to monotonize seroprevalence (default to TRUE)}
 }
 \value{
-estimated_from_mixture object
+a list of class estimated_from_mixture with the following items
+  \item{df}{the dataframe used for fitting the model}
+  \item{info}{a fitted "gam" model for mu(a)}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
+  \item{threshold_status}{serostatus using threshold method only if provided}
 }
 \description{
 Refers to section 11.2 - 11.4
+}
+\seealso{
+[mgcv::gam()] for more information about the fitted gam object
 }

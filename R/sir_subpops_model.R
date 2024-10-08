@@ -73,6 +73,7 @@ sir_subpop <- function(t, state, parameters) {
 #' @param parameters the parameters of the model.
 #'
 #' @examples
+#' \donttest{
 #' k <- 2
 #' state <- c(
 #'   s = c(0.8, 0.8),
@@ -92,6 +93,13 @@ sir_subpop <- function(t, state, parameters) {
 #' times<-seq(0,10000,by=0.5)
 #' model <- sir_subpops_model(times, state, parameters)
 #' model
+#' }
+#'
+#' @return list of class sir_subpops_model with the following items
+#'
+#'   \item{parameters}{list of parameters used for fitting the model}
+#'   \item{output}{matrix of proportion for each compartment over time}
+#'
 #'
 #' @export
 sir_subpops_model <- function(times, state, parameters) {

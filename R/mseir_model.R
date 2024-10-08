@@ -18,6 +18,10 @@
 #' )
 #' model
 #'
+#' @return list of class mseir_model with the following parameters
+#'   \item{parameters}{list of parameters used for fitting the model}
+#'   \item{output}{matrix of proportion for each compartment over time}
+#'
 #' @export
 mseir_model <- function(a, gamma, lambda, sigma, nu)
 {

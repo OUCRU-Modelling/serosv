@@ -66,14 +66,6 @@ Load the rubella in UK dataset.
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'VGAM::deviance' by 'stats::deviance' when
-#> loading 'serosv'
-#> 
-#> Attaching package: 'serosv'
-#> The following object is masked from 'package:base':
-#> 
-#>     transform
-rubella <- rubella_uk_1986_1987
 ```
 
 Find the power for the best second degree fractional polynomial with
@@ -81,6 +73,8 @@ monotonicity constraint and a logit link function. The power appears to
 be (-0.9,-0.9).
 
 ``` r
+rubella <- rubella_uk_1986_1987
+
 best_2d_mn <- find_best_fp_powers(
   rubella$age, rubella$pos, rubella$tot,
   p=seq(-2,3,0.1), mc = T, degree=2, link="logit"
@@ -118,4 +112,4 @@ fpmd <- fp_model(
 plot(fpmd)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />

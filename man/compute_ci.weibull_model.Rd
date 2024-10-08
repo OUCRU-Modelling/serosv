@@ -13,6 +13,9 @@ compute_ci.weibull_model(x, ci = 0.95, ...)
 
 \item{...}{- arbitrary argument}
 }
+\value{
+confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+}
 \description{
 Compute confidence interval for Weibull model
 }

@@ -32,6 +32,11 @@ formulate <- function(p) {
 #' @param degree the degree of the model. Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
 #'
+#' @return list of 3 elements:
+#'   \item{p}{The best power for fp model.}
+#'   \item{deviance}{Deviance of the best fitted model.}
+#'   \item{model}{The best model fitted}
+#'
 #' @examples
 #' df <- hav_be_1993_1994
 #' best_p <- find_best_fp_powers(
@@ -114,6 +119,14 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #' @param link the link function for model. Defaulted to "logit".
 #'
 #' @importFrom stats predict as.formula
+#'
+#' @return a list of class fp_model with 5 items
+#'   \item{datatype}{type of data used for fitting model (aggregated or linelisting)}
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{info}{a fitted glm model}
+#'   \item{sp}{seroprevalence}
+#'   \item{foi}{force of infection}
+#' @seealso [stats::glm()] for more information on glm object
 #'
 #' @examples
 #' df <- hav_be_1993_1994

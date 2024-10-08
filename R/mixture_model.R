@@ -12,6 +12,11 @@
 #' @importFrom stats fitted
 #'
 #' @export
+#' @return a list of class mixture_model with the following items
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{info}{list of 3 items parameters, distribution and constraints for the fitted model}
+#'   \item{susceptible}{fitted distribution for susceptible}
+#'   \item{infected}{fitted distribution for infected}
 #'
 #' @examples
 #' df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
@@ -51,7 +56,15 @@ mixture_model <- function (antibody_level, breaks=40, pi=c(0.2, 0.8), mu=c(2,6),
 #' @import mgcv
 #' @importFrom stats approx gaussian
 #'
-#' @return estimated_from_mixture object
+#' @return  a list of class estimated_from_mixture with the following items
+#'   \item{df}{the dataframe used for fitting the model}
+#'   \item{info}{a fitted "gam" model for mu(a)}
+#'   \item{sp}{seroprevalence}
+#'   \item{foi}{force of infection}
+#'   \item{threshold_status}{serostatus using threshold method only if provided}
+#' @seealso
+#'  [mgcv::gam()] for more information about the fitted gam object
+#'
 #' @export
 estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, mixture_model, s="ps", sp=83, monotonize=TRUE){
   # Helper funciton to compute derivative of mu(a) aka. mu'(a)

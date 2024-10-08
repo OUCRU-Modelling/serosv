@@ -28,6 +28,14 @@ Initial values for optimizer.}
 \item{fixed}{Named list of vectors or single vector.
 Parameter values to keep fixed during optimization.}
 }
+\value{
+a list of class farrington_model with 5 items
+  \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+  \item{df}{the dataframe used for fitting the model}
+  \item{info}{fitted "glm" object}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
+}
 \description{
 Refers to section 6.1.2.
 }
@@ -39,4 +47,7 @@ model <- farrington_model(
   )
 plot(model)
 
+}
+\seealso{
+[stats::glm()] for more information on the fitted glm object
 }

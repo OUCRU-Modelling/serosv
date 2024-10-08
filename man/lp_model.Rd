@@ -36,6 +36,15 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 
 \item{deg}{Degree of polynomial to use. Default: 2.}
 }
+\value{
+a list of class lp_model with 6 items
+  \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
+  \item{df}{the dataframe used for fitting the model}
+  \item{pi}{fitted locfit object for pi}
+  \item{eta}{fitted locfit object for eta}
+  \item{sp}{seroprevalence}
+  \item{foi}{force of infection}
+}
 \description{
 Refers to section 7.1. and 7.2.
 }
@@ -47,4 +56,7 @@ model <- lp_model(
   )
 plot(model)
 
+}
+\seealso{
+[locfit::locfit()] for more information on the fitted locfit object
 }

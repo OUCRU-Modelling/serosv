@@ -13,6 +13,11 @@ sir_static_model(a, state, parameters)
 
 \item{parameters}{the model's parameter.}
 }
+\value{
+list of class sir_static_model with the following items
+  \item{parameters}{list of parameters used for fitting the model}
+  \item{output}{matrix of proportion for each compartment over time}
+}
 \description{
 Refers to section 3.2.2.
 }

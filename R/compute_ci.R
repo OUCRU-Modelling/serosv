@@ -1,7 +1,3 @@
-compute_ci <- function(x, ci = 0.95, ...){
-  UseMethod("compute_ci")
-}
-
 #' Compute confidence interval
 #'
 #' @param x - serosv models
@@ -12,8 +8,13 @@ compute_ci <- function(x, ci = 0.95, ...){
 #' @importFrom stats qt predict.glm
 #' @import dplyr
 #'
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#'
 #' @export
 compute_ci <- function(x, ci = 0.95, le = 100, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- x$info$data
@@ -22,15 +23,15 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
   ages <- seq(age_range[1], age_range[2], le = le)
 
   mod1 <- predict.glm(x$info,data.frame(Age = ages), se.fit = TRUE)
-  n1 <- mod1 |> extract(c("fit", "se.fit")) %>%
-    c(age = list(ages), .) %>%
-    as_tibble() |>
+  n1 <- mod1 %>% as_tibble() %>%  select(fit, se.fit) %>%
+    mutate(age = ages ) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
 
   out.DF <- data.frame(x = n1$age, y = 1- n1$fit, ymin= 1-  n1$lwr, ymax=1- n1$upr)
+  out.DF
 }
 
 #' Compute confidence interval for fractional polynomial model
@@ -41,9 +42,12 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... - arbitrary argument
 #'
 #' @import dplyr
-#'
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- data.frame(x$df)
@@ -53,14 +57,15 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 
   mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- data.frame(mod1)[,-3] %>%
-    c(age = list(ages), .) %>%
-    as_tibble() |>
+    mutate(age = ages) %>%
+    as_tibble() %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
   out.DF <- data.frame(x = n1$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
+  out.DF
 }
 
 #' Compute confidence interval for Weibull model
@@ -70,8 +75,12 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... - arbitrary argument
 #'
 #' @import dplyr
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- x$info$model
@@ -80,9 +89,9 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   exposure_time <- dataset$`log(t)`
 
   mod1 <- predict.glm(x$info,data.frame("log(t)" = exposure_time), se.fit = TRUE)
-  n1 <- mod1 |> extract(c("fit", "se.fit")) %>%
-    c(exposure = list(exposure_time), .) %>%
-    as_tibble() |>
+  n1 <- mod1 %>% as_tibble() %>%
+    select(fit, se.fit) %>%
+    mutate(exposure = exposure_time) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
@@ -90,6 +99,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 
   out.DF <- data.frame(x = x$df$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
+  out.DF
 }
 
 
@@ -98,6 +108,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 #' @param x - serosv models
 #' @param ci - confidence interval
 #' @param ... - arbitrary arguments
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
@@ -116,8 +127,12 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
+#' @return list of confidence interval for seroprevalence and foi Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
   m <- 1
   p <- (1 - ci) / 2
 
@@ -138,9 +153,9 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   # print(head(ages))
 
   mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE)  %>%
-    extract(c("fit", "se.fit")) %>%
-    c(age = list(ages), .)  %>%
     as_tibble()  %>%
+    select(fit, se.fit) %>%
+    mutate(age = ages)  %>%
     mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
            upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
            fit = m * link_inv(fit))  %>%
@@ -156,8 +171,6 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
                         ymax = est_foi(ages[[1]],mod$upr)
   )
 
-  # print(head(out.DF))
-
   return(list(out.DF, out.FOI))
 }
 
@@ -168,6 +181,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
 #' @param ... - arbitrary arguments
 #' @importFrom stats qnorm
 #'
+#' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
 #' @export
 compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 

@@ -1,9 +1,3 @@
-# rename_col <- function(df, old, new)
-# {
-#   names(df)[names(df) == old] <- new
-#   df
-# }
-
 
 #' Estimate force of infection
 #'
@@ -13,6 +7,7 @@
 #' @importFrom stats approx
 #'
 #' @return computed foi vector
+#' @export
 est_foi <- function(t, sp)
 {
   # handle duplicated t
@@ -29,6 +24,15 @@ est_foi <- function(t, sp)
   foi
 }
 
+#' Monotonize seroprevalence
+#'
+#' @param pos the positive count vector.
+#' @param tot the total count vector.
+#'
+#' @importFrom stats approx
+#'
+#' @return computed list of 2 items pai1 for original values and pai2 for monotonized value
+#' @export
 pava<- function(pos=pos,tot=rep(1,length(pos)))
 {
   gi<- pos/tot
@@ -67,6 +71,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #' @importFrom dplyr summarize
 #' @import magrittr
 #'
+#' @return dataframe in aggregated format
 #' @export
 transform_data <- function(t, spos) {
   df <- data.frame(t, spos)
@@ -79,53 +84,3 @@ transform_data <- function(t, spos) {
   df_agg
 }
 
-# detransform <- function(hcv_df) {
-#   hcv_dur <- c()
-#   hcv_sp <- c()
-#
-#   for (i in 1:nrow(hcv_df)) {
-#     row <- hcv_df[i, ]
-#     hcv_dur <- c(hcv_dur, rep(row$age, row$tot))
-#     if (row$pos > 0) {
-#       hcv_sp <- c(hcv_sp, rep(1, row$pos))
-#     }
-#     if (row$tot - row$pos > 0) {
-#       hcv_sp <- c(hcv_sp, rep(0, row$tot - row$pos))
-#     }
-#   }
-#   data.frame(
-#     dur = hcv_dur,
-#     seropositive = hcv_sp
-#   )
-# }
-
-#' Plot the prevalence and force of infection against age.
-#'
-#' Refers to section 6.1.
-#'
-#' @param model a model returned from this package's function.
-#'
-#' @examples
-#' model <- polynomial_model(degree=3)
-#' hav_be_1993_1994 %>%
-#'   model$fit() %>%
-#'   plot_p_foi_wrt_age()
-# plot_p_foi_wrt_age <- function(model)
-# {
-#   CEX_SCALER <- 4 # arbitrary number for better visual
-#
-#   with(model$df, {
-#     par(las=1,cex.axis=1,cex.lab=1,lwd=2,mgp=c(2, 0.5, 0),mar=c(4,4,4,3))
-#     plot(
-#       age,
-#       pos/tot,
-#       cex=CEX_SCALER*tot/max(tot),
-#       xlab="age", ylab="seroprevalence",
-#       xlim=c(0, max(age)), ylim=c(0,1)
-#     )
-#     lines(age, model$sp, lwd=2)
-#     lines(age, model$foi, lwd=2, lty=2)
-#     axis(side=4, at=round(seq(0.0, max(model$foi), length.out=3), 2))
-#     mtext(side=4, "force of infection", las=3, line=2)
-#   })
-# }

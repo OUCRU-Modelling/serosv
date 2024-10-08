@@ -13,6 +13,12 @@ sir_subpops_model(times, state, parameters)
 
 \item{parameters}{the parameters of the model.}
 }
+\value{
+list of class sir_subpops_model with the following items
+
+  \item{parameters}{list of parameters used for fitting the model}
+  \item{output}{matrix of proportion for each compartment over time}
+}
 \description{
 Refers to section 3.5.1.
 }
@@ -36,6 +42,7 @@ In \code{parameters}:
 - \code{k}: number of subpopulations
 }
 \examples{
+\donttest{
 k <- 2
 state <- c(
   s = c(0.8, 0.8),
@@ -55,5 +62,6 @@ parameters <- list(
 times<-seq(0,10000,by=0.5)
 model <- sir_subpops_model(times, state, parameters)
 model
+}
 
 }

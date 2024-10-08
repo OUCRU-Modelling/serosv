@@ -15,3 +15,7 @@
 ^test_pkg$
 ^vignettes/web-only
 ^rstan_code$
+^cran-comments\.md$
+^revdep$
+^docs$
+^CRAN-SUBMISSION$

@@ -5,9 +5,11 @@
 #' @param foi - color for force of infection line
 #' @param sero_line - linetype for seroprevalence line
 #' @param foi_line - linetype for force of infection line
+#' @param xlabel - x label
 #'
+#' @return list of updated aesthetic values
 #' @export
-set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed"){
+set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed", xlabel = "Age"){
     list(
       scale_colour_manual(
         values = c("sero" = sero, "foi" = foi)
@@ -18,7 +20,7 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
       scale_fill_manual(
         values = c("ci" =ci)
       ),
-      labs(linetype = "Line", colour = "Line", fill="Fill color")
+      labs(x=xlabel, linetype = "Line", colour = "Line", fill="Fill color")
     )
 }
 
@@ -44,6 +46,9 @@ plot_data <- function(x){
 
 #=== Helper function for plotting =====
 plot_util <- function(age, pos, tot, sero, foi, cex = 20){
+  # resolve no visible binding
+  x <- y <- ymin <- ymax <- NULL
+
   plot <- ggplot(data = data.frame(age, pos, tot), aes(x = age, y = pos/tot)) +
     geom_point(size = cex*(pos)/max(tot), shape = 1)+
     labs(y="Seroprevalence", x="Age")+
@@ -112,9 +117,11 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.sir_basic_model <- function(x, ...){
   comp_lvl <-  c("S", "I", "R")
+  time <- S <- I <- R <- NULL
 
   ggplot(x$output) +
     geom_line(aes(x = time, y = S, color = factor("S", levels = comp_lvl))) +
@@ -139,9 +146,11 @@ plot.sir_basic_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.sir_static_model <- function(x, ...){
   comp_lvl <-  c("s", "i", "r")
+  time <- s <- i <- r <- NULL
 
   ggplot(x$output) +
     geom_line(aes(x = time, y = s, color = factor("s", levels = comp_lvl))) +
@@ -168,8 +177,10 @@ plot.sir_static_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return list of ggplot objects, each object is the plot for the corresponding subpopulation
 #' @export
 plot.sir_subpops_model <- function(x, ...){
+  time <- s <- i <- r <- NULL
   comp_lvl <-  c("s", "i", "r")
 
   # using for loop here would not work due to ggplot lazy eval
@@ -200,8 +211,10 @@ plot.sir_subpops_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.mseir_model <- function(x, ...){
+  a <- m <- s <- e <- i <- r <- NULL
   # make leveled factor to force legend show color in order
   comp_lvl <- c("m", "s", "e", "i", "r")
 
@@ -227,6 +240,7 @@ plot.mseir_model <- function(x, ...){
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.polynomial_model <- function(x, ...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -259,6 +273,7 @@ plot.polynomial_model <- function(x, ...) {
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.farrington_model <- function(x,...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -290,6 +305,7 @@ plot.farrington_model <- function(x,...) {
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.weibull_model <- function(x, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
@@ -307,7 +323,13 @@ plot.weibull_model <- function(x, ...) {
     foi <- x$foi
   }
 
-  plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi), cex = cex)
+  suppressMessages(
+    returned_plot <- plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
+                               sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi), cex = cex) +
+      set_plot_style(xlabel = "Exposure time")
+  )
+
+  returned_plot
 }
 
 #### Fractional polynomial model ####
@@ -319,6 +341,7 @@ plot.weibull_model <- function(x, ...) {
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
+#' @return ggplot object
 #' @export
 plot.fp_model <- function(x,...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -342,6 +365,7 @@ plot.fp_model <- function(x,...) {
 #' @importFrom graphics plot
 #' @importFrom methods is
 #'
+#' @return ggplot object
 #' @export
 plot.lp_model <- function(x, ...) {
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -370,6 +394,7 @@ plot.lp_model <- function(x, ...) {
 #' @importFrom graphics plot
 #' @importFrom methods is
 #'
+#' @return ggplot object
 #' @export
 plot.hierarchical_bayesian_model <- function(x,  ...){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -389,6 +414,7 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #' @importFrom graphics plot
 #' @importFrom methods is
 #'
+#' @return ggplot object
 #' @export
 plot.penalized_spline_model <- function(x, ...){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -414,6 +440,7 @@ plot.penalized_spline_model <- function(x, ...){
 #' @importFrom graphics plot
 #' @import ggplot2
 #'
+#' @return ggplot object
 #' @export
 plot.mixture_model <- function(x, ...){
   ci_layer <- function(x, y, xmin, xmax, fill="royalblue1"){
@@ -472,6 +499,8 @@ plot.mixture_model <- function(x, ...){
 #' @importFrom graphics plot
 #' @import ggplot2
 #'
+#' @return ggplot object
+#'
 #' @export
 plot.estimate_from_mixture <- function(x, ... ){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
@@ -481,12 +510,16 @@ plot.estimate_from_mixture <- function(x, ... ){
 
   if(!is.null(x$df$threshold_status)){
     aggregated <- transform_data(round(x$df$age), x$df$threshold_status)
+    # resolve no visible binding note
+    t <- pos <- tot <- NULL
 
     returned_plot <-  returned_plot +
       geom_point(aes( x = t, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
                  shape = 1, show.legend = FALSE)
   }
 
+  # resolve no visible binding note
+  foi <- foi_x <- NULL
   returned_plot <- returned_plot +
     geom_line(aes(x = age, y = x$sp, col = "sero", linetype = "sero")) +
     geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)
@@ -522,6 +555,7 @@ plot.estimate_from_mixture <- function(x, ... ){
 #' @import locfit patchwork ggplot2
 #' @import graphics
 #'
+#' @return plot of gcv value
 #' @export
 plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   y <- pos/tot
