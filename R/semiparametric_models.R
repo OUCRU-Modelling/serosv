@@ -27,7 +27,7 @@
 #' @examples
 #' data <- parvob19_be_2001_2003
 #' model <- penalized_spline_model(data$age, status = data$seropositive, framework="glmm")
-#' model$gam$info
+#' model$info$gam
 #' plot(model)
 penalized_spline_model <- function(age, pos=NULL,tot=NULL,status=NULL, s = "bs", link = "logit", framework = "pl", sp = NULL){
   stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )

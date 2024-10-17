@@ -47,7 +47,7 @@ Penalized Spline model
 \examples{
 data <- parvob19_be_2001_2003
 model <- penalized_spline_model(data$age, status = data$seropositive, framework="glmm")
-model$gam$info
+model$info$gam
 plot(model)
 }
 \seealso{

@@ -17,4 +17,7 @@ test_that("sir_basic_model returns expected results", {
 
   expect_equal(round(tail(output, 1)$S, 2), S_equilibrium)
   expect_equal(round(tail(output, 1)$I, 2), I_equilibrium)
+
+  # make sure utilities work
+  expect_no_error(plot(output))
 })
