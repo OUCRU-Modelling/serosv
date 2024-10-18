@@ -521,7 +521,7 @@ plot.estimate_from_mixture <- function(x, ... ){
   # resolve no visible binding note
   foi <- foi_x <- NULL
   returned_plot <- returned_plot +
-    geom_line(aes(x = age, y = x$sp, col = "sero", linetype = "sero")) +
+    geom_line(aes(x = x$sp$age, y = x$sp$sp, col = "sero", linetype = "sero")) +
     geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)
 
   returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")

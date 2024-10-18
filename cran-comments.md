@@ -1,8 +1,7 @@
-## Resubmission
-This is a resubmission. In this version I have:
-* add missing \value to .Rd files and add more detailed description for return value
-* remove unnecessary spaces in description field in DESCRIPTION file
-* change print() to stop()
+## Patch release
+This is a patch release. In this version I have:
+* adjust the test case that fails on some architectures
+* fix mu_a prediction in estimate_mixture_model to ensure a smooth sero-prevalence and foi estimation
 
 
 ## R CMD check results

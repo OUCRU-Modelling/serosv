@@ -92,16 +92,30 @@ estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, 
   # Fit mu(a)
   model$info <- gam(log_antibody ~ s(age, bs = "ps", sp=83), family = gaussian())
 
+  # making sure age range is enough for a smooth estimation
+  threshold <- 20
+  pred_age <- age
+  if (length(age) < threshold){
+    pred_age <- seq(min(age, na.rm = TRUE), max(age, na.rm = TRUE), 0.1)
+  }
+
   # compute sp = [mu(a) - mu_s] / mu_i - mu_s
   # call pava to monotonize sp
-  model$sp <- (model$info$fitted.values - mu_s)/(mu_i - mu_s)
+  fitted_mu_a <- predict(
+    model$info,
+    data.frame(age = pred_age)
+  )
+  model$sp <- data.frame(
+    age = pred_age,
+    sp = (fitted_mu_a - mu_s)/(mu_i - mu_s)
+  )
 
   if (monotonize){
-    model$sp <- pava(model$sp)$pai2
+    model$sp$sp <- pava(model$sp$sp)$pai2
   }
 
   # compute foi = mu'(a)/(mu_I - mu(a))
-  compute_dermu <- differentiate_mu(age, model$info$fitted.values)
+  compute_dermu <- differentiate_mu(model$sp$age, model$sp$sp)
   model$foi <- compute_dermu$dermu/(mu_i - compute_dermu$mu)
   model$foi <- data.frame(
     foi_x = compute_dermu$grid,
