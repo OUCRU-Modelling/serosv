@@ -62,6 +62,7 @@ reference:
   - serosv-package
   - est_foi
   - pava
+  - correct_prevalence
   - transform_data
   - compute_ci
   - compute_ci.fp_model
@@ -85,4 +86,5 @@ articles:
   navbar: Utilities
   contents:
   - data_transformation
+  - imperfect_test
   - visualizing_model

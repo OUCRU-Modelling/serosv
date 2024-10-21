@@ -49,7 +49,7 @@ Collate:
     'fractional_polynomial_models.R'
     'polynomial_models.R'
     'utils.R'
-    'correct_sero.R'
+    'correct_prevalence.R'
     'weibull_model.R'
     'nonparametric.R'
     'semiparametric_models.R'
