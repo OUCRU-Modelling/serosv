@@ -25,6 +25,10 @@ model{
       theta[i] ~ beta(1, 1); // non informative seroprevalence
       // compute apparent theta = theta*sensitivity + (1-theta)*specificity
       apparent_theta[i] = theta[i]*est_se + (1-theta[i])*(1-est_sp);
+
+      // likelihood
       posi[i] ~ binomial(ni[i], apparent_theta[i]);
+
+      // TODO: include condition(s) mentioned in the paper for relations between sp and se
   }
 }

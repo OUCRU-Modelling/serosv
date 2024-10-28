@@ -16,22 +16,55 @@ knitr::opts_chunk$set(
 
 ```{r setup, output=FALSE}
 library(serosv)
+library(ggplot2)
 ```
 
 ## Imperfect test
 
 Function `correct_prevalence()` is used for estimating the true prevalence if the serological test used is imperfect
 
+Arguments:
+
+-   `age` the age vector
+
+-   `pos` the positive count vector (optional if status is provided).
+
+-   `tot` the total count vector (optional if status is provided).
+
+-   `status` the serostatus vector (optional if pos & tot are provided).
+
+-   `init_se` best guess for the sensitivity of the serological test (default value `0.95`)
+
+-   `init_sp` best guess for the specificity of the serological test (default value `0.8`)
+
+-   `study_size` best guess for the study size for se and sp (default value `1000`)
+
+-   `chains` number of Markov chains (default to `1`)
+
+-   `warmup` number of warm up runs (default value `1000`)
+
+-   `iter` number of iterations (default value `2000`)
+
+The function will return a list of 2 items:
+
+-   `info` contains estimated values for se, sp and corrected seroprevalence
+
+-   `corrected_sero` return a data.frame with `age`, `sero` (corrected sero) and `pos`, `tot` (adjusted based on corrected prevalence)
+
 ```{r}
 # estimate real prevalence
 data <- rubella_uk_1986_1987
-output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, study_size=1000)
+output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, init_se=0.85, init_sp = 0.8, study_size=1000)
 
-# check fitted value
-output$info
+# check fitted value 
+output$info[1:2, ]
 
 # compare original prevalence and corrected prevalence
 ggplot()+
-  geom_point(aes(x = data$age, y = data$pos/data$tot), color="royalblue1") + 
-  geom_point(aes(x = output$corrected_se$age, y = output$corrected_se$sero), color="blueviolet")
+  geom_point(aes(x = data$age, y = data$pos/data$tot, color="apparent prevalence")) + 
+  geom_point(aes(x = output$corrected_se$age, y = output$corrected_se$sero, color="esimated prevalence" )) +
+  scale_color_manual(
+    values = c("apparent prevalence" = "royalblue1", "esimated prevalence" = "blueviolet")
+  )+ 
+  labs(x = "Age", y = "Prevalence")
 ```
