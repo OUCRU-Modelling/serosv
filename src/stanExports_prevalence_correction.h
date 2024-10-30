@@ -27,36 +27,38 @@ namespace model_prevalence_correction_namespace {
 using stan::model::model_base_crtp;
 using namespace stan::math;
 stan::math::profile_map profiles__;
-static constexpr std::array<const char*, 22> locations_array__ =
+static constexpr std::array<const char*, 23> locations_array__ =
   {" (found before start of program)",
-  " (in 'prevalence_correction', line 10, column 2 to column 31)",
   " (in 'prevalence_correction', line 11, column 2 to column 31)",
-  " (in 'prevalence_correction', line 12, column 2 to column 36)",
-  " (in 'prevalence_correction', line 15, column 9 to column 13)",
-  " (in 'prevalence_correction', line 15, column 2 to column 30)",
-  " (in 'prevalence_correction', line 17, column 2 to column 60)",
-  " (in 'prevalence_correction', line 18, column 2 to column 60)",
-  " (in 'prevalence_correction', line 21, column 6 to column 28)",
-  " (in 'prevalence_correction', line 23, column 6 to column 68)",
-  " (in 'prevalence_correction', line 25, column 6 to column 51)",
-  " (in 'prevalence_correction', line 20, column 19 to line 27, column 3)",
-  " (in 'prevalence_correction', line 20, column 2 to line 27, column 3)",
+  " (in 'prevalence_correction', line 12, column 2 to column 31)",
+  " (in 'prevalence_correction', line 13, column 2 to column 36)",
+  " (in 'prevalence_correction', line 16, column 9 to column 13)",
+  " (in 'prevalence_correction', line 16, column 2 to column 30)",
+  " (in 'prevalence_correction', line 18, column 2 to column 66)",
+  " (in 'prevalence_correction', line 19, column 2 to column 66)",
+  " (in 'prevalence_correction', line 22, column 6 to column 28)",
+  " (in 'prevalence_correction', line 24, column 6 to column 68)",
+  " (in 'prevalence_correction', line 26, column 6 to column 51)",
+  " (in 'prevalence_correction', line 21, column 19 to line 28, column 3)",
+  " (in 'prevalence_correction', line 21, column 2 to line 28, column 3)",
   " (in 'prevalence_correction', line 2, column 2 to column 20)",
   " (in 'prevalence_correction', line 3, column 2 to column 26)",
   " (in 'prevalence_correction', line 4, column 2 to column 26)",
-  " (in 'prevalence_correction', line 5, column 2 to column 26)",
-  " (in 'prevalence_correction', line 6, column 20 to column 24)",
-  " (in 'prevalence_correction', line 6, column 2 to column 26)",
-  " (in 'prevalence_correction', line 7, column 18 to column 22)",
-  " (in 'prevalence_correction', line 7, column 2 to column 24)",
-  " (in 'prevalence_correction', line 12, column 30 to column 34)"};
+  " (in 'prevalence_correction', line 5, column 2 to column 29)",
+  " (in 'prevalence_correction', line 6, column 2 to column 29)",
+  " (in 'prevalence_correction', line 7, column 20 to column 24)",
+  " (in 'prevalence_correction', line 7, column 2 to column 26)",
+  " (in 'prevalence_correction', line 8, column 18 to column 22)",
+  " (in 'prevalence_correction', line 8, column 2 to column 24)",
+  " (in 'prevalence_correction', line 13, column 30 to column 34)"};
 #include <stan_meta_header.hpp>
 class model_prevalence_correction final : public model_base_crtp<model_prevalence_correction> {
 private:
   int Nage;
   double init_se;
   double init_sp;
-  int study_size;
+  int study_size_se;
+  int study_size_sp;
   std::vector<int> posi;
   std::vector<int> ni;
 public:
@@ -105,35 +107,44 @@ public:
       current_statement__ = 15;
       stan::math::check_greater_or_equal(function__, "init_sp", init_sp, 0.5);
       current_statement__ = 16;
-      context__.validate_dims("data initialization", "study_size", "int",
+      context__.validate_dims("data initialization", "study_size_se", "int",
         std::vector<size_t>{});
-      study_size = std::numeric_limits<int>::min();
+      study_size_se = std::numeric_limits<int>::min();
       current_statement__ = 16;
-      study_size = context__.vals_i("study_size")[(1 - 1)];
+      study_size_se = context__.vals_i("study_size_se")[(1 - 1)];
       current_statement__ = 16;
-      stan::math::check_greater_or_equal(function__, "study_size",
-        study_size, 0);
+      stan::math::check_greater_or_equal(function__, "study_size_se",
+        study_size_se, 0);
       current_statement__ = 17;
-      stan::math::validate_non_negative_index("posi", "Nage", Nage);
+      context__.validate_dims("data initialization", "study_size_sp", "int",
+        std::vector<size_t>{});
+      study_size_sp = std::numeric_limits<int>::min();
+      current_statement__ = 17;
+      study_size_sp = context__.vals_i("study_size_sp")[(1 - 1)];
+      current_statement__ = 17;
+      stan::math::check_greater_or_equal(function__, "study_size_sp",
+        study_size_sp, 0);
       current_statement__ = 18;
+      stan::math::validate_non_negative_index("posi", "Nage", Nage);
+      current_statement__ = 19;
       context__.validate_dims("data initialization", "posi", "int",
         std::vector<size_t>{static_cast<size_t>(Nage)});
       posi = std::vector<int>(Nage, std::numeric_limits<int>::min());
-      current_statement__ = 18;
-      posi = context__.vals_i("posi");
-      current_statement__ = 18;
-      stan::math::check_greater_or_equal(function__, "posi", posi, 0);
       current_statement__ = 19;
-      stan::math::validate_non_negative_index("ni", "Nage", Nage);
+      posi = context__.vals_i("posi");
+      current_statement__ = 19;
+      stan::math::check_greater_or_equal(function__, "posi", posi, 0);
       current_statement__ = 20;
+      stan::math::validate_non_negative_index("ni", "Nage", Nage);
+      current_statement__ = 21;
       context__.validate_dims("data initialization", "ni", "int",
         std::vector<size_t>{static_cast<size_t>(Nage)});
       ni = std::vector<int>(Nage, std::numeric_limits<int>::min());
-      current_statement__ = 20;
-      ni = context__.vals_i("ni");
-      current_statement__ = 20;
-      stan::math::check_greater_or_equal(function__, "ni", ni, 0);
       current_statement__ = 21;
+      ni = context__.vals_i("ni");
+      current_statement__ = 21;
+      stan::math::check_greater_or_equal(function__, "ni", ni, 0);
+      current_statement__ = 22;
       stan::math::validate_non_negative_index("theta", "Nage", Nage);
     } catch (const std::exception& e) {
       stan::lang::rethrow_located(e, locations_array__[current_statement__]);
@@ -188,10 +199,10 @@ public:
           Eigen::Matrix<local_scalar_t__,-1,1>::Constant(Nage, DUMMY_VAR__);
         current_statement__ = 6;
         lp_accum__.add(stan::math::beta_lpdf<propto__>(est_se, (init_se *
-                         study_size), ((1 - init_se) * study_size)));
+                         study_size_se), ((1 - init_se) * study_size_se)));
         current_statement__ = 7;
         lp_accum__.add(stan::math::beta_lpdf<propto__>(est_sp, (init_sp *
-                         study_size), ((1 - init_sp) * study_size)));
+                         study_size_sp), ((1 - init_sp) * study_size_sp)));
         current_statement__ = 12;
         for (int i = 1; i <= Nage; ++i) {
           current_statement__ = 8;

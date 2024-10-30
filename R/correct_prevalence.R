@@ -4,9 +4,10 @@
 #' @param pos the positive count vector (optional if status is provided).
 #' @param tot the total count vector (optional if status is provided).
 #' @param status the serostatus vector (optional if pos & tot are provided).
-#' @param init_se best guess for the sensitivity of the serological test
-#' @param init_sp best guess for the specificity of the serological test
-#' @param study_size best guess for the study size for se and sp
+#' @param init_se sensitivity of the serological test
+#' @param init_sp specificity of the serological test
+#' @param study_size_se study size for sensitivity validation study (i.e., number of confirmed infected patients in the study)
+#' @param study_size_sp study size for specificity validation study (i.e., number of confirmed non-infected patients in the study)
 #' @param chains number of Markov chains
 #' @param warmup number of warm up runs
 #' @param iter number of iterations
@@ -23,7 +24,7 @@
 #' data <- rubella_uk_1986_1987
 #' correct_prevalence(data$age, pos = data$pos, tot = data$tot)
 correct_prevalence <- function(age, pos=NULL, tot=NULL, status=NULL,
-                         init_se = 0.95, init_sp = 0.8, study_size = 1000,
+                         init_se = 0.95, init_sp = 0.8, study_size_se = 1000, study_size_sp = 1000,
                          chains = 1, warmup = 1000, iter = 2000){
   output <- list()
   if (!is.null(pos) & !is.null(tot)){
@@ -43,7 +44,8 @@ correct_prevalence <- function(age, pos=NULL, tot=NULL, status=NULL,
     ni = tot,
     init_se = init_se,
     init_sp = init_sp,
-    study_size = study_size,
+    study_size_se = study_size_se,
+    study_size_sp = study_size_sp,
     Nage = length(age)
   )
 

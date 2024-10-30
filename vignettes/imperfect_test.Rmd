@@ -33,11 +33,13 @@ Arguments:
 
 -   `status` the serostatus vector (optional if pos & tot are provided).
 
--   `init_se` best guess for the sensitivity of the serological test (default value `0.95`)
+-   `init_se` sensitivity of the serological test (default value `0.95`)
 
--   `init_sp` best guess for the specificity of the serological test (default value `0.8`)
+-   `init_sp` specificity of the serological test (default value `0.8`)
 
--   `study_size` best guess for the study size for se and sp (default value `1000`)
+-   `study_size_se` sample size for sensitivity validation study (default value `1000`)
+
+-   `study_size_sp` sample size for specificity validation study (default value `1000`)
 
 -   `chains` number of Markov chains (default to `1`)
 
@@ -54,7 +56,7 @@ The function will return a list of 2 items:
 ```{r}
 # estimate real prevalence
 data <- rubella_uk_1986_1987
-output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, init_se=0.85, init_sp = 0.8, study_size=1000)
+output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, init_se=0.85, init_sp = 0.8, study_size_se=1000, study_size_sp=3000)
 
 # check fitted value 
 output$info[1:2, ]
@@ -67,4 +69,29 @@ ggplot()+
     values = c("apparent prevalence" = "royalblue1", "esimated prevalence" = "blueviolet")
   )+ 
   labs(x = "Age", y = "Prevalence")
+```
+
+### Fitting corrected data 
+
+**Data after seroprevalence correction**
+
+```{r}
+suppressWarnings(
+  corrected_data <- farrington_model(
+  age = output$corrected_se$age, pos = output$corrected_se$pos, tot = output$corrected_se$tot,
+  start=list(alpha=0.07,beta=0.1,gamma=0.03))
+)
+
+plot(corrected_data)
+```
+
+**Original data**
+
+```{r}
+suppressWarnings(
+  original_data <- farrington_model(
+  age = data$age, pos = data$pos, tot = data$tot,
+  start=list(alpha=0.07,beta=0.1,gamma=0.03))
+)
+plot(original_data)
 ```

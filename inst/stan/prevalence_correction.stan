@@ -2,7 +2,8 @@ data{
   int<lower=1> Nage;           // number of age groups
   real<lower=0.5> init_se;     // best guess for sensitivity
   real<lower=0.5> init_sp;     // best guess for specificity
-  int<lower=0> study_size;     // study size for sensitivity, specificity estimate
+  int<lower=0> study_size_se;  // study size for sensitivity estimate
+  int<lower=0> study_size_sp;  // study size for specificity estimate
   int<lower=0> posi[Nage];     // Number of positive cases
   int<lower=0> ni[Nage];       // Number of trials
 }
@@ -16,11 +17,10 @@ parameters{
 model{
   vector[Nage] apparent_theta; // denote seroprevalence as theta for consistency
   // prior
-  est_se ~ beta(init_se*study_size, (1-init_se)*study_size);
-  est_sp ~ beta(init_sp*study_size, (1-init_sp)*study_size);
+  est_se ~ beta(init_se*study_size_se, (1-init_se)*study_size_se);
+  est_sp ~ beta(init_sp*study_size_sp, (1-init_sp)*study_size_sp);
 
 
-  // posterior
   for (i in 1:Nage){
       theta[i] ~ beta(1, 1); // non informative seroprevalence
       // compute apparent theta = theta*sensitivity + (1-theta)*specificity

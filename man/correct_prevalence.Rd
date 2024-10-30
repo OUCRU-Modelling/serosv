@@ -11,7 +11,8 @@ correct_prevalence(
   status = NULL,
   init_se = 0.95,
   init_sp = 0.8,
-  study_size = 1000,
+  study_size_se = 1000,
+  study_size_sp = 1000,
   chains = 1,
   warmup = 1000,
   iter = 2000
@@ -26,11 +27,13 @@ correct_prevalence(
 
 \item{status}{the serostatus vector (optional if pos & tot are provided).}
 
-\item{init_se}{best guess for the sensitivity of the serological test}
+\item{init_se}{sensitivity of the serological test}
 
-\item{init_sp}{best guess for the specificity of the serological test}
+\item{init_sp}{specificity of the serological test}
 
-\item{study_size}{best guess for the study size for se and sp}
+\item{study_size_se}{study size for sensitivity validation study (i.e., number of confirmed infected patients in the study)}
+
+\item{study_size_sp}{study size for specificity validation study (i.e., number of confirmed non-infected patients in the study)}
 
 \item{chains}{number of Markov chains}
 
