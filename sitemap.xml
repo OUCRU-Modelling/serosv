@@ -4,6 +4,7 @@
 <url><loc>https://oucru-modelling.github.io/serosv/LICENSE.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/data_transformation.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/hierarchical_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/articles/imperfect_test.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/index.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/model_quantitative_data.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/nonparametric_model.html</loc></url>
@@ -20,6 +21,7 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.mixture_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.penalized_spline_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.weibull_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/correct_prevalence.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/est_foi.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/estimate_from_mixture.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/farrington_model.html</loc></url>
