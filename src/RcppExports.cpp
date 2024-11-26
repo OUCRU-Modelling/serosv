@@ -15,11 +15,13 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 RcppExport SEXP _rcpp_module_boot_stan_fit4fra_2_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4fra_3_mod();
 RcppExport SEXP _rcpp_module_boot_stan_fit4log_logistic_mod();
+RcppExport SEXP _rcpp_module_boot_stan_fit4prevalence_correction_mod();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_stan_fit4fra_2_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4fra_2_mod, 0},
     {"_rcpp_module_boot_stan_fit4fra_3_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4fra_3_mod, 0},
     {"_rcpp_module_boot_stan_fit4log_logistic_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4log_logistic_mod, 0},
+    {"_rcpp_module_boot_stan_fit4prevalence_correction_mod", (DL_FUNC) &_rcpp_module_boot_stan_fit4prevalence_correction_mod, 0},
     {NULL, NULL, 0}
 };
 

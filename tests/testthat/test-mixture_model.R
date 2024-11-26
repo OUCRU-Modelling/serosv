@@ -21,8 +21,7 @@ test_that("mixture_model returns expected result", {
   expect_equal(expected_se_dist2, actual_se_dist2, tolerance = 0.001)
 })
 
-# TODO: update expected return value
-test_that("estimate_from_mixture returns expected result", {
+test_that("estimate_from_mixture runs without error", {
   df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
   data <- df$VZVmIUml[order(df$age)]
   model <- mixture_model(data)
@@ -31,5 +30,4 @@ test_that("estimate_from_mixture returns expected result", {
   expect_no_error(
     estimate_from_mixture(df$age[order(df$age)], data, mixture_model = model)
   )
-
 })

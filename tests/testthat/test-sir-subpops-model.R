@@ -31,4 +31,6 @@ test_that("sir_subpops_model returns expected results", {
   actual <- as.list(tail(output, 1))
 
   expect_equal(actual, expected, tolerance = 0.000001)
+  # make sure utilities work
+  expect_no_error(plot(output))
 })

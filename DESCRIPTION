@@ -1,7 +1,7 @@
 Package: serosv
 Type: Package
 Title: Model Infectious Disease Parameters from Serosurveys
-Version: 1.0.0.9000
+Version: 1.0.1.9000
 Authors@R: c(
     person("Anh", "Phan Truong Quynh", email = "anhptq@oucru.org", role = c("aut", "cre")),
     person("Nguyen", "Pham Nguyen The", email = "nguyenpnt@oucru.org", role = c("aut")),
@@ -49,6 +49,7 @@ Collate:
     'fractional_polynomial_models.R'
     'polynomial_models.R'
     'utils.R'
+    'correct_prevalence.R'
     'weibull_model.R'
     'nonparametric.R'
     'semiparametric_models.R'

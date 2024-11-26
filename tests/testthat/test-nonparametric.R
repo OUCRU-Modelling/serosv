@@ -26,4 +26,8 @@ test_that("lp_model returns expected results", {
 
   expect_equal(actual_foi_summary, expected_foi_summary, tolerance=0.000001)
   expect_equal(actual_sp_summary, expected_sp_summary, tolerance=0.000001)
+
+  # make sure utilities work
+  expect_no_error(compute_ci.lp_model(model))
+  expect_no_error(plot(model))
 })

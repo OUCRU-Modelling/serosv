@@ -18,6 +18,10 @@ test_that("fp_model returns same result as in the book (Hepatitis A (BG))", {
 
   expect_equal(actual_coefs, expected_coefs)
   expect_equal(actual_D, expected_D)
+
+  # make sure utilities work
+  expect_no_error(compute_ci.fp_model(model))
+  expect_no_error(plot(model))
 })
 
 

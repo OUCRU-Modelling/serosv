@@ -1,3 +1,7 @@
+compute_ci <- function(x, ci = 0.95, le = 100, ...){
+  UseMethod("compute_ci")
+}
+
 #' Compute confidence interval
 #'
 #' @param x - serosv models

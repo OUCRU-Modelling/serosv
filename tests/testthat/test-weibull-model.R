@@ -15,4 +15,8 @@ test_that("weibull_model returns same result as in the book", {
 
   expect_equal(actual_coefs, expected_coefs, tolerance=0.000001)
   expect_equal(actual_beta_0_hat, expected_beta_0_hat, tolerance=0.001)
+
+  # make sure helper works fine
+  expect_no_error(compute_ci.weibull_model(model))
+  expect_no_error(plot(model))
 })

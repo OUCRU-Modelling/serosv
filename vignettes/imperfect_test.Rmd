@@ -1,0 +1,97 @@
+---
+title: "Imperfect serological test"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Imperfect serological test}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, output=FALSE}
+library(serosv)
+library(ggplot2)
+```
+
+## Imperfect test
+
+Function `correct_prevalence()` is used for estimating the true prevalence if the serological test used is imperfect
+
+Arguments:
+
+-   `age` the age vector
+
+-   `pos` the positive count vector (optional if status is provided).
+
+-   `tot` the total count vector (optional if status is provided).
+
+-   `status` the serostatus vector (optional if pos & tot are provided).
+
+-   `init_se` sensitivity of the serological test (default value `0.95`)
+
+-   `init_sp` specificity of the serological test (default value `0.8`)
+
+-   `study_size_se` sample size for sensitivity validation study (default value `1000`)
+
+-   `study_size_sp` sample size for specificity validation study (default value `1000`)
+
+-   `chains` number of Markov chains (default to `1`)
+
+-   `warmup` number of warm up runs (default value `1000`)
+
+-   `iter` number of iterations (default value `2000`)
+
+The function will return a list of 2 items:
+
+-   `info` contains estimated values for se, sp and corrected seroprevalence
+
+-   `corrected_sero` return a data.frame with `age`, `sero` (corrected sero) and `pos`, `tot` (adjusted based on corrected prevalence)
+
+```{r}
+# estimate real prevalence
+data <- rubella_uk_1986_1987
+output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, init_se=0.85, init_sp = 0.8, study_size_se=1000, study_size_sp=3000)
+
+# check fitted value 
+output$info[1:2, ]
+
+# compare original prevalence and corrected prevalence
+ggplot()+
+  geom_point(aes(x = data$age, y = data$pos/data$tot, color="apparent prevalence")) + 
+  geom_point(aes(x = output$corrected_se$age, y = output$corrected_se$sero, color="esimated prevalence" )) +
+  scale_color_manual(
+    values = c("apparent prevalence" = "royalblue1", "esimated prevalence" = "blueviolet")
+  )+ 
+  labs(x = "Age", y = "Prevalence")
+```
+
+### Fitting corrected data 
+
+**Data after seroprevalence correction**
+
+```{r}
+suppressWarnings(
+  corrected_data <- farrington_model(
+  age = output$corrected_se$age, pos = output$corrected_se$pos, tot = output$corrected_se$tot,
+  start=list(alpha=0.07,beta=0.1,gamma=0.03))
+)
+
+plot(corrected_data)
+```
+
+**Original data**
+
+```{r}
+suppressWarnings(
+  original_data <- farrington_model(
+  age = data$age, pos = data$pos, tot = data$tot,
+  start=list(alpha=0.07,beta=0.1,gamma=0.03))
+)
+plot(original_data)
+```
