@@ -65,8 +65,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Hierarchical Bayesian models</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Hierarchical Bayesian models</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/OUCRU-Modelling/serosv/blob/main/vignettes/hierarchical_model.Rmd" class="external-link"><code>vignettes/hierarchical_model.Rmd</code></a></small>
@@ -179,8 +178,8 @@ parameters
 <span><span class="co">#&gt; Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span></span>
 <span><span class="co">#&gt; Chain 1:   Stan can't start sampling from this initial value.</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.4e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.64 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 5.7e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.57 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -197,14 +196,19 @@ parameters
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 7.15 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                6.951 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                14.101 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 5.222 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                25.942 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                31.164 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
-<span><span class="co">#&gt; Warning: There were 568 divergent transitions after warmup. See</span></span>
+<span><span class="co">#&gt; Warning: There were 695 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
 <span><span class="co">#&gt; to find out why this is a problem and how to eliminate them.</span></span>
+<span><span class="co">#&gt; Warning: There were 43 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See</span></span>
+<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</span></span>
 <span><span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></span>
+<span><span class="co">#&gt; Warning: The largest R-hat is 1.2, indicating chains have not mixed.</span></span>
+<span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
+<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#r-hat</span></span>
 <span><span class="co">#&gt; Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span></span>
 <span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#bulk-ess</span></span>
@@ -214,47 +218,47 @@ parameters
 <span></span>
 <span><span class="va">model</span><span class="op">$</span><span class="va">info</span></span>
 <span><span class="co">#&gt;                       mean      se_mean           sd          2.5%</span></span>
-<span><span class="co">#&gt; alpha1        1.401214e-01 3.547730e-04 6.258881e-03  1.285380e-01</span></span>
-<span><span class="co">#&gt; alpha2        1.993669e-01 4.755861e-04 8.363286e-03  1.848245e-01</span></span>
-<span><span class="co">#&gt; alpha3        8.856149e-03 3.568605e-04 7.071400e-03  4.349792e-04</span></span>
-<span><span class="co">#&gt; tau_alpha1    1.655955e-01 3.058673e-02 3.947079e-01  1.762069e-06</span></span>
-<span><span class="co">#&gt; tau_alpha2    1.324341e-01 2.370415e-02 2.930593e-01  2.488436e-06</span></span>
-<span><span class="co">#&gt; tau_alpha3    7.120083e-01 1.464684e-01 1.637538e+00  3.348306e-06</span></span>
-<span><span class="co">#&gt; mu_alpha1     5.309619e+00 2.830580e+00 5.072469e+01 -1.011749e+02</span></span>
-<span><span class="co">#&gt; mu_alpha2     4.377174e+00 4.306267e+00 5.440375e+01 -1.063688e+02</span></span>
-<span><span class="co">#&gt; mu_alpha3     9.083521e-01 2.602170e+00 3.312617e+01 -8.185717e+01</span></span>
-<span><span class="co">#&gt; sigma_alpha1  1.438473e+02 3.692646e+01 1.158127e+03  8.186990e-01</span></span>
-<span><span class="co">#&gt; sigma_alpha2  1.074171e+02 2.011728e+01 7.564462e+02  9.330434e-01</span></span>
-<span><span class="co">#&gt; sigma_alpha3  1.890636e+02 9.517393e+01 5.132818e+03  3.995507e-01</span></span>
-<span><span class="co">#&gt; lp__         -2.535748e+03 4.167295e-01 4.060532e+00 -2.544257e+03</span></span>
-<span><span class="co">#&gt;                        25%           50%           75%         97.5%      n_eff</span></span>
-<span><span class="co">#&gt; alpha1        1.356498e-01  1.399529e-01  1.441737e-01  1.532028e-01  311.23776</span></span>
-<span><span class="co">#&gt; alpha2        1.933265e-01  1.992242e-01  2.047900e-01  2.172946e-01  309.23995</span></span>
-<span><span class="co">#&gt; alpha3        3.306703e-03  7.023647e-03  1.243968e-02  2.624763e-02  392.65737</span></span>
-<span><span class="co">#&gt; tau_alpha1    2.035679e-04  5.030110e-03  1.052841e-01  1.491946e+00  166.52741</span></span>
-<span><span class="co">#&gt; tau_alpha2    2.822231e-04  4.927917e-03  8.502226e-02  1.148673e+00  152.84887</span></span>
-<span><span class="co">#&gt; tau_alpha3    7.431981e-04  1.625552e-02  4.147886e-01  6.264065e+00  124.99567</span></span>
-<span><span class="co">#&gt; mu_alpha1    -6.110784e+00  3.366331e-01  1.043346e+01  1.227509e+02  321.13506</span></span>
-<span><span class="co">#&gt; mu_alpha2    -6.218693e+00  2.605688e-01  1.018331e+01  1.451005e+02  159.60841</span></span>
-<span><span class="co">#&gt; mu_alpha3    -3.304551e+00  5.251649e-02  3.947081e+00  8.569737e+01  162.05831</span></span>
-<span><span class="co">#&gt; sigma_alpha1  3.081901e+00  1.409975e+01  7.008830e+01  7.534708e+02  983.64134</span></span>
-<span><span class="co">#&gt; sigma_alpha2  3.429523e+00  1.424519e+01  5.952645e+01  6.339306e+02 1413.89599</span></span>
-<span><span class="co">#&gt; sigma_alpha3  1.552697e+00  7.843314e+00  3.668159e+01  5.465076e+02 2908.54511</span></span>
-<span><span class="co">#&gt; lp__         -2.538286e+03 -2.535437e+03 -2.532915e+03 -2.528247e+03   94.94175</span></span>
-<span><span class="co">#&gt;                   Rhat</span></span>
-<span><span class="co">#&gt; alpha1       1.0003681</span></span>
-<span><span class="co">#&gt; alpha2       1.0002450</span></span>
-<span><span class="co">#&gt; alpha3       1.0064494</span></span>
-<span><span class="co">#&gt; tau_alpha1   1.0035818</span></span>
-<span><span class="co">#&gt; tau_alpha2   1.0137683</span></span>
-<span><span class="co">#&gt; tau_alpha3   1.0023225</span></span>
-<span><span class="co">#&gt; mu_alpha1    1.0024548</span></span>
-<span><span class="co">#&gt; mu_alpha2    1.0050142</span></span>
-<span><span class="co">#&gt; mu_alpha3    1.0061848</span></span>
-<span><span class="co">#&gt; sigma_alpha1 0.9997586</span></span>
-<span><span class="co">#&gt; sigma_alpha2 1.0009646</span></span>
-<span><span class="co">#&gt; sigma_alpha3 0.9997631</span></span>
-<span><span class="co">#&gt; lp__         1.0214395</span></span>
+<span><span class="co">#&gt; alpha1        1.382327e-01 6.024468e-04 5.395076e-03  1.290082e-01</span></span>
+<span><span class="co">#&gt; alpha2        1.977825e-01 2.932399e-04 7.010390e-03  1.850168e-01</span></span>
+<span><span class="co">#&gt; alpha3        8.619333e-03 2.197728e-04 6.073388e-03  3.210978e-04</span></span>
+<span><span class="co">#&gt; tau_alpha1    4.786573e+00 8.249853e-01 1.993600e+01  2.358965e-05</span></span>
+<span><span class="co">#&gt; tau_alpha2    2.022266e+01 1.124635e+01 2.634616e+01  9.394349e-06</span></span>
+<span><span class="co">#&gt; tau_alpha3    1.535166e+01 8.812088e+00 1.958917e+01  6.288836e-06</span></span>
+<span><span class="co">#&gt; mu_alpha1     2.743472e-01 2.287560e+00 2.464974e+01 -4.368005e+01</span></span>
+<span><span class="co">#&gt; mu_alpha2     6.175443e-01 1.014058e+00 2.600850e+01 -5.407492e+01</span></span>
+<span><span class="co">#&gt; mu_alpha3    -9.931423e-03 1.351460e+00 3.076812e+01 -7.950832e+01</span></span>
+<span><span class="co">#&gt; sigma_alpha1  2.575155e+01 6.662214e+00 1.625481e+02  1.405248e-01</span></span>
+<span><span class="co">#&gt; sigma_alpha2  1.118008e+02 5.348903e+01 2.267177e+03  1.195848e-01</span></span>
+<span><span class="co">#&gt; sigma_alpha3  6.734625e+01 1.760003e+01 4.646277e+02  1.365585e-01</span></span>
+<span><span class="co">#&gt; lp__         -2.530070e+03 1.881719e+00 5.433244e+00 -2.540977e+03</span></span>
+<span><span class="co">#&gt;                        25%           50%           75%         97.5%</span></span>
+<span><span class="co">#&gt; alpha1        1.353412e-01  1.358761e-01  1.414754e-01  1.505236e-01</span></span>
+<span><span class="co">#&gt; alpha2        1.953459e-01  1.962209e-01  2.008053e-01  2.148333e-01</span></span>
+<span><span class="co">#&gt; alpha3        4.451097e-03  8.453046e-03  9.629159e-03  2.421844e-02</span></span>
+<span><span class="co">#&gt; tau_alpha1    1.577187e-02  2.431518e-01  5.792699e-01  5.064111e+01</span></span>
+<span><span class="co">#&gt; tau_alpha2    8.171240e-03  1.036140e+00  4.551178e+01  6.992753e+01</span></span>
+<span><span class="co">#&gt; tau_alpha3    6.126580e-03  1.118944e+00  3.636696e+01  5.362445e+01</span></span>
+<span><span class="co">#&gt; mu_alpha1    -1.328659e+00 -3.900075e-01  6.006530e-01  5.801395e+01</span></span>
+<span><span class="co">#&gt; mu_alpha2    -3.278791e-01  1.892208e-01  7.079219e-01  6.292127e+01</span></span>
+<span><span class="co">#&gt; mu_alpha3    -3.993203e-01  1.526806e-02  5.001233e-01  6.887675e+01</span></span>
+<span><span class="co">#&gt; sigma_alpha1  1.313892e+00  2.027969e+00  7.962942e+00  2.058920e+02</span></span>
+<span><span class="co">#&gt; sigma_alpha2  1.482307e-01  9.825099e-01  1.106257e+01  3.262711e+02</span></span>
+<span><span class="co">#&gt; sigma_alpha3  1.658240e-01  9.453610e-01  1.277590e+01  3.987634e+02</span></span>
+<span><span class="co">#&gt; lp__         -2.534043e+03 -2.530040e+03 -2.524574e+03 -2.523072e+03</span></span>
+<span><span class="co">#&gt;                    n_eff      Rhat</span></span>
+<span><span class="co">#&gt; alpha1         80.196933 1.0525108</span></span>
+<span><span class="co">#&gt; alpha2        571.528841 1.0247604</span></span>
+<span><span class="co">#&gt; alpha3        763.685059 1.0023823</span></span>
+<span><span class="co">#&gt; tau_alpha1    583.960806 1.0029730</span></span>
+<span><span class="co">#&gt; tau_alpha2      5.487967 1.1520810</span></span>
+<span><span class="co">#&gt; tau_alpha3      4.941680 1.2892083</span></span>
+<span><span class="co">#&gt; mu_alpha1     116.112683 0.9998174</span></span>
+<span><span class="co">#&gt; mu_alpha2     657.817047 1.0005022</span></span>
+<span><span class="co">#&gt; mu_alpha3     518.317049 0.9997892</span></span>
+<span><span class="co">#&gt; sigma_alpha1  595.287515 1.0017212</span></span>
+<span><span class="co">#&gt; sigma_alpha2 1796.559173 1.0004816</span></span>
+<span><span class="co">#&gt; sigma_alpha3  696.920393 1.0021057</span></span>
+<span><span class="co">#&gt; lp__            8.336983 1.1432377</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
 <span><span class="co">#&gt; data's <span style="color: #00BB00;">fill</span> values.</span></span></code></pre></div>
@@ -307,8 +311,8 @@ can be derived in the same way</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 1.7e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 1.1e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -325,17 +329,14 @@ can be derived in the same way</p>
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 1.113 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                6.829 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                7.942 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 0.677 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                0.343 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                1.02 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
-<span><span class="co">#&gt; Warning: There were 174 divergent transitions after warmup. See</span></span>
+<span><span class="co">#&gt; Warning: There were 766 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
 <span><span class="co">#&gt; to find out why this is a problem and how to eliminate them.</span></span>
 <span><span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></span>
-<span><span class="co">#&gt; Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span></span>
-<span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
-<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#bulk-ess</span></span>
 <span><span class="co">#&gt; Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span></span>
 <span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#tail-ess</span></span>
