@@ -1,5 +1,5 @@
-pandoc: 3.1.11
-pkgdown: 2.1.1
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   data_transformation: data_transformation.html
@@ -11,7 +11,8 @@ articles:
   semiparametric_model: semiparametric_model.html
   sir_model: sir_model.html
   visualizing_model: visualizing_model.html
-last_built: 2024-12-09T05:00Z
+last_built: 2024-10-30T05:28Z
 urls:
   reference: https://oucru-modelling.github.io/serosv/reference
   article: https://oucru-modelling.github.io/serosv/articles
+
