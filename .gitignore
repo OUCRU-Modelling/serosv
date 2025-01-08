@@ -4,7 +4,6 @@
 .Ruserdata
 .DS_Store
 ..Rcheck
-docs
 inst/doc
 test_pkg
 rstan_code
