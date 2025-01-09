@@ -71,7 +71,7 @@ ggplot()+
   labs(x = "Age", y = "Prevalence")
 ```
 
-### Fitting corrected data 
+### Fitting corrected data
 
 **Data after seroprevalence correction**
 

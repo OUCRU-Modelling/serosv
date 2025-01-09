@@ -64,6 +64,7 @@ reference:
   - pava
   - correct_prevalence
   - transform_data
+  - compare_models
   - compute_ci
   - compute_ci.fp_model
   - compute_ci.lp_model
@@ -88,3 +89,4 @@ articles:
   - data_transformation
   - imperfect_test
   - visualizing_model
+  - model_selection

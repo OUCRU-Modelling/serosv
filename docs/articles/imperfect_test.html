@@ -59,6 +59,7 @@
     <a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a>
     <a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a>
     <a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a>
+    <a class="dropdown-item" href="../articles/model_selection.html">Model selection</a>
   </div>
 </li>
 <li class="nav-item">
@@ -145,8 +146,8 @@ prevalence)</p></li>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000145 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.45 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000106 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.06 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -163,19 +164,19 @@ prevalence)</p></li>
 <span><span class="co">#&gt; Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 2.336 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                4.272 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                6.608 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 2.193 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                4.177 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                6.37 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
 <span></span>
 <span><span class="co"># check fitted value </span></span>
 <span><span class="va">output</span><span class="op">$</span><span class="va">info</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span></span>
 <span><span class="co">#&gt;             mean      se_mean          sd      2.5%       25%       50%</span></span>
-<span><span class="co">#&gt; est_se 0.9026457 1.095950e-04 0.006297521 0.8900950 0.8984677 0.9026841</span></span>
-<span><span class="co">#&gt; est_sp 0.8027493 9.421592e-05 0.006679577 0.7896145 0.7983065 0.8028328</span></span>
+<span><span class="co">#&gt; est_se 0.9024362 1.092418e-04 0.006381214 0.8899568 0.8980939 0.9026348</span></span>
+<span><span class="co">#&gt; est_sp 0.8026341 9.378639e-05 0.006901781 0.7886638 0.7979969 0.8027428</span></span>
 <span><span class="co">#&gt;              75%     97.5%    n_eff      Rhat</span></span>
-<span><span class="co">#&gt; est_se 0.9069751 0.9149754 3301.853 0.9997525</span></span>
-<span><span class="co">#&gt; est_sp 0.8072482 0.8153181 5026.311 1.0001153</span></span>
+<span><span class="co">#&gt; est_se 0.9069507 0.9143738 3412.157 0.9997752</span></span>
+<span><span class="co">#&gt; est_sp 0.8074061 0.8161842 5415.552 0.9996771</span></span>
 <span></span>
 <span><span class="co"># compare original prevalence and corrected prevalence</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
