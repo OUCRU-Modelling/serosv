@@ -23,6 +23,8 @@ Imports:
     dplyr,
     ggplot2,
     locfit,
+    purrr,
+    stringr,
     magrittr,
     methods,
     mgcv,
