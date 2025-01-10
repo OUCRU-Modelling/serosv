@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# serosv <img src="logo.svg" align="right" width="120" />
+# serosv <img src="logo.svg" align="right" width="120"/>
 
 <!-- badges: start -->
 
@@ -60,12 +60,27 @@ Nonparametric approaches:
 
 - Local estimation by polynomials
 
+Semiparametric approaches:
+
+- Penalized splines:
+
+  - Penalized likelihood framework
+
+  - Generalized Linear Mixed Model framework
+
+Hierarchical Bayesian approaches:
+
+- Hierarchical Farrington model
+
+- Hierarchical log-logistic model
+
 ## Demo
 
 Load the rubella in UK dataset.
 
 ``` r
 library(serosv)
+#> Warning: package 'serosv' was built under R version 4.3.3
 ```
 
 Find the power for the best second degree fractional polynomial with
