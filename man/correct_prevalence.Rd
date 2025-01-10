@@ -9,6 +9,7 @@ correct_prevalence(
   pos = NULL,
   tot = NULL,
   status = NULL,
+  bayesian = TRUE,
   init_se = 0.95,
   init_sp = 0.8,
   study_size_se = 1000,
@@ -27,19 +28,21 @@ correct_prevalence(
 
 \item{status}{the serostatus vector (optional if pos & tot are provided).}
 
+\item{bayesian}{whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.}
+
 \item{init_se}{sensitivity of the serological test}
 
 \item{init_sp}{specificity of the serological test}
 
-\item{study_size_se}{study size for sensitivity validation study (i.e., number of confirmed infected patients in the study)}
+\item{study_size_se}{(applicable when `bayesian=TRUE`) study size for sensitivity validation study (i.e., number of confirmed infected patients in the study)}
 
-\item{study_size_sp}{study size for specificity validation study (i.e., number of confirmed non-infected patients in the study)}
+\item{study_size_sp}{(applicable when `bayesian=TRUE`) study size for specificity validation study (i.e., number of confirmed non-infected patients in the study)}
 
-\item{chains}{number of Markov chains}
+\item{chains}{(applicable when `bayesian=TRUE`) number of Markov chains}
 
-\item{warmup}{number of warm up runs}
+\item{warmup}{(applicable when `bayesian=TRUE`) number of warm up runs}
 
-\item{iter}{number of iterations}
+\item{iter}{(applicable when `bayesian=TRUE`) number of iterations}
 }
 \value{
 a list of 2 items
