@@ -31,6 +31,9 @@
     <loc>https://oucru-modelling.github.io/serosv/articles/model_quantitative_data.html</loc>
   </url>
   <url>
+    <loc>https://oucru-modelling.github.io/serosv/articles/model_selection.html</loc>
+  </url>
+  <url>
     <loc>https://oucru-modelling.github.io/serosv/articles/nonparametric_model.html</loc>
   </url>
   <url>
@@ -59,6 +62,9 @@
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/bivariate_dale_model.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/compare_models.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.html</loc>
