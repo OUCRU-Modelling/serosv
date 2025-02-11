@@ -33,52 +33,84 @@ Arguments:
 
 -   `status` the serostatus vector (optional if pos & tot are provided).
 
+-   `bayesian` whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.
+
 -   `init_se` sensitivity of the serological test (default value `0.95`)
 
 -   `init_sp` specificity of the serological test (default value `0.8`)
 
--   `study_size_se` sample size for sensitivity validation study (default value `1000`)
+-   `study_size_se` (applicable when `bayesian=TRUE`) sample size for sensitivity validation study (default value `1000`)
 
--   `study_size_sp` sample size for specificity validation study (default value `1000`)
+-   `study_size_sp` (applicable when `bayesian=TRUE`) sample size for specificity validation study (default value `1000`)
 
--   `chains` number of Markov chains (default to `1`)
+-   `chains` (applicable when `bayesian=TRUE`) number of Markov chains (default to `1`)
 
--   `warmup` number of warm up runs (default value `1000`)
+-   `warmup` (applicable when `bayesian=TRUE`) number of warm up runs (default value `1000`)
 
--   `iter` number of iterations (default value `2000`)
+-   `iter` (applicable when `bayesian=TRUE`) number of iterations (default value `2000`)
 
 The function will return a list of 2 items:
 
--   `info` contains estimated values for se, sp and corrected seroprevalence
+-   `info`
+
+    -   if `bayesian = TRUE` contains estimated values for se, sp and corrected seroprevalence
+
+    -   else return the formula for computing corrected seroprevalence
 
 -   `corrected_sero` return a data.frame with `age`, `sero` (corrected sero) and `pos`, `tot` (adjusted based on corrected prevalence)
 
 ```{r}
-# estimate real prevalence
+# ---- estimate real prevalence using Bayesian approach ----
 data <- rubella_uk_1986_1987
-output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, init_se=0.85, init_sp = 0.8, study_size_se=1000, study_size_sp=3000)
+output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, warmup = 1000, iter = 4000, init_se=0.9, init_sp = 0.8, study_size_se=1000, study_size_sp=3000)
 
 # check fitted value 
 output$info[1:2, ]
 
+# ---- estimate real prevalence using frequentist approach ----
+freq_output <- correct_prevalence(data$age, pos = data$pos, tot = data$tot, bayesian = FALSE, init_se=0.9, init_sp = 0.8)
+
+# check info
+freq_output$info
+```
+
+```{r}
 # compare original prevalence and corrected prevalence
 ggplot()+
   geom_point(aes(x = data$age, y = data$pos/data$tot, color="apparent prevalence")) + 
-  geom_point(aes(x = output$corrected_se$age, y = output$corrected_se$sero, color="esimated prevalence" )) +
+  geom_point(aes(x = output$corrected_se$age, y = output$corrected_se$sero, color="estimated prevalence (bayesian)" )) +
+  geom_point(aes(x = freq_output$corrected_se$age, y = freq_output$corrected_se$sero, color="estimated prevalence (frequentist)" )) +
   scale_color_manual(
-    values = c("apparent prevalence" = "royalblue1", "esimated prevalence" = "blueviolet")
+    values = c(
+      "apparent prevalence" = "red", 
+      "estimated prevalence (bayesian)" = "blueviolet",
+      "estimated prevalence (frequentist)" = "royalblue")
   )+ 
   labs(x = "Age", y = "Prevalence")
 ```
 
-### Fitting corrected data 
+### Fitting corrected data
 
 **Data after seroprevalence correction**
+
+Bayesian approach
 
 ```{r}
 suppressWarnings(
   corrected_data <- farrington_model(
   age = output$corrected_se$age, pos = output$corrected_se$pos, tot = output$corrected_se$tot,
+  start=list(alpha=0.07,beta=0.1,gamma=0.03))
+)
+
+plot(corrected_data)
+```
+
+Frequentist approach
+
+```{r}
+suppressWarnings(
+  corrected_data <- farrington_model(
+  age = freq_output$corrected_se$age, pos = freq_output$corrected_se$pos, tot = freq_output$corrected_se$tot,
   start=list(alpha=0.07,beta=0.1,gamma=0.03))
 )
 

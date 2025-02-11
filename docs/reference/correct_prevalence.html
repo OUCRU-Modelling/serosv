@@ -35,6 +35,7 @@
     <a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a>
     <a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a>
     <a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a>
+    <a class="dropdown-item" href="../articles/model_selection.html">Model selection</a>
   </div>
 </li>
 <li class="nav-item">
@@ -72,6 +73,7 @@
 <span>  pos <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  status <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bayesian <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  init_se <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  init_sp <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  study_size_se <span class="op">=</span> <span class="fl">1000</span>,</span>
@@ -100,6 +102,10 @@
 <dd><p>the serostatus vector (optional if pos &amp; tot are provided).</p></dd>
 
 
+<dt>bayesian</dt>
+<dd><p>whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.</p></dd>
+
+
 <dt>init_se</dt>
 <dd><p>sensitivity of the serological test</p></dd>
 
@@ -109,23 +115,23 @@
 
 
 <dt>study_size_se</dt>
-<dd><p>study size for sensitivity validation study (i.e., number of confirmed infected patients in the study)</p></dd>
+<dd><p>(applicable when `bayesian=TRUE`) study size for sensitivity validation study (i.e., number of confirmed infected patients in the study)</p></dd>
 
 
 <dt>study_size_sp</dt>
-<dd><p>study size for specificity validation study (i.e., number of confirmed non-infected patients in the study)</p></dd>
+<dd><p>(applicable when `bayesian=TRUE`) study size for specificity validation study (i.e., number of confirmed non-infected patients in the study)</p></dd>
 
 
 <dt>chains</dt>
-<dd><p>number of Markov chains</p></dd>
+<dd><p>(applicable when `bayesian=TRUE`) number of Markov chains</p></dd>
 
 
 <dt>warmup</dt>
-<dd><p>number of warm up runs</p></dd>
+<dd><p>(applicable when `bayesian=TRUE`) number of warm up runs</p></dd>
 
 
 <dt>iter</dt>
-<dd><p>number of iterations</p></dd>
+<dd><p>(applicable when `bayesian=TRUE`) number of iterations</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -148,8 +154,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 0.000251 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.51 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 0.000143 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.43 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Adjust your expectations accordingly!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
@@ -166,9 +172,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:  Elapsed Time: 1.796 seconds (Warm-up)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                1.343 seconds (Sampling)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                3.139 seconds (Total)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:  Elapsed Time: 1.737 seconds (Warm-up)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                1.312 seconds (Sampling)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                3.049 seconds (Total)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $info</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    mean      se_mean          sd          2.5%           25%</span>

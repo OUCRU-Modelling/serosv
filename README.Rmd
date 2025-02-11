@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# serosv <img src="logo.svg" align="right" width="120" />
+# serosv <img src="logo.svg" align="right" width="120"/>
 
 <!-- badges: start -->
 
@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 
 You can install the development version of serosv with:
 
-``` {r, eval = FALSE}
+```{r, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("OUCRU-Modelling/serosv")
 ```
@@ -61,6 +61,20 @@ Parametric approaches:
 Nonparametric approaches:
 
 -   Local estimation by polynomials
+
+Semiparametric approaches:
+
+-   Penalized splines:
+
+    -   Penalized likelihood framework
+
+    -   Generalized Linear Mixed Model framework
+
+Hierarchical Bayesian approaches:
+
+-   Hierarchical Farrington model
+
+-   Hierarchical log-logistic model
 
 ## Demo
 

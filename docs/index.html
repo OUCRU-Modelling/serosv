@@ -61,6 +61,7 @@
     <a class="dropdown-item" href="articles/data_transformation.html">Data transformation</a>
     <a class="dropdown-item" href="articles/imperfect_test.html">Imperfect serological test</a>
     <a class="dropdown-item" href="articles/visualizing_model.html">Model visualization</a>
+    <a class="dropdown-item" href="articles/model_selection.html">Model selection</a>
   </div>
 </li>
 <li class="nav-item">
@@ -137,6 +138,21 @@
 <ul>
 <li>Local estimation by polynomials</li>
 </ul>
+<p>Semiparametric approaches:</p>
+<ul>
+<li>
+<p>Penalized splines:</p>
+<ul>
+<li><p>Penalized likelihood framework</p></li>
+<li><p>Generalized Linear Mixed Model framework</p></li>
+</ul>
+</li>
+</ul>
+<p>Hierarchical Bayesian approaches:</p>
+<ul>
+<li><p>Hierarchical Farrington model</p></li>
+<li><p>Hierarchical log-logistic model</p></li>
+</ul>
 </div>
 </div>
 <div class="section level2">
@@ -144,7 +160,8 @@
 </h2>
 <p>Load the rubella in UK dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'serosv' was built under R version 4.3.3</span></span></code></pre></div>
 <p>Find the power for the best second degree fractional polynomial with monotonicity constraint and a logit link function. The power appears to be (-0.9,-0.9).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span>
