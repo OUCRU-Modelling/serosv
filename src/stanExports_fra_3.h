@@ -64,10 +64,10 @@ static constexpr std::array<const char*, 40> locations_array__ =
   " (in 'fra_3', line 2, column 2 to column 20)",
   " (in 'fra_3', line 3, column 9 to column 13)",
   " (in 'fra_3', line 3, column 2 to column 19)",
-  " (in 'fra_3', line 4, column 20 to column 24)",
-  " (in 'fra_3', line 4, column 2 to column 26)",
-  " (in 'fra_3', line 5, column 18 to column 22)",
-  " (in 'fra_3', line 5, column 2 to column 24)"};
+  " (in 'fra_3', line 4, column 8 to column 12)",
+  " (in 'fra_3', line 4, column 2 to column 32)",
+  " (in 'fra_3', line 5, column 8 to column 12)",
+  " (in 'fra_3', line 5, column 2 to column 30)"};
 #include <stan_meta_header.hpp>
 class model_fra_3 final : public model_base_crtp<model_fra_3> {
 private:

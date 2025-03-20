@@ -5,10 +5,7 @@
 \title{Estimate the true sero prevalence using Bayesian estimation}
 \usage{
 correct_prevalence(
-  age,
-  pos = NULL,
-  tot = NULL,
-  status = NULL,
+  data,
   bayesian = TRUE,
   init_se = 0.95,
   init_sp = 0.8,
@@ -20,13 +17,7 @@ correct_prevalence(
 )
 }
 \arguments{
-\item{age}{the age vector}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{bayesian}{whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.}
 
@@ -54,5 +45,5 @@ Estimate the true sero prevalence using Bayesian estimation
 }
 \examples{
 data <- rubella_uk_1986_1987
-correct_prevalence(data$age, pos = data$pos, tot = data$tot)
+correct_prevalence(data)
 }

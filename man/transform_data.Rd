@@ -5,12 +5,14 @@
 \title{Generate a dataframe with `t`, `pos` and `tot` columns from
 `t` and `seropositive` vectors.}
 \usage{
-transform_data(t, spos)
+transform_data(t, spos, heterogeneity_col = "t")
 }
 \arguments{
 \item{t}{the time vector.}
 
 \item{spos}{the seropositive vector.}
+
+\item{heterogeneity_col}{new name for the time vector (default to "t")}
 }
 \value{
 dataframe in aggregated format

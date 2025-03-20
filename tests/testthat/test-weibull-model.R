@@ -3,10 +3,10 @@ test_that("weibull_model returns same result as in the book", {
   expected_beta_0_hat <- 0.759
 
   df <- hcv_be_2006[order(hcv_be_2006$dur), ]
-  model <- weibull_model(
-    t=df$dur,
-    status=df$seropositive
-  )
+  colnames(df) <- c("t", "status")
+
+  model <- weibull_model(df)
+
   actual_coefs <- unname(c(
     coef(model$info)[1], # intercept
     coef(model$info)[2]

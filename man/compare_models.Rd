@@ -19,7 +19,3 @@ a data.frame of 4 columns
 \description{
 Compare models
 }
-\examples{
-data <- rubella_uk_1986_1987
-correct_prevalence(data$age, pos = data$pos, tot = data$tot)
-}

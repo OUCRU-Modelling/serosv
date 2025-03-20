@@ -1,7 +1,7 @@
 ## Patch release
-This is a patch release. In this version I have:
-* adjust the test case that fails on some architectures
-* fix mu_a prediction in estimate_mixture_model to ensure a smooth sero-prevalence and foi estimation
+In this version I have
+* add correct_prevalence() and compare_models() functions
+* update API
 
 
 ## R CMD check results

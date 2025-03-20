@@ -4,17 +4,17 @@ test_that("no error while using hierarchical bayesian model", {
   # making sure all models work without error
   expect_no_error(
     suppressWarnings(
-      hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far2")
+      hierarchical_bayesian_model(df, type="far2")
     )
   )
   expect_no_error(
     suppressWarnings(
-      hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+      hierarchical_bayesian_model(df, type="far3")
     )
   )
   expect_no_error(
     suppressWarnings(
-      hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="log_logistic")
+      hierarchical_bayesian_model(df, type="log_logistic")
     )
   )
 

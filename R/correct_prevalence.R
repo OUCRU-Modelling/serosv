@@ -1,9 +1,6 @@
 #' Estimate the true sero prevalence using Bayesian estimation
 #'
-#' @param age the age vector
-#' @param pos the positive count vector (optional if status is provided).
-#' @param tot the total count vector (optional if status is provided).
-#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param bayesian whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.
 #' @param init_se sensitivity of the serological test
 #' @param init_sp specificity of the serological test
@@ -23,22 +20,23 @@
 #'
 #' @examples
 #' data <- rubella_uk_1986_1987
-#' correct_prevalence(data$age, pos = data$pos, tot = data$tot)
-correct_prevalence <- function(age, pos=NULL, tot=NULL, status=NULL, bayesian=TRUE,
+#' correct_prevalence(data)
+correct_prevalence <- function(data, bayesian=TRUE,
                          init_se = 0.95, init_sp = 0.8, study_size_se = 1000, study_size_sp = 1000,
                          chains = 1, warmup = 1000, iter = 2000){
   output <- list()
-  if (!is.null(pos) & !is.null(tot)){
-    pos <- as.numeric(pos)
-    tot <- as.numeric(tot)
-  }else{
-    # automatically transform to aggregated data if line listing data is given
-    transform_df <- transform_data(age, status)
-    age <- transform_df$t
-    pos <- as.numeric(transform_df$pos)
-    tot <- as.numeric(transform_df$tot)
-  }
 
+  data <- serosv:::check_input(data)
+  age <- data$age
+  pos <- data$pos
+  tot <- data$tot
+
+  if (data$type == "linelisting"){
+    transform_df <- transform_data(age, pos)
+    age <- transform_df$t
+    pos <- transform_df$pos
+    tot <- transform_df$tot
+  }
 
   if (bayesian){
 

@@ -94,6 +94,7 @@ articles:
 - title: Fitting data
   navbar: ~
   contents:
+  - linelisting_vs_aggregated
   - sir_model
   - parametric_model
   - nonparametric_model

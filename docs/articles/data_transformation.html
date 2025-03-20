@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
     <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
     <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
     <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
@@ -112,6 +113,8 @@ aggregated data (data with <code>t</code>, <code>pos</code>,
 <li><p><code>t</code> the time vector</p></li>
 <li><p><code>spos</code> the seropositive vector (TRUE/FALSE or
 1/0)</p></li>
+<li><p><code>heterogeneity_col</code> new name for the time vector,
+default to <code>heterogeneity_col = "t"</code></p></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">linelisting_data</span> <span class="op">&lt;-</span> <span class="va">hcv_be_2006</span></span>

@@ -31,7 +31,7 @@ static constexpr std::array<const char*, 23> locations_array__ =
   {" (found before start of program)",
   " (in 'prevalence_correction', line 11, column 2 to column 31)",
   " (in 'prevalence_correction', line 12, column 2 to column 31)",
-  " (in 'prevalence_correction', line 13, column 2 to column 36)",
+  " (in 'prevalence_correction', line 13, column 2 to column 42)",
   " (in 'prevalence_correction', line 16, column 9 to column 13)",
   " (in 'prevalence_correction', line 16, column 2 to column 30)",
   " (in 'prevalence_correction', line 18, column 2 to column 66)",
@@ -46,11 +46,11 @@ static constexpr std::array<const char*, 23> locations_array__ =
   " (in 'prevalence_correction', line 4, column 2 to column 26)",
   " (in 'prevalence_correction', line 5, column 2 to column 29)",
   " (in 'prevalence_correction', line 6, column 2 to column 29)",
-  " (in 'prevalence_correction', line 7, column 20 to column 24)",
-  " (in 'prevalence_correction', line 7, column 2 to column 26)",
-  " (in 'prevalence_correction', line 8, column 18 to column 22)",
-  " (in 'prevalence_correction', line 8, column 2 to column 24)",
-  " (in 'prevalence_correction', line 13, column 30 to column 34)"};
+  " (in 'prevalence_correction', line 7, column 8 to column 12)",
+  " (in 'prevalence_correction', line 7, column 2 to column 32)",
+  " (in 'prevalence_correction', line 8, column 8 to column 12)",
+  " (in 'prevalence_correction', line 8, column 2 to column 30)",
+  " (in 'prevalence_correction', line 13, column 8 to column 12)"};
 #include <stan_meta_header.hpp>
 class model_prevalence_correction final : public model_base_crtp<model_prevalence_correction> {
 private:

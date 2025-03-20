@@ -1,0 +1,74 @@
+---
+title: "Input data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Input data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(serosv)
+library(dplyr)
+library(magrittr)
+```
+
+## Input data format
+
+Most `*_model()` functions in `serosv` require `data` argument as the input data to be fitted.
+
+The package can handle both linelisting and aggregated data, and it infers the format from the column names of the input data frame. This means that input data is [expected to follow a specific format.]{.underline}
+
+For linelisting data: data must have `age`, `pos` and `tot` columns, where
+
+-   `age` is the age vector
+
+-   `pos` is the vector of counts of sero positives of that age group
+
+-   `tot` is the vector is the total population of that age group
+
+For aggregated data: data must have `age`, `status` columns, where
+
+-   `age` is the age vector of individuals
+
+-   `status` is the vector for the sero positivity of that individual
+
+**Example:** Fitting linelisting and aggregated data using `polynomial_model()`
+
+```{r}
+linelisting <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
+aggregated <- hav_bg_1964
+
+# View the 2 different data format
+head(linelisting)
+head(aggregated)
+
+# fit with aggregated data
+model1 <- polynomial_model(aggregated, type = "Muench")
+plot(model1)
+# fit with linelisting data
+model2 <- linelisting %>% 
+  rename(status = seropositive) %>% 
+  polynomial_model(type = "Muench")
+plot(model2)
+```
+
+## Data transformation
+
+`serosv` also offers function `transform_data()` to convert from linelisting to aggregated data. For more information, refer to [Data transformation](data_transformation.html)
+
+```{r}
+transform_data(
+  linelisting$age, 
+  linelisting$seropositive,
+  heterogeneity_col = "age") %>% 
+  polynomial_model(type = "Muench") %>% 
+  plot()
+```

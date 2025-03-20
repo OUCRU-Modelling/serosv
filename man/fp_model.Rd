@@ -4,18 +4,12 @@
 \alias{fp_model}
 \title{A fractional polynomial model.}
 \usage{
-fp_model(age, p, pos = NULL, tot = NULL, status = NULL, link = "logit")
+fp_model(data, p, link = "logit")
 }
 \arguments{
-\item{age}{the age vector.}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{p}{the powers of the predictor.}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
 
 \item{link}{the link function for model. Defaulted to "logit".}
 }
@@ -33,7 +27,7 @@ Refers to section 6.2.
 \examples{
 df <- hav_be_1993_1994
 model <- fp_model(
-  df$age, pos = df$pos, tot = df$tot,
+  df,
   p=c(1.5, 1.6), link="cloglog")
 plot(model)
 

@@ -86,7 +86,7 @@ To fit Farrington model, use `hierarchical_bayesian_model()` and define `type = 
 
 ```{r}
 df <- mumps_uk_1986_1987
-model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+model <- hierarchical_bayesian_model(df, type="far3")
 
 model$info
 plot(model)
@@ -129,7 +129,7 @@ To fit Log-logistic model, use `hierarchical_bayesian_model()` and define `type 
 
 ```{r}
 df <- rubella_uk_1986_1987
-model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="log_logistic")
+model <- hierarchical_bayesian_model(df, type="log_logistic")
 
 model$type
 plot(model)

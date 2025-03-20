@@ -78,9 +78,11 @@ Hierarchical Bayesian approaches:
 
 ## Demo
 
+### Fitting rubella data from the UK
+
 Load the rubella in UK dataset.
 
-```{r}
+```{r, eval=FALSE}
 library(serosv)
 ```
 
@@ -90,7 +92,7 @@ Find the power for the best second degree fractional polynomial with monotonicit
 rubella <- rubella_uk_1986_1987
 
 best_2d_mn <- find_best_fp_powers(
-  rubella$age, rubella$pos, rubella$tot,
+  rubella,
   p=seq(-2,3,0.1), mc = T, degree=2, link="logit"
 )
 
@@ -101,8 +103,28 @@ Finally, fit the second degree fractional polynomial.
 
 ```{r}
 fpmd <- fp_model(
-  rubella$age, rubella$pos, rubella$tot,
+  rubella,
   p=c(-0.9, -0.9), link="logit")
 
 plot(fpmd)
+```
+
+### Fitting Parvo B19 data from Finland
+
+```{r}
+parvob19 <- parvob19_fi_1997_1998
+
+# for linelisting data, either transform it to aggregated
+transform_data(
+  parvob19$age, 
+  parvob19$seropositive,
+  heterogeneity_col = "age") %>% 
+  polynomial_model(type = "Muench") %>% 
+  plot()
+
+# or fit data as is
+parvob19 %>% 
+  rename(status = seropositive) %>% 
+  polynomial_model(type = "Muench") %>% 
+  plot()
 ```

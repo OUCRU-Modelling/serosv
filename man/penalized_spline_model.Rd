@@ -5,10 +5,7 @@
 \title{Penalized Spline model}
 \usage{
 penalized_spline_model(
-  age,
-  pos = NULL,
-  tot = NULL,
-  status = NULL,
+  data,
   s = "bs",
   link = "logit",
   framework = "pl",
@@ -16,13 +13,7 @@ penalized_spline_model(
 )
 }
 \arguments{
-\item{age}{the age vector}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` column for aggregated data OR `age`, `status` for linelisting data}
 
 \item{s}{smoothing basis to use}
 
@@ -46,7 +37,8 @@ Penalized Spline model
 }
 \examples{
 data <- parvob19_be_2001_2003
-model <- penalized_spline_model(data$age, status = data$seropositive, framework="glmm")
+data$status <- data$seropositive
+model <- penalized_spline_model(data, framework="glmm")
 model$info$gam
 plot(model)
 }

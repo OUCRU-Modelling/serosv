@@ -9,20 +9,24 @@ vignette: >
 
 ```{r setup, output=FALSE}
 library(serosv)
+library(dplyr)
+library(magrittr)
 ```
 
 ```{r, warning=FALSE}
-data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-aggregated <- transform_data(data$age, data$seropositive)
+data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] %>% 
+  rename(status = seropositive)
+  
+aggregated <- transform_data(data$age, data$status, heterogeneity_col = "age")
 
 # fit with linelisting data
-model1 <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
+model1 <- polynomial_model(data, type = "Muench")
 # fit with aggregated data
-model2 <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
-# fit with laggregated data
-model3 <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Griffith")
+model2 <- polynomial_model(aggregated, type = "Muench")
+# fit with aggregated data
+model3 <- polynomial_model(aggregated, type = "Griffith")
 # fit with gam
-model4 <- penalized_spline_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot)
+model4 <- penalized_spline_model(aggregated)
 ```
 
 ## Generate models comparison `data.frame`

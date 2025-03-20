@@ -24,9 +24,7 @@ formulate <- function(p) {
 #'
 #' Refers to section 6.2.
 #'
-#' @param age the age vector.
-#' @param pos the pos vector.
-#' @param tot the tot vector.
+#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param p a powers sequence.
 #' @param mc indicates if the returned model should be monotonic.
 #' @param degree the degree of the model. Recommended to be <= 2.
@@ -40,7 +38,7 @@ formulate <- function(p) {
 #' @examples
 #' df <- hav_be_1993_1994
 #' best_p <- find_best_fp_powers(
-#' df$age, df$pos, df$tot,
+#' df,
 #' p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
 #' )
 #' best_p
@@ -48,7 +46,12 @@ formulate <- function(p) {
 #' @importFrom stats glm binomial as.formula
 #'
 #' @export
-find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
+find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
+  data <- serosv:::check_input(data)
+  age <- data$age
+  pos <- data$pos
+  tot <- data$tot
+
   glm_best <- NULL
   d_best <- NULL
   p_best <- NULL
@@ -111,10 +114,7 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #'
 #' Refers to section 6.2.
 #'
-#' @param age the age vector.
-#' @param pos the positive count vector (optional if status is provided).
-#' @param tot the total count vector (optional if status is provided).
-#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param p the powers of the predictor.
 #' @param link the link function for model. Defaulted to "logit".
 #'
@@ -131,26 +131,20 @@ find_best_fp_powers <- function(age, pos, tot, p, mc, degree, link="logit"){
 #' @examples
 #' df <- hav_be_1993_1994
 #' model <- fp_model(
-#'   df$age, pos = df$pos, tot = df$tot,
+#'   df,
 #'   p=c(1.5, 1.6), link="cloglog")
 #' plot(model)
 #'
 #' @export
-fp_model <- function(age,p, pos=NULL, tot=NULL, status = NULL,  link="logit") {
-  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
+fp_model <- function(data,p,  link="logit") {
   model <- list()
-  age <- as.numeric(age)
 
-  # check input whether it is line-listing or aggregated data
-  if (!is.null(pos) & !is.null(tot)){
-    pos <- as.numeric(pos)
-    tot <- as.numeric(tot)
-    model$datatype <- "aggregated"
-  }else{
-    pos <- as.numeric(status)
-    tot <- rep(1, length(pos))
-    model$datatype <- "linelisting"
-  }
+  data <- serosv:::check_input(data)
+  age <- data$age
+  pos <- data$pos
+  tot <- data$tot
+
+  model$datatype <- data$type
 
   model$info <- glm(
     as.formula(formulate(p)),

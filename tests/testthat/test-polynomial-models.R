@@ -8,9 +8,8 @@ test_that("farrington_model returns same result as in the book", {
     gamma=0.03665599
   )
 
-  df <- rubella_uk_1986_1987
   model <- suppressWarnings(farrington_model(
-      df$age, pos = df$pos, tot = df$tot,
+      rubella_uk_1986_1987,
       start=list(alpha=0.07,beta=0.1,gamma=0.03)
     ))
   actual <- c(
@@ -27,10 +26,11 @@ test_that("farrington_model returns same result as in the book", {
 
 test_that("farrington_model works with linelisting data", {
   df <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age),]
+  df$status <- df$seropositive
 
   expect_no_error(
     suppressWarnings(farrington_model(
-      df$age, status = df$seropositive,
+      df,
       start=list(alpha=0.07,beta=0.1,gamma=0.03)
     ))
   )
@@ -40,7 +40,8 @@ test_that("farrington_model works with linelisting data", {
 test_that("polynomial_model works with line listing data", {
 
   data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age),]
-  expect_no_error(polynomial_model(data$age, status = data$seropositive, type = "Muench"))
+  data$status <- data$seropositive
+  expect_no_error(polynomial_model(data, type = "Muench"))
 
 
 })
@@ -48,9 +49,8 @@ test_that("polynomial_model works with line listing data", {
 test_that("polynomial_model returns same result as in the book (Muench)", {
   expected <- c(-0.0505004)
 
-  df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, pos = df$pos, tot = df$tot,
+    hav_bg_1964,
     type= "Muench"
   )
   actual <- unname(c(
@@ -67,9 +67,8 @@ test_that("polynomial_model returns same result as in the book (Muench)", {
 test_that("polynomial_model returns same result as in the book (Muench)", {
   expected <- c(-0.0505004)
 
-  df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, pos = df$pos, tot = df$tot,
+    hav_bg_1964,
     k = 1
   )
   actual <- unname(c(
@@ -82,9 +81,8 @@ test_that("polynomial_model returns same result as in the book (Muench)", {
 test_that("polynomial_model returns same result as in the book (Griffiths)", {
   expected <- c(-0.0442615740, -0.0001888796)
 
-  df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, pos = df$pos, tot = df$tot,
+    hav_bg_1964,
     type = "Griffith"
   )
   actual <- unname(c(
@@ -100,9 +98,8 @@ test_that("polynomial_model returns same result as in the book (Griffiths)", {
 test_that("polynomial_model returns same result as in the book (Griffiths)", {
   expected <- c(-0.0442615740, -0.0001888796)
 
-  df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, pos = df$pos, tot = df$tot,
+    hav_bg_1964,
     k = 2
   )
   actual <- unname(c(
@@ -116,9 +113,8 @@ test_that("polynomial_model returns same result as in the book (Griffiths)", {
 test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
   expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)
 
-  df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, pos = df$pos, tot = df$tot,
+    hav_bg_1964,
     type = "Grenfell"
   )
   actual <- unname(c(
@@ -133,9 +129,8 @@ test_that("polynomial_model returns same result as in the book (Grenfell & Ander
 test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
   expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)
 
-  df <- hav_bg_1964
   model <- polynomial_model(
-    df$age, pos = df$pos, tot = df$tot,
+    hav_bg_1964,
     k = 3
   )
   actual <- unname(c(

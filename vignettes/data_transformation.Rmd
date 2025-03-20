@@ -28,6 +28,8 @@ Arguments:
 
 -   `spos` the seropositive vector (TRUE/FALSE or 1/0)
 
+-   `heterogeneity_col` new name for the time vector, default to `heterogeneity_col = "t"`
+
 ```{r}
 linelisting_data <- hcv_be_2006
 aggregated_data <- transform_data(linelisting_data$dur, linelisting_data$seropositive)

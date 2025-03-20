@@ -6,7 +6,7 @@ test_that("fp_model returns same result as in the book (Hepatitis A (BG))", {
 
   df <- hav_bg_1964
   model <- fp_model(
-    df$age, pos = df$pos, tot = df$tot,
+    df,
     p=c(1.9, 2.0), link="logit"
   )
   actual_coefs <- unname(c(
@@ -30,7 +30,7 @@ test_that("find_best_fp_powers returns same result as in the book (non-monotone)
 
   df <- hav_be_1993_1994
   output <- suppressWarnings(find_best_fp_powers(
-    df$age, pos = df$pos, tot = df$tot,
+    df,
     p=seq(-2,3,0.1), mc=F, degree=2, link="logit"
   ))
 
@@ -44,7 +44,7 @@ test_that("find_best_fp_powers returns same result as in the book (monotone)", {
 
   df <- hav_be_1993_1994
   output <- suppressWarnings(find_best_fp_powers(
-    df$age, pos = df$pos, tot = df$tot,
+    df,
     p=seq(-2,3,0.1), mc=T, degree=2, link="logit"
   ))
 
