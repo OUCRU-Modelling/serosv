@@ -115,7 +115,13 @@ check_input <- function(data, heterogeneity_col = "age"){
     tot <- rep(1, length(data$status))
     type <- "linelisting"
   }else{
-    stop("Data must have `age`, `pos`, `tot` columns for aggregated data OR `age`, `status` columns for linelisting data")
+    stop(paste0(
+      "Data must have `",
+      heterogeneity_col,
+      "`, `pos`, `tot` columns for aggregated data OR `",
+      heterogeneity_col,
+      "`, `status` columns for linelisting data"
+    ))
   }
 
   list(
