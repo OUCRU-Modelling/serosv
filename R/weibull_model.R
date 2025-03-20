@@ -8,7 +8,8 @@
 #'
 #' @examples
 #' df <- hcv_be_2006[order(hcv_be_2006$dur), ]
-#' df$t <- df$dur
+#' df$age <- df$dur
+#' df$status <- df$seropositive
 #' model <- weibull_model(df)
 #' plot(model)
 #'
