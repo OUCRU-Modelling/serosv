@@ -1,8 +1,8 @@
 data {
   int<lower=1> Nage;           // Number of age groups
   vector[Nage] age;            // Age vector
-  int<lower=0> posi[Nage];     // Number of positive cases
-  int<lower=0> ni[Nage];       // Number of trials
+  array[Nage] int<lower=0> posi;     // Number of positive cases
+  array[Nage] int<lower=0> ni;       // Number of trials
 }
 
 parameters {

@@ -4,14 +4,14 @@ data{
   real<lower=0.5> init_sp;     // best guess for specificity
   int<lower=0> study_size_se;  // study size for sensitivity estimate
   int<lower=0> study_size_sp;  // study size for specificity estimate
-  int<lower=0> posi[Nage];     // Number of positive cases
-  int<lower=0> ni[Nage];       // Number of trials
+  array[Nage] int<lower=0> posi;     // Number of positive cases
+  array[Nage] int<lower=0> ni;       // Number of trials
 }
 
 parameters{
   real<lower=0,upper=1> est_se; // estimated sensitivity
   real<lower=0,upper=1> est_sp; // estimated specificity
-  real<lower=0,upper=1> theta[Nage]; //corrected seroprevalence, denote as theta for consistency
+  array[Nage] real<lower=0,upper=1> theta; //corrected seroprevalence, denote as theta for consistency
 }
 
 model{
