@@ -3,9 +3,11 @@ test_that("penalized_spline_model returns correct format", {
   subset <- (df$age > 0.5) &
     (df$age < 76) &
     (!is.na(df$age)) & !is.na(df$parvo_res)
-  df <- df[subset, ]
-  glmm_model <- penalized_spline_model(df$age, status = df$parvo_res, s = "tp", framework = "glmm")
-  pl_model <- penalized_spline_model(df$age, status = df$parvo_res, s = "tp", framework = "pl")
+  df <- df[subset, c("age", "parvo_res")]
+  colnames(df) <- c("age", "status")
+
+  glmm_model <- penalized_spline_model(df, s = "tp", framework = "glmm")
+  pl_model <- penalized_spline_model(df, s = "tp", framework = "pl")
 
   expect_equal(class(glmm_model$info)[1], "gamm")
   expect_equal(class(pl_model$info)[1], "gam")
@@ -17,10 +19,11 @@ test_that("penalized_spline_model works without error (pl framework)", {
     (df$age > 0.5) &
     (df$age < 76) &
     (!is.na(df$age)) & !is.na(df$parvo_res)
-  df <- df[subset, ]
+  df <- df[subset, c("age", "parvo_res")]
+  colnames(df) <- c("age", "status")
 
-  expect_no_error(penalized_spline_model(df$age, status = df$parvo_res, s = "tp", framework = "pl"))
-  model <- penalized_spline_model(df$age, status = df$parvo_res, s = "tp", framework = "pl")
+  expect_no_error(penalized_spline_model(df, s = "tp", framework = "pl"))
+  model <- penalized_spline_model(df, s = "tp", framework = "pl")
 
   # making sure compute ci and plot function works without error
   expect_no_error(compute_ci.penalized_spline_model(model))
@@ -36,8 +39,10 @@ test_that("penalized_spline_model works without error (glmm framework)", {
     (df$age > 0.5) &
     (df$age < 76) &
     (!is.na(df$age)) & !is.na(df$parvo_res)
-  df <- df[subset, ]
-  model <- penalized_spline_model(df$age, status = df$parvo_res, s = "tp", framework = "glmm")
+  df <- df[subset, c("age", "parvo_res")]
+  colnames(df) <- c("age", "status")
+
+  model <- penalized_spline_model(df, s = "tp", framework = "glmm")
   actual_coef <- unname(model$info$gam$coefficients)
 
   # expect_equal(actual_coef,expected_coef, tolerance=0.00001)
@@ -50,5 +55,5 @@ test_that("penalized_spline_model works without error (glmm framework)", {
 test_that("penalized_spline_model works with aggregated data", {
   df <- hav_bg_1964[order(hav_bg_1964$age), ]
 
-  expect_no_error(suppressWarnings(penalized_spline_model(df$age, pos = df$pos, tot = df$tot)))
+  expect_no_error(suppressWarnings(penalized_spline_model(df)))
 })

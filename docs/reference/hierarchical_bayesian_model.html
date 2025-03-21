@@ -24,6 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
     <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
     <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
     <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
@@ -69,10 +70,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hierarchical_bayesian_model</span><span class="op">(</span></span>
-<span>  <span class="va">age</span>,</span>
-<span>  pos <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  tot <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  status <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">data</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"far3"</span>,</span>
 <span>  chains <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  warmup <span class="op">=</span> <span class="fl">1500</span>,</span>
@@ -82,20 +80,8 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>age</dt>
-<dd><p>the age vector</p></dd>
-
-
-<dt>pos</dt>
-<dd><p>the positive count vector (optional if status is provided).</p></dd>
-
-
-<dt>tot</dt>
-<dd><p>the total count vector (optional if status is provided).</p></dd>
-
-
-<dt>status</dt>
-<dd><p>the serostatus vector (optional if pos &amp; tot are provided).</p></dd>
+    <dl><dt>data</dt>
+<dd><p>the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)</p></dd>
 
 
 <dt>type</dt>
@@ -143,21 +129,15 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">mumps_uk_1986_1987</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">hierarchical_bayesian_model</span><span class="op">(</span>age <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">tot</span>, type<span class="op">=</span><span class="st">"far3"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">hierarchical_bayesian_model</span><span class="op">(</span><span class="va">df</span>, type<span class="op">=</span><span class="st">"far3"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SAMPLING FOR MODEL 'fra_3' NOW (CHAIN 1).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Rejecting initial value:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:   Stan can't start sampling from this initial value.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Rejecting initial value:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:   Stan can't start sampling from this initial value.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Rejecting initial value:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:   Stan can't start sampling from this initial value.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 0.000121 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.21 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 0.000168 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.68 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Adjust your expectations accordingly!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
@@ -174,68 +154,62 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:  Elapsed Time: 49.2 seconds (Warm-up)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                130.397 seconds (Sampling)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                179.597 seconds (Total)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:  Elapsed Time: 16.86 seconds (Warm-up)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                98.178 seconds (Sampling)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                115.038 seconds (Total)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 754 divergent transitions after warmup. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 288 divergent transitions after warmup. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> to find out why this is a problem and how to eliminate them.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 441 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 11 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Examine the pairs() plot to diagnose sampling problems</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.14, indicating chains have not mixed.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-in"><span><span class="va">model</span><span class="op">$</span><span class="va">info</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       mean      se_mean           sd           2.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha1        2.125727e+76 1.873582e+76 9.857746e+77   2.086006e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha2        3.051760e+78 2.980399e+78 4.985109e+79   7.962382e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha3        1.709108e-01 8.195715e-04 3.146095e-03   1.667742e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha1    9.889012e-02 9.193690e-02 9.748461e-01  1.841235e-105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha2    9.395319e-08 5.345279e-08 2.296888e-06  3.584028e-143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha3    2.376998e+01 1.514506e+01 3.586927e+01   3.939792e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha1     5.884438e+00 2.884030e+00 8.530155e+01  -1.779321e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha2    -6.249001e+00 2.874228e+00 8.427984e+01  -1.765891e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha3     2.225693e+00 1.190663e+00 3.571111e+01  -6.603497e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha1  4.361931e+76 4.013065e+76 2.138431e+78   8.260705e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha2  2.579272e+78 2.446088e+78 3.697949e+79   1.367125e+05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha3  1.230550e+02 5.486590e+01 2.280212e+03   1.035053e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lp__         -2.656979e+03 6.507088e-01 3.424670e+00  -2.664633e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        25%           50%           75%         97.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha1        8.767568e+05  1.423411e+07  3.050902e+17  6.171746e+52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha2        8.417773e+16  3.154072e+31  6.436364e+45  5.309616e+70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha3        1.678333e-01  1.706392e-01  1.732886e-01  1.774482e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha1    5.135079e-36  1.156093e-15  9.727284e-13  1.465456e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha2    1.258968e-92  2.263345e-64  5.752806e-35  5.354637e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha3    3.709497e-03  5.060957e-01  6.172539e+01  9.334150e+01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha1    -3.590809e+01  8.194513e+00  4.749799e+01  1.806975e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha2    -4.023764e+01 -3.018942e+01  4.648757e+01  1.754870e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha3    -5.309773e-01  1.943059e-01  1.069483e+00  1.061274e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha1  1.013921e+06  2.943244e+07  4.414435e+17  4.255456e+52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha2  1.325968e+17  6.648715e+31  8.912360e+45  1.677776e+71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha3  1.272823e-01  1.405673e+00  1.641884e+01  5.038258e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lp__         -2.659324e+03 -2.656303e+03 -2.654219e+03 -2.652050e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    n_eff      Rhat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha1       2768.279665 0.9999745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha2        279.769550 1.0034368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha3         14.735669 1.0976911</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha1    112.432650 1.0077260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha2   1846.455170 1.0000195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha3      5.609229 1.2258454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha1     874.811304 0.9997411</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha2     859.815120 1.0045739</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha3     899.556899 0.9997474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha1 2839.474300 1.0000051</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha2  228.548178 1.0045025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha3 1727.211679 1.0005627</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lp__           27.699006 1.0232961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       mean      se_mean           sd          2.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha1        1.396732e-01 2.328172e-04 5.926643e-03  1.290067e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha2        1.989632e-01 3.342249e-04 8.454176e-03  1.847781e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha3        9.017286e-03 2.957517e-04 7.503320e-03  2.519932e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha1    2.051039e+00 2.925237e-01 5.992958e+00  1.814318e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha2    4.280878e+00 1.545375e+00 1.261621e+01  5.514011e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha3    1.594944e+00 2.713658e-01 4.513571e+00  1.717967e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha1    -2.434489e+00 4.143249e+00 4.467754e+01 -1.656101e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha2    -9.043922e-01 1.406475e+00 3.373188e+01 -9.031034e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha3     2.147579e+00 1.666808e+00 4.272829e+01 -9.818932e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha1  9.673678e+03 9.523462e+03 2.012224e+05  2.027127e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha2  8.037575e+01 1.664371e+01 5.816331e+02  1.342710e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha3  1.665419e+02 4.235920e+01 1.470059e+03  2.354869e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lp__         -2.534311e+03 2.684310e-01 4.176499e+00 -2.542650e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        25%           50%           75%         97.5%      n_eff</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha1        1.353546e-01  1.393536e-01  1.435425e-01  1.520502e-01  648.01829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha2        1.931939e-01  1.981250e-01  2.037919e-01  2.181404e-01  639.83066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha3        3.301399e-03  6.948630e-03  1.310897e-02  2.798314e-02  643.65402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha1    4.699710e-04  1.339575e-02  4.377299e-01  2.433537e+01  419.72073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha2    1.099782e-03  3.547442e-02  9.730938e-01  5.546799e+01   66.64842</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha3    3.847899e-04  1.424805e-02  4.511886e-01  1.803311e+01  276.64990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha1    -4.777740e+00  1.761566e-01  4.990839e+00  8.616947e+01  116.27771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha2    -3.043304e+00  1.912986e-01  2.809284e+00  6.930927e+01  575.19790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha3    -4.356601e+00  8.834931e-02  7.109717e+00  1.097394e+02  657.14323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha1  1.511461e+00  8.640059e+00  4.612799e+01  7.424105e+02  446.43988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha2  1.013731e+00  5.309408e+00  3.015428e+01  4.258861e+02 1221.23065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha3  1.488748e+00  8.377652e+00  5.097869e+01  7.629637e+02 1204.40906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lp__         -2.537035e+03 -2.534291e+03 -2.531361e+03 -2.526569e+03  242.08025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   Rhat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha1       1.0006390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha2       0.9997486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha3       0.9999655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha1   1.0023789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha2   1.0060590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> tau_alpha3   1.0005442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha1    1.0039620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha2    0.9997144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mu_alpha3    1.0015442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha1 1.0019918</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha2 1.0000931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sigma_alpha3 0.9997146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lp__         1.0215691</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No shared levels found between `names(values)` of the manual scale and the</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> data's <span style="color: #00BB00;">fill</span> values.</span>

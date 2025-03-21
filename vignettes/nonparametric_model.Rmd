@@ -52,17 +52,13 @@ $$
 
 ```{r}
 mump <- mumps_uk_1986_1987
-age <- mump$age
-pos <- mump$pos
-tot <- mump$tot
-y <- pos/tot
 ```
 
 Use `plot_gcv()` to show GCV curves for the nearest neighbor method (left) and constant bandwidth (right).
 
 ```{r, fig.width=7, fig.height=3}
 plot_gcv(
-   age, pos, tot,
+   mump$age, mump$pos, mump$tot,
    nn_seq = seq(0.2, 0.8, by=0.1),
    h_seq = seq(5, 25, by=1)
  )
@@ -71,6 +67,6 @@ plot_gcv(
 Use `lp_model()` to fit a local estimation by polynomials.
 
 ```{r}
-lp <- lp_model(age, pos = pos, tot = tot, kern="tcub", nn=0.7, deg=2)
+lp <- lp_model(mump, kern="tcub", nn=0.7, deg=2)
 plot(lp)
 ```

@@ -4,25 +4,10 @@
 \alias{lp_model}
 \title{A local polynomial model.}
 \usage{
-lp_model(
-  age,
-  pos = NULL,
-  tot = NULL,
-  status = NULL,
-  kern = "tcub",
-  nn = 0,
-  h = 0,
-  deg = 2
-)
+lp_model(data, kern = "tcub", nn = 0, h = 0, deg = 2)
 }
 \arguments{
-\item{age}{the age vector.}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{kern}{Weight function, default = "tcub".
 Other choices are "rect", "trwt", "tria", "epan", "bisq" and "gauss".
@@ -51,7 +36,7 @@ Refers to section 7.1. and 7.2.
 \examples{
 df <- mumps_uk_1986_1987
 model <- lp_model(
-  df$age, pos = df$pos, tot = df$tot,
+  df,
   nn=0.7, kern="tcub"
   )
 plot(model)

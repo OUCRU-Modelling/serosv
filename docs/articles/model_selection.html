@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
     <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
     <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
     <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
@@ -99,19 +100,33 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">parvob19_fi_1997_1998</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">parvob19_fi_1997_1998</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>, <span class="op">]</span></span>
-<span><span class="va">aggregated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_data.html">transform_data</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">age</span>, <span class="va">data</span><span class="op">$</span><span class="va">seropositive</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: package 'dplyr' was built under R version 4.3.1</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     filter, lag</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">parvob19_fi_1997_1998</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">parvob19_fi_1997_1998</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>status <span class="op">=</span> <span class="va">seropositive</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="va">aggregated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transform_data.html">transform_data</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">age</span>, <span class="va">data</span><span class="op">$</span><span class="va">status</span>, heterogeneity_col <span class="op">=</span> <span class="st">"age"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># fit with linelisting data</span></span>
-<span><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">age</span>, status <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">seropositive</span>, type <span class="op">=</span> <span class="st">"Muench"</span><span class="op">)</span></span>
+<span><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, type <span class="op">=</span> <span class="st">"Muench"</span><span class="op">)</span></span>
 <span><span class="co"># fit with aggregated data</span></span>
-<span><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">aggregated</span><span class="op">$</span><span class="va">t</span>, pos <span class="op">=</span> <span class="va">aggregated</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">aggregated</span><span class="op">$</span><span class="va">tot</span>, type <span class="op">=</span> <span class="st">"Muench"</span><span class="op">)</span></span>
-<span><span class="co"># fit with laggregated data</span></span>
-<span><span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">aggregated</span><span class="op">$</span><span class="va">t</span>, pos <span class="op">=</span> <span class="va">aggregated</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">aggregated</span><span class="op">$</span><span class="va">tot</span>, type <span class="op">=</span> <span class="st">"Griffith"</span><span class="op">)</span></span>
+<span><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">aggregated</span>, type <span class="op">=</span> <span class="st">"Muench"</span><span class="op">)</span></span>
+<span><span class="co"># fit with aggregated data</span></span>
+<span><span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">aggregated</span>, type <span class="op">=</span> <span class="st">"Griffith"</span><span class="op">)</span></span>
 <span><span class="co"># fit with gam</span></span>
-<span><span class="va">model4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/penalized_spline_model.html">penalized_spline_model</a></span><span class="op">(</span><span class="va">aggregated</span><span class="op">$</span><span class="va">t</span>, pos <span class="op">=</span> <span class="va">aggregated</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">aggregated</span><span class="op">$</span><span class="va">tot</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">model4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/penalized_spline_model.html">penalized_spline_model</a></span><span class="op">(</span><span class="va">aggregated</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="generate-models-comparison-data-frame">Generate models comparison <code>data.frame</code><a class="anchor" aria-label="anchor" href="#generate-models-comparison-data-frame"></a>
 </h2>
@@ -133,7 +148,7 @@ applicable)</p></li>
 </ul>
 <p><strong>Sample usage</strong></p>
 <p>Compare 4 models defined above</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># provide models with name</span></span>
 <span><span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span>muench_linelist <span class="op">=</span> <span class="va">model1</span>, muench_aggregated <span class="op">=</span> <span class="va">model2</span>, griffith <span class="op">=</span> <span class="va">model3</span>, penalized_spline <span class="op">=</span> <span class="va">model4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##               model                   type       AIC       BIC</span></span>
@@ -141,7 +156,7 @@ applicable)</p></li>
 <span><span class="co">## 2 muench_aggregated       polynomial_model  505.5269  508.8787</span></span>
 <span><span class="co">## 3          griffith       polynomial_model  489.1185  495.8223</span></span>
 <span><span class="co">## 4  penalized_spline penalized_spline_model  256.7061  271.3522</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># provide models without name</span></span>
 <span><span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span>, <span class="va">model4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   model                   type       AIC       BIC</span></span>
@@ -149,7 +164,7 @@ applicable)</p></li>
 <span><span class="co">## 2     2       polynomial_model  505.5269  508.8787</span></span>
 <span><span class="co">## 3     3       polynomial_model  489.1185  495.8223</span></span>
 <span><span class="co">## 4     4 penalized_spline_model  256.7061  271.3522</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># user can provide arbitrary number of models</span></span>
 <span><span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span><span class="va">model3</span>, <span class="va">model4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   model                   type      AIC      BIC</span></span>

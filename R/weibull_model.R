@@ -2,19 +2,15 @@
 #'
 #' Refers to section 6.1.2.
 #'
-#' @param t the time vector.
-#' @param pos the positive count vector (optional if status is provided).
-#' @param tot the total count vector (optional if status is provided).
-#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param data the input data frame, must either have `t`, `pos`, `tot` column for aggregated data OR `t`, `status` for linelisting data
 #'
 #' @importFrom stats coef
 #'
 #' @examples
 #' df <- hcv_be_2006[order(hcv_be_2006$dur), ]
-#' model <- weibull_model(
-#'   t=df$dur,
-#'   status=df$seropositive
-#'   )
+#' df$t <- df$dur
+#' df$status <- df$seropositive
+#' model <- weibull_model(df)
 #' plot(model)
 #'
 #' @return list of class weibull_model with the following items
@@ -27,22 +23,16 @@
 #' @seealso [stats::glm()] for more information on the fitted "glm" object
 #'
 #' @export
-weibull_model <- function(t, status=NULL, pos=NULL, tot=NULL)
+weibull_model <- function(data)
 {
-  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
-  t <- as.numeric(t)
 
   # check input whether it is line-listing or aggregated data
-  if (!is.null(pos) & !is.null(tot)){
-    pos <- as.numeric(pos)
-    tot <- as.numeric(tot)
-    model$datatype <- "aggregated"
-  }else{
-    pos <- as.numeric(status)
-    tot <- rep(1, length(pos))
-    model$datatype <- "linelisting"
-  }
+  data <- serosv:::check_input(data, heterogeneity_col = "t")
+  t <- data$age
+  pos <- data$pos
+  tot <- data$tot
+  model$datatype <- data$type
 
   spos <- pos/tot
   model$info <- glm(

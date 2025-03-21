@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, output=FALSE}
 library(serosv)
+library(dplyr)
 ```
 
 ## Penalized splines {#sec-penalized-splines}
@@ -136,8 +137,9 @@ Basis function can be defined via the `s` parameter, some values for s includes:
 For more options, refer to the [mgcv documentation](https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/smooth.terms.html) [@Wood2017]
 
 ```{r}
-data <- parvob19_be_2001_2003
-pl <- penalized_spline_model(data$age, status = data$seropositive, s = "tp", framework = "pl") 
+pl <- parvob19_be_2001_2003 %>% 
+  rename(status = seropositive) %>% 
+  penalized_spline_model(s = "tp", framework = "pl") 
 pl$info
 ```
 
@@ -173,8 +175,9 @@ Thus $Z$ is penalized by assuming the corresponding coefficients $u$ are random 
 To fit the data using the penalized likelihood framework, specify `framework = "glmm"`
 
 ```{r}
-data <- parvob19_be_2001_2003
-glmm <- penalized_spline_model(data$age, status = data$seropositive, s = "tp", framework = "glmm") 
+glmm <- parvob19_be_2001_2003 %>% 
+  rename(status = seropositive) %>% 
+  penalized_spline_model(s = "tp", framework = "glmm") 
 glmm$info$gam
 ```
 

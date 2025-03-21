@@ -15,10 +15,6 @@
 #' @importFrom stringr str_detect
 #'
 #' @export
-#'
-#' @examples
-#' data <- rubella_uk_1986_1987
-#' correct_prevalence(data$age, pos = data$pos, tot = data$tot)
 compare_models <- function(...){
   list(...) %>%
     imap_dfr(~ {

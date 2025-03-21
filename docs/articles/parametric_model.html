@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
     <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
     <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
     <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
@@ -99,7 +100,9 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="polynomial-models">Polynomial models<a class="anchor" aria-label="anchor" href="#polynomial-models"></a>
 </h2>
@@ -108,11 +111,7 @@
 <p>We will use the <code>Hepatitis A</code> data from Belgium 1993–1994
 for this example.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="va">hav_bg_1964</span></span>
-<span><span class="va">neg</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">tot</span> <span class="op">-</span><span class="va">a</span><span class="op">$</span><span class="va">pos</span></span>
-<span><span class="va">pos</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">pos</span></span>
-<span><span class="va">age</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">age</span></span>
-<span><span class="va">tot</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">tot</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">hav_bg_1964</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="muench-model">Muench model<a class="anchor" aria-label="anchor" href="#muench-model"></a>
 </h3>
@@ -130,12 +129,11 @@ exponential with rate <span class="math inline">\(\beta\)</span></p>
 <span class="math inline">\(\pi\)</span> is the seroprevalence at
 age <span class="math inline">\(a\)</span>
 </li>
-</ul>
-<!-- --><ul>
-<li><p><span class="math inline">\(1 - k\)</span> is the proportion of
-population that stay uninfected for a lifetime</p></li>
-<li><p><span class="math inline">\(a\)</span> is the variable
-age</p></li>
+<li>
+<span class="math inline">\(1 - k\)</span> is the proportion of
+population that stay uninfected for a lifetime</li>
+<li>
+<span class="math inline">\(a\)</span> is the variable age</li>
 </ul>
 <p>Under this catalytic model and assuming that <span class="math inline">\(k = 1\)</span>, force infection would be <span class="math inline">\(\lambda(a) = \beta\)</span></p>
 <p><strong>Fitting data</strong></p>
@@ -144,7 +142,7 @@ age</p></li>
 irrelevant to the k in the proposed model) or setting the
 <code>type = "Muench"</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">muench1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">pos</span>, tot <span class="op">=</span> <span class="va">tot</span>, k <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">muench1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, k <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">muench1</span><span class="op">$</span><span class="va">info</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -164,7 +162,7 @@ irrelevant to the k in the proposed model) or setting the
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of Fisher Scoring iterations: 5</span></span>
 <span></span>
-<span><span class="va">muench2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">pos</span>, tot <span class="op">=</span> <span class="va">tot</span>, type <span class="op">=</span> <span class="st">"Muench"</span><span class="op">)</span></span>
+<span><span class="va">muench2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, type <span class="op">=</span> <span class="st">"Muench"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">muench2</span><span class="op">$</span><span class="va">info</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -204,7 +202,7 @@ predictor was <span class="math inline">\(\eta(a) = \beta_1 +
 by defining <code>k = 2</code>, or setting the
 <code>type = "Griffith"</code></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">pos</span>, tot <span class="op">=</span> <span class="va">tot</span>, type <span class="op">=</span> <span class="st">"Griffith"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, type <span class="op">=</span> <span class="st">"Griffith"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gf_model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="parametric_model_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
@@ -223,7 +221,7 @@ prevalence model as followed</p>
 <p><strong>Fitting data</strong></p>
 <p>And Grenfell and Anderson’s model.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">grf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">pos</span>, tot <span class="op">=</span> <span class="va">tot</span>, type <span class="op">=</span> <span class="st">"Grenfell"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">grf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, type <span class="op">=</span> <span class="st">"Grenfell"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">grf_model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="parametric_model_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <hr>
@@ -259,11 +257,8 @@ results in the following non-linear model for prevalence</p>
 <p>Use <code><a href="../reference/farrington_model.html">farrington_model()</a></code> to fit a
 <strong>Farrington</strong>’s model.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span>
-<span><span class="va">rubella</span><span class="op">$</span><span class="va">neg</span> <span class="op">&lt;-</span> <span class="va">rubella</span><span class="op">$</span><span class="va">tot</span> <span class="op">-</span> <span class="va">rubella</span><span class="op">$</span><span class="va">pos</span></span>
-<span></span>
-<span><span class="va">farrington_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span></span>
-<span>   <span class="va">rubella</span><span class="op">$</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">rubella</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">rubella</span><span class="op">$</span><span class="va">tot</span>,</span>
+<code class="sourceCode R"><span><span class="va">farrington_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span></span>
+<span>   <span class="va">rubella_uk_1986_1987</span>,</span>
 <span>   start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span></span>
 <span>   <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">farrington_md</span><span class="op">)</span></span></code></pre></div>
@@ -292,13 +287,11 @@ the exposure time as followed</p>
 <p>Use <code><a href="../reference/weibull_model.html">weibull_model()</a></code> to fit a Weibull model.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hcv</span> <span class="op">&lt;-</span> <span class="va">hcv_be_2006</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">hcv_be_2006</span><span class="op">$</span><span class="va">dur</span><span class="op">)</span>, <span class="op">]</span></span>
-<span><span class="va">dur</span> <span class="op">&lt;-</span> <span class="va">hcv</span><span class="op">$</span><span class="va">dur</span></span>
-<span><span class="va">infected</span> <span class="op">&lt;-</span> <span class="va">hcv</span><span class="op">$</span><span class="va">seropositive</span></span>
 <span></span>
-<span><span class="va">wb_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weibull_model.html">weibull_model</a></span><span class="op">(</span></span>
-<span>   t <span class="op">=</span> <span class="va">dur</span>,</span>
-<span>   status <span class="op">=</span> <span class="va">infected</span></span>
-<span>   <span class="op">)</span></span>
+<span><span class="va">wb_md</span> <span class="op">&lt;-</span> <span class="va">hcv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
+<span>    t <span class="op">=</span> <span class="va">dur</span>, status <span class="op">=</span> <span class="va">seropositive</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/weibull_model.html">weibull_model</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">wb_md</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="parametric_model_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <hr>
@@ -331,7 +324,7 @@ the lowest deviance score</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hav</span> <span class="op">&lt;-</span> <span class="va">hav_be_1993_1994</span></span>
 <span><span class="va">best_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_best_fp_powers.html">find_best_fp_powers</a></span><span class="op">(</span></span>
-<span>  <span class="va">hav</span><span class="op">$</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">hav</span><span class="op">$</span><span class="va">pos</span>,tot <span class="op">=</span> <span class="va">hav</span><span class="op">$</span><span class="va">tot</span>,</span>
+<span>  <span class="va">hav</span>,</span>
 <span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">0.1</span><span class="op">)</span>, mc<span class="op">=</span><span class="cn">FALSE</span>, degree<span class="op">=</span><span class="fl">2</span>, link<span class="op">=</span><span class="st">"cloglog"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">best_p</span></span>
@@ -355,111 +348,7 @@ the lowest deviance score</p>
 <p><strong>Fitting data</strong></p>
 <p>Use <code><a href="../reference/fp_model.html">fp_model()</a></code> to fit a fractional polynomial model</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span></span>
-<span>  <span class="va">hav</span><span class="op">$</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">hav</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">hav</span><span class="op">$</span><span class="va">tot</span>,</span>
-<span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.6</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/compute_ci.fp_model.html">compute_ci.fp_model</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             x          y       ymin       ymax</span></span>
-<span><span class="co">#&gt; 1    0.500000 0.02716482 0.01959292 0.03760634</span></span>
-<span><span class="co">#&gt; 2    1.353535 0.02862007 0.02076739 0.03938180</span></span>
-<span><span class="co">#&gt; 3    2.207071 0.03050022 0.02229336 0.04166326</span></span>
-<span><span class="co">#&gt; 4    3.060606 0.03272353 0.02411019 0.04434334</span></span>
-<span><span class="co">#&gt; 5    3.914141 0.03526829 0.02620530 0.04738857</span></span>
-<span><span class="co">#&gt; 6    4.767677 0.03813303 0.02858256 0.05079025</span></span>
-<span><span class="co">#&gt; 7    5.621212 0.04132595 0.03125392 0.05455127</span></span>
-<span><span class="co">#&gt; 8    6.474747 0.04486080 0.03423621 0.05868100</span></span>
-<span><span class="co">#&gt; 9    7.328283 0.04875493 0.03754957 0.06319273</span></span>
-<span><span class="co">#&gt; 10   8.181818 0.05302816 0.04121663 0.06810243</span></span>
-<span><span class="co">#&gt; 11   9.035354 0.05770215 0.04526197 0.07342778</span></span>
-<span><span class="co">#&gt; 12   9.888889 0.06279986 0.04971170 0.07918768</span></span>
-<span><span class="co">#&gt; 13  10.742424 0.06834517 0.05459314 0.08540179</span></span>
-<span><span class="co">#&gt; 14  11.595960 0.07436252 0.05993448 0.09209011</span></span>
-<span><span class="co">#&gt; 15  12.449495 0.08087661 0.06576446 0.09927268</span></span>
-<span><span class="co">#&gt; 16  13.303030 0.08791198 0.07211204 0.10696929</span></span>
-<span><span class="co">#&gt; 17  14.156566 0.09549275 0.07900598 0.11519909</span></span>
-<span><span class="co">#&gt; 18  15.010101 0.10364218 0.08647445 0.12398036</span></span>
-<span><span class="co">#&gt; 19  15.863636 0.11238230 0.09454458 0.13333012</span></span>
-<span><span class="co">#&gt; 20  16.717172 0.12173352 0.10324196 0.14326387</span></span>
-<span><span class="co">#&gt; 21  17.570707 0.13171416 0.11259010 0.15379519</span></span>
-<span><span class="co">#&gt; 22  18.424242 0.14234005 0.12260991 0.16493547</span></span>
-<span><span class="co">#&gt; 23  19.277778 0.15362405 0.13331910 0.17669357</span></span>
-<span><span class="co">#&gt; 24  20.131313 0.16557562 0.14473160 0.18907544</span></span>
-<span><span class="co">#&gt; 25  20.984848 0.17820037 0.15685696 0.20208387</span></span>
-<span><span class="co">#&gt; 26  21.838384 0.19149963 0.16969980 0.21571816</span></span>
-<span><span class="co">#&gt; 27  22.691919 0.20547006 0.18325928 0.22997380</span></span>
-<span><span class="co">#&gt; 28  23.545455 0.22010329 0.19752856 0.24484227</span></span>
-<span><span class="co">#&gt; 29  24.398990 0.23538562 0.21249445 0.26031074</span></span>
-<span><span class="co">#&gt; 30  25.252525 0.25129778 0.22813709 0.27636190</span></span>
-<span><span class="co">#&gt; 31  26.106061 0.26781475 0.24442970 0.29297378</span></span>
-<span><span class="co">#&gt; 32  26.959596 0.28490571 0.26133858 0.31011961</span></span>
-<span><span class="co">#&gt; 33  27.813131 0.30253403 0.27882315 0.32776771</span></span>
-<span><span class="co">#&gt; 34  28.666667 0.32065739 0.29683627 0.34588144</span></span>
-<span><span class="co">#&gt; 35  29.520202 0.33922801 0.31532461 0.36441921</span></span>
-<span><span class="co">#&gt; 36  30.373737 0.35819301 0.33422931 0.38333451</span></span>
-<span><span class="co">#&gt; 37  31.227273 0.37749480 0.35348672 0.40257603</span></span>
-<span><span class="co">#&gt; 38  32.080808 0.39707168 0.37302931 0.42208783</span></span>
-<span><span class="co">#&gt; 39  32.934343 0.41685844 0.39278668 0.44180970</span></span>
-<span><span class="co">#&gt; 40  33.787879 0.43678713 0.41268659 0.46167752</span></span>
-<span><span class="co">#&gt; 41  34.641414 0.45678779 0.43265608 0.48162384</span></span>
-<span><span class="co">#&gt; 42  35.494949 0.47678937 0.45262248 0.50157854</span></span>
-<span><span class="co">#&gt; 43  36.348485 0.49672055 0.47251437 0.52146971</span></span>
-<span><span class="co">#&gt; 44  37.202020 0.51651067 0.49226246 0.54122460</span></span>
-<span><span class="co">#&gt; 45  38.055556 0.53609057 0.51180028 0.56077069</span></span>
-<span><span class="co">#&gt; 46  38.909091 0.55539345 0.53106484 0.58003679</span></span>
-<span><span class="co">#&gt; 47  39.762626 0.57435568 0.54999703 0.59895424</span></span>
-<span><span class="co">#&gt; 48  40.616162 0.59291745 0.56854205 0.61745792</span></span>
-<span><span class="co">#&gt; 49  41.469697 0.61102348 0.58664964 0.63548732</span></span>
-<span><span class="co">#&gt; 50  42.323232 0.62862347 0.60427423 0.65298738</span></span>
-<span><span class="co">#&gt; 51  43.176768 0.64567252 0.62137511 0.66990917</span></span>
-<span><span class="co">#&gt; 52  44.030303 0.66213145 0.63791643 0.68621046</span></span>
-<span><span class="co">#&gt; 53  44.883838 0.67796694 0.65386716 0.70185598</span></span>
-<span><span class="co">#&gt; 54  45.737374 0.69315156 0.66920108 0.71681762</span></span>
-<span><span class="co">#&gt; 55  46.590909 0.70766374 0.68389659 0.73107434</span></span>
-<span><span class="co">#&gt; 56  47.444444 0.72148757 0.69793657 0.74461197</span></span>
-<span><span class="co">#&gt; 57  48.297980 0.73461254 0.71130813 0.75742291</span></span>
-<span><span class="co">#&gt; 58  49.151515 0.74703320 0.72400232 0.76950564</span></span>
-<span><span class="co">#&gt; 59  50.005051 0.75874875 0.73601383 0.78086420</span></span>
-<span><span class="co">#&gt; 60  50.858586 0.76976255 0.74734066 0.79150759</span></span>
-<span><span class="co">#&gt; 61  51.712121 0.78008167 0.75798364 0.80144916</span></span>
-<span><span class="co">#&gt; 62  52.565657 0.78971633 0.76794612 0.81070592</span></span>
-<span><span class="co">#&gt; 63  53.419192 0.79867939 0.77723350 0.81929794</span></span>
-<span><span class="co">#&gt; 64  54.272727 0.80698582 0.78585282 0.82724767</span></span>
-<span><span class="co">#&gt; 65  55.126263 0.81465218 0.79381235 0.83457942</span></span>
-<span><span class="co">#&gt; 66  55.979798 0.82169617 0.80112116 0.84131869</span></span>
-<span><span class="co">#&gt; 67  56.833333 0.82813613 0.80778876 0.84749172</span></span>
-<span><span class="co">#&gt; 68  57.686869 0.83399062 0.81382480 0.85312499</span></span>
-<span><span class="co">#&gt; 69  58.540404 0.83927809 0.81923866 0.85824471</span></span>
-<span><span class="co">#&gt; 70  59.393939 0.84401643 0.82403928 0.86287648</span></span>
-<span><span class="co">#&gt; 71  60.247475 0.84822275 0.82823488 0.86704484</span></span>
-<span><span class="co">#&gt; 72  61.101010 0.85191307 0.83183279 0.87077301</span></span>
-<span><span class="co">#&gt; 73  61.954545 0.85510205 0.83483926 0.87408252</span></span>
-<span><span class="co">#&gt; 74  62.808081 0.85780288 0.83725937 0.87699300</span></span>
-<span><span class="co">#&gt; 75  63.661616 0.86002700 0.83909685 0.87952200</span></span>
-<span><span class="co">#&gt; 76  64.515152 0.86178403 0.84035397 0.88168483</span></span>
-<span><span class="co">#&gt; 77  65.368687 0.86308166 0.84103143 0.88349447</span></span>
-<span><span class="co">#&gt; 78  66.222222 0.86392548 0.84112821 0.88496159</span></span>
-<span><span class="co">#&gt; 79  67.075758 0.86431902 0.84064144 0.88609456</span></span>
-<span><span class="co">#&gt; 80  67.929293 0.86426362 0.83956628 0.88689948</span></span>
-<span><span class="co">#&gt; 81  68.782828 0.86375845 0.83789584 0.88738031</span></span>
-<span><span class="co">#&gt; 82  69.636364 0.86280045 0.83562110 0.88753895</span></span>
-<span><span class="co">#&gt; 83  70.489899 0.86138442 0.83273093 0.88737534</span></span>
-<span><span class="co">#&gt; 84  71.343434 0.85950298 0.82921209 0.88688755</span></span>
-<span><span class="co">#&gt; 85  72.196970 0.85714665 0.82504940 0.88607189</span></span>
-<span><span class="co">#&gt; 86  73.050505 0.85430394 0.82022587 0.88492295</span></span>
-<span><span class="co">#&gt; 87  73.904040 0.85096143 0.81472299 0.88343368</span></span>
-<span><span class="co">#&gt; 88  74.757576 0.84710393 0.80852105 0.88159545</span></span>
-<span><span class="co">#&gt; 89  75.611111 0.84271461 0.80159953 0.87939813</span></span>
-<span><span class="co">#&gt; 90  76.464646 0.83777525 0.79393761 0.87683008</span></span>
-<span><span class="co">#&gt; 91  77.318182 0.83226642 0.78551469 0.87387829</span></span>
-<span><span class="co">#&gt; 92  78.171717 0.82616781 0.77631105 0.87052838</span></span>
-<span><span class="co">#&gt; 93  79.025253 0.81945855 0.76630847 0.86676475</span></span>
-<span><span class="co">#&gt; 94  79.878788 0.81211754 0.75549100 0.86257063</span></span>
-<span><span class="co">#&gt; 95  80.732323 0.80412392 0.74384571 0.85792827</span></span>
-<span><span class="co">#&gt; 96  81.585859 0.79545748 0.73136344 0.85281900</span></span>
-<span><span class="co">#&gt; 97  82.439394 0.78609923 0.71803967 0.84722350</span></span>
-<span><span class="co">#&gt; 98  83.292929 0.77603184 0.70387518 0.84112196</span></span>
-<span><span class="co">#&gt; 99  84.146465 0.76524031 0.68887688 0.83449431</span></span>
-<span><span class="co">#&gt; 100 85.000000 0.75371250 0.67305839 0.82732055</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span><span class="va">hav</span>, p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.6</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="parametric_model_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <div id="refs" class="references csl-bib-body hanging-indent">

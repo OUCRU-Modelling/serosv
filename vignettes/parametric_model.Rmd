@@ -16,8 +16,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, output=FALSE}
+```{r setup, output=FALSE, warning=FALSE, message=FALSE}
 library(serosv)
+library(dplyr)
+library(magrittr)
 ```
 
 ## Polynomial models
@@ -29,11 +31,7 @@ Use `polynomial_model()` to fit a polynomial model.
 We will use the `Hepatitis A` data from Belgium 1993--1994 for this example.
 
 ```{r}
-a <- hav_bg_1964
-neg <- a$tot -a$pos
-pos <- a$pos
-age <- a$age
-tot <- a$tot
+data <- hav_bg_1964
 ```
 
 ### Muench model
@@ -49,11 +47,7 @@ $$
 Where:
 
 -   $\pi$ is the seroprevalence at age $a$
-
-<!-- -->
-
 -   $1 - k$ is the proportion of population that stay uninfected for a lifetime
-
 -   $a$ is the variable age
 
 Under this catalytic model and assuming that $k = 1$, force infection would be $\lambda(a) = \beta$
@@ -63,10 +57,10 @@ Under this catalytic model and assuming that $k = 1$, force infection would be $
 **Muench**'s model can be estimated by either defining `k = 1` (a degree one linear predictor, note that it is irrelevant to the k in the proposed model) or setting the `type = "Muench"`.
 
 ```{r}
-muench1 <- polynomial_model(age, pos = pos, tot = tot, k = 1)
+muench1 <- polynomial_model(data, k = 1)
 summary(muench1$info)
 
-muench2 <- polynomial_model(age, pos = pos, tot = tot, type = "Muench")
+muench2 <- polynomial_model(data, type = "Muench")
 summary(muench2$info)
 ```
 
@@ -93,7 +87,7 @@ Which can be estimated using a GLM where the for which the linear predictor was 
 Similarly, we can estimate **Griffith**'s model either by defining `k = 2`, or setting the `type = "Griffith"`
 
 ```{r}
-gf_model <- polynomial_model(age, pos = pos, tot = tot, type = "Griffith")
+gf_model <- polynomial_model(data, type = "Griffith")
 plot(gf_model)
 ```
 
@@ -114,7 +108,7 @@ Which implies that force of infection equals $\lambda(a) = \Sigma \beta_i i a^{i
 And Grenfell and Anderson's model.
 
 ```{r}
-grf_model <- polynomial_model(age, pos = pos, tot = tot, type = "Grenfell")
+grf_model <- polynomial_model(data, type = "Grenfell")
 plot(grf_model)
 ```
 
@@ -147,11 +141,8 @@ $$
 Use `farrington_model()` to fit a **Farrington**'s model.
 
 ```{r, warning=FALSE}
-rubella <- rubella_uk_1986_1987
-rubella$neg <- rubella$tot - rubella$pos
-
 farrington_md <- farrington_model(
-   rubella$age, pos = rubella$pos, tot = rubella$tot,
+   rubella_uk_1986_1987,
    start=list(alpha=0.07,beta=0.1,gamma=0.03)
    )
 plot(farrington_md)
@@ -185,13 +176,11 @@ Use `weibull_model()` to fit a Weibull model.
 
 ```{r}
 hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
-dur <- hcv$dur
-infected <- hcv$seropositive
 
-wb_md <- weibull_model(
-   t = dur,
-   status = infected
-   )
+wb_md <- hcv %>% 
+  rename(
+    t = dur, status = seropositive
+  ) %>% weibull_model()
 plot(wb_md) 
 ```
 
@@ -225,7 +214,7 @@ Use `find_best_fp_powers()` to find the powers which gives the lowest deviance s
 ```{r, warning=FALSE}
 hav <- hav_be_1993_1994
 best_p <- find_best_fp_powers(
-  hav$age, pos = hav$pos,tot = hav$tot,
+  hav,
   p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
 )
 best_p
@@ -236,9 +225,6 @@ best_p
 Use `fp_model()` to fit a fractional polynomial model
 
 ```{r}
-model <- fp_model(
-  hav$age, pos = hav$pos, tot = hav$tot,
-  p=c(1.5, 1.6), link="cloglog")
-compute_ci.fp_model(model)
+model <- fp_model(hav, p=c(1.5, 1.6), link="cloglog")
 plot(model)
 ```

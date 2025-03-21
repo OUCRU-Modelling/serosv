@@ -60,6 +60,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #'
 #' @param t the time vector.
 #' @param spos the seropositive vector.
+#' @param heterogeneity_col new name for the time vector (default to "t")
 #'
 #' @examples
 #' df <- hcv_be_2006
@@ -73,7 +74,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #'
 #' @return dataframe in aggregated format
 #' @export
-transform_data <- function(t, spos) {
+transform_data <- function(t, spos, heterogeneity_col = "t") {
   df <- data.frame(t, spos)
   df_agg <- df %>%
     group_by(t) %>%
@@ -81,6 +82,52 @@ transform_data <- function(t, spos) {
       pos = sum(spos),
       tot = n()
     )
+  colnames(df_agg) <- c(heterogeneity_col, "pos", "tot")
+
   df_agg
 }
+
+# utility function to check input data
+# return:
+# - type of data (either linelisting or aggregated)
+# - preprocessed pos and tot columns
+#' @importFrom assertthat assert_that
+check_input <- function(data, heterogeneity_col = "age"){
+  assert_that(
+    is.data.frame(data),
+    msg = "Input must be a data.frame or tibble"
+  )
+
+  age <- NULL
+  pos <- NULL
+  tot <- NULL
+  type <- NULL
+
+
+  if( all(c(heterogeneity_col, "pos", "tot") %in% colnames(data)) ){
+    age <- as.numeric(data[[heterogeneity_col]])
+    pos <- as.numeric(data$pos)
+    tot <- as.numeric(data$tot)
+    type <- "aggregated"
+  }else if( all(c(heterogeneity_col, "status") %in% colnames(data)) ){
+    age <- as.numeric(data[[heterogeneity_col]])
+    pos <- as.numeric(data$status)
+    tot <- rep(1, length(data$status))
+    type <- "linelisting"
+  }else{
+    stop(paste0(
+      "Data must have `",
+      heterogeneity_col,
+      "`, `pos`, `tot` columns for aggregated data OR `",
+      heterogeneity_col,
+      "`, `status` columns for linelisting data"
+    ))
+  }
+
+  list(
+    age = age, pos = pos, tot = tot, type = type
+  )
+}
+
+
 

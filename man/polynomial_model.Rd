@@ -4,28 +4,14 @@
 \alias{polynomial_model}
 \title{Polynomial models}
 \usage{
-polynomial_model(
-  age,
-  k,
-  type,
-  pos = NULL,
-  tot = NULL,
-  status = NULL,
-  link = "log"
-)
+polynomial_model(data, k, type, link = "log")
 }
 \arguments{
-\item{age}{the age vector.}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{k}{degree of the model.}
 
 \item{type}{name of method (Muench, Giffith, Grenfell).}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
 
 \item{link}{link function.}
 }
@@ -38,19 +24,17 @@ a list of class polynomial_model with 5 items
   \item{foi}{force of infection}
 }
 \description{
-Either `status` (treated as line-listing dataset) or  `pos` & `tot` (treated as aggregated dataset) must be provided
-}
-\details{
 Refers to section 6.1.1
 }
 \examples{
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-aggregated <- transform_data(data$age, data$seropositive)
+data$status <- data$seropositive
+aggregated <- transform_data(data$age, data$seropositive, heterogeneity_col = "age")
 
 # fit with aggregated data
-model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
+model <- polynomial_model(aggregated, type = "Muench")
 # fit with linelisting data
-model <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
+model <- polynomial_model(data, type = "Muench")
 plot(model)
 
 }

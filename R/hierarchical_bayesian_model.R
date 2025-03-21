@@ -2,10 +2,7 @@
 #'
 #' Refers to section 10.3
 #'
-#' @param age the age vector
-#' @param pos the positive count vector (optional if status is provided).
-#' @param tot the total count vector (optional if status is provided).
-#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param type type of model ("far2", "far3" or "log_logistic")
 #' @param chains number of Markov chains
 #' @param warmup number of warmup runs
@@ -26,28 +23,22 @@
 #' @examples
 #' \donttest{
 #' df <- mumps_uk_1986_1987
-#' model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+#' model <- hierarchical_bayesian_model(df, type="far3")
 #' model$info
 #' plot(model)
 #' }
-hierarchical_bayesian_model <- function(age,pos=NULL,tot=NULL, status=NULL,
+hierarchical_bayesian_model <- function(data,
                             type="far3",chains = 1,warmup = 1500,iter = 5000){
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  if (!is.null(pos) & !is.null(tot)){
-    pos <- as.numeric(pos)
-    tot <- as.numeric(tot)
-    model$datatype <- "aggregated"
-  }else{
-    # automatically transform to aggregated data if line listing data is given
-    transform_df <- transform_data(age, status)
-    age <- transform_df$t
-    pos <- as.numeric(transform_df$pos)
-    tot <- as.numeric(transform_df$tot)
-    model$datatype <- "linelisting"
-  }
+  data <- serosv:::check_input(data)
+  model$datatype <- data$type
+  age <- data$age
+  pos <- data$pos
+  tot <- data$tot
 
+  # prepare data for stan model
   data <- list(age = age,
                posi = pos,
                ni = tot,

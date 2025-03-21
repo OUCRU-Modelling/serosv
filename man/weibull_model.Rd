@@ -4,16 +4,10 @@
 \alias{weibull_model}
 \title{The Weibull model.}
 \usage{
-weibull_model(t, status = NULL, pos = NULL, tot = NULL)
+weibull_model(data)
 }
 \arguments{
-\item{t}{the time vector.}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
+\item{data}{the input data frame, must either have `t`, `pos`, `tot` column for aggregated data OR `t`, `status` for linelisting data}
 }
 \value{
 list of class weibull_model with the following items
@@ -28,10 +22,9 @@ Refers to section 6.1.2.
 }
 \examples{
 df <- hcv_be_2006[order(hcv_be_2006$dur), ]
-model <- weibull_model(
-  t=df$dur,
-  status=df$seropositive
-  )
+df$t <- df$dur
+df$status <- df$seropositive
+model <- weibull_model(df)
 plot(model)
 
 }

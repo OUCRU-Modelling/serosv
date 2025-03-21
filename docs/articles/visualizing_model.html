@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
     <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
     <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
     <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
@@ -108,7 +109,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hav</span> <span class="op">&lt;-</span> <span class="va">hav_be_1993_1994</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span></span>
-<span>  <span class="va">hav</span><span class="op">$</span><span class="va">age</span>, <span class="va">hav</span><span class="op">$</span><span class="va">pos</span>, <span class="va">hav</span><span class="op">$</span><span class="va">tot</span>,</span>
+<span>  <span class="va">hav</span>,</span>
 <span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.6</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="visualizing_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
@@ -119,7 +120,7 @@ seroprevalence line</p>
 <code class="sourceCode R"><span><span class="va">rubella</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span>
 <span></span>
 <span><span class="va">farrington_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span></span>
-<span>   <span class="va">rubella</span><span class="op">$</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">rubella</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">rubella</span><span class="op">$</span><span class="va">tot</span>,</span>
+<span>   <span class="va">rubella</span>,</span>
 <span>   start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span></span>
 <span>   <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">farrington_md</span><span class="op">)</span></span></code></pre></div>
@@ -133,11 +134,7 @@ attributes of the plot.</p>
 <p>Current modifiable attributes include color, linetype for
 seroprevalence, foi and fill color for confidence interval</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="va">hav_bg_1964</span></span>
-<span><span class="va">pos</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">pos</span></span>
-<span><span class="va">age</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">age</span></span>
-<span><span class="va">tot</span> <span class="op">&lt;-</span> <span class="va">a</span><span class="op">$</span><span class="va">tot</span></span>
-<span><span class="va">gf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">pos</span>, tot <span class="op">=</span> <span class="va">tot</span>, type <span class="op">=</span> <span class="st">"Griffith"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">hav_bg_1964</span>, type <span class="op">=</span> <span class="st">"Griffith"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># customize plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gf_model</span><span class="op">)</span> <span class="op">+</span></span>

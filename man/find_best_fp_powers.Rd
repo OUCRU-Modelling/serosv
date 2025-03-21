@@ -4,14 +4,10 @@
 \alias{find_best_fp_powers}
 \title{Returns the powers of the GLM fitted model which has the lowest deviance score.}
 \usage{
-find_best_fp_powers(age, pos, tot, p, mc, degree, link = "logit")
+find_best_fp_powers(data, p, mc, degree, link = "logit")
 }
 \arguments{
-\item{age}{the age vector.}
-
-\item{pos}{the pos vector.}
-
-\item{tot}{the tot vector.}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{p}{a powers sequence.}
 
@@ -33,7 +29,7 @@ Refers to section 6.2.
 \examples{
 df <- hav_be_1993_1994
 best_p <- find_best_fp_powers(
-df$age, df$pos, df$tot,
+df,
 p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
 )
 best_p

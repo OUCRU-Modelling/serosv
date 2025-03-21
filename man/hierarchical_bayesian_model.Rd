@@ -5,10 +5,7 @@
 \title{Hierarchical Bayesian Model}
 \usage{
 hierarchical_bayesian_model(
-  age,
-  pos = NULL,
-  tot = NULL,
-  status = NULL,
+  data,
   type = "far3",
   chains = 1,
   warmup = 1500,
@@ -16,13 +13,7 @@ hierarchical_bayesian_model(
 )
 }
 \arguments{
-\item{age}{the age vector}
-
-\item{pos}{the positive count vector (optional if status is provided).}
-
-\item{tot}{the total count vector (optional if status is provided).}
-
-\item{status}{the serostatus vector (optional if pos & tot are provided).}
+\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{type}{type of model ("far2", "far3" or "log_logistic")}
 
@@ -47,7 +38,7 @@ Refers to section 10.3
 \examples{
 \donttest{
 df <- mumps_uk_1986_1987
-model <- hierarchical_bayesian_model(age = df$age, pos = df$pos, tot = df$tot, type="far3")
+model <- hierarchical_bayesian_model(df, type="far3")
 model$info
 plot(model)
 }

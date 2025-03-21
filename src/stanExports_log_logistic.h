@@ -56,10 +56,10 @@ static constexpr std::array<const char*, 32> locations_array__ =
   " (in 'log_logistic', line 2, column 2 to column 20)",
   " (in 'log_logistic', line 3, column 9 to column 13)",
   " (in 'log_logistic', line 3, column 2 to column 19)",
-  " (in 'log_logistic', line 4, column 20 to column 24)",
-  " (in 'log_logistic', line 4, column 2 to column 26)",
-  " (in 'log_logistic', line 5, column 18 to column 22)",
-  " (in 'log_logistic', line 5, column 2 to column 24)"};
+  " (in 'log_logistic', line 4, column 8 to column 12)",
+  " (in 'log_logistic', line 4, column 2 to column 32)",
+  " (in 'log_logistic', line 5, column 8 to column 12)",
+  " (in 'log_logistic', line 5, column 2 to column 30)"};
 #include <stan_meta_header.hpp>
 class model_log_logistic final : public model_base_crtp<model_log_logistic> {
 private:

@@ -11,25 +11,20 @@ X <- function(t, degree) {
 #' Polynomial models
 #'
 #' Refers to section 6.1.1
-#' @description
-#' Either `status` (treated as line-listing dataset) or  `pos` & `tot` (treated as aggregated dataset) must be provided
-#'
-#' @param age the age vector.
-#' @param pos the positive count vector (optional if status is provided).
-#' @param tot the total count vector (optional if status is provided).
-#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param k  degree of the model.
 #' @param type name of method (Muench, Giffith, Grenfell).
 #' @param link link function.
 #'
 #' @examples
 #' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-#' aggregated <- transform_data(data$age, data$seropositive)
+#' data$status <- data$seropositive
+#' aggregated <- transform_data(data$age, data$seropositive, heterogeneity_col = "age")
 #'
 #' # fit with aggregated data
-#' model <- polynomial_model(aggregated$t, pos = aggregated$pos, tot = aggregated$tot, type = "Muench")
+#' model <- polynomial_model(aggregated, type = "Muench")
 #' # fit with linelisting data
-#' model <- polynomial_model(data$age, status = data$seropositive, type = "Muench")
+#' model <- polynomial_model(data, type = "Muench")
 #' plot(model)
 #'
 #' @return a list of class polynomial_model with 5 items
@@ -40,25 +35,14 @@ X <- function(t, degree) {
 #'   \item{foi}{force of infection}
 #'
 #' @export
-polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL, link = "log"){
-  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
-
+polynomial_model <- function(data, k,type, link = "log"){
   model <- list()
-  Pos <- NULL
-  Neg <- NULL
+  data <- serosv:::check_input(data)
+  model$datatype <- data$type
 
-  # check input whether it is line-listing or aggregated data
-  if (!is.null(pos) & !is.null(tot)){
-    Pos <- as.numeric(pos)
-    Neg <- as.numeric(tot) - Pos
-    model$datatype <- "aggregated"
-  }else{
-    Pos <- as.numeric(status)
-    Neg <- 1 - Pos
-    model$datatype <- "linelisting"
-  }
-
-  Age <- as.numeric(age)
+  Age <- data$age
+  Pos <- data$pos
+  Neg <- data$tot - Pos
 
   df <- data.frame(cbind(Age, Pos,Neg))
   if(missing(k)){
@@ -87,10 +71,7 @@ polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL, link = "
 #'
 #' Refers to section 6.1.2.
 #'
-#' @param age the age vector.
-#' @param pos the positive count vector (optional if status is provided).
-#' @param tot the total count vector (optional if status is provided).
-#' @param status the serostatus vector (optional if pos & tot are provided).
+#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param start Named list of vectors or single vector.
 #' Initial values for optimizer.
 #' @param fixed Named list of vectors or single vector.
@@ -107,7 +88,7 @@ polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL, link = "
 #' @examples
 #' df <- rubella_uk_1986_1987
 #' model <- farrington_model(
-#'   df$age, pos = df$pos, tot = df$tot,
+#'   df,
 #'   start=list(alpha=0.07,beta=0.1,gamma=0.03)
 #'   )
 #' plot(model)
@@ -115,25 +96,16 @@ polynomial_model <- function(age,k,type, pos=NULL,tot=NULL,status=NULL, link = "
 #' @importFrom stats4 mle
 #'
 #' @export
-farrington_model <- function(age, start,pos=NULL,tot=NULL,status=NULL, fixed=list())
+farrington_model <- function(data, start, fixed=list())
 {
-  stopifnot("Values for either `pos & tot` or `status` must be provided" = !is.null(pos) & !is.null(tot) | !is.null(status) )
   model <- list()
-  age <- as.numeric(age)
 
   # check input whether it is line-listing or aggregated data
-  if (!is.null(pos) & !is.null(tot)){
-    pos <- as.numeric(pos)
-    tot <- as.numeric(tot)
-    model$datatype <- "aggregated"
-  }else{
-    pos <- as.numeric(status)
-    tot <- rep(1, length(pos))
-    model$datatype <- "linelisting"
-  }
-
-  # print(head(pos))
-  # print(head(tot))
+  data <- serosv:::check_input(data)
+  age <- data$age
+  pos <- data$pos
+  tot <- data$tot
+  model$datatype <- data$type
 
   farrington <- function(alpha,beta,gamma) {
     p=1-exp((alpha/beta)*age*exp(-beta*age)
