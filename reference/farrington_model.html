@@ -24,6 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
     <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
     <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
     <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
@@ -68,37 +69,18 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">farrington_model</span><span class="op">(</span></span>
-<span>  <span class="va">age</span>,</span>
-<span>  <span class="va">start</span>,</span>
-<span>  pos <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  tot <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  status <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">farrington_model</span><span class="op">(</span><span class="va">data</span>, <span class="va">start</span>, fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>age</dt>
-<dd><p>the age vector.</p></dd>
+    <dl><dt>data</dt>
+<dd><p>the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)</p></dd>
 
 
 <dt>start</dt>
 <dd><p>Named list of vectors or single vector.
 Initial values for optimizer.</p></dd>
-
-
-<dt>pos</dt>
-<dd><p>the positive count vector (optional if status is provided).</p></dd>
-
-
-<dt>tot</dt>
-<dd><p>the total count vector (optional if status is provided).</p></dd>
-
-
-<dt>status</dt>
-<dd><p>the serostatus vector (optional if pos &amp; tot are provided).</p></dd>
 
 
 <dt>fixed</dt>
@@ -136,7 +118,7 @@ Parameter values to keep fixed during optimization.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">farrington_model</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">df</span><span class="op">$</span><span class="va">age</span>, pos <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">pos</span>, tot <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">tot</span>,</span></span>
+<span class="r-in"><span>  <span class="va">df</span>,</span></span>
 <span class="r-in"><span>  start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
