@@ -20,8 +20,7 @@
 #'   )
 #' plot(model)
 #'
-#' @importFrom locfit locfit
-#' @importFrom locfit lp
+#' @importFrom locfit locfit lp crit crit<-
 #' @importFrom graphics par
 #' @importFrom stats fitted
 #'
@@ -43,7 +42,7 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2) {
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

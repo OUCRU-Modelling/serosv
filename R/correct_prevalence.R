@@ -26,7 +26,7 @@ correct_prevalence <- function(data, bayesian=TRUE,
                          chains = 1, warmup = 1000, iter = 2000){
   output <- list()
 
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

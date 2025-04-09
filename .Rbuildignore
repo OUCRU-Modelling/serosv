@@ -19,3 +19,4 @@
 ^revdep$
 ^docs$
 ^CRAN-SUBMISSION$
+^logo\.svg$

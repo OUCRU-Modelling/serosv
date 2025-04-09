@@ -53,7 +53,7 @@ mixture_model <- function (antibody_level, breaks=40, pi=c(0.2, 0.8), mu=c(2,6),
 #' @param threshold_status - sero status using threshold approach in line listing (optional, for visualization and comparison only)
 #' @param monotonize - whether to monotonize seroprevalence (default to TRUE)
 #'
-#' @import mgcv
+#' @importFrom mgcv gam
 #' @importFrom stats approx gaussian
 #'
 #' @return  a list of class estimated_from_mixture with the following items

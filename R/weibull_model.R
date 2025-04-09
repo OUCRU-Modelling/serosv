@@ -28,7 +28,7 @@ weibull_model <- function(data)
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- serosv:::check_input(data, heterogeneity_col = "t")
+  data <- check_input(data, heterogeneity_col = "t")
   t <- data$age
   pos <- data$pos
   tot <- data$tot
