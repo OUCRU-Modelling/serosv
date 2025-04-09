@@ -1,4 +1,4 @@
-# serosv (development version)
+# serosv 1.1.0
 
 # serosv 1.0.1
 
