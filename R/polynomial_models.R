@@ -37,7 +37,7 @@ X <- function(t, degree) {
 #' @export
 polynomial_model <- function(data, k,type, link = "log"){
   model <- list()
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   model$datatype <- data$type
 
   Age <- data$age
@@ -101,7 +101,7 @@ farrington_model <- function(data, start, fixed=list())
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

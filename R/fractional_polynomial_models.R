@@ -47,7 +47,7 @@ formulate <- function(p) {
 #'
 #' @export
 find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   age <- data$age
   pos <- data$pos
   tot <- data$tot
@@ -139,7 +139,7 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
 fp_model <- function(data,p,  link="logit") {
   model <- list()
 
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

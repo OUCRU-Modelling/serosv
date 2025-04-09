@@ -6,7 +6,7 @@
 #' @param link link function to use
 #' @param framework which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)
 #'
-#' @import mgcv
+#' @importFrom mgcv gam gamm
 #' @importFrom stats binomial
 #'
 #' @return a list of class penalized_spline_model with 6 attributes
@@ -30,7 +30,7 @@
 penalized_spline_model <- function(data, s = "bs", link = "logit", framework = "pl", sp = NULL){
   model <- list()
 
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

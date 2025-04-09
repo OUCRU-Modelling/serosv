@@ -1,8 +1,8 @@
-## Patch release
+## Minor release
 In this version I have
 * add correct_prevalence() and compare_models() functions
-* update API
-
+* update API to takes a data.frame as input 
+* resolve import warning
 
 ## R CMD check results
 checking installed package size ... NOTE

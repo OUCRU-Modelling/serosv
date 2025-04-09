@@ -32,7 +32,7 @@ hierarchical_bayesian_model <- function(data,
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- serosv:::check_input(data)
+  data <- check_input(data)
   model$datatype <- data$type
   age <- data$age
   pos <- data$pos

@@ -552,16 +552,23 @@ plot.estimate_from_mixture <- function(x, ... ){
 #'   h_seq = seq(5, 25, by=1)
 #' )
 #'
-#' @import locfit patchwork ggplot2
-#' @import graphics
+#' @importFrom locfit gcvplot gcv
+#' @import graphics patchwork ggplot2
 #'
 #' @return plot of gcv value
 #' @export
 plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   y <- pos/tot
 
+  # create a function to summarize gcvplot instead of calling locfit:::summary.gcvplot
+  summary.gcvplot <- function(object, ...){
+    z <- cbind(object$df, object$values)
+    dimnames(z) <- list(NULL, c("df", object$cri))
+    z
+  }
+
   # --- Plot for nn seq
-  res <-  cbind(nn_seq, summary(gcvplot(y~age, family="binomial", alpha=nn_seq)))
+  res <-  cbind(nn_seq, summary.gcvplot(gcvplot(y~age, family="binomial", alpha=nn_seq)))
   nn_plot <- ggplot() +
     geom_line(aes(x = res[,1], y = res[,3]), col = "royalblue") +
     labs(x="nn (% Neighbors)", y="GCV")
@@ -569,7 +576,7 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
 
   # --- Plot for h seq
   h_seq_ <- cbind(rep(0, length(h_seq)), h_seq)
-  h_res <- cbind(h_seq_[,2],summary(gcvplot(y~age,family="binomial",alpha=h_seq_)))
+  h_res <- cbind(h_seq_[,2], summary.gcvplot(gcvplot(y~age,family="binomial",alpha=h_seq_)))
   h_plot <- ggplot() +
     geom_line(aes(x = h_res[,1], y = h_res[,3]), col = "royalblue") +
     labs(x="h (Bandwidth)", y="GCV")
