@@ -64,10 +64,16 @@
     <loc>https://oucru-modelling.github.io/serosv/news/index.html</loc>
   </url>
   <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/age_time_model.html</loc>
+  </url>
+  <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/bivariate_dale_model.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/compare_models.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.html</loc>
@@ -170,6 +176,9 @@
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/penalized_spline_model.html</loc>
+  </url>
+  <url>
+    <loc>https://oucru-modelling.github.io/serosv/reference/plot.age_time_model.html</loc>
   </url>
   <url>
     <loc>https://oucru-modelling.github.io/serosv/reference/plot.bivariate_dale_model.html</loc>

@@ -55,6 +55,7 @@ reference:
   - penalized_spline_model
   - mixture_model
   - estimate_from_mixture
+  - age_time_model
 
 - title: Plotting functions
   contents:
@@ -72,6 +73,7 @@ reference:
   - plot.penalized_spline_model
   - plot.mixture_model
   - plot.estimate_from_mixture
+  - plot.age_time_model
   - set_plot_style
 
 - title: Other utilities
@@ -88,6 +90,7 @@ reference:
   - compute_ci.weibull_model
   - compute_ci.penalized_spline_model
   - compute_ci.mixture_model
+  - compute_ci.age_time_model
   - find_best_fp_powers
 
 articles:

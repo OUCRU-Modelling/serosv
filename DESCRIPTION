@@ -3,8 +3,8 @@ Type: Package
 Title: Model Infectious Disease Parameters from Serosurveys
 Version: 1.2.0
 Authors@R: c(
-    person("Anh", "Phan Truong Quynh", email = "anhptq@oucru.org", role = c("aut", "cre")),
-    person("Nguyen", "Pham Nguyen The", email = "nguyenpnt@oucru.org", role = c("aut")),
+    person("Anh", "Phan Truong Quynh", email = "anhptq@oucru.org", role = c("aut", "cre"), comment = c(ORCID = "0009-0000-2129-435X")),
+    person("Nguyen", "Pham Nguyen The", email = "nguyenpnt@oucru.org", role = c("aut"), comment = c(ORCID = "0000-0002-0356-2776")),
     person("Long", "Bui Thanh", role = "aut"),
     person("Tuyen", "Huynh", email = "tuyenhn@oucru.org", role = "aut"),
     person("Thinh", "Ong", email = "thinhop@oucru.org", role = "aut", comment = c(ORCID = "0000-0001-6772-9291")),
@@ -21,6 +21,7 @@ RoxygenNote: 7.3.1
 Imports:
     deSolve,
     dplyr,
+    tidyr,
     ggplot2,
     locfit,
     purrr,
