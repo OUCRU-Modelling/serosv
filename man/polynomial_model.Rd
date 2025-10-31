@@ -29,7 +29,7 @@ Refers to section 6.1.1
 \examples{
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
 data$status <- data$seropositive
-aggregated <- transform_data(data$age, data$seropositive, heterogeneity_col = "age")
+aggregated <- transform_data(data$age, data$seropositive, stratification_col = "age")
 
 # fit with aggregated data
 model <- polynomial_model(aggregated, type = "Muench")

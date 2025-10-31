@@ -527,6 +527,80 @@ plot.estimate_from_mixture <- function(x, ... ){
   returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")
 }
 
+#' Plot output for age_time_model
+#'
+#' @param x - a `age_time_model` object
+#' @param facet - whether to facet the plot by group or not
+#' @param modtype - indicate which model to plot, either "monotonized" or "non-monotonized"
+#' @param le - number of bins to generate x axis, higher value return smoother plot
+#' @param cex - adjust the of the data points (only when facet = TRUE)
+#'
+#' @importFrom graphics plot
+#' @import ggplot2 assertthat tidyr
+#'
+#' @return ggplot object
+#' @export
+plot.age_time_model <- function(x, ...){
+  # check whether user specify facet
+  facet <- if (is.null(list(...)[["facet"]])) TRUE else list(...)$facet
+  cex <- if (is.null(list(...)[["cex"]])) 10 else list(...)$cex
+  le <- if (is.null(list(...)[["le"]])) 100 else list(...)$le
+
+  assert_that(
+    is.logical(facet),
+    msg = "facet argument must be of type logical"
+  )
+
+  # check which type of model user wants to visualize
+  modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
+  assert_that(
+    modtype == "monotonized" | modtype == "non-monotonized",
+    msg = "modtype argument must be eithers 'monotonized' or 'non-monotonized'"
+  )
+
+  # compute the CI for sp
+  out <- compute_ci.age_time_model(x, modtype = modtype, le = le)
+
+  # get seroprev data and foi data for plotting
+  sp_dat <- out %>% select(!!sym(x$grouping_col), sp_df) %>% unnest(sp_df)
+  foi_dat <- out %>% select(!!sym(x$grouping_col), foi_df) %>% unnest(foi_df)
+
+  # get input data points
+  df_dat <- x$out %>%
+    select(!!sym(x$grouping_col), df) %>%
+    unnest(df) %>%
+    mutate(age = round(age)) %>%
+    group_by(!!sym(x$grouping_col), age) %>%
+    summarize(
+      pos = sum(pos, na.rm = TRUE),
+      tot = sum(tot, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(seroprev = pos/tot)
+
+  ggplot() +
+    geom_smooth(aes(
+      x = x, y = y, ymin=ymin, ymax=ymax,
+      color = if(facet) "sero" else as.factor(!!sym(x$grouping_col)),
+      fill = if(facet) "ci" else as.factor(!!sym(x$grouping_col))
+    ), stat = "identity", lwd=0.5, alpha=0.2, data = sp_dat) +
+    geom_line(aes(
+      x = x, y = y, color = if(facet) "foi" else as.factor(!!sym(x$grouping_col))
+    ), linetype = "dashed", data = foi_dat) +
+    ylim(c(0, 1)) +
+    if (facet)
+      list(
+        geom_point(
+          aes(x = age, y = seroprev, size = cex*pos/max(tot)), shape = 1,
+          data = df_dat
+        ),
+        guides(shape = "none", size = "none"),
+        serosv:::set_plot_style(),
+        facet_wrap(vars(!!sym(x$grouping_col)))
+      ) else
+        labs(color = x$grouping_col, fill = x$grouping_col)
+}
+
 
 #### GCV values ####
 #' Plotting GCV values with respect to different nn-s and h-s parameters.

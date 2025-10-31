@@ -118,10 +118,9 @@ parvob19 <- parvob19_fi_1997_1998
 transform_data(
   parvob19$age, 
   parvob19$seropositive,
-  heterogeneity_col = "age") %>% 
+  stratum_col = "age") %>% 
   polynomial_model(type = "Muench") %>% 
   plot()
-
 # or fit data as is
 parvob19 %>% 
   rename(status = seropositive) %>% 

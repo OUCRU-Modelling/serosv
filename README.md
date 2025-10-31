@@ -137,7 +137,7 @@ parvob19 <- parvob19_fi_1997_1998
 transform_data(
   parvob19$age, 
   parvob19$seropositive,
-  heterogeneity_col = "age") %>% 
+  stratification_col = "age") %>% 
   polynomial_model(type = "Muench") %>% 
   plot()
 ```
