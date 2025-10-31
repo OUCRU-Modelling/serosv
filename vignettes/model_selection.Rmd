@@ -17,7 +17,7 @@ library(magrittr)
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] %>% 
   rename(status = seropositive)
   
-aggregated <- transform_data(data$age, data$status, heterogeneity_col = "age")
+aggregated <- transform_data(data$age, data$status, stratum_col = "age")
 
 # fit with linelisting data
 model1 <- polynomial_model(data, type = "Muench")

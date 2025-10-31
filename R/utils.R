@@ -58,9 +58,9 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #' Generate a dataframe with `t`, `pos` and `tot` columns from
 #' `t` and `seropositive` vectors.
 #'
-#' @param t the time vector.
+#' @param t the time vector (for stratification).
 #' @param spos the seropositive vector.
-#' @param heterogeneity_col new name for the time vector (default to "t")
+#' @param stratum_col new name for the time vector (default to "t")
 #'
 #' @examples
 #' df <- hcv_be_2006
@@ -74,7 +74,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #'
 #' @return dataframe in aggregated format
 #' @export
-transform_data <- function(t, spos, heterogeneity_col = "t") {
+transform_data <- function(t, spos, stratum_col = "t") {
   df <- data.frame(t, spos)
   df_agg <- df %>%
     group_by(t) %>%
@@ -82,7 +82,7 @@ transform_data <- function(t, spos, heterogeneity_col = "t") {
       pos = sum(spos),
       tot = n()
     )
-  colnames(df_agg) <- c(heterogeneity_col, "pos", "tot")
+  colnames(df_agg) <- c(stratum_col, "pos", "tot")
 
   df_agg
 }
@@ -92,7 +92,7 @@ transform_data <- function(t, spos, heterogeneity_col = "t") {
 # - type of data (either linelisting or aggregated)
 # - preprocessed pos and tot columns
 #' @importFrom assertthat assert_that
-check_input <- function(data, heterogeneity_col = "age"){
+check_input <- function(data, stratum_col = "age"){
   assert_that(
     is.data.frame(data),
     msg = "Input must be a data.frame or tibble"
@@ -104,22 +104,22 @@ check_input <- function(data, heterogeneity_col = "age"){
   type <- NULL
 
 
-  if( all(c(heterogeneity_col, "pos", "tot") %in% colnames(data)) ){
-    age <- as.numeric(data[[heterogeneity_col]])
+  if( all(c(stratum_col, "pos", "tot") %in% colnames(data)) ){
+    age <- as.numeric(data[[stratum_col]])
     pos <- as.numeric(data$pos)
     tot <- as.numeric(data$tot)
     type <- "aggregated"
-  }else if( all(c(heterogeneity_col, "status") %in% colnames(data)) ){
-    age <- as.numeric(data[[heterogeneity_col]])
+  }else if( all(c(stratum_col, "status") %in% colnames(data)) ){
+    age <- as.numeric(data[[stratum_col]])
     pos <- as.numeric(data$status)
     tot <- rep(1, length(data$status))
     type <- "linelisting"
   }else{
     stop(paste0(
       "Data must have `",
-      heterogeneity_col,
+      stratum_col,
       "`, `pos`, `tot` columns for aggregated data OR `",
-      heterogeneity_col,
+      stratum_col,
       "`, `status` columns for linelisting data"
     ))
   }

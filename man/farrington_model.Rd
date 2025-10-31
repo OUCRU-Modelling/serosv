@@ -19,7 +19,7 @@ Parameter values to keep fixed during optimization.}
 a list of class farrington_model with 5 items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
-  \item{info}{fitted "glm" object}
+  \item{info}{fitted "mle" object}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
 }
@@ -36,5 +36,5 @@ plot(model)
 
 }
 \seealso{
-[stats::glm()] for more information on the fitted glm object
+[stats4::mle()] for more information on the fitted mle object
 }

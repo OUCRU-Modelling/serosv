@@ -203,6 +203,89 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
   return(list(susceptible= susceptible, infected=infected))
 }
 
+#' Compute confidence interval for time age model
+#'
+#' @param x - serosv models
+#' @param ci - confidence interval
+#' @param le - number of data for computing confidence interval
+#' @param ... - arbitrary argument
+#'
+#' @importFrom mgcv predict.gam
+#' @import dplyr
+#'
+#' @return confidence interval dataframe with n_group x 3 cols, the columns are `group`, `sp_df`, `foi_df`
+#' @export
+compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
+  # check which type of model user wants to visualize
+  modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
+  assert_that(
+    modtype == "monotonized" | modtype == "non-monotonized",
+    msg = "modtype argument must be eithers 'monotonized' or 'non-monotonized'"
+  )
+
+  p <- (1 - ci) / 2
+
+  # use model to generate seroprev (with CI) and FOI on a finer grid for plotting
+  age_range <- range(bind_rows(x$out$df)$age)
+  out <- x$out %>%
+    mutate(
+      age = map(df, \(dat){
+        seq(age_range[1], age_range[2], length.out = le)
+      })
+    )
+
+  # --- use the monotonized model for prediction and ci-----
+  if(modtype == "monotonized"){
+    out <- out %>%
+      mutate(
+        sp_df = pmap(list(monotonized_info, monotonized_ci_mod, age), \(mod, ci_mod, grid){
+          data.frame(
+            x = grid,
+            y = predict(mod, list(age = grid), type = "response"),
+            ymin = predict(ci_mod$ymin, list(age = grid), type = "response"),
+            ymax = predict(ci_mod$ymax, list(age = grid), type = "response")
+          )
+        })
+      )
+  }else{
+    # --- if user specify non-monotonized then simply compute CI from gam model-----
+    out <- out %>%
+      mutate(
+        sp_df = map2(info, age, \(mod, grid){
+          link_inv <- mod$family$linkinv
+          dataset <- mod$model[,1:2]
+          n <- nrow(dataset) - length(mod$coefficients)
+
+          predict(mod, data.frame(age = grid), se.fit = TRUE)  %>%
+            as_tibble()  %>%
+            select(fit, se.fit) %>%
+            mutate(
+              x = grid,
+              ymin = link_inv(fit + qt(    p, n) * se.fit),
+              ymax = link_inv(fit + qt(1 - p, n) * se.fit),
+              y = link_inv(fit)
+            )  %>%
+            select(- se.fit)
+        })
+      )
+  }
+
+  # --- finally, compute FOI -----
+  out <- out %>%
+    mutate(
+      foi_df = map2(age, sp_df, \(grid, sp){
+        foi_x <- sort(unique(grid))
+        foi_x <- foi_x[c(-1, -length(foi_x) )]
+
+        tibble(
+          x = foi_x,
+          y = est_foi(grid, sp$y)
+        )
+      })
+    ) %>%
+    select(!!sym(x$grouping_col), sp_df, foi_df)
+}
+
 
 
 

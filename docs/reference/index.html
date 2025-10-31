@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -327,6 +327,12 @@
           <code><a href="estimate_from_mixture.html">estimate_from_mixture()</a></code> 
         </dt>
         <dd>Estimate seroprevalence and foi by combining mixture model and regression</dd>
+      </dl><dl><dt>
+          
+          <code><a href="age_time_model.html">age_time_model()</a></code> 
+        </dt>
+        <dd>Age-time varying seroprevalence
+Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.</dd>
       </dl></div><div class="section level2">
       <h2 id="plotting-functions">Plotting functions<a class="anchor" aria-label="anchor" href="#plotting-functions"></a></h2>
       
@@ -410,6 +416,11 @@
         <dd>plot() overloading for result of estimate_from_mixture</dd>
       </dl><dl><dt>
           
+          <code><a href="plot.age_time_model.html">plot(<i>&lt;age_time_model&gt;</i>)</a></code> 
+        </dt>
+        <dd>Plot output for age_time_model</dd>
+      </dl><dl><dt>
+          
           <code><a href="set_plot_style.html">set_plot_style()</a></code> 
         </dt>
         <dd>Helper to adjust styling of a plot</dd>
@@ -485,6 +496,11 @@
           <code><a href="compute_ci.mixture_model.html">compute_ci.mixture_model()</a></code> 
         </dt>
         <dd>Compute confidence interval for mixture model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="compute_ci.age_time_model.html">compute_ci.age_time_model()</a></code> 
+        </dt>
+        <dd>Compute confidence interval for time age model</dd>
       </dl><dl><dt>
           
           <code><a href="find_best_fp_powers.html">find_best_fp_powers()</a></code> 

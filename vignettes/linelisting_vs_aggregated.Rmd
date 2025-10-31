@@ -68,7 +68,7 @@ plot(model2)
 transform_data(
   linelisting$age, 
   linelisting$seropositive,
-  heterogeneity_col = "age") %>% 
+  stratum_col = "age") %>% 
   polynomial_model(type = "Muench") %>% 
   plot()
 ```

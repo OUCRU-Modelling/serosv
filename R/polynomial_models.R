@@ -19,7 +19,7 @@ X <- function(t, degree) {
 #' @examples
 #' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
 #' data$status <- data$seropositive
-#' aggregated <- transform_data(data$age, data$seropositive, heterogeneity_col = "age")
+#' aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 #'
 #' # fit with aggregated data
 #' model <- polynomial_model(aggregated, type = "Muench")
@@ -80,10 +80,10 @@ polynomial_model <- function(data, k,type, link = "log"){
 #' @return a list of class farrington_model with 5 items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
-#'   \item{info}{fitted "glm" object}
+#'   \item{info}{fitted "mle" object}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
-#' @seealso [stats::glm()] for more information on the fitted glm object
+#' @seealso [stats4::mle()] for more information on the fitted mle object
 #'
 #' @examples
 #' df <- rubella_uk_1986_1987

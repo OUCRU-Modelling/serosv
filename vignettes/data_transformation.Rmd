@@ -28,7 +28,7 @@ Arguments:
 
 -   `spos` the seropositive vector (TRUE/FALSE or 1/0)
 
--   `heterogeneity_col` new name for the time vector, default to `heterogeneity_col = "t"`
+-   `stratum_col` new name for the time vector, default to `stratum_col = "t"`
 
 ```{r}
 linelisting_data <- hcv_be_2006
