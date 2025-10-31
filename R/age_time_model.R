@@ -17,9 +17,7 @@
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
 #' @export
 age_time_model <- function(data, time_col="date", grouping_col="group",
-                           age_correct=F, le=512, ci = 0.95,
-
-                           ){
+                           age_correct=F, le=512, ci = 0.95){
 
 
   # ---- helper functions -----
