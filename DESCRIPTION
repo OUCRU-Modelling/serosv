@@ -1,7 +1,7 @@
 Package: serosv
 Type: Package
 Title: Model Infectious Disease Parameters from Serosurveys
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
     person("Anh", "Phan Truong Quynh", email = "anhptq@oucru.org", role = c("aut", "cre")),
     person("Nguyen", "Pham Nguyen The", email = "nguyenpnt@oucru.org", role = c("aut")),
@@ -63,6 +63,7 @@ Collate:
     'stanmodels.R'
     'plots.R'
     'compute_ci.R'
+    'age_time_model.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/, https://github.com/OUCRU-Modelling/serosv
 VignetteBuilder: knitr
