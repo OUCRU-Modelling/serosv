@@ -1,5 +1,5 @@
-# ------ Demo function --------
 #' Age-time varying seroprevalence
+#'
 #' Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.
 #'
 #' @param data - input data, must have`age`, `status`, time, group columns, where group column determines how data is aggregated
@@ -8,17 +8,20 @@
 #' @param age_correct - a boolean, if `TRUE`, monotonize age-specific prevalence. Monotonize birth cohort-specific seroprevalence otherwise.
 #' @param le - number of bins to generate age grid, used when monotonizing data
 #' @param ci - confidence interval for smoothing
-#' @import mgcv
+#' @param monotonize_method - either "pava" or "scam"
+#' @import mgcv scam assertthat
 #'
 #' @return a list of class time_age_model with 3 items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
-#' data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotnized data}
+#' data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
 #'   \item{grouping_col}{name of the column for grouping}
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
 #' @export
-age_time_model <- function(data, time_col="date", grouping_col="group",
-                           age_correct=F, le=512, ci = 0.95){
-
+age_time_model <- function(data, time_col="date", grouping_col="group", age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
+  assert_that(
+    (monotonize_method == "pava") | (monotonize_method == "scam"),
+    msg = 'Monotonize method must be either "pava" or "scam"'
+  )
 
   # ---- helper functions -----
   shift_right <- \(n,x){ if(n == 1) x else dplyr::lag(x, n, default = NA)}
@@ -46,8 +49,23 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
   }
   # function to monotonize data using serosv pava function
   monotonize_data <- \(dat, grp){
+    dat <- dat %>% arrange(mean_time)
+    if(monotonize_method == "scam"){
+      out <- tryCatch(
+        {
+          mod <- scam(prevalence ~ s(mean_time, bs = "mpi"), data=dat,family = betar)
+          dat$prevalence <- predict(mod, list(mean_time = dat$mean_time), type = "response")
+          dat
+        },
+        error = \(e) {
+          e
+        }
+      )
+
+      if (!("error" %in% class(out))) return(out)
+    }
+
     dat %>%
-      arrange(mean_time) %>%
       mutate(
         prevalence = serosv::pava(prevalence)$pai2
       )
@@ -206,3 +224,4 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
 
   model
 }
+
