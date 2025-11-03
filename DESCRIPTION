@@ -30,7 +30,7 @@ Imports:
     methods,
     mgcv,
     mixdist,
-    scam,
+    scam, 
     patchwork,
     assertthat,
     Rcpp (>= 0.12.0),

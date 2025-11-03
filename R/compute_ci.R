@@ -123,6 +123,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
   out.DF
 }
 
+
 #' Compute confidence interval for penalized_spline_model
 #'
 #' @param x - serosv models
@@ -176,6 +177,59 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   )
 
   return(list(out.DF, out.FOI))
+}
+
+#' Compute 95% credible interval for hierarchical_bayesian_model
+#'
+#' @param x - serosv models
+#' @param ci - confidence interval
+#' @param ... - arbitrary arguments
+#' @importFrom mgcv predict.gam
+#' @import dplyr
+#'
+#' @return list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @export
+compute_ci.hierarchical_bayesian_model <- function(x, ...){
+  out_x <- x$df$age
+  out.DF <- NULL
+
+  if (x$type == "far3"){
+    alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
+    alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
+    alpha3 <- x$info["alpha3",c("2.5%","50%", "97.5%")]
+
+    out.DF <- data.frame(
+      x = out_x,
+      ymin = x$sp_func(out_x, alpha1[1], alpha2[1], alpha3[1]),
+      y = x$sp_func(out_x, alpha1[2], alpha2[2], alpha3[2]),
+      ymax = x$sp_func(out_x, alpha1[3], alpha2[3], alpha3[3])
+    )
+  }else if(x$type == "far2"){
+    alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
+    alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
+
+    out.DF <- data.frame(
+      x = out_x,
+      ymin = x$sp_func(out_x, alpha1[1], alpha2[1]),
+      y = x$sp_func(out_x, alpha1[2], alpha2[2]),
+      ymax = x$sp_func(out_x, alpha1[3], alpha2[3])
+    )
+
+  }else if(x$type == "log_logistic"){
+    alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
+    alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
+
+    out.DF <- data.frame(
+      x = out_x,
+      ymin = x$sp_func(out_x, alpha1[1], alpha2[1]),
+      y = x$sp_func(out_x, alpha1[2], alpha2[2]),
+      ymax = x$sp_func(out_x, alpha1[3], alpha2[3])
+    )
+  }else{
+    warning('Expect model type to be one of the following: "far3", "far2", "log_logistic"')
+  }
+
+  out.DF
 }
 
 #' Compute confidence interval for mixture model

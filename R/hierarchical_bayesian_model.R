@@ -18,6 +18,8 @@
 #'   \item{info}{parameters for the fitted model}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{sp_func}{function to compute seroprevalence given age and model parameters}
+#'   \item{foi}{function to compute force of infection given age and model parameters}
 #' @export
 #'
 #' @examples
@@ -62,22 +64,25 @@ hierarchical_bayesian_model <- function(data,
 
   model$info <- summary(fit)$summary
 
-  theta <- data.frame(
-    sp = rep (0,length(age)),
-    foi = rep (0,length(age))
-    )
+  theta <- list()
 
   if (type == "far3"){
     alpha1 <- model$info["alpha1",c("mean")]
     alpha2 <- model$info["alpha2",c("mean")]
     alpha3 <- model$info["alpha3",c("mean")]
 
-    for (i in 1:data$Nage){
-      theta$sp[i] = 1-exp((alpha1/alpha2)*data$age[i]*exp(-alpha2*data$age[i])+
-                            (1/alpha2)*((alpha1/alpha2)-alpha3)*(exp(-alpha2*data$age[i])-1)-
-                            alpha3*data$age[i])
-      theta$foi[i] = (alpha1*data$age[i]-alpha3)*exp(-alpha2*data$age[i])+alpha3
+    theta$sp_func <- \(age, alpha1, alpha2, alpha3){
+      1 - exp((alpha1/alpha2)*age*exp(-alpha2*age)+
+              (1/alpha2)*((alpha1/alpha2)-alpha3)*(exp(-alpha2*age)-1)-
+              alpha3*age)
     }
+
+    theta$foi_func <- \(age, alpha1, alpha2, alpha3){
+      (alpha1*age-alpha3)*exp(-alpha2*age)+alpha3
+    }
+
+    theta$sp <-  theta$sp_func(data$age, alpha1, alpha2, alpha3)
+    theta$foi <-  theta$foi_func(data$age, alpha1, alpha2, alpha3)
 
   }
 
@@ -85,11 +90,16 @@ hierarchical_bayesian_model <- function(data,
     alpha1 <- model$info["alpha1",c("mean")]
     alpha2 <- model$info["alpha2",c("mean")]
 
-    for (i in 1:data$Nage){
-      theta$sp[i] = 1-exp((alpha1 / alpha2) * data$age[i] * exp(-alpha2 * data$age[i]) +
-                            (1 / alpha2) * ((alpha1 / alpha2)) * (exp(-alpha2 * data$age[i]) - 1));
-      theta$foi[i] = (alpha1*data$age[i])*exp(-alpha2*data$age[i])
+    theta$sp_func <- \(age, alpha1, alpha2){
+      1-exp((alpha1 / alpha2) * age * exp(-alpha2 * age) +
+              (1 / alpha2) * ((alpha1 / alpha2)) * (exp(-alpha2 * age) - 1))
     }
+    theta$foi_func <- \(age, alpha1, alpha2){
+      (alpha1*age)*exp(-alpha2*age)
+    }
+
+    theta$sp <- theta$sp_func(data$age, alpha1, alpha2)
+    theta$foi <- theta$foi_func(data$age, alpha1, alpha2)
 
   }
 
@@ -97,16 +107,23 @@ hierarchical_bayesian_model <- function(data,
     alpha1 <- model$info["alpha1",c("mean")]
     alpha2 <- model$info["alpha2",c("mean")]
 
-    for (i in 1:data$Nage){
-      theta$sp[i] = inv.logit(alpha2+alpha1*log(data$age[i]))
-      theta$foi[i] = alpha1*exp(alpha2)*(data$age[i]^(alpha1-1))*(1-theta$sp[i])
+    theta$sp_func <- \(age, alpha1, alpha2){
+      inv.logit(alpha2+alpha1*log(age))
     }
+    theta$foi_func <- \(age, sp, alpha1, alpha2){
+      alpha1*exp(alpha2)*(age^(alpha1-1))*(1-sp)
+    }
+
+    theta$sp <- theta$sp_func(data$age, alpha1, alpha2)
+    theta$foi <- theta$foi_func(data$age, theta$sp, alpha1, alpha2)
   }
 
   model$sp <- theta$sp
   model$foi <- theta$foi
   model$df <- data.frame(age = age, tot = tot, pos = pos)
   model$type <- type
+  model$sp_func <- theta$sp_func
+  model$foi_func <- theta$foi_func
 
   class(model) <- "hierarchical_bayesian_model"
 

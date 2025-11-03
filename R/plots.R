@@ -399,8 +399,10 @@ plot.lp_model <- function(x, ...) {
 plot.hierarchical_bayesian_model <- function(x,  ...){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
 
+  out.DF <- compute_ci.hierarchical_bayesian_model(x)
+
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = x$sp, foi = x$foi, cex=cex)
+    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi, cex=cex)
   })
 }
 
