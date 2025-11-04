@@ -1,4 +1,4 @@
-#' Estimate the true sero prevalence using Bayesian estimation
+#' Estimate the true sero prevalence using Frequentist/Bayesian estimation
 #'
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param bayesian whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.
@@ -11,11 +11,13 @@
 #' @param iter (applicable when `bayesian=TRUE`) number of iterations
 #'
 #' @importFrom rstan sampling summary
+#' @importFrom dplyr mutate
+#' @import magrittr
 #'
-#' @return
-#' a list of 2 items
-#'   \item{info}{estimated parameters}
-#'   \item{corrected_sero}{data.frame containing age, the corresponding estimated seroprevalance, adjusted tot and pos}
+#' @return a list of 3 items
+#'   \item{info}{estimated parameters (when `bayesian = TRUE`) or formula to compute corrected prevalence (when `bayesian = FALSE`)}
+#'   \item{df}{data.frame of input data (in aggregated form)}
+#'   \item{corrected_sero}{data.frame containing age, the corresponding estimated seroprevalance with 95\% confidence/credible interval, and adjusted tot and pos}
 #' @export
 #'
 #' @examples
@@ -55,23 +57,46 @@ correct_prevalence <- function(data, bayesian=TRUE,
 
     output$info <- summary(fit)$summary
 
-    # subsetting theta estimates (use mean value as corrected seroprevalence)
-    thetas <- summary(fit)$summary[3:(length(age) + 2), "mean"]
+    # subsetting theta estimates, also get the credible interval
+    thetas <- data.frame(
+      lower = summary(fit)$summary[3:(length(age) + 2), "2.5%"],
+      fit = summary(fit)$summary[3:(length(age) + 2), "50%"],
+      upper = summary(fit)$summary[3:(length(age) + 2), "97.5%"]
+    )
   }else{
-    # simply compute thetas using the formula
-    thetas <- (pos/tot + init_sp - 1) / (init_se + init_sp - 1)
-    thetas <- pmin(thetas, 1) # keep upper bound as 1
-    thetas <- pmax(thetas, 0) # keep lower bound as 0
+    thetas <- data.frame(
+      # use prop.test to get confidence interval
+      lower = mapply(\(pos, tot){prop.test(pos, tot, conf.level = 0.95)$conf.int[1]}, pos, tot),
+      fit = pos/tot,
+      upper = mapply(\(pos, tot){prop.test(pos, tot, conf.level = 0.95)$conf.int[2]}, pos, tot)
+    ) %>%
+    mutate(
+      # estimate true prevalence and lower, upper bound
+      lower = pmax(0, (lower - 1 + init_sp)/(init_se + init_sp - 1)),
+      fit =  pmax(0, (fit + init_sp - 1) / (init_se + init_sp - 1)) %>% pmin(1),
+      upper = pmin(1, (upper - 1 + init_sp)/(init_se + init_sp - 1))
+    )
+
     # info for frequentist approach
-    output$info <- "Formula: real_sero = (apparent_sero + sp - 1) / (se + sp -1)"
+    output$info <- "Formula: real_sero = (observed_sero + sp - 1) / (se + sp -1)"
   }
+
+  output$df <- data.frame(
+    age = age,
+    pos = pos,
+    tot = tot
+  )
 
   output$corrected_se <- data.frame(
     age = age,
-    sero = thetas,
-    pos = thetas*tot, #adjusted pos with estimated sero
-    tot = tot
+    sero = thetas$fit,
+    pos = thetas$fit*tot, #adjusted pos with estimated sero
+    tot = tot,
+    sero_lwr = thetas$lower,
+    sero_upr = thetas$upper
   )
+
+  output$method <- if(bayesian) "bayesian" else "frequentist"
 
   output
 }

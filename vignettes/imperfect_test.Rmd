@@ -72,20 +72,23 @@ freq_output <- correct_prevalence(data, bayesian = FALSE, init_se=0.9, init_sp =
 freq_output$info
 ```
 
+User can then visualize the output using `plot_corrected_prev()` function 
 ```{r}
-# compare original prevalence and corrected prevalence
-ggplot()+
-  geom_point(aes(x = data$age, y = data$pos/data$tot, color="apparent prevalence")) + 
-  geom_point(aes(x = output$corrected_se$age, y = output$corrected_se$sero, color="estimated prevalence (bayesian)" )) +
-  geom_point(aes(x = freq_output$corrected_se$age, y = freq_output$corrected_se$sero, color="estimated prevalence (frequentist)" )) +
-  scale_color_manual(
-    values = c(
-      "apparent prevalence" = "red", 
-      "estimated prevalence (bayesian)" = "blueviolet",
-      "estimated prevalence (frequentist)" = "royalblue")
-  )+ 
-  labs(x = "Age", y = "Prevalence")
+# Plot output of the frequentist approach
+plot_corrected_prev(freq_output)
+
+# Plot output of the bayesian approach 
+plot_corrected_prev(output)
 ```
+To compare both correction methods in a single plot, provide the output from the second method as the optional `y` argument in `plot_corrected_prev()`  
+
+```{r}
+plot_corrected_prev(output, freq_output)
+
+# set facet = TRUE to display the confidence or credible intervals for each method
+plot_corrected_prev(output, freq_output, facet = TRUE)
+```
+
 
 ### Fitting corrected data
 

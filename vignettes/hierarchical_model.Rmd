@@ -32,7 +32,6 @@ Where:
 
 -   $n = (n_1, n_2, ..., n_m)$ and $n_i$ is the sample size at age $a_i$
 
-<!-- -->
 
 -   $y = (y_1, y_2, ..., y_m)$ and $y_i$ is the number of infected individual from the $n_i$ sampled subjects
 

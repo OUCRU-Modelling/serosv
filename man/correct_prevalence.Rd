@@ -2,7 +2,7 @@
 % Please edit documentation in R/correct_prevalence.R
 \name{correct_prevalence}
 \alias{correct_prevalence}
-\title{Estimate the true sero prevalence using Bayesian estimation}
+\title{Estimate the true sero prevalence using Frequentist/Bayesian estimation}
 \usage{
 correct_prevalence(
   data,
@@ -36,12 +36,13 @@ correct_prevalence(
 \item{iter}{(applicable when `bayesian=TRUE`) number of iterations}
 }
 \value{
-a list of 2 items
-  \item{info}{estimated parameters}
-  \item{corrected_sero}{data.frame containing age, the corresponding estimated seroprevalance, adjusted tot and pos}
+a list of 3 items
+  \item{info}{estimated parameters (when `bayesian = TRUE`) or formula to compute corrected prevalence (when `bayesian = FALSE`)}
+  \item{df}{data.frame of input data (in aggregated form)}
+  \item{corrected_sero}{data.frame containing age, the corresponding estimated seroprevalance with 95\% confidence/credible interval, and adjusted tot and pos}
 }
 \description{
-Estimate the true sero prevalence using Bayesian estimation
+Estimate the true sero prevalence using Frequentist/Bayesian estimation
 }
 \examples{
 data <- rubella_uk_1986_1987
