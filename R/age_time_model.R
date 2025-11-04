@@ -74,7 +74,7 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
   model <- list()
 
   # --- preprocess data ------
-  check_input <- serosv:::check_input(data)
+  check_input <- check_input(data)
   age_range <- range(data$age)
   age_grid <- seq(age_range[1], age_range[2], length.out = le)
 

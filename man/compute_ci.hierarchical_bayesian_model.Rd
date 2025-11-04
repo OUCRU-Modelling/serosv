@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_ci.R
 \name{compute_ci.hierarchical_bayesian_model}
 \alias{compute_ci.hierarchical_bayesian_model}
-\title{Compute 95% credible interval for hierarchical_bayesian_model}
+\title{Compute 95\% credible interval for hierarchical_bayesian_model}
 \usage{
 compute_ci.hierarchical_bayesian_model(x, ...)
 }
@@ -10,12 +10,10 @@ compute_ci.hierarchical_bayesian_model(x, ...)
 \item{x}{- serosv models}
 
 \item{...}{- arbitrary arguments}
-
-\item{ci}{- confidence interval}
 }
 \value{
 list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 }
 \description{
-Compute 95% credible interval for hierarchical_bayesian_model
+Compute 95\% credible interval for hierarchical_bayesian_model
 }

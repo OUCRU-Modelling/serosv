@@ -179,10 +179,9 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   return(list(out.DF, out.FOI))
 }
 
-#' Compute 95% credible interval for hierarchical_bayesian_model
+#' Compute 95\% credible interval for hierarchical_bayesian_model
 #'
 #' @param x - serosv models
-#' @param ci - confidence interval
 #' @param ... - arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr

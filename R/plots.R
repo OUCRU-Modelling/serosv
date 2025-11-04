@@ -533,10 +533,13 @@ plot.estimate_from_mixture <- function(x, ... ){
 #'
 #' @param x - a `age_time_model` object
 #' @param ... arbitrary params.
-#' @param facet - whether to facet the plot by group or not
-#' @param modtype - indicate which model to plot, either "monotonized" or "non-monotonized"
-#' @param le - number of bins to generate x axis, higher value return smoother plot
-#' @param cex - adjust the of the data points (only when facet = TRUE)
+#' Supported options include:
+#'   \itemize{
+#'     \item \code{facet}: Whether to facet the plot by group.
+#'     \item \code{modtype}: Which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}.
+#'     \item \code{le}: Number of bins used to generate the x-axis; higher values produce smoother curves.
+#'     \item \code{cex}: Adjusts the size of data points (only when \code{facet = TRUE}).
+#'   }
 #'
 #' @importFrom graphics plot
 #' @import ggplot2 assertthat tidyr
@@ -598,7 +601,7 @@ plot.age_time_model <- function(x, ...){
           data = df_dat
         ),
         guides(shape = "none", size = "none"),
-        serosv:::set_plot_style(),
+        set_plot_style(),
         facet_wrap(vars(!!sym(x$grouping_col)))
       ) else
         labs(color = x$grouping_col, fill = x$grouping_col)
