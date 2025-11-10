@@ -22,6 +22,7 @@ Imports:
     deSolve,
     dplyr,
     tidyr,
+    janitor,
     ggplot2,
     locfit,
     purrr,
@@ -61,6 +62,7 @@ Collate:
     'semiparametric_models.R'
     'mixture_model.R'
     'hierarchical_bayesian_model.R'
+    'to_titer.R'
     'serosv.R'
     'stanmodels.R'
     'plots.R'
