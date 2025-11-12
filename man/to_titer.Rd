@@ -19,6 +19,8 @@ to_titer(
 
 \item{positive_threshold}{- if not NULL, processed_data will have the serostatus labeled}
 
+\item{ci}{- confidence interval for the titer estimates}
+
 \item{negative_control}{- if TRUE, output tibble will include the result for negative controls}
 }
 \value{

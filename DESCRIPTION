@@ -17,7 +17,7 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 3.4.0)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Imports:
     deSolve,
     dplyr,
@@ -32,6 +32,7 @@ Imports:
     mgcv,
     mixdist,
     scam, 
+    mvtnorm,
     patchwork,
     assertthat,
     Rcpp (>= 0.12.0),

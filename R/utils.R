@@ -70,7 +70,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #' @importFrom dplyr group_by
 #' @importFrom dplyr n
 #' @importFrom dplyr summarize
-#' @import magrittr
+#' @importFrom magrittr %>%
 #'
 #' @return dataframe in aggregated format
 #' @export

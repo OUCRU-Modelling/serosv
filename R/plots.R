@@ -670,7 +670,8 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
 #' @param x - the output of `correct_prevalence()` function
 #' @param y - another output of `correct_prevalence()` function (optional, for comparison only)
 #' @param facet - whether to plot as facets or on the same plot (only when y is provided)
-#' @import ggplot2 tidyr patchwork magrittr
+#' @import ggplot2 tidyr patchwork 
+#' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #'
 #' @return ggplot object

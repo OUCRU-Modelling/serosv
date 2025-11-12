@@ -269,6 +269,9 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 #' @return confidence interval dataframe with n_group x 3 cols, the columns are `group`, `sp_df`, `foi_df`
 #' @export
 compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
+  # resolve no visible binding note
+  df <- monotonized_info <- monotonized_ci_mod <- age <- info <- fit <- se.fit <- sp_df <- foi_df <- NULL
+
   # check which type of model user wants to visualize
   modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
   assert_that(

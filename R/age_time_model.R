@@ -18,6 +18,11 @@
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
 #' @export
 age_time_model <- function(data, time_col="date", grouping_col="group", age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
+  # work around to resolve no visible binding note NOTE during check()
+  x <- label <- family <- fit <- se.fit <- ymin <- ymax <- y <- mean_time <- prevalence <- sim_data <- NULL
+  age <- ys <- shift_no <- cohort <- col_time <- monotonized_mod <- df <- info <- sp <- monotonized_info <- monotonized_sp <- NULL
+
+
   assert_that(
     (monotonize_method == "pava") | (monotonize_method == "scam"),
     msg = 'Monotonize method must be either "pava" or "scam"'

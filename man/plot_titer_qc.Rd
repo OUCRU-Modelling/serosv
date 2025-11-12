@@ -23,4 +23,7 @@ Each sample is represented by a `n_estimates x n_dilutions` grid where cell colo
 estimate availability (green = estimate available, orange = result too low, red = result too high)
 
 These sample grids are arranged in columns where each column represent samples from a plate
+
+The figure below demonstrates the interpretation of the plot.
+\figure{interpret_titer_qc.png}{options: width="70\%"}
 }

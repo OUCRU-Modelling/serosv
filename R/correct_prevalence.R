@@ -12,7 +12,8 @@
 #'
 #' @importFrom rstan sampling summary
 #' @importFrom dplyr mutate
-#' @import magrittr
+#' @importFrom stats prop.test
+#' @importFrom magrittr %>%
 #'
 #' @return a list of 3 items
 #'   \item{info}{estimated parameters (when `bayesian = TRUE`) or formula to compute corrected prevalence (when `bayesian = FALSE`)}
@@ -26,6 +27,9 @@
 correct_prevalence <- function(data, bayesian=TRUE,
                          init_se = 0.95, init_sp = 0.8, study_size_se = 1000, study_size_sp = 1000,
                          chains = 1, warmup = 1000, iter = 2000){
+  # resolve no visible binding note
+  lower <- upper <- prop.test <- NULL
+
   output <- list()
 
   data <- check_input(data)
