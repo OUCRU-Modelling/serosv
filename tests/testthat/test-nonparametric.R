@@ -1,5 +1,4 @@
 library(testthat)
-library(locfit)
 
 test_that("lp_model works with linelisting data", {
   df <- hav_be_2002[order(hav_be_2002$age),]
