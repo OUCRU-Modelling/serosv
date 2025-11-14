@@ -59,6 +59,9 @@ reference:
 
 - title: Plotting functions
   contents:
+  - plot_corrected_prev
+  - plot_standard_curve
+  - plot_titer_qc
   - plot_gcv
   - plot.polynomial_model
   - plot.farrington_model
@@ -75,14 +78,17 @@ reference:
   - plot.estimate_from_mixture
   - plot.age_time_model
   - set_plot_style
+  - add_thresholds
 
 - title: Other utilities
   contents:
   - serosv-package
   - est_foi
   - pava
+  - to_titer
   - correct_prevalence
   - transform_data
+  - standardize_data
   - compare_models
   - compute_ci
   - compute_ci.fp_model
@@ -91,6 +97,7 @@ reference:
   - compute_ci.penalized_spline_model
   - compute_ci.mixture_model
   - compute_ci.age_time_model
+  - compute_ci.hierarchical_bayesian_model
   - find_best_fp_powers
 
 articles:
@@ -104,6 +111,7 @@ articles:
   - semiparametric_model
   - hierarchical_model
   - model_quantitative_data
+  - repeated_cross_sectional
 - title: Utilities
   navbar: Utilities
   contents:

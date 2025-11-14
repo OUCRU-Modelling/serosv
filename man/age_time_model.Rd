@@ -30,12 +30,13 @@ age_time_model(
 \item{monotonize_method}{- either "pava" or "scam"}
 }
 \value{
-a list of class time_age_model with 3 items
+a list of class time_age_model with 4 items
   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
 data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
   \item{grouping_col}{name of the column for grouping}
   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
+  \item{datatype}{whether the input data is aggregated or line-listing data}
 }
 \description{
-Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.
+Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or birth cohort) - specific seroprevalence.
 }

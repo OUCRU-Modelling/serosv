@@ -1,6 +1,7 @@
 #' Age-time varying seroprevalence
 #'
-#' Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.
+#'
+#' @description Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or birth cohort) - specific seroprevalence.
 #'
 #' @param data - input data, must have`age`, `status`, time, group columns, where group column determines how data is aggregated
 #' @param time_col - name of the column for time (default to `date`)
@@ -11,11 +12,12 @@
 #' @param monotonize_method - either "pava" or "scam"
 #' @import mgcv scam assertthat
 #'
-#' @return a list of class time_age_model with 3 items
+#' @return a list of class time_age_model with 4 items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
 #' data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
 #'   \item{grouping_col}{name of the column for grouping}
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
+#'   \item{datatype}{whether the input data is aggregated or line-listing data}
 #' @export
 age_time_model <- function(data, time_col="date", grouping_col="group", age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
   # work around to resolve no visible binding note NOTE during check()
@@ -160,7 +162,7 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
 
     # mapping to covert cohort to age
     cohort_age_mapping <- scam_data %>%
-      select(col_time, age, cohort) %>%
+      select(!!sym(grouping_col), age, cohort) %>%
       unique()
 
     # map cohort from monotized data to age (at collection time)
@@ -180,13 +182,23 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
   out <- scam_out %>%
     mutate(
       monotonized_mod = map(data, \(dat){
-        gam(y ~ s(age), family = betar, data = dat)
+        # handle potential error when dataset is small
+        k <- if(length(unique(dat$age)) < 10) length(unique(dat$age)) - 1 else -1
+        # also when y range is small
+        k <- if(diff(range(dat$y)) < 0.01) 3 else k
+
+        gam(y ~ s(age, k=k), family = betar, data = dat)
       }),
       # also have model for smooth ci
       monotonized_ci_mod = map(data, \(dat){
+        # handle potential error when dataset is small
+        k <- if(length(unique(dat$age)) < 10) length(unique(dat$age)) - 1 else -1
+        # also when y range is small
+        k <- if(min(diff(range(dat$ymin)), diff(range(dat$ymax))) < 0.01) 3 else k
+
         list(
-          "ymin" = gam(ymin ~ s(age), family = betar, data = dat),
-          "ymax" = gam(ymax ~ s(age), family = betar, data = dat)
+          "ymin" = gam(ymin ~ s(age, k=k), family = betar, data = dat),
+          "ymax" = gam(ymax ~ s(age, k=k), family = betar, data = dat)
         )
       })
     ) %>%
