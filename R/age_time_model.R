@@ -198,8 +198,8 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
         k <- if(min(diff(range(dat$ymin)), diff(range(dat$ymax))) < 0.01) 3 else k
 
         list(
-          "ymin" = gam(ymin ~ s(age, k=k), family = betar, data = dat),
-          "ymax" = gam(ymax ~ s(age, k=k), family = betar, data = dat)
+          "ymin" = gam(ymin ~ s(age, k=k), family = gaussian, data = dat),
+          "ymax" = gam(ymax ~ s(age, k=k), family = gaussian, data = dat)
         )
       })
     ) %>%
