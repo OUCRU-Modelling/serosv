@@ -2,23 +2,9 @@
 
 ``` r
 library(serosv)
-library(tidyverse)
-#> Warning: package 'ggplot2' was built under R version 4.3.3
-#> Warning: package 'tibble' was built under R version 4.3.3
-#> Warning: package 'readr' was built under R version 4.3.1
-#> Warning: package 'purrr' was built under R version 4.3.3
-#> Warning: package 'dplyr' was built under R version 4.3.1
-#> Warning: package 'stringr' was built under R version 4.3.1
-#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-#> ✔ dplyr     1.1.4     ✔ readr     2.1.5
-#> ✔ forcats   1.0.0     ✔ stringr   1.5.1
-#> ✔ ggplot2   3.5.2     ✔ tibble    3.3.0
-#> ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-#> ✔ purrr     1.0.4     
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
-#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+library(dplyr)
+library(magrittr)
+library(ggplot2)
 ```
 
 ## Age-time varying model
@@ -56,7 +42,7 @@ The function expects input data with the following columns:
 tb_nl <- tb_nl_1966_1973 %>% 
   mutate(
     survey_year = age + birthyr,
-    survey_time = ymd(paste0(survey_year, "0101"))
+    survey_time = as.Date(paste0(survey_year, "-01-01"))
   ) %>% select(-birthyr) %>% 
   filter(survey_year > 1966) %>% 
   group_by(age, survey_year, survey_time) %>% 
@@ -83,14 +69,8 @@ out_pava <- tb_nl %>%
     grouping_col = "survey_year",
     age_correct = F,
     monotonize_method = "pava"
-  )
-#> Warning: There were 21 warnings in `mutate()`.
-#> The first warning was:
-#> ℹ In argument: `monotonized_mod = map(...)`.
-#> ℹ In group 1: `survey_year = 1967` `mean_time = 1967-01-01`.
-#> Caused by warning in `family$saturated.ll()`:
-#> ! saturated likelihood may be inaccurate
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 20 remaining warnings.
+  ) %>% 
+  suppressWarnings()
 
 out_scam <- tb_nl %>% 
   age_time_model(
@@ -98,14 +78,8 @@ out_scam <- tb_nl %>%
     grouping_col = "survey_year",
     age_correct = T,
     monotonize_method = "scam"
-  )
-#> Warning: There were 10 warnings in `mutate()`.
-#> The first warning was:
-#> ℹ In argument: `monotonized_mod = map(...)`.
-#> ℹ In group 2: `survey_year = 1968` `mean_time = 1968-01-01`.
-#> Caused by warning in `family$saturated.ll()`:
-#> ! saturated likelihood may be inaccurate
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 9 remaining warnings.
+  ) %>% 
+  suppressWarnings()
 ```
 
 The output is a `data.frame` with dimension \[number of survey, 9\],
@@ -113,9 +87,9 @@ where each row corresponds to a single survey period. The columns are:
 
 - column for id of survey period
 
-- **`df`** - input data.frame corresponding to that survey period
+- `df` - input data.frame corresponding to that survey period
 
-- **`info`** - model for the seroprevalence
+- `info` - model for the seroprevalence
 
 - `monotonized_info` - model for the monotonized seroprevalence
 
@@ -161,12 +135,6 @@ following configurations
 plot(out_pava, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's linetype values.
-#> Warning: Removed 51 rows containing missing values or values outside the scale range
-#> (`geom_smooth()`).
-#> Warning: Removed 23 rows containing missing values or values outside the scale range
-#> (`geom_line()`).
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-5-1.png)
@@ -175,12 +143,6 @@ plot(out_pava, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 plot(out_pava, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's linetype values.
-#> Warning: Removed 51 rows containing missing values or values outside the scale range
-#> (`geom_smooth()`).
-#> Warning: Removed 23 rows containing missing values or values outside the scale range
-#> (`geom_line()`).
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-5-2.png)
@@ -190,10 +152,6 @@ plot(out_pava, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 plot(out_pava, facet = FALSE, modtype = "monotonized") + ylim(c(0, 0.07))
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-#> Warning: Removed 51 rows containing missing values or values outside the scale range
-#> (`geom_smooth()`).
-#> Warning: Removed 45 rows containing missing values or values outside the scale range
-#> (`geom_line()`).
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-5-3.png)
@@ -204,12 +162,6 @@ plot(out_pava, facet = FALSE, modtype = "monotonized") + ylim(c(0, 0.07))
 plot(out_scam, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's linetype values.
-#> Warning: Removed 51 rows containing missing values or values outside the scale range
-#> (`geom_smooth()`).
-#> Warning: Removed 23 rows containing missing values or values outside the scale range
-#> (`geom_line()`).
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-6-1.png)
@@ -218,12 +170,6 @@ plot(out_scam, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 plot(out_scam, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's linetype values.
-#> Warning: Removed 51 rows containing missing values or values outside the scale range
-#> (`geom_smooth()`).
-#> Warning: Removed 23 rows containing missing values or values outside the scale range
-#> (`geom_line()`).
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-6-2.png)

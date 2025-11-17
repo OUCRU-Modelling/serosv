@@ -1,5 +1,4 @@
 library(dplyr)
-library(lubridate)
 library(magrittr)
 
 test_that("test age time model", {
@@ -7,7 +6,7 @@ test_that("test age time model", {
   tb_nl <- tb_nl_1966_1973 %>%
     mutate(
       survey_year = age + birthyr,
-      survey_time = ymd(paste0(survey_year, "0101"))
+      survey_time = as.Date(paste0(survey_year, "-01-01"))
     ) %>% select(-birthyr) %>%
     group_by(age, survey_year, survey_time) %>%
     summarize(pos = sum(pos), tot = sum(tot), .groups = "drop")

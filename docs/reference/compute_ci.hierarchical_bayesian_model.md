@@ -1,6 +1,6 @@
-# Compute 95% credible interval for hierarchical_bayesian_model
+# Compute 95% credible interval for hierarchical Bayesian model
 
-Compute 95% credible interval for hierarchical_bayesian_model
+Compute 95% credible interval for hierarchical Bayesian model
 
 ## Usage
 

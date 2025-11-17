@@ -55,6 +55,8 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
   return(list(pai1=pai1,pai2=pai2))
 }
 
+#' Aggregate data
+#'
 #' Generate a dataframe with `t`, `pos` and `tot` columns from
 #' `t` and `seropositive` vectors.
 #'

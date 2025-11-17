@@ -84,23 +84,9 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.3.3</span></span>
-<span><span class="co">#&gt; Warning: package 'tibble' was built under R version 4.3.3</span></span>
-<span><span class="co">#&gt; Warning: package 'readr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'purrr' was built under R version 4.3.3</span></span>
-<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; Warning: package 'stringr' was built under R version 4.3.1</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.5</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 3.5.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.3.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.4     </span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use the conflicted package (<span style="color: #0000BB; font-style: italic;">&lt;http://conflicted.r-lib.org/&gt;</span>) to force all conflicts to become errors</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="age-time-varying-model">Age-time varying model<a class="anchor" aria-label="anchor" href="#age-time-varying-model"></a>
 </h2>
@@ -135,7 +121,7 @@ argument)</p></li>
 <span><span class="va">tb_nl</span> <span class="op">&lt;-</span> <span class="va">tb_nl_1966_1973</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    survey_year <span class="op">=</span> <span class="va">age</span> <span class="op">+</span> <span class="va">birthyr</span>,</span>
-<span>    survey_time <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">survey_year</span>, <span class="st">"0101"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    survey_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">survey_year</span>, <span class="st">"-01-01"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">birthyr</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">survey_year</span> <span class="op">&gt;</span> <span class="fl">1966</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">survey_year</span>, <span class="va">survey_time</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -163,14 +149,8 @@ supports 2 options:</p>
 <span>    grouping_col <span class="op">=</span> <span class="st">"survey_year"</span>,</span>
 <span>    age_correct <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>    monotonize_method <span class="op">=</span> <span class="st">"pava"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There were 21 warnings in `mutate()`.</span></span>
-<span><span class="co">#&gt; The first warning was:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `monotonized_mod = map(...)`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In group 1: `survey_year = 1967` `mean_time = 1967-01-01`.</span></span>
-<span><span class="co">#&gt; Caused by warning in `family$saturated.ll()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> saturated likelihood may be inaccurate</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run `dplyr::last_dplyr_warnings()` to see the 20 remaining warnings.</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">out_scam</span> <span class="op">&lt;-</span> <span class="va">tb_nl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/age_time_model.html">age_time_model</a></span><span class="op">(</span></span>
@@ -178,23 +158,16 @@ supports 2 options:</p>
 <span>    grouping_col <span class="op">=</span> <span class="st">"survey_year"</span>,</span>
 <span>    age_correct <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>    monotonize_method <span class="op">=</span> <span class="st">"scam"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There were 10 warnings in `mutate()`.</span></span>
-<span><span class="co">#&gt; The first warning was:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `monotonized_mod = map(...)`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In group 2: `survey_year = 1968` `mean_time = 1968-01-01`.</span></span>
-<span><span class="co">#&gt; Caused by warning in `family$saturated.ll()`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> saturated likelihood may be inaccurate</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run `dplyr::last_dplyr_warnings()` to see the 9 remaining warnings.</span></span></code></pre></div>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The output is a <code>data.frame</code> with dimension [number of
 survey, 9], where each row corresponds to a single survey period. The
 columns are:</p>
 <ul>
 <li><p>column for id of survey period</p></li>
-<li><p><strong><code>df</code></strong> - input data.frame corresponding
-to that survey period</p></li>
-<li><p><strong><code>info</code></strong> - model for the
-seroprevalence</p></li>
+<li><p><code>df</code> - input data.frame corresponding to that survey
+period</p></li>
+<li><p><code>info</code> - model for the seroprevalence</p></li>
 <li><p><code>monotonized_info</code> - model for the monotonized
 seroprevalence</p></li>
 <li><p><code>monotonized_ci_mod</code> - model for the monotonized
@@ -236,58 +209,30 @@ monotonization</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out_pava</span>, facet <span class="op">=</span> <span class="cn">TRUE</span>, modtype <span class="op">=</span> <span class="st">"non-monotonized"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.07</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Scale for <span style="color: #00BB00;">y</span> is already present.</span></span>
-<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">linetype</span> values.</span></span>
-<span><span class="co">#&gt; Warning: Removed 51 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_smooth()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 23 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span></code></pre></div>
 <p><img src="repeated_cross_sectional_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out_pava</span>, facet <span class="op">=</span> <span class="cn">TRUE</span>, modtype <span class="op">=</span> <span class="st">"monotonized"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.07</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Scale for <span style="color: #00BB00;">y</span> is already present.</span></span>
-<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">linetype</span> values.</span></span>
-<span><span class="co">#&gt; Warning: Removed 51 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_smooth()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 23 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span></code></pre></div>
 <p><img src="repeated_cross_sectional_files/figure-html/unnamed-chunk-5-2.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out_pava</span>, facet <span class="op">=</span> <span class="cn">FALSE</span>, modtype <span class="op">=</span> <span class="st">"monotonized"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.07</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Scale for <span style="color: #00BB00;">y</span> is already present.</span></span>
-<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span>
-<span><span class="co">#&gt; Warning: Removed 51 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_smooth()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 45 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span></code></pre></div>
 <p><img src="repeated_cross_sectional_files/figure-html/unnamed-chunk-5-3.png" class="r-plt" width="700"></p>
 <p><strong><em>Example:</em></strong> output for model with SCAM for
 monotonization</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out_scam</span>, facet <span class="op">=</span> <span class="cn">TRUE</span>, modtype <span class="op">=</span> <span class="st">"non-monotonized"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.07</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Scale for <span style="color: #00BB00;">y</span> is already present.</span></span>
-<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">linetype</span> values.</span></span>
-<span><span class="co">#&gt; Warning: Removed 51 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_smooth()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 23 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span></code></pre></div>
 <p><img src="repeated_cross_sectional_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out_scam</span>, facet <span class="op">=</span> <span class="cn">TRUE</span>, modtype <span class="op">=</span> <span class="st">"monotonized"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.07</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Scale for <span style="color: #00BB00;">y</span> is already present.</span></span>
-<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">linetype</span> values.</span></span>
-<span><span class="co">#&gt; Warning: Removed 51 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_smooth()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 23 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_line()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span></code></pre></div>
 <p><img src="repeated_cross_sectional_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" width="700"></p>
 </div>
   </main>

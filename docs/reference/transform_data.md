@@ -1,4 +1,4 @@
-# Generate a dataframe with \`t\`, \`pos\` and \`tot\` columns from \`t\` and \`seropositive\` vectors.
+# Aggregate data
 
 Generate a dataframe with \`t\`, \`pos\` and \`tot\` columns from \`t\`
 and \`seropositive\` vectors.

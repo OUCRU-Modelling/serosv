@@ -14,9 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, output=FALSE, message=FALSE}
+```{r setup, output=FALSE, message=FALSE, warning=FALSE}
 library(serosv)
-library(tidyverse)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
 ```
 
 ## Age-time varying model
@@ -46,7 +48,7 @@ The function expects input data with the following columns:
 tb_nl <- tb_nl_1966_1973 %>% 
   mutate(
     survey_year = age + birthyr,
-    survey_time = ymd(paste0(survey_year, "0101"))
+    survey_time = as.Date(paste0(survey_year, "-01-01"))
   ) %>% select(-birthyr) %>% 
   filter(survey_year > 1966) %>% 
   group_by(age, survey_year, survey_time) %>% 
@@ -117,7 +119,7 @@ For visualization, the plot function for `age_time_model` offers the following c
 
 ***Example:*** output for model with PAVA for monotonization
 
-```{r}
+```{r warning=FALSE}
 plot(out_pava, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 plot(out_pava, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 
@@ -126,7 +128,7 @@ plot(out_pava, facet = FALSE, modtype = "monotonized") + ylim(c(0, 0.07))
 
 ***Example:*** output for model with SCAM for monotonization
 
-```{r}
+```{r warning=FALSE}
 plot(out_scam, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 plot(out_scam, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 ```

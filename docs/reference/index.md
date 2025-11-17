@@ -160,8 +160,7 @@
   : Estimate the true sero prevalence using Frequentist/Bayesian
   estimation
 - [`transform_data()`](https://oucru-modelling.github.io/serosv/reference/transform_data.md)
-  : Generate a dataframe with \`t\`, \`pos\` and \`tot\` columns from
-  \`t\` and \`seropositive\` vectors.
+  : Aggregate data
 - [`standardize_data()`](https://oucru-modelling.github.io/serosv/reference/standardize_data.md)
   : Preprocess data
 - [`compare_models()`](https://oucru-modelling.github.io/serosv/reference/compare_models.md)
@@ -181,7 +180,7 @@
 - [`compute_ci.age_time_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.md)
   : Compute confidence interval for time age model
 - [`compute_ci.hierarchical_bayesian_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
-  : Compute 95% credible interval for hierarchical_bayesian_model
+  : Compute 95% credible interval for hierarchical Bayesian model
 - [`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
   : Returns the powers of the GLM fitted model which has the lowest
   deviance score.
