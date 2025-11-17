@@ -10,8 +10,8 @@
 #' @param le - number of bins to generate age grid, used when monotonizing data
 #' @param ci - confidence interval for smoothing
 #' @param monotonize_method - either "pava" or "scam"
-#' @import mgcv scam assertthat
-#' @importFrom mgcv gam predict.gam
+#' @import scam assertthat
+#' @importFrom mgcv gam predict.gam betar
 #'
 #' @return a list of class time_age_model with 4 items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
