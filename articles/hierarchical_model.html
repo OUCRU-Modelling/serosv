@@ -5,83 +5,66 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="serosv">
 <title>Hierarchical Bayesian models • serosv</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Hierarchical Bayesian models">
-<meta property="og:description" content="serosv">
-<meta property="og:image" content="https://oucru-modelling.github.io/serosv/logo.svg">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Hierarchical Bayesian models">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a>
-    <a class="dropdown-item" href="../articles/sir_model.html">SIR model</a>
-    <a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a>
-    <a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a>
-    <a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a>
-    <a class="dropdown-item" href="../articles/hierarchical_model.html">Hierarchical Bayesian models</a>
-    <a class="dropdown-item" href="../articles/model_quantitative_data.html">Modeling directly from antibody levels</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Utilities</h6>
-    <a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a>
-    <a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a>
-    <a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a>
-    <a class="dropdown-item" href="../articles/model_selection.html">Model selection</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a></li>
+    <li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
+    <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
+    <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
+    <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
+    <li><a class="dropdown-item" href="../articles/hierarchical_model.html">Hierarchical Bayesian models</a></li>
+    <li><a class="dropdown-item" href="../articles/model_quantitative_data.html">Modeling directly from antibody levels</a></li>
+    <li><a class="dropdown-item" href="../articles/repeated_cross_sectional.html">Model repeated cross-sectional data</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Utilities</h6></li>
+    <li><a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a></li>
+    <li><a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a></li>
+    <li><a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a></li>
+    <li><a class="dropdown-item" href="../articles/model_selection.html">Model selection</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/OUCRU-Modelling/serosv/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/OUCRU-Modelling/serosv/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -100,34 +83,36 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when</span></span>
-<span><span class="co">#&gt; loading 'serosv'</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="parametric-bayesian-framework">Parametric Bayesian framework<a class="anchor" aria-label="anchor" href="#parametric-bayesian-framework"></a>
 </h2>
 <p>Currently, <code>serosv</code> only has models under parametric
 Bayesian framework</p>
 <p><strong>Proposed approach</strong></p>
-<p>Prevalence has a parametric form <span class="math inline">\(\pi(a_i,
-\alpha)\)</span> where <span class="math inline">\(\alpha\)</span> is a
-parameter vector</p>
+<p>Prevalence has a parametric form
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi(a_i, \alpha)</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+is a parameter vector</p>
 <p>One can constraint the parameter space of the prior distribution
-<span class="math inline">\(P(\alpha)\)</span> in order to achieve the
-desired monotonicity of the posterior distribution <span class="math inline">\(P(\pi_1, \pi_2, ..., \pi_m|y,n)\)</span></p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">P(\alpha)</annotation></semantics></math>
+in order to achieve the desired monotonicity of the posterior
+distribution
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>,</mo><msub><mi>π</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>π</mi><mi>m</mi></msub><mo stretchy="false" form="prefix">|</mo><mi>y</mi><mo>,</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">P(\pi_1, \pi_2, ..., \pi_m|y,n)</annotation></semantics></math></p>
 <p>Where:</p>
 <ul>
-<li>
-<span class="math inline">\(n = (n_1, n_2, ..., n_m)\)</span> and
-<span class="math inline">\(n_i\)</span> is the sample size at age <span class="math inline">\(a_i\)</span>
-</li>
-</ul>
-<!-- --><ul>
-<li>
-<span class="math inline">\(y = (y_1, y_2, ..., y_m)\)</span> and
-<span class="math inline">\(y_i\)</span> is the number of infected
-individual from the <span class="math inline">\(n_i\)</span> sampled
-subjects</li>
+<li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mn>1</mn></msub><mo>,</mo><msub><mi>n</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>n</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">n = (n_1, n_2, ..., n_m)</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>i</mi></msub><annotation encoding="application/x-tex">n_i</annotation></semantics></math>
+is the sample size at age
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_i</annotation></semantics></math></p></li>
+<li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>y</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">y = (y_1, y_2, ..., y_m)</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_i</annotation></semantics></math>
+is the number of infected individual from the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>i</mi></msub><annotation encoding="application/x-tex">n_i</annotation></semantics></math>
+sampled subjects</p></li>
 </ul>
 <div class="section level3">
 <h3 id="farrington">Farrington<a class="anchor" aria-label="anchor" href="#farrington"></a>
@@ -135,57 +120,57 @@ subjects</li>
 <p>Refer to <code>Chapter 10.3.1</code></p>
 <p><strong>Proposed model</strong></p>
 <p>The model for prevalence is as followed</p>
-<p><span class="math display">\[
-\pi (a) = 1 - exp\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} +
-\frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2 a}
-- 1) -\alpha_3 a \}
-\]</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false" form="prefix">{</mo><mfrac><msub><mi>α</mi><mn>1</mn></msub><msub><mi>α</mi><mn>2</mn></msub></mfrac><mi>a</mi><msup><mi>e</mi><mrow><mo>−</mo><msub><mi>α</mi><mn>2</mn></msub><mi>a</mi></mrow></msup><mo>+</mo><mfrac><mn>1</mn><msub><mi>α</mi><mn>2</mn></msub></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mi>α</mi><mn>1</mn></msub><msub><mi>α</mi><mn>2</mn></msub></mfrac><mo>−</mo><msub><mi>α</mi><mn>3</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><mrow><mo>−</mo><msub><mi>α</mi><mn>2</mn></msub><mi>a</mi></mrow></msup><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msub><mi>α</mi><mn>3</mn></msub><mi>a</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
+\pi (a) = 1 - exp\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} + \frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2 a} - 1) -\alpha_3 a \}
+</annotation></semantics></math></p>
 <p>For likelihood model, independent binomial distribution are assumed
-for the number of infected individuals at age <span class="math inline">\(a_i\)</span></p>
-<p><span class="math display">\[
+for the number of infected individuals at age
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>i</mi></msub><annotation encoding="application/x-tex">a_i</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>∼</mo><mi>B</mi><mi>i</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>,</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> for </mtext><mspace width="0.333em"></mspace></mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">
 y_i \sim Bin(n_i, \pi_i), \text{  for } i = 1,2,3,...m
-\]</span></p>
+</annotation></semantics></math></p>
 <p>The constraint on the parameter space can be incorporated by assuming
-truncated normal distribution for the components of <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\alpha = (\alpha_1, \alpha_2, \alpha_3)\)</span>
-in <span class="math inline">\(\pi_i = \pi(a_i,\alpha)\)</span></p>
-<p><span class="math display">\[
-\alpha_j \sim \text{truncated  } \mathcal{N}(\mu_j, \tau_j), \text{ } j
-= 1,2,3
-\]</span></p>
-<p>The joint posterior distribution for <span class="math inline">\(\alpha\)</span> can be derived by combining the
-likelihood and prior as followed</p>
-<p><span class="math display">\[
-P(\alpha|y) \propto \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha))
-\prod^3_{i=1}-\frac{1}{\tau_j}\text{exp}(\frac{1}{2\tau^2_j} (\alpha_j -
-\mu_j)^2)
-\]</span></p>
+truncated normal distribution for the components of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>1</mn></msub><mo>,</mo><msub><mi>α</mi><mn>2</mn></msub><mo>,</mo><msub><mi>α</mi><mn>3</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha = (\alpha_1, \alpha_2, \alpha_3)</annotation></semantics></math>
+in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_i = \pi(a_i,\alpha)</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>j</mi></msub><mo>∼</mo><mrow><mtext mathvariant="normal">truncated </mtext><mspace width="0.333em"></mspace></mrow><mstyle mathvariant="script"><mi>𝒩</mi></mstyle><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>j</mi></msub><mo>,</mo><msub><mi>τ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"></mtext><mspace width="0.333em"></mspace></mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">
+\alpha_j \sim \text{truncated  } \mathcal{N}(\mu_j, \tau_j), \text{ } j = 1,2,3
+</annotation></semantics></math></p>
+<p>The joint posterior distribution for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+can be derived by combining the likelihood and prior as followed</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo stretchy="false" form="prefix">|</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∝</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mtext mathvariant="normal">Bin</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>n</mi><mi>i</mi></msub><mo>,</mo><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><mo>−</mo><mfrac><mn>1</mn><msub><mi>τ</mi><mi>j</mi></msub></mfrac><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mrow><mn>2</mn><msubsup><mi>τ</mi><mi>j</mi><mn>2</mn></msubsup></mrow></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+P(\alpha|y) \propto \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha)) \prod^3_{i=1}-\frac{1}{\tau_j}\text{exp}(\frac{1}{2\tau^2_j} (\alpha_j - \mu_j)^2)
+</annotation></semantics></math></p>
 <ul>
 <li>
 <p>Where the flat hyperprior distribution is defined as
 followed:</p>
 <ul>
-<li><p><span class="math inline">\(\mu_j \sim \mathcal{N}(0,
-10000)\)</span></p></li>
-<li><p><span class="math inline">\(\tau^{-2}_j \sim
-\Gamma(100,100)\)</span></p></li>
+<li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><mo>∼</mo><mstyle mathvariant="script"><mi>𝒩</mi></mstyle><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>10000</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mu_j \sim \mathcal{N}(0, 10000)</annotation></semantics></math></p></li>
+<li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>τ</mi><mi>j</mi><mrow><mo>−</mo><mn>2</mn></mrow></msubsup><mo>∼</mo><mi>Γ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>100</mn><mo>,</mo><mn>100</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\tau^{-2}_j \sim \Gamma(100,100)</annotation></semantics></math></p></li>
 </ul>
 </li>
 </ul>
-<p>The full conditional distribution of <span class="math inline">\(\alpha_i\)</span> is thus <span class="math display">\[
-P(\alpha_i|\alpha_j,\alpha_k, k, j \neq i)
-\propto  -\frac{1}{\tau_i}\text{exp}(\frac{1}{2\tau^2_i} (\alpha_i -
-\mu_i)^2) \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha))
-\]</span></p>
+<p>The full conditional distribution of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\alpha_i</annotation></semantics></math>
+is thus
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>α</mi><mi>j</mi></msub><mo>,</mo><msub><mi>α</mi><mi>k</mi></msub><mo>,</mo><mi>k</mi><mo>,</mo><mi>j</mi><mo>≠</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∝</mo><mo>−</mo><mfrac><mn>1</mn><msub><mi>τ</mi><mi>i</mi></msub></mfrac><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mrow><mn>2</mn><msubsup><mi>τ</mi><mi>i</mi><mn>2</mn></msubsup></mrow></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mtext mathvariant="normal">Bin</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>n</mi><mi>i</mi></msub><mo>,</mo><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+P(\alpha_i|\alpha_j,\alpha_k, k, j \neq i) \propto  -\frac{1}{\tau_i}\text{exp}(\frac{1}{2\tau^2_i} (\alpha_i - \mu_i)^2) \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha))
+</annotation></semantics></math></p>
 <p><strong>Fitting data</strong></p>
 <p>To fit Farrington model, use
 <code><a href="../reference/hierarchical_bayesian_model.html">hierarchical_bayesian_model()</a></code> and define
 <code>type = "far2"</code> or <code>type = "far3"</code> where</p>
 <ul>
 <li><p><code>type = "far2"</code> refers to Farrington model with 2
-parameters (<span class="math inline">\(\alpha_3 = 0\)</span>)</p></li>
+parameters
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>3</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha_3 = 0</annotation></semantics></math>)</p></li>
 <li><p><code>type = "far3"</code> refers to Farrington model with 3
-parameters (<span class="math inline">\(\alpha_3 &gt;
-0\)</span>)</p></li>
+parameters
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>3</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha_3 &gt; 0</annotation></semantics></math>)</p></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">mumps_uk_1986_1987</span></span>
@@ -196,8 +181,8 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span></span>
 <span><span class="co">#&gt; Chain 1:   Stan can't start sampling from this initial value.</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000126 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.26 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000154 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.54 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -214,105 +199,103 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 14.91 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                14.326 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                29.236 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 16.591 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                96.031 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                112.622 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
-<span><span class="co">#&gt; Warning: There were 1236 divergent transitions after warmup. See</span></span>
+<span><span class="co">#&gt; Warning: There were 288 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
 <span><span class="co">#&gt; to find out why this is a problem and how to eliminate them.</span></span>
+<span><span class="co">#&gt; Warning: There were 11 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See</span></span>
+<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</span></span>
 <span><span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></span>
-<span><span class="co">#&gt; Warning: The largest R-hat is 1.07, indicating chains have not mixed.</span></span>
-<span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
-<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#r-hat</span></span>
-<span><span class="co">#&gt; Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span></span>
-<span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
-<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#bulk-ess</span></span>
 <span><span class="co">#&gt; Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span></span>
 <span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#tail-ess</span></span>
 <span></span>
 <span><span class="va">model</span><span class="op">$</span><span class="va">info</span></span>
 <span><span class="co">#&gt;                       mean      se_mean           sd          2.5%</span></span>
-<span><span class="co">#&gt; alpha1        1.400750e-01 5.772746e-04 5.061637e-03  1.291531e-01</span></span>
-<span><span class="co">#&gt; alpha2        1.971363e-01 6.891601e-04 6.915543e-03  1.855918e-01</span></span>
-<span><span class="co">#&gt; alpha3        7.289266e-03 1.518418e-03 7.518513e-03  1.120555e-04</span></span>
-<span><span class="co">#&gt; tau_alpha1    4.356277e-01 1.212644e-01 9.969059e-01  8.370028e-06</span></span>
-<span><span class="co">#&gt; tau_alpha2    1.047710e+00 3.895075e-01 2.035456e+00  1.255557e-05</span></span>
-<span><span class="co">#&gt; tau_alpha3    2.040321e+00 1.247945e+00 3.455228e+00  6.342945e-06</span></span>
-<span><span class="co">#&gt; mu_alpha1    -3.309940e+00 2.884706e+00 3.864842e+01 -8.296621e+01</span></span>
-<span><span class="co">#&gt; mu_alpha2     6.802868e-01 1.689830e+00 2.588370e+01 -6.616912e+01</span></span>
-<span><span class="co">#&gt; mu_alpha3     2.083459e+00 1.746417e+00 2.930201e+01 -5.886563e+01</span></span>
-<span><span class="co">#&gt; sigma_alpha1  6.371450e+01 1.307429e+01 3.332064e+02  5.015577e-01</span></span>
-<span><span class="co">#&gt; sigma_alpha2  8.334825e+01 4.038113e+01 1.560984e+03  3.719014e-01</span></span>
-<span><span class="co">#&gt; sigma_alpha3  8.502171e+01 2.868993e+01 1.157427e+03  3.159379e-01</span></span>
-<span><span class="co">#&gt; lp__         -2.534185e+03 6.823333e-01 3.897737e+00 -2.541944e+03</span></span>
-<span><span class="co">#&gt;                        25%           50%           75%         97.5%</span></span>
-<span><span class="co">#&gt; alpha1        1.367395e-01  1.412622e-01  1.437116e-01  1.490064e-01</span></span>
-<span><span class="co">#&gt; alpha2        1.929334e-01  1.950358e-01  2.016050e-01  2.122837e-01</span></span>
-<span><span class="co">#&gt; alpha3        1.336679e-03  4.927735e-03  1.129148e-02  2.722506e-02</span></span>
-<span><span class="co">#&gt; tau_alpha1    1.060576e-03  4.558585e-03  2.647481e-01  3.975193e+00</span></span>
-<span><span class="co">#&gt; tau_alpha2    1.928452e-03  1.281223e-02  8.139368e-01  7.230101e+00</span></span>
-<span><span class="co">#&gt; tau_alpha3    2.614862e-03  5.170448e-02  2.966259e+00  1.001836e+01</span></span>
-<span><span class="co">#&gt; mu_alpha1    -1.703190e+01 -9.766189e-01  1.329607e+00  9.839007e+01</span></span>
-<span><span class="co">#&gt; mu_alpha2    -1.427125e+00  4.241891e-01  1.024570e+01  5.114096e+01</span></span>
-<span><span class="co">#&gt; mu_alpha3    -1.369344e+00 -2.821753e-02  1.753812e+00  7.802320e+01</span></span>
-<span><span class="co">#&gt; sigma_alpha1  1.943496e+00  1.481106e+01  3.070642e+01  3.456672e+02</span></span>
-<span><span class="co">#&gt; sigma_alpha2  1.108421e+00  8.834616e+00  2.277171e+01  2.822211e+02</span></span>
-<span><span class="co">#&gt; sigma_alpha3  5.806246e-01  4.397813e+00  1.955597e+01  3.970900e+02</span></span>
-<span><span class="co">#&gt; lp__         -2.536565e+03 -2.534811e+03 -2.531149e+03 -2.526663e+03</span></span>
-<span><span class="co">#&gt;                    n_eff     Rhat</span></span>
-<span><span class="co">#&gt; alpha1         76.880659 1.020363</span></span>
-<span><span class="co">#&gt; alpha2        100.696016 1.002847</span></span>
-<span><span class="co">#&gt; alpha3         24.517797 1.010750</span></span>
-<span><span class="co">#&gt; tau_alpha1     67.583632 1.001489</span></span>
-<span><span class="co">#&gt; tau_alpha2     27.308103 1.001907</span></span>
-<span><span class="co">#&gt; tau_alpha3      7.665891 1.125965</span></span>
-<span><span class="co">#&gt; mu_alpha1     179.498324 1.004001</span></span>
-<span><span class="co">#&gt; mu_alpha2     234.620692 1.010656</span></span>
-<span><span class="co">#&gt; mu_alpha3     281.513284 1.001463</span></span>
-<span><span class="co">#&gt; sigma_alpha1  649.516789 1.001963</span></span>
-<span><span class="co">#&gt; sigma_alpha2 1494.307920 1.000572</span></span>
-<span><span class="co">#&gt; sigma_alpha3 1627.527210 1.000915</span></span>
-<span><span class="co">#&gt; lp__           32.631107 1.019529</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">fill</span> values.</span></span></code></pre></div>
-<p><img src="hierarchical_model_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<span><span class="co">#&gt; alpha1        1.396732e-01 2.328172e-04 5.926643e-03  1.290067e-01</span></span>
+<span><span class="co">#&gt; alpha2        1.989632e-01 3.342249e-04 8.454176e-03  1.847781e-01</span></span>
+<span><span class="co">#&gt; alpha3        9.017286e-03 2.957517e-04 7.503320e-03  2.519932e-04</span></span>
+<span><span class="co">#&gt; tau_alpha1    2.051039e+00 2.925237e-01 5.992958e+00  1.814318e-06</span></span>
+<span><span class="co">#&gt; tau_alpha2    4.280878e+00 1.545375e+00 1.261621e+01  5.514011e-06</span></span>
+<span><span class="co">#&gt; tau_alpha3    1.594944e+00 2.713658e-01 4.513571e+00  1.717967e-06</span></span>
+<span><span class="co">#&gt; mu_alpha1    -2.434489e+00 4.143249e+00 4.467754e+01 -1.656101e+02</span></span>
+<span><span class="co">#&gt; mu_alpha2    -9.043922e-01 1.406475e+00 3.373188e+01 -9.031034e+01</span></span>
+<span><span class="co">#&gt; mu_alpha3     2.147579e+00 1.666808e+00 4.272829e+01 -9.818932e+01</span></span>
+<span><span class="co">#&gt; sigma_alpha1  9.673678e+03 9.523462e+03 2.012224e+05  2.027127e-01</span></span>
+<span><span class="co">#&gt; sigma_alpha2  8.037575e+01 1.664371e+01 5.816331e+02  1.342710e-01</span></span>
+<span><span class="co">#&gt; sigma_alpha3  1.665419e+02 4.235920e+01 1.470059e+03  2.354869e-01</span></span>
+<span><span class="co">#&gt; lp__         -2.534311e+03 2.684310e-01 4.176499e+00 -2.542650e+03</span></span>
+<span><span class="co">#&gt;                        25%           50%           75%         97.5%      n_eff</span></span>
+<span><span class="co">#&gt; alpha1        1.353546e-01  1.393536e-01  1.435425e-01  1.520502e-01  648.01829</span></span>
+<span><span class="co">#&gt; alpha2        1.931939e-01  1.981250e-01  2.037919e-01  2.181404e-01  639.83066</span></span>
+<span><span class="co">#&gt; alpha3        3.301399e-03  6.948630e-03  1.310897e-02  2.798314e-02  643.65402</span></span>
+<span><span class="co">#&gt; tau_alpha1    4.699710e-04  1.339575e-02  4.377299e-01  2.433537e+01  419.72073</span></span>
+<span><span class="co">#&gt; tau_alpha2    1.099782e-03  3.547442e-02  9.730938e-01  5.546799e+01   66.64842</span></span>
+<span><span class="co">#&gt; tau_alpha3    3.847899e-04  1.424805e-02  4.511886e-01  1.803311e+01  276.64990</span></span>
+<span><span class="co">#&gt; mu_alpha1    -4.777740e+00  1.761566e-01  4.990839e+00  8.616947e+01  116.27771</span></span>
+<span><span class="co">#&gt; mu_alpha2    -3.043304e+00  1.912986e-01  2.809284e+00  6.930927e+01  575.19790</span></span>
+<span><span class="co">#&gt; mu_alpha3    -4.356601e+00  8.834931e-02  7.109717e+00  1.097394e+02  657.14323</span></span>
+<span><span class="co">#&gt; sigma_alpha1  1.511461e+00  8.640059e+00  4.612799e+01  7.424105e+02  446.43988</span></span>
+<span><span class="co">#&gt; sigma_alpha2  1.013731e+00  5.309408e+00  3.015428e+01  4.258861e+02 1221.23065</span></span>
+<span><span class="co">#&gt; sigma_alpha3  1.488748e+00  8.377652e+00  5.097869e+01  7.629637e+02 1204.40906</span></span>
+<span><span class="co">#&gt; lp__         -2.537035e+03 -2.534291e+03 -2.531361e+03 -2.526569e+03  242.08025</span></span>
+<span><span class="co">#&gt;                   Rhat</span></span>
+<span><span class="co">#&gt; alpha1       1.0006390</span></span>
+<span><span class="co">#&gt; alpha2       0.9997486</span></span>
+<span><span class="co">#&gt; alpha3       0.9999655</span></span>
+<span><span class="co">#&gt; tau_alpha1   1.0023789</span></span>
+<span><span class="co">#&gt; tau_alpha2   1.0060590</span></span>
+<span><span class="co">#&gt; tau_alpha3   1.0005442</span></span>
+<span><span class="co">#&gt; mu_alpha1    1.0039620</span></span>
+<span><span class="co">#&gt; mu_alpha2    0.9997144</span></span>
+<span><span class="co">#&gt; mu_alpha3    1.0015442</span></span>
+<span><span class="co">#&gt; sigma_alpha1 1.0019918</span></span>
+<span><span class="co">#&gt; sigma_alpha2 1.0000931</span></span>
+<span><span class="co">#&gt; sigma_alpha3 0.9997146</span></span>
+<span><span class="co">#&gt; lp__         1.0215691</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<p><img src="hierarchical_model_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="log-logistic">Log-logistic<a class="anchor" aria-label="anchor" href="#log-logistic"></a>
 </h3>
 <p><strong>Proposed approach</strong></p>
 <p>The model for seroprevalence is as followed</p>
-<p><span class="math display">\[
-\pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ } \alpha,
-\beta &gt; 0
-\]</span></p>
-<p>The likelihood is specified to be the same as Farrington model (<span class="math inline">\(y_i \sim Bin(n_i, \pi_i)\)</span>) with</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>β</mi><msup><mi>a</mi><mi>α</mi></msup></mrow><mrow><mn>1</mn><mo>+</mo><mi>β</mi><msup><mi>a</mi><mi>α</mi></msup></mrow></mfrac><mo>,</mo><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"></mtext><mspace width="0.333em"></mspace></mrow><mi>α</mi><mo>,</mo><mi>β</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">
+\pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ } \alpha, \beta &gt; 0
+</annotation></semantics></math></p>
+<p>The likelihood is specified to be the same as Farrington model
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>∼</mo><mi>B</mi><mi>i</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>i</mi></msub><mo>,</mo><msub><mi>π</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">y_i \sim Bin(n_i, \pi_i)</annotation></semantics></math>)
+with</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">logit</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>α</mi><mn>2</mn></msub><mo>+</mo><msub><mi>α</mi><mn>1</mn></msub><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 \text{logit}(\pi(a)) = \alpha_2 + \alpha_1\log(a)
-\]</span></p>
+</annotation></semantics></math></p>
 <ul>
-<li>Where <span class="math inline">\(\alpha_2 =
-\text{log}(\beta)\)</span>
+<li>Where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>2</mn></msub><mo>=</mo><mtext mathvariant="normal">log</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_2 = \text{log}(\beta)</annotation></semantics></math>
 </li>
 </ul>
-<p>The prior model of <span class="math inline">\(\alpha_1\)</span> is
-specified as <span class="math inline">\(\alpha_1 \sim
-\text{truncated  } \mathcal{N}(\mu_1, \tau_1)\)</span> with flat
-hyperprior as in Farrington model</p>
-<p><span class="math inline">\(\beta\)</span> is constrained to be
-positive by specifying <span class="math inline">\(\alpha_2 \sim
-\mathcal{N}(\mu_2, \tau_2)\)</span></p>
-<p>The full conditional distribution of <span class="math inline">\(\alpha_1\)</span> is thus</p>
-<p><span class="math display">\[
-P(\alpha_1|\alpha_2) \propto -\frac{1}{\tau_1} \text{exp} (\frac{1}{2
-\tau_1^2} (\alpha_1 - \mu_1)^2)
+<p>The prior model of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\alpha_1</annotation></semantics></math>
+is specified as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>∼</mo><mrow><mtext mathvariant="normal">truncated </mtext><mspace width="0.333em"></mspace></mrow><mstyle mathvariant="script"><mi>𝒩</mi></mstyle><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>τ</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_1 \sim \text{truncated  } \mathcal{N}(\mu_1, \tau_1)</annotation></semantics></math>
+with flat hyperprior as in Farrington model</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+is constrained to be positive by specifying
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>2</mn></msub><mo>∼</mo><mstyle mathvariant="script"><mi>𝒩</mi></mstyle><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mn>2</mn></msub><mo>,</mo><msub><mi>τ</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_2 \sim \mathcal{N}(\mu_2, \tau_2)</annotation></semantics></math></p>
+<p>The full conditional distribution of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\alpha_1</annotation></semantics></math>
+is thus</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>1</mn></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>α</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>∝</mo><mo>−</mo><mfrac><mn>1</mn><msub><mi>τ</mi><mn>1</mn></msub></mfrac><mtext mathvariant="normal">exp</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><mrow><mn>2</mn><msubsup><mi>τ</mi><mn>1</mn><mn>2</mn></msubsup></mrow></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>α</mi><mn>1</mn></msub><mo>−</mo><msub><mi>μ</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mtext mathvariant="normal">Bin</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>n</mi><mi>i</mi></msub><mo>,</mo><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><msub><mi>α</mi><mn>1</mn></msub><mo>,</mo><msub><mi>α</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+P(\alpha_1|\alpha_2) \propto -\frac{1}{\tau_1} \text{exp} (\frac{1}{2 \tau_1^2} (\alpha_1 - \mu_1)^2)
 \prod_{i=1}^m \text{Bin}(y_i|n_i,\pi(a_i, \alpha_1, \alpha_2) )
-\]</span></p>
-<p>And <span class="math inline">\(\alpha_2\)</span> can be derived in
-the same way</p>
+</annotation></semantics></math></p>
+<p>And
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\alpha_2</annotation></semantics></math>
+can be derived in the same way</p>
 <p><strong>Fitting data</strong></p>
 <p>To fit Log-logistic model, use
 <code><a href="../reference/hierarchical_bayesian_model.html">hierarchical_bayesian_model()</a></code> and define
@@ -323,8 +306,8 @@ the same way</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 5.2e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.52 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.4e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.64 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -341,17 +324,14 @@ the same way</p>
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.335 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                2.113 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                6.448 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.15 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                5.77 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                9.92 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
-<span><span class="co">#&gt; Warning: There were 830 divergent transitions after warmup. See</span></span>
+<span><span class="co">#&gt; Warning: There were 583 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
 <span><span class="co">#&gt; to find out why this is a problem and how to eliminate them.</span></span>
 <span><span class="co">#&gt; Warning: Examine the pairs() plot to diagnose sampling problems</span></span>
-<span><span class="co">#&gt; Warning: The largest R-hat is 1.05, indicating chains have not mixed.</span></span>
-<span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
-<span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#r-hat</span></span>
 <span><span class="co">#&gt; Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span></span>
 <span><span class="co">#&gt; Running the chains for more iterations may help. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#bulk-ess</span></span>
@@ -361,34 +341,30 @@ the same way</p>
 <span></span>
 <span><span class="va">model</span><span class="op">$</span><span class="va">type</span></span>
 <span><span class="co">#&gt; [1] "log_logistic"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">fill</span> values.</span></span></code></pre></div>
-<p><img src="hierarchical_model_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<p><img src="hierarchical_model_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Anh Phan Truong Quynh, Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
+  <p>Developed by Anh Phan Truong Quynh, Nguyen Pham Nguyen The, Long Bui Thanh, Tuyen Huynh, Thinh Ong, Marc Choisy.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

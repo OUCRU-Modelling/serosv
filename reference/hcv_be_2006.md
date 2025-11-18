@@ -1,0 +1,64 @@
+# Hepatitis C serological data from Belgium in 2006 (line listing)
+
+A study of HCV infection among injecting drug users. All injecting drug
+users were interviewed by means of a standardized face-to-face interview
+and information on their socio-demographic status, drug use history,
+drug use, and related risk behavior was recorded
+
+## Usage
+
+``` r
+hcv_be_2006
+```
+
+## Format
+
+A data frame with 3 variables:
+
+- dur:
+
+  Duration of injection/Exposure time (years)
+
+- seropositive:
+
+  If the individual is seropositive or not
+
+## Source
+
+Mathei, C., Shkedy, Z., Denis, B., Kabali, C., Aerts, M., Molenberghs,
+G., Van Damme, P. and Buntinx, F. (2006), Evidence for a substantial
+role of sharing of injecting paraphernalia other than syringes/needles
+to the spread of hepatitis C among injecting drug users. Journal of
+Viral Hepatitis, 13: 560-570.
+[doi:10.1111/j.1365-2893.2006.00725.x](https://doi.org/10.1111/j.1365-2893.2006.00725.x)
+
+## Examples
+
+``` r
+# Reproduce Fig 4.3, p. 66
+library(dplyr)
+# snapping age to aggregated age group
+# (credit: https://stackoverflow.com/a/12861810)
+groups <- c(0.5:24.5)
+range <- 0.5
+low <- findInterval(hcv_be_2006$dur, groups)
+high <- low + 1
+low_diff <- hcv_be_2006$dur - groups[ifelse(low == 0, NA, low)]
+high_diff <- groups[ifelse(high == 0, NA, high)] - hcv_be_2006$dur
+mins <- pmin(low_diff, high_diff, na.rm = TRUE)
+pick <- ifelse(!is.na(low_diff) & mins == low_diff, low, high)
+hcv_be_2006$dur <- ifelse(
+  mins <= range + .Machine$double.eps, groups[pick], hcv_be_2006$dur
+)
+hcv_be_2006 <- hcv_be_2006 %>%
+  group_by(dur) %>%
+  summarise(tot = n(), pos = sum(seropositive))
+
+plot(
+  hcv_be_2006$dur, hcv_be_2006$pos / hcv_be_2006$tot,
+  cex = 0.1 * hcv_be_2006$tot, pch = 16,
+  xlab = "duration of injection (years)",
+  ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+)
+
+```
