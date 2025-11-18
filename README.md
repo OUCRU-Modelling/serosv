@@ -13,9 +13,9 @@ coverage](https://codecov.io/gh/OUCRU-Modelling/serosv/branch/main/graph/badge.s
 
 `serosv` is an easy-to-use and efficient tool to estimate infectious
 diseases parameters (seroprevalence and force of infection) using
-serological data. The current version is based on the book “Modeling
-Infectious Disease Parameters Based on Serological and Social Contact
-Data – A Modern Statistical Perspective” by [Hens et al., 2012
+serological data. The current version is mostly based on the book
+“Modeling Infectious Disease Parameters Based on Serological and Social
+Contact Data – A Modern Statistical Perspective” by [Hens et al., 2012
 Springer](https://link.springer.com/book/10.1007/978-1-4614-4072-7).
 
 ## Installation
@@ -108,8 +108,10 @@ best_2d_mn
 #> Call:  glm(formula = as.formula(formulate(p_cur)), family = binomial(link = link))
 #> 
 #> Coefficients:
-#>               (Intercept)                I(age^-0.9)  I(I(age^-0.9) * log(age))  
-#>                     4.342                     -4.696                     -9.845  
+#>               (Intercept)                I(age^-0.9)  
+#>                     4.342                     -4.696  
+#> I(I(age^-0.9) * log(age))  
+#>                    -9.845  
 #> 
 #> Degrees of Freedom: 43 Total (i.e. Null);  41 Residual
 #> Null Deviance:       1369 
@@ -126,31 +128,41 @@ fpmd <- fp_model(
 plot(fpmd)
 ```
 
-<img src="man/figures/README-unnamed-chunk-48-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 ### Fitting Parvo B19 data from Finland
 
 ``` r
+library(dplyr)
+#> Warning: package 'dplyr' was built under R version 4.3.1
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 parvob19 <- parvob19_fi_1997_1998
 
 # for linelisting data, either transform it to aggregated
 transform_data(
   parvob19$age, 
   parvob19$seropositive,
-  stratum_col = "age") %>% 
-  polynomial_model(type = "Muench") %>% 
+  stratum_col = "age") |>
+  polynomial_model(type = "Muench") |>
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-49-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 ``` r
 
 # or fit data as is
-parvob19 %>% 
-  rename(status = seropositive) %>% 
-  polynomial_model(type = "Muench") %>% 
+parvob19 |>
+  rename(status = seropositive) |>
+  polynomial_model(type = "Muench") |>
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-49-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-2.png" width="100%" />

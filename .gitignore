@@ -8,3 +8,5 @@ inst/doc
 test_pkg
 rstan_code
 revdep
+/doc/
+/Meta/

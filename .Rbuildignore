@@ -20,3 +20,5 @@
 ^docs$
 ^CRAN-SUBMISSION$
 ^logo\.svg$
+^doc$
+^Meta$

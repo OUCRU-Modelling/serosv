@@ -1,6 +1,7 @@
-# ------ Demo function --------
 #' Age-time varying seroprevalence
-#' Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.
+#'
+#'
+#' @description Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or birth cohort) - specific seroprevalence.
 #'
 #' @param data - input data, must have`age`, `status`, time, group columns, where group column determines how data is aggregated
 #' @param time_col - name of the column for time (default to `date`)
@@ -8,17 +9,27 @@
 #' @param age_correct - a boolean, if `TRUE`, monotonize age-specific prevalence. Monotonize birth cohort-specific seroprevalence otherwise.
 #' @param le - number of bins to generate age grid, used when monotonizing data
 #' @param ci - confidence interval for smoothing
-#' @import mgcv
+#' @param monotonize_method - either "pava" or "scam"
+#' @import scam assertthat
+#' @importFrom mgcv gam predict.gam betar
 #'
-#' @return a list of class time_age_model with 3 items
+#' @return a list of class time_age_model with 4 items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
-#' data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotnized data}
+#' data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
 #'   \item{grouping_col}{name of the column for grouping}
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
+#'   \item{datatype}{whether the input data is aggregated or line-listing data}
 #' @export
-age_time_model <- function(data, time_col="date", grouping_col="group",
-                           age_correct=F, le=512, ci = 0.95){
+age_time_model <- function(data, time_col="date", grouping_col="group", age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
+  # work around to resolve no visible binding note NOTE during check()
+  x <- label <- family <- fit <- se.fit <- ymin <- ymax <- y <- mean_time <- prevalence <- sim_data <- NULL
+  age <- ys <- shift_no <- cohort <- col_time <- monotonized_mod <- df <- info <- sp <- monotonized_info <- monotonized_sp <- NULL
 
+
+  assert_that(
+    (monotonize_method == "pava") | (monotonize_method == "scam"),
+    msg = 'Monotonize method must be either "pava" or "scam"'
+  )
 
   # ---- helper functions -----
   shift_right <- \(n,x){ if(n == 1) x else dplyr::lag(x, n, default = NA)}
@@ -46,8 +57,23 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
   }
   # function to monotonize data using serosv pava function
   monotonize_data <- \(dat, grp){
+    dat <- dat %>% arrange(mean_time)
+    if(monotonize_method == "scam"){
+      out <- tryCatch(
+        {
+          mod <- scam(prevalence ~ s(mean_time, bs = "mpi"), data=dat,family = betar)
+          dat$prevalence <- predict(mod, list(mean_time = dat$mean_time), type = "response")
+          dat
+        },
+        error = \(e) {
+          e
+        }
+      )
+
+      if (!("error" %in% class(out))) return(out)
+    }
+
     dat %>%
-      arrange(mean_time) %>%
       mutate(
         prevalence = serosv::pava(prevalence)$pai2
       )
@@ -56,7 +82,7 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
   model <- list()
 
   # --- preprocess data ------
-  check_input <- serosv:::check_input(data)
+  check_input <- check_input(data)
   age_range <- range(data$age)
   age_grid <- seq(age_range[1], age_range[2], length.out = le)
 
@@ -137,7 +163,7 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
 
     # mapping to covert cohort to age
     cohort_age_mapping <- scam_data %>%
-      select(col_time, age, cohort) %>%
+      select(!!sym(grouping_col), age, cohort) %>%
       unique()
 
     # map cohort from monotized data to age (at collection time)
@@ -157,13 +183,19 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
   out <- scam_out %>%
     mutate(
       monotonized_mod = map(data, \(dat){
-        gam(y ~ s(age), family = betar, data = dat)
+        # handle potential error when dataset is small
+        k <- if(length(unique(dat$age)) < 10) length(unique(dat$age)) - 1 else -1
+
+        gam(y ~ s(age, k=k), family = betar, data = dat)
       }),
       # also have model for smooth ci
       monotonized_ci_mod = map(data, \(dat){
+        # handle potential error when dataset is small
+        k <- if(length(unique(dat$age)) < 10) length(unique(dat$age)) - 1 else -1
+
         list(
-          "ymin" = gam(ymin ~ s(age), family = betar, data = dat),
-          "ymax" = gam(ymax ~ s(age), family = betar, data = dat)
+          "ymin" = gam(ymin ~ s(age, k=k), family = gaussian, data = dat),
+          "ymax" = gam(ymax ~ s(age, k=k), family = gaussian, data = dat)
         )
       })
     ) %>%
@@ -206,3 +238,4 @@ age_time_model <- function(data, time_col="date", grouping_col="group",
 
   model
 }
+

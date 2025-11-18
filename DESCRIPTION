@@ -17,11 +17,12 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     R (>= 3.4.0)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 Imports:
     deSolve,
     dplyr,
     tidyr,
+    janitor,
     ggplot2,
     locfit,
     purrr,
@@ -30,6 +31,8 @@ Imports:
     methods,
     mgcv,
     mixdist,
+    scam, 
+    mvtnorm,
     patchwork,
     assertthat,
     Rcpp (>= 0.12.0),
@@ -60,6 +63,7 @@ Collate:
     'semiparametric_models.R'
     'mixture_model.R'
     'hierarchical_bayesian_model.R'
+    'to_titer.R'
     'serosv.R'
     'stanmodels.R'
     'plots.R'

@@ -399,8 +399,10 @@ plot.lp_model <- function(x, ...) {
 plot.hierarchical_bayesian_model <- function(x,  ...){
   cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
 
+  out.DF <- compute_ci.hierarchical_bayesian_model(x)
+
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = x$sp, foi = x$foi, cex=cex)
+    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi, cex=cex)
   })
 }
 
@@ -530,10 +532,14 @@ plot.estimate_from_mixture <- function(x, ... ){
 #' Plot output for age_time_model
 #'
 #' @param x - a `age_time_model` object
-#' @param facet - whether to facet the plot by group or not
-#' @param modtype - indicate which model to plot, either "monotonized" or "non-monotonized"
-#' @param le - number of bins to generate x axis, higher value return smoother plot
-#' @param cex - adjust the of the data points (only when facet = TRUE)
+#' @param ... arbitrary params.
+#' Supported options include:
+#'   \itemize{
+#'     \item \code{facet}: Whether to facet the plot by group.
+#'     \item \code{modtype}: Which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}.
+#'     \item \code{le}: Number of bins used to generate the x-axis; higher values produce smoother curves.
+#'     \item \code{cex}: Adjusts the size of data points (only when \code{facet = TRUE}).
+#'   }
 #'
 #' @importFrom graphics plot
 #' @import ggplot2 assertthat tidyr
@@ -595,7 +601,7 @@ plot.age_time_model <- function(x, ...){
           data = df_dat
         ),
         guides(shape = "none", size = "none"),
-        serosv:::set_plot_style(),
+        set_plot_style(),
         facet_wrap(vars(!!sym(x$grouping_col)))
       ) else
         labs(color = x$grouping_col, fill = x$grouping_col)
@@ -658,3 +664,96 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   # --- Combine 2 plots
   nn_plot + h_plot + plot_layout(ncol=2)
 }
+
+#' Plot output for corrected_prevalence
+#'
+#' @param x - the output of `correct_prevalence()` function
+#' @param y - another output of `correct_prevalence()` function (optional, for comparison only)
+#' @param facet - whether to plot as facets or on the same plot (only when y is provided)
+#' @import ggplot2 tidyr patchwork 
+#' @importFrom magrittr %>%
+#' @importFrom assertthat assert_that
+#'
+#' @return ggplot object
+#' @export
+plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
+  dat <- x$df
+  corrected_dat <- x$corrected_se %>% mutate(label = paste0("estimated prevalence"))
+  corrected_dat2 <- NULL
+
+  if(!is.null(y)){
+    if (!facet){
+      corrected_dat <- bind_rows(
+        corrected_dat %>% mutate(label = paste0("estimated prevalence (", x$method,")")),
+        y$corrected_se %>% mutate(label = paste0("estimated prevalence (", y$method,")"))
+      )
+    }else{
+      corrected_dat2 <- y$corrected_se %>% mutate(label = paste0("estimated prevalence"))
+    }
+  }
+
+  generate_layers <- function(data, title = NULL){
+    # always return point layer
+    out <- list(
+      geom_point(
+        aes(
+          x = age, y = sero,
+          color = label
+        ),
+        alpha = 0.7, data = data
+      )
+    )
+    # if facet or only x is provided or facet, add error_bar layer
+    if(facet | is.null(y)){
+      out[[length(out) + 1]] <- geom_errorbar(
+        aes(
+          x = age, y = sero,
+          ymin = sero_lwr,
+          ymax = sero_upr,
+          color = label
+        ),
+        alpha = 0.7, data = data
+      )
+    }
+    # them add label layer
+    out[[length(out) + 1]] <- labs(x = "Age", y = "Prevalence", title = title)
+    # finally add scale color layer
+    out[[length(out) + 1]] <- if(facet | is.null(y))
+      scale_color_manual(
+        values = c(
+          "apparent prevalence" = "red",
+          "estimated prevalence" = "royalblue"
+        ))
+    else
+      scale_color_manual(
+        values = c(
+          "apparent prevalence" = "red",
+          "estimated prevalence (bayesian)" = "blueviolet",
+          "estimated prevalence (frequentist)" = "royalblue"
+        ))
+    out
+  }
+
+  # when y is not given force facet to FALSE
+  facet <- if(is.null(y)) FALSE else facet
+
+  plot <- ggplot() +
+    geom_point(aes(
+      x = age, y = pos / tot,
+      color = "apparent prevalence"
+    ), data = dat)
+
+  if(!facet){
+    plot <- plot + generate_layers(corrected_dat, title = if(is.null(y)) paste0("Plot for ", x$method, " approach") else NULL)
+  }else{
+    plot1 <- plot + generate_layers(corrected_dat, title = paste0("Plot for ", x$method, " approach"))
+    plot2 <- plot + generate_layers(corrected_dat2, title = paste0("Plot for ", y$method, " approach"))
+
+    plot <- plot1/plot2
+  }
+
+  plot
+}
+
+
+

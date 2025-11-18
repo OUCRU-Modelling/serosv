@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-`serosv` is an easy-to-use and efficient tool to estimate infectious diseases parameters (seroprevalence and force of infection) using serological data. The current version is based on the book "Modeling Infectious Disease Parameters Based on Serological and Social Contact Data -- A Modern Statistical Perspective" by [Hens et al., 2012 Springer](https://link.springer.com/book/10.1007/978-1-4614-4072-7).
+`serosv` is an easy-to-use and efficient tool to estimate infectious diseases parameters (seroprevalence and force of infection) using serological data. The current version is mostly based on the book "Modeling Infectious Disease Parameters Based on Serological and Social Contact Data -- A Modern Statistical Perspective" by [Hens et al., 2012 Springer](https://link.springer.com/book/10.1007/978-1-4614-4072-7).
 
 ## Installation
 
@@ -82,7 +82,7 @@ Hierarchical Bayesian approaches:
 
 Load the rubella in UK dataset.
 
-```{r, eval=FALSE}
+```{r}
 library(serosv)
 ```
 
@@ -112,18 +112,20 @@ plot(fpmd)
 ### Fitting Parvo B19 data from Finland
 
 ```{r}
+library(dplyr)
 parvob19 <- parvob19_fi_1997_1998
 
 # for linelisting data, either transform it to aggregated
 transform_data(
   parvob19$age, 
   parvob19$seropositive,
-  stratum_col = "age") %>% 
-  polynomial_model(type = "Muench") %>% 
+  stratum_col = "age") |>
+  polynomial_model(type = "Muench") |>
   plot()
+
 # or fit data as is
-parvob19 %>% 
-  rename(status = seropositive) %>% 
-  polynomial_model(type = "Muench") %>% 
+parvob19 |>
+  rename(status = seropositive) |>
+  polynomial_model(type = "Muench") |>
   plot()
 ```

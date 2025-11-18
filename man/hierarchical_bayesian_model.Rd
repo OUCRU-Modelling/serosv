@@ -31,6 +31,8 @@ a list of class hierarchical_bayesian_model with 6 items
   \item{info}{parameters for the fitted model}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{sp_func}{function to compute seroprevalence given age and model parameters}
+  \item{foi}{function to compute force of infection given age and model parameters}
 }
 \description{
 Refers to section 10.3

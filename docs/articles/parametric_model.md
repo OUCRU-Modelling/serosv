@@ -1,0 +1,305 @@
+# Parametric models
+
+``` r
+library(serosv)
+library(dplyr)
+library(magrittr)
+```
+
+## Polynomial models
+
+Refer to `Chapter 6.1.1`
+
+Use
+[`polynomial_model()`](https://oucru-modelling.github.io/serosv/reference/polynomial_model.md)
+to fit a polynomial model.
+
+We will use the `Hepatitis A` data from Belgium 1993–1994 for this
+example.
+
+``` r
+data <- hav_bg_1964
+```
+
+### Muench model
+
+**Proposed model**
+
+([Muench 1934](#ref-muench_derivation_1934)) suggested to model the
+infection process with so-called “catalytic model”, in which the
+distribution of the time spent in the susceptible class in SIR model is
+exponential with rate \\(\beta\\)
+
+\\\[ \pi(a) = k(1 - e^{-\beta a} ) \\\]
+
+Where:
+
+- \\(\pi\\) is the seroprevalence at age \\(a\\)
+- \\(1 - k\\) is the proportion of population that stay uninfected for a
+  lifetime
+- \\(a\\) is the variable age
+
+Under this catalytic model and assuming that \\(k = 1\\), force
+infection would be \\(\lambda(a) = \beta\\)
+
+**Fitting data**
+
+**Muench**’s model can be estimated by either defining `k = 1` (a degree
+one linear predictor, note that it is irrelevant to the k in the
+proposed model) or setting the `type = "Muench"`.
+
+``` r
+muench1 <- polynomial_model(data, k = 1)
+summary(muench1$info)
+#> 
+#> Call:
+#> glm(formula = age(k), family = binomial(link = link), data = df)
+#> 
+#> Coefficients:
+#>      Estimate Std. Error z value Pr(>|z|)    
+#> Age -0.050500   0.002457  -20.55   <2e-16 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance:    Inf  on 83  degrees of freedom
+#> Residual deviance: 97.275  on 82  degrees of freedom
+#> AIC: 219.19
+#> 
+#> Number of Fisher Scoring iterations: 5
+
+muench2 <- polynomial_model(data, type = "Muench")
+summary(muench2$info)
+#> 
+#> Call:
+#> glm(formula = age(k), family = binomial(link = link), data = df)
+#> 
+#> Coefficients:
+#>      Estimate Std. Error z value Pr(>|z|)    
+#> Age -0.050500   0.002457  -20.55   <2e-16 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance:    Inf  on 83  degrees of freedom
+#> Residual deviance: 97.275  on 82  degrees of freedom
+#> AIC: 219.19
+#> 
+#> Number of Fisher Scoring iterations: 5
+```
+
+We can plot any model with the
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) function.
+
+``` r
+plot(muench2) 
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-4-1.png)
+
+### Griffith model
+
+**Proposed model**
+
+Griffith proposed a model for force of infection as followed
+
+\\\[ \lambda(a) = \beta_1 + 2\beta_2a \\\]
+
+Which can be estimated using a GLM where the for which the linear
+predictor was \\(\eta(a) = \beta_1 + \beta_2a^{2}\\)
+
+**Fitting data**
+
+Similarly, we can estimate **Griffith**’s model either by defining
+`k = 2`, or setting the `type = "Griffith"`
+
+``` r
+gf_model <- polynomial_model(data, type = "Griffith")
+plot(gf_model)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-5-1.png)
+
+### Grenfell and Anderson model
+
+**Proposed model**
+
+([Grenfell and Anderson 1985](#ref-grenfell_estimation_1985)) extended
+the models of Muench and Griffiths further suggest the use of higher
+order polynomial functions to model the force of infection which assumes
+prevalence model as followed
+
+\\\[ \pi(a) = 1 - e^{-\Sigma_i \beta_i a^i} \\\]
+
+Which implies that force of infection equals \\(\lambda(a) = \Sigma
+\beta_i i a^{i-1}\\)
+
+**Fitting data**
+
+And Grenfell and Anderson’s model.
+
+``` r
+grf_model <- polynomial_model(data, type = "Grenfell")
+plot(grf_model)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
+
+------------------------------------------------------------------------
+
+## Nonlinear models
+
+Refer to `Chapter 6.1.2`
+
+### Farrington model
+
+**Proposed model**
+
+For Farrington’s model, the force of infection was defined non-negative
+for all a \\(\lambda(a) \geq 0\\) and increases to a peak in a linear
+fashion followed by an exponential decrease
+
+\\\[ \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma \\\]
+
+Where \\(\gamma\\) is called the long term residual for FOI, as \\(a
+\rightarrow \infty\\) , \\(\lambda (a) \rightarrow \gamma\\)
+
+Integrating \\(\lambda(a)\\) would results in the following non-linear
+model for prevalence
+
+\\\[ \pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\\\ = 1 - exp\\{
+\frac{\alpha}{\beta}ae^{-\beta a} +
+\frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
+a \\} \\\]
+
+**Fitting data**
+
+Use
+[`farrington_model()`](https://oucru-modelling.github.io/serosv/reference/farrington_model.md)
+to fit a **Farrington**’s model.
+
+``` r
+farrington_md <- farrington_model(
+   rubella_uk_1986_1987,
+   start=list(alpha=0.07,beta=0.1,gamma=0.03)
+   )
+plot(farrington_md)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-7-1.png)
+
+### Weibull model
+
+**Proposed model**
+
+For a Weibull model, the prevalence is given by
+
+\\\[ \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}} \\\]
+
+Where \\(d\\) is exposure time (difference between age of injection and
+age at test)
+
+The model was reformulated as a GLM model with log - log link and linear
+predictor using log(d)
+
+\\\[\eta(d) = log(\beta_0) + \beta_1 log(d)\\\]
+
+Thus implies that the force of infection is a monotone function of the
+exposure time as followed
+
+\\\[ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1} \\\]
+
+**Fitting data**
+
+Use
+[`weibull_model()`](https://oucru-modelling.github.io/serosv/reference/weibull_model.md)
+to fit a Weibull model.
+
+``` r
+hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
+
+wb_md <- hcv %>% 
+  rename(
+    t = dur, status = seropositive
+  ) %>% weibull_model()
+plot(wb_md) 
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
+
+------------------------------------------------------------------------
+
+## Fractional polynomial model
+
+Refer to `Chapter 6.2`
+
+**Proposed model**
+
+Fractional polynomial model generalize conventional polynomial class of
+functions. In the context of binary responses, a fractional polynomial
+of degree \\(m\\) for the linear predictor is defined as followed
+
+\\\[ \eta_m(a, \beta, p_1, p_2, ...,p_m) = \Sigma^m\_{i=0} \beta_i
+H_i(a) \\\]
+
+Where \\(m\\) is an integer, \\(p_1 \le p_2 \le... \le p_m\\) is a
+sequence of powers, and \\(H_i(a)\\) is a transformation given by
+
+\\\[ H_i = \begin{cases} a^{p_i} & \text{ if } p_i \neq p\_{i-1}, \\\\
+H\_{i-1}(a) \times log(a) & \text{ if } p_i = p\_{i-1}, \end{cases} \\\]
+
+**Best power selection**
+
+Use
+[`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
+to find the powers which gives the lowest deviance score
+
+``` r
+hav <- hav_be_1993_1994
+best_p <- find_best_fp_powers(
+  hav,
+  p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
+)
+best_p
+#> $p
+#> [1] 1.5 1.6
+#> 
+#> $deviance
+#> [1] 81.60333
+#> 
+#> $model
+#> 
+#> Call:  glm(formula = as.formula(formulate(p_cur)), family = binomial(link = link))
+#> 
+#> Coefficients:
+#> (Intercept)   I(age^1.5)   I(age^1.6)  
+#>    -3.61083      0.12443     -0.07656  
+#> 
+#> Degrees of Freedom: 85 Total (i.e. Null);  83 Residual
+#> Null Deviance:       1320 
+#> Residual Deviance: 81.6  AIC: 361.2
+```
+
+**Fitting data**
+
+Use
+[`fp_model()`](https://oucru-modelling.github.io/serosv/reference/fp_model.md)
+to fit a fractional polynomial model
+
+``` r
+model <- fp_model(hav, p=c(1.5, 1.6), link="cloglog")
+plot(model)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-10-1.png)
+
+Grenfell, B. T., and R. M. Anderson. 1985. “The Estimation of
+Age-Related Rates of Infection from Case Notifications and Serological
+Data.” *The Journal of Hygiene* 95 (2): 419–36.
+<https://doi.org/10.1017/s0022172400062859>.
+
+Muench, Hugo. 1934. “Derivation of Rates from Summation Data by the
+Catalytic Curve.” *Journal of the American Statistical Association* 29
+(185): 25–38. <https://doi.org/10.1080/01621459.1934.10502684>.

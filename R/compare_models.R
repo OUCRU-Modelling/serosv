@@ -23,6 +23,8 @@ compare_models <- function(...){
         stop("Inputs must be serosv models")
       }
 
+      # TODO: apply cross validation to get matrix instead
+
       data.frame(
         model = .y,
         type = class(.x),

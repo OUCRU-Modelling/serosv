@@ -2,8 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{transform_data}
 \alias{transform_data}
-\title{Generate a dataframe with `t`, `pos` and `tot` columns from
-`t` and `seropositive` vectors.}
+\title{Aggregate data}
 \usage{
 transform_data(t, spos, stratum_col = "t")
 }

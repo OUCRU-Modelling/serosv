@@ -2,8 +2,7 @@
 % Please edit documentation in R/age_time_model.R
 \name{age_time_model}
 \alias{age_time_model}
-\title{Age-time varying seroprevalence
-Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.}
+\title{Age-time varying seroprevalence}
 \usage{
 age_time_model(
   data,
@@ -11,7 +10,8 @@ age_time_model(
   grouping_col = "group",
   age_correct = F,
   le = 512,
-  ci = 0.95
+  ci = 0.95,
+  monotonize_method = "pava"
 )
 }
 \arguments{
@@ -26,15 +26,17 @@ age_time_model(
 \item{le}{- number of bins to generate age grid, used when monotonizing data}
 
 \item{ci}{- confidence interval for smoothing}
+
+\item{monotonize_method}{- either "pava" or "scam"}
 }
 \value{
-a list of class time_age_model with 3 items
+a list of class time_age_model with 4 items
   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
-data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotnized data}
+data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
   \item{grouping_col}{name of the column for grouping}
   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
+  \item{datatype}{whether the input data is aggregated or line-listing data}
 }
 \description{
-Age-time varying seroprevalence
-Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or cohort) - specific seroprevalence.
+Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or birth cohort) - specific seroprevalence.
 }
