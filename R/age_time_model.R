@@ -185,8 +185,6 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
       monotonized_mod = map(data, \(dat){
         # handle potential error when dataset is small
         k <- if(length(unique(dat$age)) < 10) length(unique(dat$age)) - 1 else -1
-        # also when y range is small
-        k <- if(diff(range(dat$y)) < 0.01) 3 else k
 
         gam(y ~ s(age, k=k), family = betar, data = dat)
       }),
@@ -194,8 +192,6 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
       monotonized_ci_mod = map(data, \(dat){
         # handle potential error when dataset is small
         k <- if(length(unique(dat$age)) < 10) length(unique(dat$age)) - 1 else -1
-        # also when y range is small
-        k <- if(min(diff(range(dat$ymin)), diff(range(dat$ymax))) < 0.01) 3 else k
 
         list(
           "ymin" = gam(ymin ~ s(age, k=k), family = gaussian, data = dat),
