@@ -28,19 +28,17 @@ A study of tuberculosis conducted in the Netherlands. Schoolchildren, aged
 between 6 and 18 years, were tested using the tuberculin skin test.
 }
 \examples{
-# Reproduce Fig 4.6, p.70
-age <- tb_nl_1966_1973$age
-birthyr <- tb_nl_1966_1973$birthyr
-pos <- tb_nl_1966_1973$pos
-tot <- tb_nl_1966_1973$tot
-# left panel
-plot(age, pos / tot,
-  pch = 16, cex = 0.00005 * tot, xlab = "age",
-  ylab = "prevalence", xlim = c(6, 18)
+with(tb_nl_1966_1973,
+  plot(age, pos / tot,
+    pch = 16, cex = 0.01 * sqrt(tot), xlab = "age",
+    ylab = "prevalence", xlim = c(6, 18)
+  )
 )
-# right panel
-plot(birthyr, pos / tot,
-  pch = 16, cex = 0.00005 * tot, xlab = "year", ylab = "prevalence"
+
+with(tb_nl_1966_1973,
+  plot(birthyr, pos / tot,
+    pch = 16, cex = 0.01 * sqrt(tot), xlab = "year", ylab = "prevalence"
+  )
 )
 
 }

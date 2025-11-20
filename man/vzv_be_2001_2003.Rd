@@ -28,14 +28,13 @@ The survey is the same as the one used to study the seroprevalence of
 parvovirus B19 in Belgium, as described above.
 }
 \examples{
-# Reproduce Fig 4.7 (right panel), p.71
 library(dplyr)
 df <- vzv_be_2001_2003 \%>\%
   mutate(age = round(age)) \%>\%
   group_by(age) \%>\%
   summarise(pos = sum(seropositive), tot = n())
 plot(df$age, df$pos / df$tot,
-  cex = 0.036 * df$tot, pch = 19, xlab = "age", ylab = "seroprevalence",
+  cex = 0.1 * sqrt(df$tot), pch = 19, xlab = "age", ylab = "seroprevalence",
   xlim = c(0, 45), ylim = c(0, 1)
 )
 

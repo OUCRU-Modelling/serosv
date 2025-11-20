@@ -7,7 +7,7 @@
 \format{
 A data frame with 3 variables:
 \describe{
- \item{age}{Age group}
+ \item{age}{Midpoint of the age group (e.g. 1.5 = 1-2 years old, 2.5 = 2-3 years old)}
  \item{pos}{Number of seropositive individuals}
  \item{tot}{Total number of individuals surveyed}
 }
@@ -26,13 +26,11 @@ the UK. The survey, covering subjects from 1 to over 65 years of age,
 provides information on the prevalence of antibody by age
 }
 \examples{
-# Reproduce Fig 4.4 (left panel), p. 67
-age <- mumps_uk_1986_1987$age
-pos <- mumps_uk_1986_1987$pos
-tot <- mumps_uk_1986_1987$tot
-plot(age, pos / tot,
-  cex = 0.008 * tot, pch = 16, xlab = "age", ylab = "seroprevalence",
-  xlim = c(0, 45), ylim = c(0, 1)
+with(mumps_uk_1986_1987,
+  plot(age, pos / tot,
+    cex = 0.1 * sqrt(tot), pch = 16, xlab = "age", ylab = "seroprevalence",
+    xlim = c(0, 45), ylim = c(0, 1)
+  )
 )
 
 }
