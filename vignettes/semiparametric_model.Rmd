@@ -92,7 +92,7 @@ $$
 
 ### Penalized likelihood framework
 
-Refer to Chapter `8.2.1`
+Refer to Chapter `8.2.1` of the book by @Hens2012 for a more detailed explanation of the method.
 
 **Proposed approach**
 
@@ -151,7 +151,7 @@ plot(pl)
 
 ### Generalized Linear Mixed Model framework
 
-Refer to Chapter `8.2.2`
+Refer to Chapter `8.2.2` of the book by @Hens2012 for a more detailed explanation of the method.
 
 **Proposed approach**
 

@@ -63,8 +63,8 @@ output <- correct_prevalence(data, warmup = 1000, iter = 4000, init_se=0.9, init
 #> 
 #> SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 9.6e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.96 seconds.
+#> Chain 1: Gradient evaluation took 9.5e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.95 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -81,9 +81,9 @@ output <- correct_prevalence(data, warmup = 1000, iter = 4000, init_se=0.9, init
 #> Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)
 #> Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 2.026 seconds (Warm-up)
-#> Chain 1:                4.044 seconds (Sampling)
-#> Chain 1:                6.07 seconds (Total)
+#> Chain 1:  Elapsed Time: 2.047 seconds (Warm-up)
+#> Chain 1:                4.077 seconds (Sampling)
+#> Chain 1:                6.124 seconds (Total)
 #> Chain 1:
 
 # check fitted value 

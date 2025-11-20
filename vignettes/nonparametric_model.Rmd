@@ -20,7 +20,7 @@ library(serosv)
 
 ## Local estimation by polynomial
 
-Refer to `Chapter 7.1`
+Refer to `Chapter 7.1` of the book by @Hens2012 for a more detailed explanation of the method.
 
 **Proposed model**
 

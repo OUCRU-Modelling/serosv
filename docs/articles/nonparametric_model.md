@@ -2,39 +2,37 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 ```
 
 ## Local estimation by polynomial
 
-Refer to `Chapter 7.1`
+Refer to `Chapter 7.1` of the book by @Hens2012 for a more detailed
+explanation of the method.
 
 **Proposed model**
 
-Within the local polynomial framework, the linear predictor
-\\(\eta(a)\\) is approximated locally at one particular value \\(a_0\\)
-for age by a line (local linear) or a parabola (local quadratic).
+Within the local polynomial framework, the linear predictor $\eta(a)$ is
+approximated locally at one particular value $a_{0}$ for age by a line
+(local linear) or a parabola (local quadratic).
 
-The estimator for the \\(k\\)-th derivative of \\(\eta(a_0)\\), for \\(k
-= 0,1,…,p\\) (degree of local polynomial) is as followed:
+The estimator for the $k$-th derivative of $\eta\left( a_{0} \right)$,
+for $k = 0,1,\ldots,p$ (degree of local polynomial) is as followed:
 
-\\\[ \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}\_k(a_0) \\\]
+$${\widehat{\eta}}^{(k)}\left( a_{0} \right) = k!{\widehat{\beta}}_{k}\left( a_{0} \right)$$
 
-The estimator for the prevalence at age \\(a_0\\) is then given by
+The estimator for the prevalence at age $a_{0}$ is then given by
 
-\\\[ \hat{\pi}(a_0) = g^{-1}\\{ \hat{\beta}\_0(a_0) \\} \\\]
+$$\widehat{\pi}\left( a_{0} \right) = g^{- 1}\{{\widehat{\beta}}_{0}\left( a_{0} \right)\}$$
 
-- Where \\(g\\) is the link function
+- Where $g$ is the link function
 
-The estimator for the force of infection at age \\(a_0\\) by assuming
-\\(p \ge 1\\) is as followed
+The estimator for the force of infection at age $a_{0}$ by assuming
+$p \geq 1$ is as followed
 
-\\\[ \hat{\lambda}(a_0) = \hat{\beta}\_1(a_0) \delta \\{ \hat{\beta}\_0
-(a_0) \\} \\\]
+$$\widehat{\lambda}\left( a_{0} \right) = {\widehat{\beta}}_{1}\left( a_{0} \right)\delta\{{\widehat{\beta}}_{0}\left( a_{0} \right)\}$$
 
-- Where \\(\delta \\{ \hat{\beta}\_0(a_0) \\} = \frac{dg^{-1} \\{
-  \hat{\beta}\_0(a_0) \\} } {d\hat{\beta}\_0(a_0)}\\)
+- Where
+  $\delta\{{\widehat{\beta}}_{0}\left( a_{0} \right)\} = \frac{dg^{- 1}\{{\widehat{\beta}}_{0}\left( a_{0} \right)\}}{d{\widehat{\beta}}_{0}\left( a_{0} \right)}$
 
 **Fitting data**
 

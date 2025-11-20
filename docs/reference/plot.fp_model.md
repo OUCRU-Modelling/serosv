@@ -5,7 +5,7 @@ plot() overloading for fractional polynomial model
 ## Usage
 
 ``` r
-# S3 method for fp_model
+# S3 method for class 'fp_model'
 plot(x, ...)
 ```
 

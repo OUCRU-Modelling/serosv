@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 **Proposed model**
 
-A transmission model consists of 3 compartments: susceptible (S), infected (I), recovered (R)
+Let's consider a transmission model consists of 3 compartments: susceptible (S), infected (I), recovered (R)
 
 With the following assumptions:
 
@@ -54,9 +54,9 @@ Where:
 -   $\alpha$ is the disease related death rate
 -   $p$ is the proportion of newborn vaccinated and moved directly to the recovered compartment
 
-**Fitting data**
+**Simulating data**
 
-To fit a basic SIR model, use `sir_basic_model()` and specify the following parameters
+To simulate a basic SIR model, use `sir_basic_model()` and specify the following parameters
 
 -   `state` - initial population of each compartment
 
@@ -83,7 +83,7 @@ plot(model)
 
 **Proposed model**
 
-A transmission model consists of 3 compartments: susceptible (S), infected (I), recovered (R)
+Let's consider a transmission model consists of 3 compartments: susceptible (S), infected (I), recovered (R)
 
 With the following assumptions:
 
@@ -107,9 +107,9 @@ Where:
 -   $\lambda$ is the force of infection
 -   $\nu$ is the recovery rate
 
-**FItting data**
+**Simulating data**
 
-To fit an SIR model with constant FOI, use `sir_static_model()` and specify the following parameters
+To simulate an SIR model with constant FOI, use `sir_static_model()` and specify the following parameters
 
 -   `state` - initial proportion of each compartment
 
@@ -156,36 +156,36 @@ $$
 \end{cases}
 $$
 
-**FItting data**
+**Simulating data**
 
-To fit a SIR model with subpopulations, use `sir_subpops_model()` and specify the following parameters
+To simulate a SIR model with subpopulations, use `sir_subpops_model()` and specify the following parameters
 
 -   `state` - initial proportion of each compartment for each population
 
--   `beta_matrix` - the WAIFW matrix
+-   `beta_matrix` - the WAIFW matrix, with dimensions `[K, K]`
 
 -   `times` - a time sequence
 
 -   `parameters` - parameters for the model
 
 ```{r}
-k <- 2 # number of population
 state <- c(
-  # proportion of each compartment for each population
+  # proportion of each compartment for each population 
   s = c(0.8, 0.6), 
   i = c(0.2, 0.4),
   r = c(  0,   0)
 )
-beta_matrix <- c(
-  c(0.05, 0.00),
-  c(0.00, 0.05)
+beta_matrix <- matrix(
+  c(0.05, 0.00,
+    0.00, 0.05),
+  2
 )
 parameters <- list(
-  beta = matrix(beta_matrix, nrow=k, ncol=k, byrow=TRUE),
+  beta = beta_matrix,
   nu = c(1/30, 1/30),
-  mu = 0.001,
-  k = k
+  mu = 0.001
 )
+
 times<-seq(0,10000,by=0.5)
 model <- sir_subpops_model(times, state, parameters)
 model$parameters
@@ -224,9 +224,9 @@ Where
 
 -   $\nu$ is the recovery rate
 
-**Fitting data**
+**Simulating data**
 
-To fit a MSEIR, use `mseir_model()` and specify the following parameters
+To simulate a MSEIR model, use `mseir_model()` and specify the following parameters
 
 -   `a` - age sequence
 

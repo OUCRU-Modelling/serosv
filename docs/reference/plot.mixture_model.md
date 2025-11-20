@@ -5,7 +5,7 @@ plot() overloading for mixture model
 ## Usage
 
 ``` r
-# S3 method for mixture_model
+# S3 method for class 'mixture_model'
 plot(x, ...)
 ```
 

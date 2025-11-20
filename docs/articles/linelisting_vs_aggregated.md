@@ -2,8 +2,6 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 library(dplyr)
 #> Warning: package 'dplyr' was built under R version 4.3.1
 #> 

@@ -94,15 +94,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Rejecting initial value:
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000123 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.23 seconds.
+#> Chain 1: Gradient evaluation took 0.000119 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.19 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -119,17 +113,16 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 14.459 seconds (Warm-up)
-#> Chain 1:                3.506 seconds (Sampling)
-#> Chain 1:                17.965 seconds (Total)
+#> Chain 1:  Elapsed Time: 15.326 seconds (Warm-up)
+#> Chain 1:                138.458 seconds (Sampling)
+#> Chain 1:                153.784 seconds (Total)
 #> Chain 1: 
-#> Warning: There were 1634 divergent transitions after warmup. See
+#> Warning: There were 324 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> to find out why this is a problem and how to eliminate them.
+#> Warning: There were 143 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+#> https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 #> Warning: Examine the pairs() plot to diagnose sampling problems
-#> Warning: The largest R-hat is 1.3, indicating chains have not mixed.
-#> Running the chains for more iterations may help. See
-#> https://mc-stan.org/misc/warnings.html#r-hat
 #> Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 #> Running the chains for more iterations may help. See
 #> https://mc-stan.org/misc/warnings.html#bulk-ess
@@ -138,47 +131,47 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> https://mc-stan.org/misc/warnings.html#tail-ess
 model$info
 #>                       mean      se_mean           sd          2.5%
-#> alpha1        1.374349e-01 2.469659e-03 7.304112e-03  1.256108e-01
-#> alpha2        1.971191e-01 2.365928e-03 8.668356e-03  1.840890e-01
-#> alpha3        8.361884e-03 9.115459e-04 6.405086e-03  6.530832e-04
-#> tau_alpha1    3.232071e-02 8.114025e-03 7.619259e-02  1.649675e-05
-#> tau_alpha2    6.679641e-01 2.734528e-01 1.028098e+00  6.526141e-06
-#> tau_alpha3    5.874325e-02 1.502771e-02 1.094519e-01  6.639239e-06
-#> mu_alpha1    -5.831428e+00 1.717162e+00 3.215799e+01 -7.580347e+01
-#> mu_alpha2     1.899729e+00 2.488519e+00 3.501723e+01 -7.316053e+01
-#> mu_alpha3     7.615985e+00 1.031699e+01 6.091801e+01 -9.637830e+01
-#> sigma_alpha1  8.046101e+01 3.723283e+01 1.601118e+03  1.845717e+00
-#> sigma_alpha2  5.050277e+01 1.023182e+01 2.116087e+02  5.704865e-01
-#> sigma_alpha3  6.396098e+01 1.470747e+01 3.041621e+02  1.532948e+00
-#> lp__         -2.535346e+03 8.603892e-01 3.512983e+00 -2.543226e+03
-#>                        25%           50%           75%         97.5%
-#> alpha1        1.309418e-01  1.381552e-01  1.433022e-01  1.496570e-01
-#> alpha2        1.903549e-01  1.978268e-01  2.027656e-01  2.136976e-01
-#> alpha3        2.918675e-03  7.742625e-03  1.200969e-02  2.372548e-02
-#> tau_alpha1    8.305591e-04  3.669129e-03  1.367782e-02  2.935416e-01
-#> tau_alpha2    1.304788e-03  6.628968e-02  1.133317e+00  3.072622e+00
-#> tau_alpha3    5.987982e-04  7.336155e-03  5.747848e-02  4.255445e-01
-#> mu_alpha1    -1.143099e+01 -2.676034e+00  2.767768e+00  4.919579e+01
-#> mu_alpha2    -1.520815e+00  4.404344e-01  2.365690e+00  8.958812e+01
-#> mu_alpha3    -3.895228e+00 -3.255963e-03  4.586351e+00  2.369248e+02
-#> sigma_alpha1  8.550509e+00  1.650901e+01  3.469882e+01  2.462098e+02
-#> sigma_alpha2  9.393433e-01  3.883981e+00  2.768415e+01  3.914472e+02
-#> sigma_alpha3  4.171069e+00  1.167549e+01  4.086578e+01  3.880977e+02
-#> lp__         -2.537755e+03 -2.535076e+03 -2.532816e+03 -2.529997e+03
-#>                    n_eff      Rhat
-#> alpha1          8.747031 1.1212692
-#> alpha2         13.423642 1.0897105
-#> alpha3         49.373384 1.0283578
-#> tau_alpha1     88.176492 1.0039526
-#> tau_alpha2     14.135280 1.3042242
-#> tau_alpha3     53.047004 0.9997529
-#> mu_alpha1     350.715887 1.0015192
-#> mu_alpha2     198.007524 1.0074621
-#> mu_alpha3      34.864649 1.0304100
-#> sigma_alpha1 1849.244902 0.9999612
-#> sigma_alpha2  427.721511 1.0054612
-#> sigma_alpha3  427.695365 1.0184599
-#> lp__           16.671016 1.1939938
+#> alpha1        1.394994e-01 2.208144e-04 5.686602e-03  1.290184e-01
+#> alpha2        1.984613e-01 3.072933e-04 7.829686e-03  1.844645e-01
+#> alpha3        8.289398e-03 2.217734e-04 6.839120e-03  3.133171e-04
+#> tau_alpha1    6.381566e+00 1.529942e+00 1.636028e+01  6.597716e-06
+#> tau_alpha2    1.371545e+01 8.454139e+00 4.030987e+01  5.871040e-06
+#> tau_alpha3    5.780803e+00 1.085321e+00 1.356397e+01  7.111779e-06
+#> mu_alpha1     8.127640e-01 1.294292e+00 2.957688e+01 -7.133897e+01
+#> mu_alpha2     3.575058e+00 1.799463e+00 3.726214e+01 -7.253911e+01
+#> mu_alpha3     3.883757e+00 1.307763e+00 3.405219e+01 -6.454653e+01
+#> sigma_alpha1  6.352800e+01 1.682171e+01 7.004084e+02  1.213045e-01
+#> sigma_alpha2  7.855927e+01 1.684436e+01 6.470535e+02  7.736001e-02
+#> sigma_alpha3  1.873854e+02 1.323037e+02 3.877173e+03  1.431469e-01
+#> lp__         -2.532504e+03 3.710684e-01 4.655392e+00 -2.542452e+03
+#>                        25%           50%           75%         97.5%      n_eff
+#> alpha1        1.357106e-01  1.390419e-01  1.430492e-01  1.511064e-01  663.20993
+#> alpha2        1.931963e-01  1.983732e-01  2.027147e-01  2.165249e-01  649.20593
+#> alpha3        2.841082e-03  6.688870e-03  1.163816e-02  2.583495e-02  951.00250
+#> tau_alpha1    1.733407e-03  9.495067e-02  2.687740e+00  6.795883e+01  114.34889
+#> tau_alpha2    1.342653e-03  6.464717e-02  2.511530e+00  1.670964e+02   22.73443
+#> tau_alpha3    1.111049e-03  5.337217e-02  2.822276e+00  4.880180e+01  156.19150
+#> mu_alpha1    -1.276472e+00  1.729980e-01  2.532245e+00  5.703259e+01  522.20403
+#> mu_alpha2    -1.528020e+00  2.032933e-01  2.920524e+00  1.045006e+02  428.79515
+#> mu_alpha3    -1.524451e+00  3.939297e-02  3.640311e+00  9.311625e+01  678.00364
+#> sigma_alpha1  6.099697e-01  3.245271e+00  2.401891e+01  3.893194e+02 1733.65511
+#> sigma_alpha2  6.310022e-01  3.933036e+00  2.729092e+01  4.127492e+02 1475.60823
+#> sigma_alpha3  5.952566e-01  4.328557e+00  3.000085e+01  3.749841e+02  858.78884
+#> lp__         -2.535634e+03 -2.532144e+03 -2.528948e+03 -2.524553e+03  157.39993
+#>                   Rhat
+#> alpha1       1.0002098
+#> alpha2       0.9998023
+#> alpha3       0.9997596
+#> tau_alpha1   1.0003182
+#> tau_alpha2   1.0444726
+#> tau_alpha3   1.0101265
+#> mu_alpha1    1.0073358
+#> mu_alpha2    1.0048162
+#> mu_alpha3    1.0031755
+#> sigma_alpha1 0.9997210
+#> sigma_alpha2 1.0000959
+#> sigma_alpha3 1.0009114
+#> lp__         0.9998177
 plot(model)
 
 # }

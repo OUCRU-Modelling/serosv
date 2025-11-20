@@ -109,7 +109,6 @@ articles:
   - parametric_model
   - nonparametric_model
   - semiparametric_model
-  - hierarchical_model
   - model_quantitative_data
   - repeated_cross_sectional
 - title: Utilities

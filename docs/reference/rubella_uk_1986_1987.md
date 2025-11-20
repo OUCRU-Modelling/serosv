@@ -15,7 +15,8 @@ A data frame with 3 variables:
 
 - age:
 
-  Age group
+  Midpoint of the age group (e.g. 1.5 = 1-2 years old, 2.5 = 2-3 years
+  old)
 
 - pos:
 
@@ -35,13 +36,11 @@ antibody to measles, mumps, and rubella by age. British Medical Journal
 ## Examples
 
 ``` r
-# Reproduce Fig 4.4 (middle panel), p. 67
-age <- rubella_uk_1986_1987$age
-pos <- rubella_uk_1986_1987$pos
-tot <- rubella_uk_1986_1987$tot
-plot(age, pos / tot,
-  cex = 0.008 * tot, pch = 16, xlab = "age", ylab = "seroprevalence",
-  xlim = c(0, 45), ylim = c(0, 1)
+with(rubella_uk_1986_1987,
+  plot(age, pos / tot,
+    cex = 0.2 * sqrt(tot), pch = 16, xlab = "age", ylab = "seroprevalence",
+    xlim = c(0, 45), ylim = c(0, 1)
+  )
 )
 
 ```

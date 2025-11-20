@@ -5,7 +5,7 @@ plot() overloading for Weibull model
 ## Usage
 
 ``` r
-# S3 method for weibull_model
+# S3 method for class 'weibull_model'
 plot(x, ...)
 ```
 

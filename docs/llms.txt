@@ -36,14 +36,26 @@ of infection.
 
 Parametric approaches:
 
-- Polynomial models:
-  - Muench’s model
-  - Griffiths’ model
-  - Grenfell and Anderson’s model
-- Nonlinear models:
-  - Farrington’s model
-  - Weibull model
-- Fractional polynomial models
+- Frequentist methods:
+
+  - Polynomial models:
+
+    - Muench’s model
+    - Griffiths’ model
+    - Grenfell and Anderson’s model
+
+  - Nonlinear models:
+
+    - Farrington’s model
+    - Weibull model
+
+  - Fractional polynomial models
+
+- Bayesian methods:
+
+  - Hierarchical Farrington model
+
+  - Hierarchical log-logistic model
 
 Nonparametric approaches:
 
@@ -56,12 +68,6 @@ Semiparametric approaches:
   - Penalized likelihood framework
 
   - Generalized Linear Mixed Model framework
-
-Hierarchical Bayesian approaches:
-
-- Hierarchical Farrington model
-
-- Hierarchical log-logistic model
 
 ## Demo
 
@@ -357,8 +363,6 @@ parvob19 |>
   model](https://oucru-modelling.github.io/serosv/articles/nonparametric_model.md):
 - [Semiparametric
   model](https://oucru-modelling.github.io/serosv/articles/semiparametric_model.md):
-- [Hierarchical Bayesian
-  models](https://oucru-modelling.github.io/serosv/articles/hierarchical_model.md):
 - [Modeling directly from antibody
   levels](https://oucru-modelling.github.io/serosv/articles/model_quantitative_data.md):
 - [Model repeated cross-sectional

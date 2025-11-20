@@ -2,8 +2,6 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 library(dplyr)
 #> Warning: package 'dplyr' was built under R version 4.3.1
 #> 
@@ -71,7 +69,8 @@ FOI can then be derived as
 
 ### Penalized likelihood framework
 
-Refer to Chapter `8.2.1`
+Refer to Chapter `8.2.1` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the method.
 
 **Proposed approach**
 
@@ -147,7 +146,8 @@ plot(pl)
 
 ### Generalized Linear Mixed Model framework
 
-Refer to Chapter `8.2.2`
+Refer to Chapter `8.2.2` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the method.
 
 **Proposed approach**
 
@@ -212,6 +212,12 @@ b-Splines and Penalties.” *Statistical Science* 11 (2).
 Green, P. J., and Bernard. W. Silverman. 1993. *Nonparametric Regression
 and Generalized Linear Models: A Roughness Penalty Approach*. Chapman;
 Hall/CRC. <https://doi.org/10.1201/b15710>.
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. *Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective*.
+*Statistics for Biology and Health*. Springer New York.
+<https://doi.org/10.1007/978-1-4614-4072-7>.
 
 Ngo, Long, and Matthew P. Wand. 2004. “Smoothing with Mixed Model
 Software.” *Journal of Statistical Software* 9 (1).

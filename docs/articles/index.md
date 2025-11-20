@@ -12,8 +12,6 @@
   model](https://oucru-modelling.github.io/serosv/articles/nonparametric_model.md):
 - [Semiparametric
   model](https://oucru-modelling.github.io/serosv/articles/semiparametric_model.md):
-- [Hierarchical Bayesian
-  models](https://oucru-modelling.github.io/serosv/articles/hierarchical_model.md):
 - [Modeling directly from antibody
   levels](https://oucru-modelling.github.io/serosv/articles/model_quantitative_data.md):
 - [Model repeated cross-sectional

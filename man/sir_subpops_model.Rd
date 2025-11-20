@@ -35,29 +35,26 @@ In \code{parameters}:
 
 - \code{mu}: natural death rate (1/L).
 
-- \code{beta}: transmission rate w.r.t population (beta tilde)
+- \code{beta}: the WAIFW matrix, with dimensions \code{[K, K]}.
 
 - \code{nu}: recovery rate
-
-- \code{k}: number of subpopulations
 }
 \examples{
 \donttest{
-k <- 2
 state <- c(
   s = c(0.8, 0.8),
   i = c(0.2, 0.2),
   r = c(  0,   0)
 )
-beta_matrix <- c(
-  c(0.05, 0.00),
-  c(0.00, 0.05)
+beta_matrix <- matrix(
+  c(0.05, 0.00,
+  0.00, 0.05),
+  2
 )
 parameters <- list(
-  beta = matrix(beta_matrix, nrow=k, ncol=k, byrow=TRUE),
+  beta = beta_matrix,
   nu = c(1/30, 1/30),
-  mu = 0.001,
-  k = k
+  mu = 0.001
 )
 times<-seq(0,10000,by=0.5)
 model <- sir_subpops_model(times, state, parameters)

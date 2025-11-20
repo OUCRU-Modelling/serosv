@@ -90,8 +90,8 @@ correct_prevalence(data)
 #> 
 #> SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000244 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.44 seconds.
+#> Chain 1: Gradient evaluation took 0.00013 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.3 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -108,9 +108,9 @@ correct_prevalence(data)
 #> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 1.656 seconds (Warm-up)
-#> Chain 1:                1.233 seconds (Sampling)
-#> Chain 1:                2.889 seconds (Total)
+#> Chain 1:  Elapsed Time: 1.647 seconds (Warm-up)
+#> Chain 1:                1.254 seconds (Sampling)
+#> Chain 1:                2.901 seconds (Total)
 #> Chain 1: 
 #> $info
 #>                    mean      se_mean          sd          2.5%           25%

@@ -4,15 +4,12 @@
 library(serosv)
 ```
 
-    ## Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-    ## loading 'serosv'
-
 ## Basic SIR model
 
 **Proposed model**
 
-A transmission model consists of 3 compartments: susceptible (S),
-infected (I), recovered (R)
+Let’s consider a transmission model consists of 3 compartments:
+susceptible (S), infected (I), recovered (R)
 
 With the following assumptions:
 
@@ -25,25 +22,25 @@ With the following assumptions:
 
 And described by a system of 3 differential equations
 
-\\\[ \begin{cases} \frac{dS(t)}{dt} = B(t) (1-p) - \lambda(t)S(t) - \mu
-S(t) \\\\ \frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) -
-\alpha I(t) \\\\ \frac{dR(t)}{dt} = B(t) p + \nu I(t) - \mu R(t)
-\end{cases} \\\]
+$$\left\{ \begin{array}{l}
+{\frac{dS(t)}{dt} = B(t)(1 - p) - \lambda(t)S(t) - \mu S(t)} \\
+{\frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) - \alpha I(t)} \\
+{\frac{dR(t)}{dt} = B(t)p + \nu I(t) - \mu R(t)} \\
+\end{array} \right.$$
 
 Where:
 
-- \\(B(t) = \mu N(t)\\)
-- \\(\lambda(t) = \beta I(t)\\) with \\(\beta\\) is the transmission
-  rate
-- \\(\mu\\) is the natural death rate
-- \\(\nu\\) is the recovery rate
-- \\(\alpha\\) is the disease related death rate
-- \\(p\\) is the proportion of newborn vaccinated and moved directly to
-  the recovered compartment
+- $B(t) = \mu N(t)$
+- $\lambda(t) = \beta I(t)$ with $\beta$ is the transmission rate
+- $\mu$ is the natural death rate
+- $\nu$ is the recovery rate
+- $\alpha$ is the disease related death rate
+- $p$ is the proportion of newborn vaccinated and moved directly to the
+  recovered compartment
 
-**Fitting data**
+**Simulating data**
 
-To fit a basic SIR model, use
+To simulate a basic SIR model, use
 [`sir_basic_model()`](https://oucru-modelling.github.io/serosv/reference/sir_basic_model.md)
 and specify the following parameters
 
@@ -76,8 +73,8 @@ plot(model)
 
 **Proposed model**
 
-A transmission model consists of 3 compartments: susceptible (S),
-infected (I), recovered (R)
+Let’s consider a transmission model consists of 3 compartments:
+susceptible (S), infected (I), recovered (R)
 
 With the following assumptions:
 
@@ -87,20 +84,22 @@ With the following assumptions:
 
 Described by a system of 3 differential equations
 
-\\\[ \begin{cases} \frac{ds(a)}{da} = -\lambda s(a) \\\\
-\frac{di(a)}{da} = \lambda s(a) - \nu i(a) \\\\ \frac{dr(a)}{da} = \nu
-i(a) \end{cases} \\\]
+$$\left\{ \begin{array}{l}
+{\frac{ds(a)}{da} = - \lambda s(a)} \\
+{\frac{di(a)}{da} = \lambda s(a) - \nu i(a)} \\
+{\frac{dr(a)}{da} = \nu i(a)} \\
+\end{array} \right.$$
 
 Where:
 
-- \\(s(a), i(a), r(a)\\) are proportion of susceptible, infected,
-  recovered population of age group \\(a\\) respectively
-- \\(\lambda\\) is the force of infection
-- \\(\nu\\) is the recovery rate
+- $s(a),i(a),r(a)$ are proportion of susceptible, infected, recovered
+  population of age group $a$ respectively
+- $\lambda$ is the force of infection
+- $\nu$ is the recovery rate
 
-**FItting data**
+**Simulating data**
 
-To fit an SIR model with constant FOI, use
+To simulate an SIR model with constant FOI, use
 [`sir_static_model()`](https://oucru-modelling.github.io/serosv/reference/sir_static_model.md)
 and specify the following parameters
 
@@ -135,52 +134,54 @@ Extends on the SIR model by having interacting sub-populations
 
 With K subpopulations, the WAIFW matrix or mixing matrix is given by
 
-\\\[ C = \begin{bmatrix} \beta\_{11} & \beta\_{12} & ... & \beta\_{1K}
-\\\\ \beta\_{21} & \beta\_{22} & ... & \beta\_{2K} \\\\ \vdots & \vdots
-& ... & \vdots \\\\ \beta\_{K1} & \beta\_{K2} & ... & \beta\_{KK} \\\\
-\end{bmatrix} \\\]
+$$C = \begin{bmatrix}
+\beta_{11} & \beta_{12} & {...} & \beta_{1K} \\
+\beta_{21} & \beta_{22} & {...} & \beta_{2K} \\
+\vdots & \vdots & {...} & \vdots \\
+\beta_{K1} & \beta_{K2} & {...} & \beta_{KK} \\
+\end{bmatrix}$$
 
-The system of differential equations for the i\\(th\\) subpopulation is
+The system of differential equations for the i$th$ subpopulation is
 given by
 
-\\\[ \begin{cases} \frac{dS_i(t)}{dt} =
--(\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) + N_i\mu_i - \mu_i S_i(t) \\\\
-\frac{dI_i(t)}{dt} = (\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) - (\nu_i +
-\mu_i) I_i(t) \\\\ \frac{dR_i(t)}{dt} = \nu_i I_i(t) - \mu_i R_i(t)
-\end{cases} \\\]
+$$\left\{ \begin{array}{l}
+{\frac{dS_{i}(t)}{dt} = - \left( \sum\limits_{j = 1}^{K}\beta_{ij}I_{j}(t) \right)S_{i}(t) + N_{i}\mu_{i} - \mu_{i}S_{i}(t)} \\
+{\frac{dI_{i}(t)}{dt} = \left( \sum\limits_{j = 1}^{K}\beta_{ij}I_{j}(t) \right)S_{i}(t) - \left( \nu_{i} + \mu_{i} \right)I_{i}(t)} \\
+{\frac{dR_{i}(t)}{dt} = \nu_{i}I_{i}(t) - \mu_{i}R_{i}(t)} \\
+\end{array} \right.$$
 
-**FItting data**
+**Simulating data**
 
-To fit a SIR model with subpopulations, use
+To simulate a SIR model with subpopulations, use
 [`sir_subpops_model()`](https://oucru-modelling.github.io/serosv/reference/sir_subpops_model.md)
 and specify the following parameters
 
 - `state` - initial proportion of each compartment for each population
 
-- `beta_matrix` - the WAIFW matrix
+- `beta_matrix` - the WAIFW matrix, with dimensions `[K, K]`
 
 - `times` - a time sequence
 
 - `parameters` - parameters for the model
 
 ``` r
-k <- 2 # number of population
 state <- c(
-  # proportion of each compartment for each population
+  # proportion of each compartment for each population 
   s = c(0.8, 0.6), 
   i = c(0.2, 0.4),
   r = c(  0,   0)
 )
-beta_matrix <- c(
-  c(0.05, 0.00),
-  c(0.00, 0.05)
+beta_matrix <- matrix(
+  c(0.05, 0.00,
+    0.00, 0.05),
+  2
 )
 parameters <- list(
-  beta = matrix(beta_matrix, nrow=k, ncol=k, byrow=TRUE),
+  beta = beta_matrix,
   nu = c(1/30, 1/30),
-  mu = 0.001,
-  k = k
+  mu = 0.001
 )
+
 times<-seq(0,10000,by=0.5)
 model <- sir_subpops_model(times, state, parameters)
 model$parameters
@@ -217,29 +218,31 @@ Extends on SIR model with 2 additional compartments: maternal antibody
 
 And described by the following system of ordinary differential equation
 
-\\\[ \begin{cases} \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\\\
-\frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\\\
-\frac{dE(a)}{da} = \lambda(a) S(a) - (\sigma + \mu(a)) E(a) \\\\
-\frac{dI(a)}{da} = \sigma(a) E(a) - (\nu + \mu(a)) I(a) \\\\
-\frac{dR(a)}{da} = \nu I(a) - \mu(a) R(a) \end{cases} \\\]
+$$\left\{ \begin{array}{l}
+{\frac{dM(a)}{da} = - \left( \gamma + \mu(a) \right)M(a)} \\
+{\frac{dS(a)}{da} = \gamma M(a) - \left( \lambda(a) + \mu(a) \right)S(a)} \\
+{\frac{dE(a)}{da} = \lambda(a)S(a) - \left( \sigma + \mu(a) \right)E(a)} \\
+{\frac{dI(a)}{da} = \sigma(a)E(a) - \left( \nu + \mu(a) \right)I(a)} \\
+{\frac{dR(a)}{da} = \nu I(a) - \mu(a)R(a)} \\
+\end{array} \right.$$
 
 Where
 
-- \\(M(0)\\) = B, the number of births in the population
+- $M(0)$ = B, the number of births in the population
 
-- \\(\gamma\\) is the rate of antibody decaying
+- $\gamma$ is the rate of antibody decaying
 
-- \\(\lambda(a)\\) is the force of infection at age \\(a\\)
+- $\lambda(a)$ is the force of infection at age $a$
 
-- \\(\mu(a)\\) is the natural death rate at age \\(a\\)
+- $\mu(a)$ is the natural death rate at age $a$
 
-- \\(\sigma\\) is the rate of becoming infected after being exposed
+- $\sigma$ is the rate of becoming infected after being exposed
 
-- \\(\nu\\) is the recovery rate
+- $\nu$ is the recovery rate
 
-**Fitting data**
+**Simulating data**
 
-To fit a MSEIR, use
+To simulate a MSEIR model, use
 [`mseir_model()`](https://oucru-modelling.github.io/serosv/reference/mseir_model.md)
 and specify the following parameters
 

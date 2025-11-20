@@ -5,7 +5,7 @@ plot() overloading for MSEIR model
 ## Usage
 
 ``` r
-# S3 method for mseir_model
+# S3 method for class 'mseir_model'
 plot(x, ...)
 ```
 

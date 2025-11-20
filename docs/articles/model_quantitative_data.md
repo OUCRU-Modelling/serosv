@@ -2,35 +2,31 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 ```
 
 ## Mixture model
 
 **Proposed model**
 
-Two-component mixture model for test result \\(Z\\) with \\(Z_j (j =
-\\{I, S\\})\\) being the latent mixing component having density
-\\(f_j(z_j\|\theta_j)\\) and with \\(\pi\_{\text{TRUE}}(a)\\) being the
-age-dependent mixing probability can be represented as
+Two-component mixture model for test result $Z$ with
+$Z_{j}\left( j = \{ I,S\} \right)$ being the latent mixing component
+having density $f_{j}\left( z_{j}|\theta_{j} \right)$ and with
+$\pi_{\text{TRUE}}(a)$ being the age-dependent mixing probability can be
+represented as
 
-\\\[ f(z\|z_I, z_S,a) =
-(1-\pi\_{\text{TRUE}}(a))f_S(z_S\|\theta_S)+\pi\_{\text{TRUE}}(a)f_I(z_I\|\theta_I)
-\\\]
+$$f\left( z|z_{I},z_{S},a \right) = \left( 1 - \pi_{\text{TRUE}}(a) \right)f_{S}\left( z_{S}|\theta_{S} \right) + \pi_{\text{TRUE}}(a)f_{I}\left( z_{I}|\theta_{I} \right)$$
 
-The mean \\(E(Z\|a)\\) thus equals
+The mean $E\left( Z|a \right)$ thus equals
 
-\\\[ \mu(a) =
-(1-\pi\_{\text{TRUE}}(a))\mu_S+\pi\_{\text{TRUE}}(a)\mu_I\\\]
+$$\mu(a) = \left( 1 - \pi_{\text{TRUE}}(a) \right)\mu_{S} + \pi_{\text{TRUE}}(a)\mu_{I}$$
 
 From which the true prevalence can be calculated by
 
-\\\[ \pi\_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S} \\\]
+$$\pi_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_{S}}{\mu_{I} - \mu_{S}}$$
 
 Force of infection can then be calculated by
 
-\\\[ \lambda\_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)} \\\]
+$$\lambda_{TRUE} = \frac{\mu\prime(a)}{\mu_{I} - \mu(a)}$$
 
 **Fitting data**
 

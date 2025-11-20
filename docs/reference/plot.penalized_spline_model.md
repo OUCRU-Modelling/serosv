@@ -5,7 +5,7 @@ plot() overloading for penalized spline
 ## Usage
 
 ``` r
-# S3 method for penalized_spline_model
+# S3 method for class 'penalized_spline_model'
 plot(x, ...)
 ```
 

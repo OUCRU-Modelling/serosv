@@ -5,7 +5,7 @@ plot() overloading for Farrington model
 ## Usage
 
 ``` r
-# S3 method for farrington_model
+# S3 method for class 'farrington_model'
 plot(x, ...)
 ```
 
