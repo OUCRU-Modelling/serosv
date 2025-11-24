@@ -9,9 +9,18 @@ sir_static_model(a, state, parameters)
 \arguments{
 \item{a}{age sequence.}
 
-\item{state}{the initial state of the system.}
+\item{state}{the initial state of the system. A named vector with the following
+\itemize{
+  \item \code{s}: initial susceptible proportion
+  \item \code{i}: initial infected proportion
+  \item \code{r}: initial recovered proportion
+}}
 
-\item{parameters}{the model's parameter.}
+\item{parameters}{the model's parameter. A named vector with the following
+\itemize{
+   \item \code{lambda}: natural death rate
+   \item \code{nu}: recovery rate
+}}
 }
 \value{
 list of class sir_static_model with the following items
@@ -19,22 +28,36 @@ list of class sir_static_model with the following items
   \item{output}{matrix of proportion for each compartment over time}
 }
 \description{
-Refers to section 3.2.2.
+Simulate transmission model with constant force of infection and consists of 3 compartments: susceptible (S), infected (I), recovered (R)
 }
 \details{
-In \code{state}:
+Follow the SIR model at endemic state described in the book by Hens et al. (section 3.2.2.)
 
-  - \code{s}: proportion susceptible
+Assumptions:
 
-  - \code{i}: proportion infected
+- Time homogeneity
 
-  - \code{r}: proportion recovered
+- Age heterogeneity
 
-In \code{parameters}:
+- Constant force of infection
 
-  - \code{lambda}: natural death rate
+The model is described by a system of 3 differential equations
 
-  - \code{nu}: recovery rate
+\deqn{
+\begin{cases}
+\frac{ds(a)}{da} = -\lambda s(a) \\
+\frac{di(a)}{da} = \lambda s(a) - \nu i(a)  \\
+\frac{dr(a)}{da} =  \nu i(a)
+\end{cases}
+}
+
+Where:
+
+-   \eqn{s(a), i(a), r(a)} are proportion of susceptible, infected, recovered population of age group \eqn{a} respectively
+
+-   \eqn{\lambda} is the force of infection
+
+-   \eqn{\nu} is the recovery rate
 }
 \examples{
 state <- c(s=0.99,i=0.01,r=0)
@@ -46,4 +69,11 @@ ages<-seq(0, 90, by=0.01)
 model = sir_static_model(ages, state, parameters)
 model
 
+}
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 }

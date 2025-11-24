@@ -1,6 +1,7 @@
 url: https://oucru-modelling.github.io/serosv/
 template:
   bootstrap: 5
+  math-rendering: mathjax
 
 reference:
 - title: Dataset

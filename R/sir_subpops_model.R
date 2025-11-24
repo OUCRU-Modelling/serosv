@@ -45,30 +45,54 @@ sir_subpop <- function(t, state, parameters) {
 
 #' SIR Model with Interacting Subpopulations
 #'
-#' Refers to section 3.5.1.
+#' @description An extension of the basic SIR model that incorporates interaction between sub-populations
 #'
 #' @details
-#' In \code{state}:
+#' Follow the SIR model with sub populations described in the book by Hens et al. (section 3.5.1.)
 #'
-#' - \code{s}: Percent susceptible
+#' With K subpopulations, the WAIFW matrix or mixing matrix is given by
 #'
-#' - \code{i}: Percent infected
+#' \deqn{
+#' C = \begin{bmatrix}
+#' \beta_{11} & \beta_{12}  & ... & \beta_{1K} \\
+#' \beta_{21} & \beta_{22}  & ... & \beta_{2K} \\
+#' \vdots & \vdots  & ... & \vdots \\
+#' \beta_{K1} & \beta_{K2}  & ... & \beta_{KK} \\
+#' \end{bmatrix}
+#' }
 #'
-#' - \code{r}: Percent recovered
+#' And the \eqn{i^{th}} sub population is described by the following system of differential equations
+#' \deqn{
+#' \begin{cases}
+#' \frac{dS_i(t)}{dt} = -(\sum^K_{j=1}\beta_{ij}I_j(t)) S_i(t) + N_i\mu_i - \mu_i S_i(t) \\
+#' \frac{dI_i(t)}{dt} = (\sum^K_{j=1}\beta_{ij}I_j(t)) S_i(t)  - (\nu_i + \mu_i) I_i(t)  \\
+#' \frac{dR_i(t)}{dt} = \nu_i I_i(t)  - \mu_i R_i(t)
+#' \end{cases}
+#' }
 #'
-#' In \code{parameters}:
 #'
-#' - \code{mu}: natural death rate (1/L).
-#'
-#' - \code{beta}: the WAIFW matrix, with dimensions \code{[K, K]}.
-#'
-#' - \code{nu}: recovery rate
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
 #' @param times time sequence.
 #'
-#' @param state the initial state of the model.
+#' @param state the initial state of the model. A named vector with the following
+#' \itemize{
+#'    \item \code{s}: initial susceptible proportion
+#'    \item \code{i}: initial infected proportion
+#'    \item \code{r}: initial recovered proportion
+#'  }
 #'
-#' @param parameters the parameters of the model.
+#' @param parameters the parameters of the model. A named vector with the following
+#' \itemize{
+#'    \item \code{mu}: natural death rate (1/L).
+#'    \item \code{beta}: the WAIFW matrix, with dimensions \code{[K, K]}.
+#'    \item \code{nu}: recovery rate
+#'  }
 #'
 #' @examples
 #' \donttest{

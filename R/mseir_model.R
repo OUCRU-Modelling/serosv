@@ -1,6 +1,40 @@
 #' MSEIR model
 #'
-#' Refers to section 3.4.
+#' @description Simulate a transmission model with 5 compartments: maternal immunity (M), susceptible (S), exposed (E), infected (I), recovered (R)
+#'
+#' @details Follow the MSEIR described in the book by Hens et al. (section 3.5.1.)
+#'
+#' The model is described by the following system of equations
+#' \deqn{
+#'  \begin{cases}
+#'    \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\
+#'    \frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\
+#'    \frac{dE(a)}{da} = \lambda(a) S(a)  - (\sigma + \mu(a)) E(a) \\
+#'    \frac{dI(a)}{da} = \sigma(a) E(a)  - (\nu + \mu(a)) I(a)  \\
+#'    \frac{dR(a)}{da} = \nu I(a)  - \mu(a) R(a)
+#'    \end{cases}
+#' }
+#'
+#' Where:
+#'
+#'-   \eqn{M(0)} = B, the number of births in the population
+#'
+#'-   \eqn{\gamma} is the rate of antibody decaying
+#'
+#'-   \eqn{\lambda(a)} is the force of infection at age \eqn{a}
+#'
+#'-   \eqn{\mu(a)} is the natural death rate at age \eqn{a}
+#'
+#'-   \eqn{\sigma} is the rate of becoming infected after being exposed
+#'
+#'-   \eqn{\nu} is the recovery rate
+#'
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
 #' @param a age sequence
 #' @param gamma time in maternal class.

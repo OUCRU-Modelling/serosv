@@ -24,7 +24,34 @@ a list of class polynomial_model with 5 items
   \item{foi}{force of infection}
 }
 \description{
-Refers to section 6.1.1
+Fit age-stratified seroprevalence data to serocatalytic models formulated as polynomials.
+Supported models includes Muench (1934), Griffith, Grenfell & Anderson (1985)
+}
+\details{
+The seroprevalence is assumed to follow the general format
+\deqn{
+\pi(a)  = 1 - e^{-\Sigma_{i=1}^k \beta_i a^i}
+}
+Which implies the force of infection to be \eqn{\lambda(a) = \Sigma_{i=1}^k \beta_i i a^{i-1}}
+
+Where:
+
+- \eqn{\pi} is the seroprevalence at age \eqn{a}
+
+- \eqn{a} is the variable age
+
+- \eqn{k} is the degree of the polynomial
+
+The seroprevalence \eqn{\pi(a)} is fitted using a GLM with log link with
+the linear predictor \eqn{\eta(a) = \Sigma_{i=1}^k \beta_i a^{i}}
+
+Muench (1934) model is equivalent to a degree 1 (\eqn{k=1}) linear predictor
+
+Griffith model is equivalent to a degree 2 (\eqn{k=2}) linear predictor
+
+Grenfell & Anderson (1985) suggested a higher order polynomials (\eqn{k \geq 3})
+
+Refer to section 6.1.1. of the the book by Hens et al. (2012) for further details.
 }
 \examples{
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
@@ -37,4 +64,19 @@ model <- polynomial_model(aggregated, type = "Muench")
 model <- polynomial_model(data, type = "Muench")
 plot(model)
 
+}
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
+
+Grenfell, B. T., and R. M. Anderson. 1985. “The Estimation of
+Age-Related Rates of Infection from Case Notifications and Serological Data.”
+The Journal of Hygiene 95 (2): 419–36. \doi{https://doi.org/10.1017/s0022172400062859}.
+
+Muench, Hugo. 1934. “Derivation of Rates from Summation Data by the Catalytic Curve.”
+Journal of the American Statistical Association 29 (185):
+25–38. \doi{https://doi.org/10.1080/01621459.1934.10502684}.
 }

@@ -24,7 +24,26 @@ a list of class farrington_model with 5 items
   \item{foi}{force of infection}
 }
 \description{
-Refers to section 6.1.2.
+Fit age-stratified seroprevalence data using the Farrington (1990) model, which assumes the
+force of infection increases linearly with age and subsequently decreases exponentially.
+}
+\details{
+The force of infection is defined as followed
+
+\deqn{
+\lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma
+}
+Where \eqn{\gamma} is called the long term residual for FOI,
+as \eqn{a \rightarrow \infty} , \eqn{\lambda (a) \rightarrow \gamma}
+
+The seroprevalence can thus be estimated using the non-linear model
+\deqn{
+ \pi(a) = 1 - exp\{ \frac{\alpha}{\beta}ae^{-\beta a} +
+ \frac{1}{\beta}(\frac{\alpha}{\beta} -
+ \gamma)(e^{-\beta a} - 1) -\gamma a \}
+}
+
+Refer to section 6.1.2. of the the book by Hens et al. (2012) for further details.
 }
 \examples{
 df <- rubella_uk_1986_1987
@@ -34,6 +53,13 @@ model <- farrington_model(
   )
 plot(model)
 
+}
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 }
 \seealso{
 [stats4::mle()] for more information on the fitted mle object

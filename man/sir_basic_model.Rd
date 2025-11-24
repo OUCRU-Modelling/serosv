@@ -9,9 +9,21 @@ sir_basic_model(times, state, parameters)
 \arguments{
 \item{times}{time sequence.}
 
-\item{state}{the initial state of the model.}
+\item{state}{the initial state of the model. A named vector with the following
+\itemize{
+  \item \code{S}: initial susceptible population
+  \item \code{I}: initial infected population
+  \item \code{R}: initial recovered population
+}}
 
-\item{parameters}{the parameters of the model.}
+\item{parameters}{the parameters of the model. A named vector with the following
+ \itemize{
+  \item \code{alpha}: disease-related death rate
+  \item \code{mu}: natural death rate (= 1/life expectancy)
+  \item \code{beta}: transmission rate
+  \item \code{nu}: recovery rate
+  \item \code{p}: proportion vaccinated at birth
+}}
 }
 \value{
 list of class sir_basic_model with the following items
@@ -19,28 +31,42 @@ list of class sir_basic_model with the following items
   \item{output}{matrix of population for each compartment over time}
 }
 \description{
-Refers to section 3.1.3.
+Simulate a transmission model with 3 compartments: susceptible (S), infected (I), recovered (R)
 }
 \details{
-In \code{state}:
+Follow the SIR model described in the book by Hens et al. (section 3.1.3.)
 
- - \code{S}: number of susceptible
+Assumptions:
 
- - \code{I}: number of infected
+- Individuals are born into susceptible group (exposure time is age of the individual) then transfer to infected class and recovered class
 
- - \code{R}: number of recovered
+- Recovered individuals gained lifelong immunity
 
-In \code{parameters}:
+- Age homogeneity
 
- - \code{alpha}: disease-related death rate
+The model is described by a system of 3 differential equations
 
- - \code{mu}: natural death rate (= 1/life expectancy)
+\deqn{
+\begin{cases}
+\frac{dS(t)}{dt} = B(t) (1-p) - \lambda(t)S(t) - \mu S(t) \\
+\frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) - \alpha I(t)  \\
+\frac{dR(t)}{dt} =  B(t) p + \nu I(t) - \mu R(t)
+\end{cases}
+}
 
- - \code{beta}: transmission rate
+Where:
 
- - \code{nu}: recovery rate
+-   \eqn{B(t) = \mu N(t)}
 
- - \code{p}: percent of population vaccinated at birth
+-   \eqn{\lambda(t) = \beta I(t)} with \eqn{\beta} is the transmission rate
+
+-   \eqn{\mu} is the natural death rate
+
+-   \eqn{\nu} is the recovery rate
+
+-   \eqn{\alpha} is the disease related death rate
+
+-   \eqn{p} is the proportion of newborn vaccinated and moved directly to the recovered compartment
 }
 \examples{
 state <- c(S=4999, I=1, R=0)
@@ -55,4 +81,11 @@ times <- seq(0, 250, by=0.1)
 model <- sir_basic_model(times, state, parameters)
 model
 
+}
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 }

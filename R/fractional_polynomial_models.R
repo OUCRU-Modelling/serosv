@@ -20,14 +20,14 @@ formulate <- function(p) {
   equation
 }
 
-#' Returns the powers of the GLM fitted model which has the lowest deviance score.
+#' Returns the powers of the fractional polynomial model which has the lowest deviance score.
 #'
-#' Refers to section 6.2.
+#' Return the best powers for a given degree
 #'
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
-#' @param p a powers sequence.
+#' @param p a powers sequence to be tested.
 #' @param mc indicates if the returned model should be monotonic.
-#' @param degree the degree of the model. Recommended to be <= 2.
+#' @param degree the degree of the model (i.e. number of power terms). Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
 #'
 #' @return list of 3 elements:
@@ -58,10 +58,11 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
   #----
   min_p <- 1
   max_p <- length(p)
-  state <- rep(min_p, degree)
+  state <- rep(min_p, degree) # state=pointers (or indices) to current power values
   i <- degree
   #----
 
+  # helper to get current powers from the state
   get_cur_p <- function(cur_state) {
     cur_p <- c()
     for (i in 1:degree) {
@@ -75,12 +76,16 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
       (i < degree && state[i] == max_p)
       || (i == degree && state[i] == max_p+1)
     ) {
+      # stop when done looping through all the terms
       if (i-1 == 0) break
+
       if (state[i-1] < max_p) {
+        # move on to the power of the current term
         state[i-1] <- state[i-1]+1
         for (j in i:degree) state[j] <- state[i-1]
         i <- degree
       } else {
+        # move on to the next term
         i <- i-1
         next
       }
@@ -104,15 +109,44 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
       }
     }
     #---------------------------------------
+
+    # stop after reaching the highest power for all terms
     if (sum(state != max_p) == 0) break
-    state[i] <- state[i]+1
+
+    state[i] <- state[i]+1 # increase power of the current term
   }
   return(list(p=p_best, deviance=d_best, model=glm_best))
 }
 
 #' A fractional polynomial model.
 #'
-#' Refers to section 6.2.
+#' @description Fractional polynomial model is a generalization of polynomial models
+#' where the power of the terms can be fractions, allowing more flexibility and better
+#' fit for data where asymptotic behavior is expected.
+#'
+#' @details
+#' Instead of a polynomial, the linear predictor is now defined as
+#' \deqn{
+#'  \eta_m(a, \beta, p_1, p_2, ...,p_m) = \Sigma^m_{i=0} \beta_i H_i(a)
+#' }
+#' Where \eqn{m} is an integer, \eqn{p_1 \le p_2 \le... \le p_m} is a sequence of powers,
+#' and \eqn{H_i(a)} is a transformation given by
+#'
+#' \deqn{
+#' H_i = \begin{cases}
+#' a^{p_i} & \text{ if } p_i \neq p_{i-1},
+#' \\ H_{i-1}(a) \times log(a)  & \text{ if } p_i = p_{i-1},
+#' \end{cases}
+#' }
+#'
+#' Refers to section 6.2. of the the book by Hens et al. (2012) for further details.
+#'
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param p the powers of the predictor.
@@ -126,7 +160,10 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
 #'   \item{info}{a fitted glm model}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
-#' @seealso [stats::glm()] for more information on glm object
+#' @seealso
+#' [stats::glm()] for more information on glm object
+#'
+#' [polynomial_models()]
 #'
 #' @examples
 #' df <- hav_be_1993_1994

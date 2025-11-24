@@ -196,7 +196,7 @@ plot(model) # returns plot for each population
 
 **Proposed model**
 
-Extends on SIR model with 2 additional compartments: maternal antibody (M) and exposed period (E)
+Extends on SIR model with 2 additional compartments: maternal immunity (M) and exposed period (E)
 
 And described by the following system of ordinary differential equation
 
