@@ -1,6 +1,7 @@
 ---
 title: "Modeling directly from antibody levels"
 output: rmarkdown::html_vignette
+bibliography: references.bib
 vignette: >
   %\VignetteIndexEntry{Modeling directly from antibody levels}
   %\VignetteEngine{knitr::rmarkdown}

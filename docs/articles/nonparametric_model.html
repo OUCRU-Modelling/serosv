@@ -11,7 +11,13 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
@@ -86,48 +92,44 @@
 <div class="section level2">
 <h2 id="local-estimation-by-polynomial">Local estimation by polynomial<a class="anchor" aria-label="anchor" href="#local-estimation-by-polynomial"></a>
 </h2>
-<p>Refer to <code>Chapter 7.1</code> of the book by <span class="citation">@Hens2012</span> for a more detailed explanation of the
-method.</p>
 <p><strong>Proposed model</strong></p>
-<p>Within the local polynomial framework, the linear predictor
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\eta(a)</annotation></semantics></math>
-is approximated locally at one particular value
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>0</mn></msub><annotation encoding="application/x-tex">a_0</annotation></semantics></math>
-for age by a line (local linear) or a parabola (local quadratic).</p>
-<p>The estimator for the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>-th
-derivative of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\eta(a_0)</annotation></semantics></math>,
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">k = 0,1,…,p</annotation></semantics></math>
-(degree of local polynomial) is as followed:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>η</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>k</mi><mi>!</mi><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>k</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-\hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0) 
-</annotation></semantics></math></p>
-<p>The estimator for the prevalence at age
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>0</mn></msub><annotation encoding="application/x-tex">a_0</annotation></semantics></math>
-is then given by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>π</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mi>g</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">{</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
+<p>Within the local polynomial framework, the linear predictor <span class="math inline">\(\eta(a)\)</span> is approximated locally at one
+particular value <span class="math inline">\(a_0\)</span> for age by a
+line (local linear, degree <span class="math inline">\(p=1\)</span>) or
+a parabola (local quadratic, degree <span class="math inline">\(p=2\)</span>).</p>
+<p>For a general degree <span class="math inline">\(p\)</span>, the
+linear predictor for a neighbor of <span class="math inline">\(a_0\)</span>, labeled <span class="math inline">\(a_i\)</span> is the Taylor approximation</p>
+<p><span class="math display">\[
+\eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
+\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... +
+\frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
+\]</span></p>
+<p>Where the estimator for the <span class="math inline">\(k\)</span>-th
+derivative of <span class="math inline">\(\eta(a_0)\)</span>, for <span class="math inline">\(k = 0,1,…,p\)</span> (degree of local polynomial)
+is as followed:</p>
+<p><span class="math display">\[
+\hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)
+\]</span></p>
+<p>The estimator for the prevalence at age <span class="math inline">\(a_0\)</span> is then given by</p>
+<p><span class="math display">\[
 \hat{\pi}(a_0) = g^{-1}\{ \hat{\beta}_0(a_0) \}
-</annotation></semantics></math></p>
+\]</span></p>
 <ul>
-<li>Where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
-is the link function</li>
+<li>Where <span class="math inline">\(g\)</span> is the link
+function</li>
 </ul>
-<p>The estimator for the force of infection at age
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>0</mn></msub><annotation encoding="application/x-tex">a_0</annotation></semantics></math>
-by assuming
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p \ge 1</annotation></semantics></math>
-is as followed</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>λ</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>δ</mi><mo stretchy="false" form="prefix">{</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
-\hat{\lambda}(a_0) = \hat{\beta}_1(a_0) \delta \{ \hat{\beta}_0 (a_0) \} 
-</annotation></semantics></math></p>
+<p>The estimator for the force of infection at age <span class="math inline">\(a_0\)</span> by assuming <span class="math inline">\(p \ge 1\)</span> is as followed</p>
+<p><span class="math display">\[
+\hat{\lambda}(a_0) = \hat{\beta}_1(a_0) \delta \{ \hat{\beta}_0 (a_0) \}
+\]</span></p>
 <ul>
-<li>Where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo stretchy="false" form="prefix">{</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo><mo>=</mo><mfrac><mrow><mi>d</mi><msup><mi>g</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">{</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo></mrow><mrow><mi>d</mi><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>a</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\delta \{ \hat{\beta}_0(a_0) \} = \frac{dg^{-1} \{ \hat{\beta}_0(a_0) \} } {d\hat{\beta}_0(a_0)}</annotation></semantics></math>
+<li>Where <span class="math inline">\(\delta \{ \hat{\beta}_0(a_0) \} =
+\frac{dg^{-1} \{ \hat{\beta}_0(a_0) \} }
+{d\hat{\beta}_0(a_0)}\)</span>
 </li>
 </ul>
+<p>Refer to <code>Chapter 7.1</code> of the book by <span class="citation">Hens et al. (2012)</span> for a more detailed
+explanation of the method.</p>
 <p><strong>Fitting data</strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mump</span> <span class="op">&lt;-</span> <span class="va">mumps_uk_1986_1987</span></span></code></pre></div>
@@ -146,6 +148,15 @@ polynomials.</p>
 <code class="sourceCode R"><span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn<span class="op">=</span><span class="fl">0.7</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span></span></code></pre></div>
 <p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Hens2012" class="csl-entry">
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. <em>Modeling Infectious Disease Parameters Based
+on Serological and Social Contact Data: A Modern Statistical
+Perspective</em>. <em>Statistics for Biology and Health</em>. Springer
+New York. <a href="https://doi.org/10.1007/978-1-4614-4072-7" class="external-link">https://doi.org/10.1007/978-1-4614-4072-7</a>.
+</div>
+</div>
 </div>
   </main>
 </div>
