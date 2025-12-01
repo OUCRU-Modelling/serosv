@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, output=FALSE}
+```{r setup, output=FALSE, message=FALSE, warning=FALSE}
 library(serosv)
 library(dplyr)
 ```
@@ -30,10 +30,6 @@ library(dplyr)
 
 **Proposed model**
 
-```{=html}
-<details>
-  <summary> <code> Penalized splines </code> </summary>
-```
 A general model relating the prevalence to age can be written as a GLM
 
 $$
@@ -59,18 +55,18 @@ $$
 In matrix notation, the mean structure model for $\eta(a_i)$ becomes
 
 $$
-\eta = X\beta + Zu
+\eta = \textbf{X}\beta + \textbf{Zu}
 $$
 
-Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $u = [u_1 u_2 ... u_k]^T$ are the regression with corresponding design matrices
+Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $\textbf{u} = [u_1 u_2 ... u_k]^T$ are the regression with corresponding design matrices
 
 $$
-X = \begin{bmatrix}
+\textbf{X} = \begin{bmatrix}
 1 & a_1 & a_1^2 & ... & a_1^p \\
 1 & a_2 & a_2^2 & ... & a_2^p \\
 \vdots & \vdots & \vdots & \dots & \vdots \\
 1 & a_N & a_N^2 & ... & a_N^p
-\end{bmatrix}, Z = \begin{bmatrix} 
+\end{bmatrix}, \textbf{Z} = \begin{bmatrix} 
 (a_1 - \kappa_1 )_+^p & (a_1 - \kappa_2 )_+^p & \dots & (a_1 - \kappa_k)_+^p \\
 (a_2 - \kappa_1 )_+^p & (a_2 - \kappa_2 )_+^p & \dots & (a_2 - \kappa_k)_+^p \\
 \vdots & \vdots & \dots & \vdots \\
@@ -84,41 +80,39 @@ $$
 \hat{\lambda}(a_i) = [\hat{\beta_1} , 2\hat{\beta_2}a_i, ..., p \hat{\beta} a_i ^{p-1} + \Sigma^k_{k=1} p \hat{u}_k(a_i - \kappa_k)^{p-1}_+] \delta(\hat{\eta}(a_i))
 $$
 
--   Where $\delta(.)$ is determined by the link function use in the model
-
-</details>
+-   Where $\delta(.)$ is determined by the link function used in the model
 
 ------------------------------------------------------------------------
 
 ### Penalized likelihood framework
 
-Refer to Chapter `8.2.1` of the book by @Hens2012 for a more detailed explanation of the method.
-
 **Proposed approach**
 
-A first approach to fit the model is by maximizing the following penalized likelihood
+The first approach to fit the model is by maximizing the following penalized likelihood
 
 ```{=tex}
 \begin{equation}
-\phi^{-1}[y^T(X\beta + Zu ) -  1^Tc(X\beta + Zu )] - \frac{1}{2}\lambda^2 
-\begin{bmatrix} \beta \\u \end{bmatrix}^T D\begin{bmatrix} \beta \\u \end{bmatrix}
+\phi^{-1}[y^T(\textbf{X}\beta + \textbf{Zu} ) -  \textbf{1}^Tc(\textbf{X}\beta + \textbf{Zu} )] - \frac{1}{2}\lambda^2 
+\begin{bmatrix} \beta \\ \textbf{u} \end{bmatrix}^T D\begin{bmatrix} \beta \\ \textbf{u} \end{bmatrix}
 
 (\#eq:penlikelihood)
 \end{equation}
 ```
 Where:
 
--   $X\beta + Zu$ is the linear predictor
+-   $X\beta + Zu$ is the predictor
 
 -   $D$ is a known semi-definite penalty matrix [@Wahba1978], [@Green1993]
 
 -   $y$ is the response vector
 
--   1 the unit vector, $c(.)$ is determined by the link function used
+-   $\textbf{1}$ is the unit vector, $c(.)$ is determined by the link function used
 
 -   $\lambda$ is the smoothing parameter (larger values --\> smoother curves)
 
 -   $\phi$ is the overdispersion parameter and equals 1 if there is no overdispersion
+
+Refer to Chapter `8.2.1` of the book by @Hens2012 for a more detailed explanation of the method.
 
 **Fitting data**
 
@@ -151,13 +145,11 @@ plot(pl)
 
 ### Generalized Linear Mixed Model framework
 
-Refer to Chapter `8.2.2` of the book by @Hens2012 for a more detailed explanation of the method.
-
 **Proposed approach**
 
-Looking back at \@ref(eq:penlikelihood), a constraint for $u$ would be $\Sigma_ku_k^2 < C$ for some positive value $C$
+Looking back at \@ref(eq:penlikelihood), a constraint for $\textbf{u}$ would be $\Sigma_ku_k^2 < C$ for some positive value $C$
 
-This is equivalent to choosing $(\beta, u)$ to maximise \@ref(eq:penlikelihood) with $D = diag(0, 1)$ where $0$ denotes zero vector length $p+1$ and 1 denotes the unit vector of length $K$
+This is equivalent to choosing $(\beta, \textbf{u})$ to maximise \@ref(eq:penlikelihood) with $D = diag(\textbf{0}, \textbf{1})$ where $\textbf{0}$ denotes zero vector length $p+1$ and $\textbf{1}$ denotes the unit vector of length $K$
 
 For a fixed value for $\lambda$ this is equivalent to fitting the following generalized linear mixed model [@Ruppert2003 , @Wand2003, @Ngo2004]
 
@@ -168,7 +160,9 @@ $$
 
 -   With similar notations as before and $G = \sigma^2_uI_{K \times K}$
 
-Thus $Z$ is penalized by assuming the corresponding coefficients $u$ are random effect with $u \sim N(0, \sigma^2_uI)$.
+Thus $Z$ is penalized by assuming the corresponding coefficients $\textbf{u}$ are random effect with $\textbf{u} \sim N(\textbf{0}, \mathbf{\sigma}^2_u \textbf{I})$.
+
+Refer to Chapter `8.2.2` of the book by @Hens2012 for a more detailed explanation of the method.
 
 **Fitting data**
 
