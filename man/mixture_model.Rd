@@ -31,7 +31,35 @@ a list of class mixture_model with the following items
   \item{infected}{fitted distribution for infected}
 }
 \description{
-Refers to section 11.1 - 11.4
+Fit the antibody level data to a 2-component Gaussian mixture model
+}
+\details{
+Antibody level (denoted \eqn{Z}) is modeled using a 2-component Gaussian
+mixture model. Each component \eqn{Z_j} (\eqn{j \in \{I, S\}}) represents the
+antibody level of the latent Infected and Susceptible sub-populations, following density
+\eqn{f_j(z_j|\theta_j)}
+
+Let \eqn{\pi_{\text{TRUE}}(a)} denotes the age-dependent mixing probability
+(i.e., the true prevalence), the density of the mixture is formulated as
+
+\deqn{f(z|z_I, z_S,a) = (1-\pi_{\text{TRUE}}(a))f_S(z_S|\theta_S)+\pi_{\text{TRUE}}(a)f_I(z_I|\theta_I)}
+
+The mean \eqn{E(Z|a)} thus equals
+\deqn{\mu(a) = (1-\pi_{\text{TRUE}}(a))\mu_S+\pi_{\text{TRUE}}(a)\mu_I}
+
+From which true prevalence can be computed as
+\deqn{\pi_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S}}
+
+And FOI can then be inferred as
+\deqn{\lambda_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)}}
+
+Function [serosv::mixture_model()] fits antibody level data to \eqn{f_S(z_S|\theta_S)} and
+\eqn{f_I(z_I|\theta_I)}
+
+Function [serosv::estimate_mixture()] will then estimate age-specific antibody level \eqn{\mu(a)}
+and infer the estimation for \eqn{\pi_{\text{TRUE}}(a)} and \eqn{\lambda_{TRUE}}
+
+Refer to section 11.3. of the the book by Hens et al. (2012) for further details.
 }
 \examples{
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
@@ -39,4 +67,11 @@ data <- df$VZVmIUml[order(df$age)]
 model <- mixture_model(antibody_level = data)
 model$info
 plot(model)
+}
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 }

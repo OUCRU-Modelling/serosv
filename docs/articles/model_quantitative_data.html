@@ -11,7 +11,13 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
@@ -87,33 +93,44 @@
 <h2 id="mixture-model">Mixture model<a class="anchor" aria-label="anchor" href="#mixture-model"></a>
 </h2>
 <p><strong>Proposed model</strong></p>
-<p>Two-component mixture model for test result
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
-with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>j</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>j</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mi>I</mi><mo>,</mo><mi>S</mi><mo stretchy="false" form="postfix">}</mo><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Z_j (j = \{I, S\})</annotation></semantics></math>
-being the latent mixing component having density
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>j</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>θ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f_j(z_j|\theta_j)</annotation></semantics></math>
-and with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mtext mathvariant="normal">TRUE</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi_{\text{TRUE}}(a)</annotation></semantics></math>
-being the age-dependent mixing probability can be represented as</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="prefix">|</mo><msub><mi>z</mi><mi>I</mi></msub><mo>,</mo><msub><mi>z</mi><mi>S</mi></msub><mo>,</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mtext mathvariant="normal">TRUE</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>f</mi><mi>S</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mi>S</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>θ</mi><mi>S</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>π</mi><mtext mathvariant="normal">TRUE</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>f</mi><mi>I</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mi>I</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>θ</mi><mi>I</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
-f(z|z_I, z_S,a) = (1-\pi_{\text{TRUE}}(a))f_S(z_S|\theta_S)+\pi_{\text{TRUE}}(a)f_I(z_I|\theta_I)
-</annotation></semantics></math></p>
-<p>The mean
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Z</mi><mo stretchy="false" form="prefix">|</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">E(Z|a)</annotation></semantics></math>
-thus equals</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>π</mi><mtext mathvariant="normal">TRUE</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>μ</mi><mi>S</mi></msub><mo>+</mo><msub><mi>π</mi><mtext mathvariant="normal">TRUE</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>μ</mi><mi>I</mi></msub></mrow><annotation encoding="application/x-tex">
-\mu(a) = (1-\pi_{\text{TRUE}}(a))\mu_S+\pi_{\text{TRUE}}(a)\mu_I</annotation></semantics></math></p>
+<p>Consider a two-component Gaussian mixture model for the antibody
+level <span class="math inline">\(Z\)</span>, where each component <span class="math inline">\(Z_j\)</span> represent antibody level arising from
+the 2 latent sub-populations <span class="math inline">\(j \in \{I,
+S\}\)</span> (i.e., Infected and Susceptible groups).</p>
+<p>Let <span class="math inline">\(f_j(z_j|\theta_j)\)</span> denotes
+the density of component <span class="math inline">\(Z_j\)</span>, where
+<span class="math inline">\(\theta_I\)</span> and <span class="math inline">\(\theta_S\)</span> are the parameters for the
+Susceptible and Infected components respectively.</p>
+<p>With <span class="math inline">\(\pi_{\text{TRUE}}(a)\)</span> being
+the age-dependent mixing probability (i.e., the true prevalence), the
+density of the mixture is formulated as</p>
+<p><span class="math display">\[
+f(z|z_I, z_S,a) =
+(1-\pi_{\text{TRUE}}(a))f_S(z_S|\theta_S)+\pi_{\text{TRUE}}(a)f_I(z_I|\theta_I)
+\]</span></p>
+<p>The age-specific mean antibody level <span class="math inline">\(E(Z|a)\)</span> thus equals</p>
+<p><span class="math display">\[
+\mu(a) =
+(1-\pi_{\text{TRUE}}(a))\mu_S+\pi_{\text{TRUE}}(a)\mu_I\]</span></p>
 <p>From which the true prevalence can be calculated by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mtext mathvariant="normal">TRUE</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msub><mi>μ</mi><mi>S</mi></msub></mrow><mrow><msub><mi>μ</mi><mi>I</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>S</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+<p><span class="math display">\[
 \pi_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S}
-</annotation></semantics></math></p>
-<p>Force of infection can then be calculated by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi>T</mi><mi>R</mi><mi>U</mi><mi>E</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi>μ</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msub><mi>μ</mi><mi>I</mi></msub><mo>−</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+\]</span></p>
+<p>Force of infection can then be inferred by</p>
+<p><span class="math display">\[
 \lambda_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)}
-</annotation></semantics></math></p>
+\]</span></p>
+<p>Refer to Chapter <code>11.3</code> of the book by <span class="citation">Hens et al. (2012)</span> for a more detailed
+explanation of the method.</p>
 <p><strong>Fitting data</strong></p>
-<p>To fit the mixture data, use <code>mixture_model</code> function</p>
+<p>General workflow:</p>
+<ul>
+<li><p>Step 1: Fit the antibody level data to a 2-component mixture
+model</p></li>
+<li><p>Step 2: From the fitted mixture model, estimate the
+seroprevalence and FOI</p></li>
+</ul>
+<p>To fit the antibody data, use <code>mixture_model</code> function</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">vzv_be_2001_2003</span><span class="op">[</span><span class="va">vzv_be_2001_2003</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;</span> <span class="fl">40.5</span>,<span class="op">]</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>,<span class="op">]</span></span>
@@ -143,6 +160,15 @@ thus equals</p>
 <span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
 <span><span class="co">#&gt; data's <span style="color: #00BB00;">fill</span> values.</span></span></code></pre></div>
 <p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Hens2012" class="csl-entry">
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. <em>Modeling Infectious Disease Parameters Based
+on Serological and Social Contact Data: A Modern Statistical
+Perspective</em>. <em>Statistics for Biology and Health</em>. Springer
+New York. <a href="https://doi.org/10.1007/978-1-4614-4072-7" class="external-link">https://doi.org/10.1007/978-1-4614-4072-7</a>.
+</div>
+</div>
 </div>
   </main>
 </div>
