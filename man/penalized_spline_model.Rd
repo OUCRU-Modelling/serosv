@@ -82,7 +82,7 @@ and \eqn{\textbf{u} = [u_1 u_2 ... u_k]^T} are the regression with corresponding
 \end{bmatrix}
 }
 
-Under \bold{penalized likelihood framework}, the model is fitted by minimizing
+Under \bold{penalized likelihood framework}, the model is fitted by maximizing
 the following likelihood
 
 \deqn{

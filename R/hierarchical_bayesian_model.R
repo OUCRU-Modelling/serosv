@@ -1,6 +1,59 @@
 #' Hierarchical Bayesian Model
 #'
-#' Refers to section 10.3
+#'
+#' @description Fit age-stratified seroprevalence to parametric hierarchical Bayesian models.
+#' Supported models including Farrington model (2 and 3 parameters variants)
+#' and Log Logistic model
+#'
+#' @details Consider a model for prevalence that has a parametric form
+#' \eqn{\pi(a_i, \alpha)} where \eqn{\alpha} is a parameter vector
+#'
+#' Under a Bayesian framework, we can constraint the parameter space of the prior distribution \eqn{P(\alpha)}
+#' to achieve monotonicity of the posterior distribution \eqn{P(\pi_1, \pi_2, ..., \pi_m|y,n)}
+#'
+#' Where:
+#'
+#' - \eqn{n = (n_1, n_2, ..., n_m)} and \eqn{n_i} is the sample size at age \eqn{a_i}
+#'
+#' - \eqn{y = (y_1, y_2, ..., y_m)} and \eqn{y_i} is the number of infected individual from the \eqn{n_i} sampled subjects
+#'
+#' For \bold{Farrington} model with 3 parameters, prevalence is formulated as follow
+#'
+#' \deqn{
+#' \pi (a) = 1 - exp\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} +
+#' \frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2 a} - 1) -\alpha_3 a \}
+#' }
+#'
+#' The likelihood model is defined as \eqn{y_i \sim Bin(n_i, \pi_i), \text{  for } i = 1,2,3,...m}
+#'
+#' The constraint on the parameter space can be incorporated by assuming
+#'  truncated normal distribution for the components of \eqn{\alpha},
+#' \eqn{\alpha = (\alpha_1, \alpha_2, \alpha_3)} in \eqn{\pi_i = \pi(a_i,\alpha)}
+#'
+#' The flat hyperpriors are defined as \eqn{\mu_j \sim \mathcal{N}(0, 10000)} and
+#' \eqn{\tau^{-2}_j \sim \Gamma(100,100)}
+#'
+#' For \bold{Farrington} model with 2 parameters, it is equivalent to the previous model with \eqn{\alpha_3 = 0}
+#'
+#' For \bold{Log logistic model}, seroprevalence is instead defined as
+#'
+#' \deqn{\pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ } \alpha, \beta > 0}
+#'
+#' The likelihood is similarly defined as \eqn{y_i \sim Bin(n_i, \pi_i))}
+#'
+#' The prior model of \eqn{\alpha_1} is specified as \eqn{\alpha_1 \sim \text{truncated  } \mathcal{N}(\mu_1, \tau_1)}
+#' with flat hyperpriors as in Farrington model
+#'
+#' \eqn{\beta} is constrained to be positive by specifying \eqn{\alpha_2 \sim \mathcal{N}(\mu_2, \tau_2)}
+#'
+#' Refer to section Chapter 10.3 of the the book by Hens et al. (2012) for further details.
+#'
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param type type of model ("far2", "far3" or "log_logistic")
