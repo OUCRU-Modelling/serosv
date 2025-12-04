@@ -96,8 +96,7 @@
 - [`mixture_model()`](https://oucru-modelling.github.io/serosv/reference/mixture_model.md)
   : Fit a mixture model to classify serostatus
 - [`estimate_from_mixture()`](https://oucru-modelling.github.io/serosv/reference/estimate_from_mixture.md)
-  : Estimate seroprevalence and foi by combining mixture model and
-  regression
+  : Estimate seroprevalence and FOI from a fixed mixture model
 - [`age_time_model()`](https://oucru-modelling.github.io/serosv/reference/age_time_model.md)
   : Age-time varying seroprevalence
 
@@ -182,5 +181,5 @@
 - [`compute_ci.hierarchical_bayesian_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
   : Compute 95% credible interval for hierarchical Bayesian model
 - [`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
-  : Returns the powers of the GLM fitted model which has the lowest
-  deviance score.
+  : Returns the powers of the fractional polynomial model which has the
+  lowest deviance score.

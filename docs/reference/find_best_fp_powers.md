@@ -1,6 +1,6 @@
-# Returns the powers of the GLM fitted model which has the lowest deviance score.
+# Returns the powers of the fractional polynomial model which has the lowest deviance score.
 
-Refers to section 6.2.
+Return the best powers for a given degree
 
 ## Usage
 
@@ -18,7 +18,7 @@ find_best_fp_powers(data, p, mc, degree, link = "logit")
 
 - p:
 
-  a powers sequence.
+  a powers sequence to be tested.
 
 - mc:
 
@@ -26,7 +26,8 @@ find_best_fp_powers(data, p, mc, degree, link = "logit")
 
 - degree:
 
-  the degree of the model. Recommended to be \<= 2.
+  the degree of the model (i.e. number of power terms). Recommended to
+  be \<= 2.
 
 - link:
 

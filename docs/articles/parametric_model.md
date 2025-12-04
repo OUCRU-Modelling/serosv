@@ -31,19 +31,19 @@ data <- hav_bg_1964
 ([Muench 1934](#ref-muench_derivation_1934)) suggested to model the
 infection process with so-called “catalytic model”, in which the
 distribution of the time spent in the susceptible class in SIR model is
-exponential with rate $\beta$
+exponential with rate \\(\beta\\)
 
-$$\pi(a) = k\left( 1 - e^{- \beta a} \right)$$
+\\\[ \pi(a) = k(1 - e^{-\beta a} ) \\\]
 
 Where:
 
-- $\pi$ is the seroprevalence at age $a$
-- $1 - k$ is the proportion of population that stay uninfected for a
+- \\(\pi\\) is the seroprevalence at age \\(a\\)
+- \\(1 - k\\) is the proportion of population that stay uninfected for a
   lifetime
-- $a$ is the variable age
+- \\(a\\) is the variable age
 
-Under this catalytic model and assuming that $k = 1$, force infection
-would be $\lambda(a) = \beta$
+Under this catalytic model and assuming that \\(k = 1\\), force
+infection would be \\(\lambda(a) = \beta\\)
 
 **Fitting data**
 
@@ -108,10 +108,10 @@ plot(muench2)
 
 Griffith proposed a model for force of infection as followed
 
-$$\lambda(a) = \beta_{1} + 2\beta_{2}a$$
+\\\[ \lambda(a) = \beta_1 + 2\beta_2a \\\]
 
 Which can be estimated using a GLM where the for which the linear
-predictor was $\eta(a) = \beta_{1}a + \beta_{2}a^{2}$
+predictor was \\(\eta(a) = \beta_1a + \beta_2a^{2}\\)
 
 **Fitting data**
 
@@ -134,10 +134,10 @@ the models of Muench and Griffiths further suggest the use of higher
 order polynomial functions to model the force of infection which assumes
 prevalence model as followed
 
-$$\pi(a) = 1 - e^{- \Sigma_{i}\beta_{i}a^{i}}$$
+\\\[ \pi(a) = 1 - e^{-\Sigma_i \beta_i a^i} \\\]
 
-Which implies that force of infection equals
-$\lambda(a) = \Sigma\beta_{i}ia^{i - 1}$
+Which implies that force of infection equals \\(\lambda(a) = \Sigma
+\beta_i i a^{i-1}\\)
 
 **Fitting data**
 
@@ -162,22 +162,21 @@ Refer to `Chapter 6.1.2` of the book by Hens et al.
 **Proposed model**
 
 For Farrington’s model, the force of infection was defined non-negative
-for all a $\lambda(a) \geq 0$ and increases to a peak in a linear
+for all a \\(\lambda(a) \geq 0\\) and increases to a peak in a linear
 fashion followed by an exponential decrease
 
-$$\lambda(a) = (\alpha a - \gamma)e^{- \beta a} + \gamma$$
+\\\[ \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma \\\]
 
-Where $\gamma$ is called the long term residual for FOI, as
-$\left. a\rightarrow\infty \right.$ ,
-$\left. \lambda(a)\rightarrow\gamma \right.$
+Where \\(\gamma\\) is called the long term residual for FOI, as \\(a
+\rightarrow \infty\\) , \\(\lambda (a) \rightarrow \gamma\\)
 
-Integrating $\lambda(a)$ would results in the following non-linear model
-for prevalence
+Integrating \\(\lambda(a)\\) would results in the following non-linear
+model for prevalence
 
-\$\$ \pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\\\ = 1 - exp\\{
+\\\[ \pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\\\ = 1 - exp\\{
 \frac{\alpha}{\beta}ae^{-\beta a} +
 \frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
-a \\} \$\$
+a \\} \\\]
 
 **Fitting data**
 
@@ -201,20 +200,20 @@ plot(farrington_md)
 
 For a Weibull model, the prevalence is given by
 
-$$\pi(d) = 1 - e^{- \beta_{0}d^{\beta_{1}}}$$
+\\\[ \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}} \\\]
 
-Where $d$ is exposure time (difference between age of injection and age
-at test)
+Where \\(d\\) is exposure time (difference between age of injection and
+age at test)
 
 The model was reformulated as a GLM model with log - log link and linear
 predictor using log(d)
 
-$$\eta(d) = log\left( \beta_{0} \right) + \beta_{1}log(d)$$
+\\\[\eta(d) = log(\beta_0) + \beta_1 log(d)\\\]
 
 Thus implies that the force of infection is a monotone function of the
 exposure time as followed
 
-$$\lambda(d) = \beta_{0}\beta_{1}d^{\beta_{1} - 1}$$
+\\\[ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1} \\\]
 
 **Fitting data**
 
@@ -245,17 +244,16 @@ Refer to `Chapter 6.2` of the book by Hens et al.
 
 Fractional polynomial model generalize conventional polynomial class of
 functions. In the context of binary responses, a fractional polynomial
-of degree $m$ for the linear predictor is defined as followed
+of degree \\(m\\) for the linear predictor is defined as followed
 
-$$\eta_{m}\left( a,\beta,p_{1},p_{2},...,p_{m} \right) = \Sigma_{i = 0}^{m}\beta_{i}H_{i}(a)$$
+\\\[ \eta_m(a, \beta, p_1, p_2, ...,p_m) = \Sigma^m\_{i=0} \beta_i
+H_i(a) \\\]
 
-Where $m$ is an integer, $p_{1} \leq p_{2} \leq ... \leq p_{m}$ is a
-sequence of powers, and $H_{i}(a)$ is a transformation given by
+Where \\(m\\) is an integer, \\(p_1 \le p_2 \le... \le p_m\\) is a
+sequence of powers, and \\(H_i(a)\\) is a transformation given by
 
-$$H_{i} = \begin{cases}
-a^{p_{i}} & {{\mspace{6mu}\text{if}\mspace{6mu}}p_{i} \neq p_{i - 1},} \\
-{H_{i - 1}(a) \times log(a)} & {{\mspace{6mu}\text{if}\mspace{6mu}}p_{i} = p_{i - 1},} \\
-\end{cases}$$
+\\\[ H_i = \begin{cases} a^{p_i} & \text{ if } p_i \neq p\_{i-1}, \\\\
+H\_{i-1}(a) \times log(a) & \text{ if } p_i = p\_{i-1}, \end{cases} \\\]
 
 **Best power selection**
 
@@ -306,57 +304,64 @@ plot(model)
 
 **Proposed approach**
 
-Prevalence has a parametric form $\pi\left( a_{i},\alpha \right)$ where
-$\alpha$ is a parameter vector
+Consider a model for prevalence that has a parametric form \\(\pi(a_i,
+\alpha)\\) where \\(\alpha\\) is a parameter vector
 
 One can constraint the parameter space of the prior distribution
-$P(\alpha)$ in order to achieve the desired monotonicity of the
-posterior distribution $P\left( \pi_{1},\pi_{2},...,\pi_{m}|y,n \right)$
+\\(P(\alpha)\\) in order to achieve the desired monotonicity of the
+posterior distribution \\(P(\pi_1, \pi_2, ..., \pi_m\|y,n)\\)
 
 Where:
 
-- $n = \left( n_{1},n_{2},...,n_{m} \right)$ and $n_{i}$ is the sample
-  size at age $a_{i}$
+- \\(n = (n_1, n_2, ..., n_m)\\) and \\(n_i\\) is the sample size at age
+  \\(a_i\\)
 
-- $y = \left( y_{1},y_{2},...,y_{m} \right)$ and $y_{i}$ is the number
-  of infected individual from the $n_{i}$ sampled subjects
+- \\(y = (y_1, y_2, ..., y_m)\\) and \\(y_i\\) is the number of infected
+  individual from the \\(n_i\\) sampled subjects
 
 ### Farrington
-
-Refer to `Chapter 10.3.1` of the book by Hens et al.
-([2012](#ref-Hens2012)) for a more detailed explanation of the method.
 
 **Proposed model**
 
 The model for prevalence is as followed
 
-$$\pi(a) = 1 - exp\{\frac{\alpha_{1}}{\alpha_{2}}ae^{- \alpha_{2}a} + \frac{1}{\alpha_{2}}\left( \frac{\alpha_{1}}{\alpha_{2}} - \alpha_{3} \right)\left( e^{- \alpha_{2}a} - 1 \right) - \alpha_{3}a\}$$
+\\\[ \pi (a) = 1 - exp\\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} +
+\frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2
+a} - 1) -\alpha_3 a \\} \\\]
 
 For likelihood model, independent binomial distribution are assumed for
-the number of infected individuals at age $a_{i}$
+the number of infected individuals at age \\(a_i\\)
 
-$$y_{i} \sim Bin\left( n_{i},\pi_{i} \right),{\mspace{6mu}\text{for}\mspace{6mu}}i = 1,2,3,...m$$
+\\\[ y_i \sim Bin(n_i, \pi_i), \text{ for } i = 1,2,3,...m \\\]
 
 The constraint on the parameter space can be incorporated by assuming
-truncated normal distribution for the components of $\alpha$,
-$\alpha = \left( \alpha_{1},\alpha_{2},\alpha_{3} \right)$ in
-$\pi_{i} = \pi\left( a_{i},\alpha \right)$
+truncated normal distribution for the components of \\(\alpha\\),
+\\(\alpha = (\alpha_1, \alpha_2, \alpha_3)\\) in \\(\pi_i =
+\pi(a_i,\alpha)\\)
 
-$$\alpha_{j} \sim {\text{truncated}\mspace{6mu}}\mathcal{N}\left( \mu_{j},\tau_{j} \right),{\mspace{6mu}\mspace{6mu}}j = 1,2,3$$
+\\\[ \alpha_j \sim \text{truncated } \mathcal{N}(\mu_j, \tau_j), \text{
+} j = 1,2,3 \\\]
 
-The joint posterior distribution for $\alpha$ can be derived by
+The joint posterior distribution for \\(\alpha\\) can be derived by
 combining the likelihood and prior as followed
 
-$$P\left( \alpha|y \right) \propto \prod\limits_{i = 1}^{m}\text{Bin}\left( y_{i}|n_{i},\pi\left( a_{i},\alpha \right) \right)\prod\limits_{i = 1}^{3} - \frac{1}{\tau_{j}}\text{exp}\left( \frac{1}{2\tau_{j}^{2}}\left( \alpha_{j} - \mu_{j} \right)^{2} \right)$$
+\\\[ P(\alpha\|y) \propto \prod^m\_{i=1} \text{Bin}(y_i\|n_i, \pi(a_i,
+\alpha)) \prod^3\_{i=1}-\frac{1}{\tau_j}\text{exp}(\frac{1}{2\tau^2_j}
+(\alpha_j - \mu_j)^2) \\\]
 
 - Where the flat hyperprior distribution is defined as followed:
 
-  - $\mu_{j} \sim \mathcal{N}(0,10000)$
+  - \\(\mu_j \sim \mathcal{N}(0, 10000)\\)
 
-  - $\tau_{j}^{- 2} \sim \Gamma(100,100)$
+  - \\(\tau^{-2}\_j \sim \Gamma(100,100)\\)
 
-The full conditional distribution of $\alpha_{i}$ is thus
-$$P\left( \alpha_{i}|\alpha_{j},\alpha_{k},k,j \neq i \right) \propto - \frac{1}{\tau_{i}}\text{exp}\left( \frac{1}{2\tau_{i}^{2}}\left( \alpha_{i} - \mu_{i} \right)^{2} \right)\prod\limits_{i = 1}^{m}\text{Bin}\left( y_{i}|n_{i},\pi\left( a_{i},\alpha \right) \right)$$
+The full conditional distribution of \\(\alpha_i\\) is thus \\\[
+P(\alpha_i\|\alpha_j,\alpha_k, k, j \neq i) \propto
+-\frac{1}{\tau_i}\text{exp}(\frac{1}{2\tau^2_i} (\alpha_i - \mu_i)^2)
+\prod^m\_{i=1} \text{Bin}(y_i\|n_i, \pi(a_i, \alpha)) \\\]
+
+Refer to `Chapter 10.3.1` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the method.
 
 **Fitting data**
 
@@ -365,10 +370,10 @@ To fit Farrington model, use
 and define `type = "far2"` or `type = "far3"` where
 
 - `type = "far2"` refers to Farrington model with 2 parameters
-  ($\alpha_{3} = 0$)
+  (\\(\alpha_3 = 0\\))
 
 - `type = "far3"` refers to Farrington model with 3 parameters
-  ($\alpha_{3} > 0$)
+  (\\(\alpha_3 \> 0\\))
 
 ``` r
 df <- mumps_uk_1986_1987
@@ -379,8 +384,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000135 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.35 seconds.
+#> Chain 1: Gradient evaluation took 5.5e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.55 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -397,9 +402,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 17.18 seconds (Warm-up)
-#> Chain 1:                97.215 seconds (Sampling)
-#> Chain 1:                114.395 seconds (Total)
+#> Chain 1:  Elapsed Time: 1.586 seconds (Warm-up)
+#> Chain 1:                9.213 seconds (Sampling)
+#> Chain 1:                10.799 seconds (Total)
 #> Chain 1:
 #> Warning: There were 288 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
@@ -465,27 +470,33 @@ plot(model)
 
 The model for seroprevalence is as followed
 
-$$\pi(a) = \frac{\beta a^{\alpha}}{1 + \beta a^{\alpha}},{\mspace{6mu}\mspace{6mu}}\alpha,\beta > 0$$
+\\\[ \pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ }
+\alpha, \beta \> 0 \\\]
 
-The likelihood is specified to be the same as Farrington model
-($y_{i} \sim Bin\left( n_{i},\pi_{i} \right)$) with
+The likelihood is specified to be the same as Farrington model (\\(y_i
+\sim Bin(n_i, \pi_i)\\)) with
 
-$$\text{logit}\left( \pi(a) \right) = \alpha_{2} + \alpha_{1}\log(a)$$
+\\\[ \text{logit}(\pi(a)) = \alpha_2 + \alpha_1\log(a) \\\]
 
-- Where $\alpha_{2} = \text{log}(\beta)$
+- Where \\(\alpha_2 = \text{log}(\beta)\\)
 
-The prior model of $\alpha_{1}$ is specified as
-$\alpha_{1} \sim {\text{truncated}\mspace{6mu}}\mathcal{N}\left( \mu_{1},\tau_{1} \right)$
-with flat hyperprior as in Farrington model
+The prior model of \\(\alpha_1\\) is specified as \\(\alpha_1 \sim
+\text{truncated } \mathcal{N}(\mu_1, \tau_1)\\) with flat hyperprior as
+in Farrington model
 
-$\beta$ is constrained to be positive by specifying
-$\alpha_{2} \sim \mathcal{N}\left( \mu_{2},\tau_{2} \right)$
+\\(\beta\\) is constrained to be positive by specifying \\(\alpha_2 \sim
+\mathcal{N}(\mu_2, \tau_2)\\)
 
-The full conditional distribution of $\alpha_{1}$ is thus
+The full conditional distribution of \\(\alpha_1\\) is thus
 
-$$P\left( \alpha_{1}|\alpha_{2} \right) \propto - \frac{1}{\tau_{1}}\text{exp}\left( \frac{1}{2\tau_{1}^{2}}\left( \alpha_{1} - \mu_{1} \right)^{2} \right)\prod\limits_{i = 1}^{m}\text{Bin}\left( y_{i}|n_{i},\pi\left( a_{i},\alpha_{1},\alpha_{2} \right) \right)$$
+\\\[ P(\alpha_1\|\alpha_2) \propto -\frac{1}{\tau_1} \text{exp}
+(\frac{1}{2 \tau_1^2} (\alpha_1 - \mu_1)^2) \prod\_{i=1}^m
+\text{Bin}(y_i\|n_i,\pi(a_i, \alpha_1, \alpha_2) ) \\\]
 
-And $\alpha_{2}$ can be derived in the same way
+And \\(\alpha_2\\) can be derived in the same way
+
+Refer to `Chapter 10.3.3` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the method.
 
 **Fitting data**
 
@@ -499,8 +510,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 6.1e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
+#> Chain 1: Gradient evaluation took 0.000209 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.09 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -517,9 +528,9 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.236 seconds (Warm-up)
-#> Chain 1:                5.814 seconds (Sampling)
-#> Chain 1:                10.05 seconds (Total)
+#> Chain 1:  Elapsed Time: 0.307 seconds (Warm-up)
+#> Chain 1:                0.42 seconds (Sampling)
+#> Chain 1:                0.727 seconds (Total)
 #> Chain 1:
 #> Warning: There were 583 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup

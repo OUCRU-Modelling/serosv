@@ -8,29 +8,49 @@ library(serosv)
 
 **Proposed model**
 
-Two-component mixture model for test result $Z$ with
-$Z_{j}\left( j = \{ I,S\} \right)$ being the latent mixing component
-having density $f_{j}\left( z_{j}|\theta_{j} \right)$ and with
-$\pi_{\text{TRUE}}(a)$ being the age-dependent mixing probability can be
-represented as
+Consider a two-component Gaussian mixture model for the antibody level
+\\(Z\\), where each component \\(Z_j\\) represent antibody level arising
+from the 2 latent sub-populations \\(j \in \\{I, S\\}\\) (i.e., Infected
+and Susceptible groups).
 
-$$f\left( z|z_{I},z_{S},a \right) = \left( 1 - \pi_{\text{TRUE}}(a) \right)f_{S}\left( z_{S}|\theta_{S} \right) + \pi_{\text{TRUE}}(a)f_{I}\left( z_{I}|\theta_{I} \right)$$
+Let \\(f_j(z_j\|\theta_j)\\) denotes the density of component \\(Z_j\\),
+where \\(\theta_I\\) and \\(\theta_S\\) are the parameters for the
+Susceptible and Infected components respectively.
 
-The mean $E\left( Z|a \right)$ thus equals
+With \\(\pi\_{\text{TRUE}}(a)\\) being the age-dependent mixing
+probability (i.e., the true prevalence), the density of the mixture is
+formulated as
 
-$$\mu(a) = \left( 1 - \pi_{\text{TRUE}}(a) \right)\mu_{S} + \pi_{\text{TRUE}}(a)\mu_{I}$$
+\\\[ f(z\|z_I, z_S,a) =
+(1-\pi\_{\text{TRUE}}(a))f_S(z_S\|\theta_S)+\pi\_{\text{TRUE}}(a)f_I(z_I\|\theta_I)
+\\\]
+
+The age-specific mean antibody level \\(E(Z\|a)\\) thus equals
+
+\\\[ \mu(a) =
+(1-\pi\_{\text{TRUE}}(a))\mu_S+\pi\_{\text{TRUE}}(a)\mu_I\\\]
 
 From which the true prevalence can be calculated by
 
-$$\pi_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_{S}}{\mu_{I} - \mu_{S}}$$
+\\\[ \pi\_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S} \\\]
 
-Force of infection can then be calculated by
+Force of infection can then be inferred by
 
-$$\lambda_{TRUE} = \frac{\mu\prime(a)}{\mu_{I} - \mu(a)}$$
+\\\[ \lambda\_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)} \\\]
+
+Refer to Chapter `11.3` of the book by Hens et al. (2012) for a more
+detailed explanation of the method.
 
 **Fitting data**
 
-To fit the mixture data, use `mixture_model` function
+General workflow:
+
+- Step 1: Fit the antibody level data to a 2-component mixture model
+
+- Step 2: From the fitted mixture model, estimate the seroprevalence and
+  FOI
+
+To fit the antibody data, use `mixture_model` function
 
 ``` r
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
@@ -69,3 +89,9 @@ plot(est_mixture)
 ```
 
 ![](model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png)
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. *Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective*.
+*Statistics for Biology and Health*. Springer New York.
+<https://doi.org/10.1007/978-1-4614-4072-7>.

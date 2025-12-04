@@ -1,6 +1,8 @@
 # The Farrington (1990) model.
 
-Refers to section 6.1.2.
+Fit age-stratified seroprevalence data using the Farrington (1990)
+model, which assumes the force of infection increases linearly with age
+and subsequently decreases exponentially.
 
 ## Usage
 
@@ -48,6 +50,31 @@ a list of class farrington_model with 5 items
 - foi:
 
   force of infection
+
+## Details
+
+The force of infection is defined as followed
+
+\$\$ \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma \$\$ Where
+\\(\gamma\\) is called the long term residual for FOI, as \\(a
+\rightarrow \infty\\) , \\(\lambda (a) \rightarrow \gamma\\)
+
+The seroprevalence can thus be estimated using the non-linear model \$\$
+\pi(a) = 1 - exp\\{ \frac{\alpha}{\beta}ae^{-\beta a} +
+\frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
+a \\} \$\$
+
+Refer to section 6.1.2. of the the book by Hens et al. (2012) for
+further details.
+
+## References
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+[doi:10.1007/978-1-4614-4072-7](https://doi.org/10.1007/978-1-4614-4072-7)
+.
 
 ## See also
 

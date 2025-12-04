@@ -529,6 +529,7 @@ plot.estimate_from_mixture <- function(x, ... ){
   returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")
 }
 
+# ------- Plot age time varying seroprevalence ----------
 #' Plot output for age_time_model
 #'
 #' @param x - a `age_time_model` object
@@ -665,12 +666,13 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   nn_plot + h_plot + plot_layout(ncol=2)
 }
 
+# ----- Plot corrected prevalence -------
 #' Plot output for corrected_prevalence
 #'
 #' @param x - the output of `correct_prevalence()` function
 #' @param y - another output of `correct_prevalence()` function (optional, for comparison only)
 #' @param facet - whether to plot as facets or on the same plot (only when y is provided)
-#' @import ggplot2 tidyr patchwork 
+#' @import ggplot2 tidyr patchwork
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #'
@@ -712,7 +714,7 @@ plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
           ymax = sero_upr,
           color = label
         ),
-        alpha = 0.7, data = data
+        alpha = 0.5, data = data
       )
     }
     # them add label layer
@@ -739,9 +741,15 @@ plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
 
   plot <- ggplot() +
     geom_point(aes(
-      x = age, y = pos / tot,
+      x = age, y = sero,
       color = "apparent prevalence"
-    ), data = dat)
+    ), alpha = 0.8, data = dat)+
+    geom_errorbar(
+      aes(
+        x = age, y = sero, ymin = sero_lwr, ymax = sero_upr,
+        color = "apparent prevalence"
+      ), alpha = 0.5,data = dat
+    )
 
   if(!facet){
     plot <- plot + generate_layers(corrected_dat, title = if(is.null(y)) paste0("Plot for ", x$method, " approach") else NULL)

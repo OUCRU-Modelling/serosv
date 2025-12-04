@@ -16,7 +16,6 @@ knitr::opts_chunk$set(
 
 ```{r setup, output=FALSE}
 library(serosv)
-library(ggplot2)
 ```
 
 ## Imperfect test

@@ -17,7 +17,7 @@
 #'
 #' @return a list of 3 items
 #'   \item{info}{estimated parameters (when `bayesian = TRUE`) or formula to compute corrected prevalence (when `bayesian = FALSE`)}
-#'   \item{df}{data.frame of input data (in aggregated form)}
+#'   \item{df}{data.frame of input data (in aggregated form) with the 95\% confidence interval for apparent (i.e. observed) seroprevalence}
 #'   \item{corrected_sero}{data.frame containing age, the corresponding estimated seroprevalance with 95\% confidence/credible interval, and adjusted tot and pos}
 #' @export
 #'
@@ -44,6 +44,14 @@ correct_prevalence <- function(data, bayesian=TRUE,
     tot <- transform_df$tot
   }
 
+  # quantify CI for apparent seroprev
+  apparent_thetas <- data.frame(
+    # use prop.test to get confidence interval
+    lower = mapply(\(pos, tot){prop.test(pos, tot, conf.level = 0.95)$conf.int[1]}, pos, tot),
+    fit = pos/tot,
+    upper = mapply(\(pos, tot){prop.test(pos, tot, conf.level = 0.95)$conf.int[2]}, pos, tot)
+  )
+
   if (bayesian){
 
     # format data
@@ -68,12 +76,7 @@ correct_prevalence <- function(data, bayesian=TRUE,
       upper = summary(fit)$summary[3:(length(age) + 2), "97.5%"]
     )
   }else{
-    thetas <- data.frame(
-      # use prop.test to get confidence interval
-      lower = mapply(\(pos, tot){prop.test(pos, tot, conf.level = 0.95)$conf.int[1]}, pos, tot),
-      fit = pos/tot,
-      upper = mapply(\(pos, tot){prop.test(pos, tot, conf.level = 0.95)$conf.int[2]}, pos, tot)
-    ) %>%
+    thetas <- apparent_thetas %>%
     mutate(
       # estimate true prevalence and lower, upper bound
       lower = pmax(0, (lower - 1 + init_sp)/(init_se + init_sp - 1)),
@@ -88,14 +91,17 @@ correct_prevalence <- function(data, bayesian=TRUE,
   output$df <- data.frame(
     age = age,
     pos = pos,
-    tot = tot
+    tot = tot,
+    sero = apparent_thetas$fit,
+    sero_lwr = apparent_thetas$lower,
+    sero_upr = apparent_thetas$upper
   )
 
   output$corrected_se <- data.frame(
     age = age,
-    sero = thetas$fit,
     pos = thetas$fit*tot, #adjusted pos with estimated sero
     tot = tot,
+    sero = thetas$fit,
     sero_lwr = thetas$lower,
     sero_upr = thetas$upper
   )
