@@ -24,11 +24,17 @@ formulate <- function(p) {
 #'
 #' Return the best powers for a given degree
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+#' `age`, `status` (for linelisting data)
 #' @param p a powers sequence to be tested.
 #' @param mc indicates if the returned model should be monotonic.
 #' @param degree the degree of the model (i.e. number of power terms). Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
+#'
 #'
 #' @return list of 3 elements:
 #'   \item{p}{The best power for fp model.}
@@ -46,8 +52,10 @@ formulate <- function(p) {
 #' @importFrom stats glm binomial as.formula
 #'
 #' @export
-find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
-  data <- check_input(data)
+find_best_fp_powers <- function(data,
+                                age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                                p, mc, degree, link="logit"){
+  data <- check_input(data, stratum_col=age_col, pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot
@@ -147,10 +155,14 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
 #' Serological and Social Contact Data: A Modern Statistical Perspective.
 #' tatistics for Biology and Health. Springer New York.
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
-#'
+#'data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param p the powers of the predictor.
 #' @param link the link function for model. Defaulted to "logit".
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @importFrom stats predict as.formula
 #'
@@ -173,10 +185,11 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
 #' plot(model)
 #'
 #' @export
-fp_model <- function(data,p,  link="logit") {
+fp_model <- function(data,p,link="logit",
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
   model <- list()
 
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

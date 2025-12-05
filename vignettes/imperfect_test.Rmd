@@ -26,9 +26,11 @@ Arguments:
 
 -   `data` the input data frame, must either have:
 
-    -   `age`, `pos`, `tot` columns (for aggregated data)
+    -   age, pos, tot columns (for aggregated data)
 
-    -   **OR** `age`, `status` columns for (linelisting data)
+    -   **OR** age, status columns for (linelisting data)
+
+    -   Users can specifiy the name for these columns in the input data frame using arguments `age_col`, `pos_col`, `tot_col`or `age_col`, `status_col` respectively
 
 -   `bayesian` whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.
 
@@ -71,7 +73,8 @@ freq_output <- correct_prevalence(data, bayesian = FALSE, init_se=0.9, init_sp =
 freq_output$info
 ```
 
-User can then visualize the output using `plot_corrected_prev()` function 
+User can then visualize the output using `plot_corrected_prev()` function
+
 ```{r}
 # Plot output of the frequentist approach
 plot_corrected_prev(freq_output)
@@ -79,7 +82,8 @@ plot_corrected_prev(freq_output)
 # Plot output of the bayesian approach 
 plot_corrected_prev(output)
 ```
-To compare both correction methods in a single plot, provide the output from the second method as the optional `y` argument in `plot_corrected_prev()`  
+
+To compare both correction methods in a single plot, provide the output from the second method as the optional `y` argument in `plot_corrected_prev()`
 
 ```{r}
 plot_corrected_prev(output, freq_output)
@@ -87,7 +91,6 @@ plot_corrected_prev(output, freq_output)
 # set facet = TRUE to display the confidence or credible intervals for each method
 plot_corrected_prev(output, freq_output, facet = TRUE)
 ```
-
 
 ### Fitting corrected data
 

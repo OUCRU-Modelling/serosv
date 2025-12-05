@@ -6,15 +6,25 @@ the linear predictor is approximated locally at one particular age.
 ## Usage
 
 ``` r
-lp_model(data, kern = "tcub", nn = 0, h = 0, deg = 2)
+lp_model(
+  data,
+  kern = "tcub",
+  nn = 0,
+  h = 0,
+  deg = 2,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 ```
 
 ## Arguments
 
 - data:
 
-  the input data frame, must either have \`age\`, \`pos\`, \`tot\`
-  columns (for aggregated data) OR \`age\`, \`status\` for (linelisting
+  the input data frame, must either have columns for \`age\`, \`pos\`,
+  \`tot\` (for aggregated data) OR \`age\`, \`status\` (for linelisting
   data)
 
 - kern:
@@ -36,6 +46,22 @@ lp_model(data, kern = "tcub", nn = 0, h = 0, deg = 2)
 - deg:
 
   Degree of polynomial to use. Default: 2.
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 ## Value
 

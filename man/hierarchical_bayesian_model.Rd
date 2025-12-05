@@ -6,6 +6,10 @@
 \usage{
 hierarchical_bayesian_model(
   data,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status",
   type = "far3",
   chains = 1,
   warmup = 1500,
@@ -13,7 +17,15 @@ hierarchical_bayesian_model(
 )
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)}
+
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 
 \item{type}{type of model ("far2", "far3" or "log_logistic")}
 

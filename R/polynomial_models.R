@@ -11,7 +11,6 @@ X <- function(t, degree) {
 #' Polynomial models
 #'
 #' @description Fit age-stratified seroprevalence data to serocatalytic models formulated as polynomials.
-#' Supported models includes Muench (1934), Griffith, Grenfell & Anderson (1985)
 #'
 #' @details
 #' The seroprevalence is assumed to follow the general format
@@ -54,20 +53,24 @@ X <- function(t, degree) {
 #' Journal of the American Statistical Association 29 (185):
 #' 25–38. \doi{https://doi.org/10.1080/01621459.1934.10502684}.
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
-#' @param k  degree of the model.
-#' @param type name of method (Muench, Giffith, Grenfell).
-#' @param link link function.
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
+#' @param k  degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model).
+#' @param link link function (default link="log").
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @examples
 #' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-#' data$status <- data$seropositive
 #' aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 #'
 #' # fit with aggregated data
-#' model <- polynomial_model(aggregated, type = "Muench")
+#' model <- polynomial_model(aggregated, k = 1)
 #' # fit with linelisting data
-#' model <- polynomial_model(data, type = "Muench")
+#' model <- polynomial_model(data,
+#'     status_col = "seropositive",
+#'     k = 1)
 #' plot(model)
 #'
 #' @return a list of class polynomial_model with 5 items
@@ -78,9 +81,10 @@ X <- function(t, degree) {
 #'   \item{foi}{force of infection}
 #'
 #' @export
-polynomial_model <- function(data, k,type, link = "log"){
+polynomial_model <- function(data, k, link = "log",
+                             age_col="age",pos_col="pos", tot_col="tot", status_col="status"){
   model <- list()
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   model$datatype <- data$type
 
   Age <- data$age
@@ -88,11 +92,7 @@ polynomial_model <- function(data, k,type, link = "log"){
   Neg <- data$tot - Pos
 
   df <- data.frame(cbind(Age, Pos,Neg))
-  if(missing(k)){
-    k <- switch(type,
-                "Muench" = 1 ,
-                "Griffith" = 2,
-                "Grenfell" = 3)}
+
   age <- function(k){
     if(k>1){
       formula<- paste0("I","(",paste("Age", 2:k,sep = "^"),")",collapse = "+")
@@ -141,11 +141,15 @@ polynomial_model <- function(data, k,type, link = "log"){
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 #' @param start Named list of vectors or single vector.
 #' Initial values for optimizer.
 #' @param fixed Named list of vectors or single vector.
 #' Parameter values to keep fixed during optimization.
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @return a list of class farrington_model with 5 items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
@@ -166,12 +170,13 @@ polynomial_model <- function(data, k,type, link = "log"){
 #' @importFrom stats4 mle
 #'
 #' @export
-farrington_model <- function(data, start, fixed=list())
+farrington_model <- function(data, start, fixed=list(),
+                             age_col="age",pos_col="pos", tot_col="tot", status_col="status")
 {
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

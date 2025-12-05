@@ -6,6 +6,10 @@
 \usage{
 age_time_model(
   data,
+  age_col = "age",
+  status_col = "status",
+  pos_col = "pos",
+  tot_col = "tot",
   time_col = "date",
   grouping_col = "group",
   age_correct = F,
@@ -15,19 +19,27 @@ age_time_model(
 )
 }
 \arguments{
-\item{data}{- input data, must have`age`, `status`, time, group columns, where group column determines how data is aggregated}
+\item{data}{input data, must have age, status, time, group columns, where group column determines how data is aggregated}
 
-\item{time_col}{- name of the column for time (default to `date`)}
+\item{age_col}{name of the `age` column (default age_col="age").}
 
-\item{grouping_col}{- name of the column for time (default to `group`)}
+\item{status_col}{name of the `status` column (default status_col="status").}
 
-\item{age_correct}{- a boolean, if `TRUE`, monotonize age-specific prevalence. Monotonize birth cohort-specific seroprevalence otherwise.}
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
 
-\item{le}{- number of bins to generate age grid, used when monotonizing data}
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
-\item{ci}{- confidence interval for smoothing}
+\item{time_col}{name of the column for time (default to "date")}
 
-\item{monotonize_method}{- either "pava" or "scam"}
+\item{grouping_col}{name of the column for time (default to "group")}
+
+\item{age_correct}{a boolean, if `TRUE`, monotonize age-specific prevalence. Monotonize birth cohort-specific seroprevalence otherwise.}
+
+\item{le}{number of bins to generate age grid, used when monotonizing data}
+
+\item{ci}{confidence interval for smoothing}
+
+\item{monotonize_method}{either "pava" or "scam"}
 }
 \value{
 a list of class time_age_model with 4 items

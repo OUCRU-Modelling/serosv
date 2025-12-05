@@ -7,7 +7,15 @@ and better fit for data where asymptotic behavior is expected.
 ## Usage
 
 ``` r
-fp_model(data, p, link = "logit")
+fp_model(
+  data,
+  p,
+  link = "logit",
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 ```
 
 ## Arguments
@@ -25,6 +33,22 @@ fp_model(data, p, link = "logit")
 - link:
 
   the link function for model. Defaulted to "logit".
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 ## Value
 
@@ -70,7 +94,9 @@ Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
 Serological and Social Contact Data: A Modern Statistical Perspective.
 tatistics for Biology and Health. Springer New York.
 [doi:10.1007/978-1-4614-4072-7](https://doi.org/10.1007/978-1-4614-4072-7)
-.
+. data the input data frame, must either have columns for \`age\`,
+\`pos\`, \`tot\` (for aggregated data) OR \`age\`, \`status\` (for
+linelisting data)
 
 ## See also
 

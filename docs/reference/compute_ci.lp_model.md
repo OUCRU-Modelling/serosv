@@ -5,22 +5,23 @@ Compute confidence interval for local polynomial model
 ## Usage
 
 ``` r
-compute_ci.lp_model(x, ci = 0.95, ...)
+# S3 method for class 'lp_model'
+compute_ci(x, ci = 0.95, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- serosv models
+  serosv models
 
 - ci:
 
-  \- confidence interval
+  confidence interval
 
 - ...:
 
-  \- arbitrary arguments
+  arbitrary arguments
 
 ## Value
 

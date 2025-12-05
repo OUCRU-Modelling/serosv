@@ -1,34 +1,54 @@
 # Polynomial models
 
 Fit age-stratified seroprevalence data to serocatalytic models
-formulated as polynomials. Supported models includes Muench (1934),
-Griffith, Grenfell & Anderson (1985)
+formulated as polynomials.
 
 ## Usage
 
 ``` r
-polynomial_model(data, k, type, link = "log")
+polynomial_model(
+  data,
+  k,
+  link = "log",
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 ```
 
 ## Arguments
 
 - data:
 
-  the input data frame, must either have \`age\`, \`pos\`, \`tot\`
-  columns (for aggregated data) OR \`age\`, \`status\` for (linelisting
+  the input data frame, must either have columns for \`age\`, \`pos\`,
+  \`tot\` (for aggregated data) OR \`age\`, \`status\` (for linelisting
   data)
 
 - k:
 
-  degree of the model.
-
-- type:
-
-  name of method (Muench, Giffith, Grenfell).
+  degree of the polynomial. (k=1 for Muench model, k=2 for Griffith
+  model, k=3 for Grenfell model).
 
 - link:
 
-  link function.
+  link function (default link="log").
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 ## Value
 
@@ -107,13 +127,14 @@ Catalytic Curve.” Journal of the American Statistical Association 29
 
 ``` r
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-data$status <- data$seropositive
 aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 
 # fit with aggregated data
-model <- polynomial_model(aggregated, type = "Muench")
+model <- polynomial_model(aggregated, k = 1)
 # fit with linelisting data
-model <- polynomial_model(data, type = "Muench")
+model <- polynomial_model(data,
+    status_col = "seropositive",
+    k = 1)
 plot(model)
 
 ```

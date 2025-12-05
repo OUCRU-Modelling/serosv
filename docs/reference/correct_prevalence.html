@@ -63,6 +63,10 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correct_prevalence</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  bayesian <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  age_col <span class="op">=</span> <span class="st">"age"</span>,</span>
+<span>  pos_col <span class="op">=</span> <span class="st">"pos"</span>,</span>
+<span>  tot_col <span class="op">=</span> <span class="st">"tot"</span>,</span>
+<span>  status_col <span class="op">=</span> <span class="st">"status"</span>,</span>
 <span>  init_se <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  init_sp <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  study_size_se <span class="op">=</span> <span class="fl">1000</span>,</span>
@@ -78,11 +82,27 @@
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)</p></dd>
+<dd><p>the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)</p></dd>
 
 
 <dt id="arg-bayesian">bayesian<a class="anchor" aria-label="anchor" href="#arg-bayesian"></a></dt>
 <dd><p>whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.</p></dd>
+
+
+<dt id="arg-age-col">age_col<a class="anchor" aria-label="anchor" href="#arg-age-col"></a></dt>
+<dd><p>name of the `age` column (default age_col="age").</p></dd>
+
+
+<dt id="arg-pos-col">pos_col<a class="anchor" aria-label="anchor" href="#arg-pos-col"></a></dt>
+<dd><p>name of the `pos` column (default pos_col="pos").</p></dd>
+
+
+<dt id="arg-tot-col">tot_col<a class="anchor" aria-label="anchor" href="#arg-tot-col"></a></dt>
+<dd><p>name of the `tot` column (default tot_col="tot").</p></dd>
+
+
+<dt id="arg-status-col">status_col<a class="anchor" aria-label="anchor" href="#arg-status-col"></a></dt>
+<dd><p>name of the `status` column (default status_col="status").</p></dd>
 
 
 <dt id="arg-init-se">init_se<a class="anchor" aria-label="anchor" href="#arg-init-se"></a></dt>
@@ -134,8 +154,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 0.000166 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.66 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 0.000167 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.67 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Adjust your expectations accordingly!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
@@ -152,9 +172,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:  Elapsed Time: 1.655 seconds (Warm-up)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                1.249 seconds (Sampling)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                2.904 seconds (Total)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:  Elapsed Time: 1.641 seconds (Warm-up)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                1.234 seconds (Sampling)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1:                2.875 seconds (Total)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $info</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    mean      se_mean          sd          2.5%           25%</span>

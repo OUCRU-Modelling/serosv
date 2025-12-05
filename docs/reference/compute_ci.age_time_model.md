@@ -5,26 +5,27 @@ Compute confidence interval for time age model
 ## Usage
 
 ``` r
-compute_ci.age_time_model(x, ci = 0.95, le = 100, ...)
+# S3 method for class 'age_time_model'
+compute_ci(x, ci = 0.95, le = 100, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- serosv models
+  serosv models
 
 - ci:
 
-  \- confidence interval
+  confidence interval
 
 - le:
 
-  \- number of data for computing confidence interval
+  number of data for computing confidence interval
 
 - ...:
 
-  \- arbitrary argument
+  arbitrary argument
 
 ## Value
 

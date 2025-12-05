@@ -94,7 +94,8 @@ transform_data <- function(t, spos, stratum_col = "t") {
 # - type of data (either linelisting or aggregated)
 # - preprocessed pos and tot columns
 #' @importFrom assertthat assert_that
-check_input <- function(data, stratum_col = "age"){
+check_input <- function(data, pos_col="pos",tot_col="tot",status_col="status",
+                        stratum_col = "age"){
   assert_that(
     is.data.frame(data),
     msg = "Input must be a data.frame or tibble"
@@ -106,23 +107,23 @@ check_input <- function(data, stratum_col = "age"){
   type <- NULL
 
 
-  if( all(c(stratum_col, "pos", "tot") %in% colnames(data)) ){
+  if( all(c(stratum_col, pos_col, tot_col) %in% colnames(data)) ){
     age <- as.numeric(data[[stratum_col]])
-    pos <- as.numeric(data$pos)
-    tot <- as.numeric(data$tot)
+    pos <- as.numeric(data[[pos_col]])
+    tot <- as.numeric(data[[tot_col]])
     type <- "aggregated"
-  }else if( all(c(stratum_col, "status") %in% colnames(data)) ){
+  }else if( all(c(stratum_col, status_col) %in% colnames(data)) ){
     age <- as.numeric(data[[stratum_col]])
-    pos <- as.numeric(data$status)
-    tot <- rep(1, length(data$status))
+    pos <- as.numeric(data[[status_col]])
+    tot <- rep(1, length(data[[status_col]]))
     type <- "linelisting"
   }else{
     stop(paste0(
       "Data must have `",
       stratum_col,
-      "`, `pos`, `tot` columns for aggregated data OR `",
+      "`, `", pos_col, "`, `", tot_col,"` columns for aggregated data OR `",
       stratum_col,
-      "`, `status` columns for linelisting data"
+      "`, `",status_col ,"` columns for linelisting data"
     ))
   }
 

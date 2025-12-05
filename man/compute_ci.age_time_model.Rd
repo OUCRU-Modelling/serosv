@@ -4,16 +4,16 @@
 \alias{compute_ci.age_time_model}
 \title{Compute confidence interval for time age model}
 \usage{
-compute_ci.age_time_model(x, ci = 0.95, le = 100, ...)
+\method{compute_ci}{age_time_model}(x, ci = 0.95, le = 100, ...)
 }
 \arguments{
-\item{x}{- serosv models}
+\item{x}{serosv models}
 
-\item{ci}{- confidence interval}
+\item{ci}{confidence interval}
 
-\item{le}{- number of data for computing confidence interval}
+\item{le}{number of data for computing confidence interval}
 
-\item{...}{- arbitrary argument}
+\item{...}{arbitrary argument}
 }
 \value{
 confidence interval dataframe with n_group x 3 cols, the columns are `group`, `sp_df`, `foi_df`

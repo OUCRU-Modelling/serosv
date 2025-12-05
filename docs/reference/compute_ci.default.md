@@ -1,11 +1,11 @@
-# Compute confidence interval for fractional polynomial model
+# Compute confidence interval for a model of serosv
 
-Compute confidence interval for fractional polynomial model
+Compute confidence interval for a model of serosv
 
 ## Usage
 
 ``` r
-# S3 method for class 'fp_model'
+# Default S3 method
 compute_ci(x, ci = 0.95, le = 100, ...)
 ```
 

@@ -6,6 +6,10 @@
 \usage{
 penalized_spline_model(
   data,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status",
   s = "bs",
   link = "logit",
   framework = "pl",
@@ -13,7 +17,16 @@ penalized_spline_model(
 )
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` column for aggregated data OR `age`, `status` for linelisting data}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+columns for `age`, `status` (for linelisting data)}
+
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 
 \item{s}{smoothing basis to use}
 

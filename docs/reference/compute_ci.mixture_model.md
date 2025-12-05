@@ -5,22 +5,23 @@ Compute confidence interval for mixture model
 ## Usage
 
 ``` r
-compute_ci.mixture_model(x, ci = 0.95, ...)
+# S3 method for class 'mixture_model'
+compute_ci(x, ci = 0.95, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- serosv mixture_model object
+  serosv mixture_model object
 
 - ci:
 
-  \- confidence interval
+  confidence interval
 
 - ...:
 
-  \- arbitrary arguments
+  arbitrary arguments
 
 ## Value
 

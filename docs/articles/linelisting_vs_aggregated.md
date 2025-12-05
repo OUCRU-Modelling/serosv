@@ -2,16 +2,6 @@
 
 ``` r
 library(serosv)
-library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.3.1
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 library(magrittr)
 ```
 
@@ -65,7 +55,7 @@ head(aggregated)
 #> 6   6   4  15
 
 # fit with aggregated data
-model1 <- polynomial_model(aggregated, type = "Muench")
+model1 <- polynomial_model(aggregated, k=1)
 plot(model1)
 ```
 
@@ -73,9 +63,7 @@ plot(model1)
 
 ``` r
 # fit with linelisting data
-model2 <- linelisting %>% 
-  rename(status = seropositive) %>% 
-  polynomial_model(type = "Muench")
+model2 <- polynomial_model(linelisting, k=1, status_col = "seropositive")
 plot(model2)
 ```
 
@@ -94,7 +82,7 @@ transform_data(
   linelisting$age, 
   linelisting$seropositive,
   stratum_col = "age") %>% 
-  polynomial_model(type = "Muench") %>% 
+  polynomial_model(k=1) %>% 
   plot()
 ```
 

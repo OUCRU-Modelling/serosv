@@ -4,16 +4,30 @@
 \alias{polynomial_model}
 \title{Polynomial models}
 \usage{
-polynomial_model(data, k, type, link = "log")
+polynomial_model(
+  data,
+  k,
+  link = "log",
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)}
 
-\item{k}{degree of the model.}
+\item{k}{degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model).}
 
-\item{type}{name of method (Muench, Giffith, Grenfell).}
+\item{link}{link function (default link="log").}
 
-\item{link}{link function.}
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
 a list of class polynomial_model with 5 items
@@ -25,7 +39,6 @@ a list of class polynomial_model with 5 items
 }
 \description{
 Fit age-stratified seroprevalence data to serocatalytic models formulated as polynomials.
-Supported models includes Muench (1934), Griffith, Grenfell & Anderson (1985)
 }
 \details{
 The seroprevalence is assumed to follow the general format
@@ -55,13 +68,14 @@ Refer to section 6.1.1. of the the book by Hens et al. (2012) for further detail
 }
 \examples{
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-data$status <- data$seropositive
 aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 
 # fit with aggregated data
-model <- polynomial_model(aggregated, type = "Muench")
+model <- polynomial_model(aggregated, k = 1)
 # fit with linelisting data
-model <- polynomial_model(data, type = "Muench")
+model <- polynomial_model(data,
+    status_col = "seropositive",
+    k = 1)
 plot(model)
 
 }

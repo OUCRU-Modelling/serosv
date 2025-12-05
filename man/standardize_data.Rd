@@ -15,19 +15,19 @@ standardize_data(
 )
 }
 \arguments{
-\item{df}{- data.frame with columns for plate id, sample id, result, dilution factor, and (optionally) negative controls}
+\item{df}{data.frame with columns for plate id, sample id, result, dilution factor, and (optionally) negative controls}
 
-\item{plate_id_col}{- name of the column storing plates id}
+\item{plate_id_col}{name of the column storing plates id}
 
-\item{id_col}{- name of the column storing sample id}
+\item{id_col}{name of the column storing sample id}
 
-\item{result_col}{- name of the column storing result}
+\item{result_col}{name of the column storing result}
 
-\item{dilution_fct_col}{- name of the column storing dilution factors}
+\item{dilution_fct_col}{name of the column storing dilution factors}
 
-\item{antitoxin_label}{- how antitoxin is label in the sample id column}
+\item{antitoxin_label}{how antitoxin is label in the sample id column}
 
-\item{negative_col}{- regex for columns for negative controls, assumed to be a label followed by the dilution factor (e.g. NEGATIVE_50, NEGATIVE_100)}
+\item{negative_col}{regex for columns for negative controls, assumed to be a label followed by the dilution factor (e.g. NEGATIVE_50, NEGATIVE_100)}
 }
 \value{
 a standardized data.frame that can be passed to `to_titer()`

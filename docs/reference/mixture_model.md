@@ -18,25 +18,25 @@ mixture_model(
 
 - antibody_level:
 
-  \- vector of the corresponding raw antibody level
+  vector of the corresponding raw antibody level
 
 - breaks:
 
-  \- number of intervals which the antibody_level are grouped into
+  number of intervals which the antibody_level are grouped into
 
 - pi:
 
-  \- proportion of susceptible, infected
+  proportion of susceptible, infected
 
 - mu:
 
-  \- a vector of means of component distributions (vector of 2 numbers
-  in ascending order)
+  a vector of means of component distributions (vector of 2 numbers in
+  ascending order)
 
 - sigma:
 
-  \- a vector of standard deviations of component distributions (vector
-  of 2 number)
+  a vector of standard deviations of component distributions (vector of
+  2 number)
 
 ## Value
 

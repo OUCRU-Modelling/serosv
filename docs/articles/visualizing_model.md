@@ -43,7 +43,7 @@ Current modifiable attributes include color, linetype for
 seroprevalence, foi and fill color for confidence interval
 
 ``` r
-gf_model <- polynomial_model(hav_bg_1964, type = "Griffith")
+gf_model <- polynomial_model(hav_bg_1964, k=3)
 
 # customize plot
 plot(gf_model) +

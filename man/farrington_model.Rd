@@ -4,16 +4,32 @@
 \alias{farrington_model}
 \title{The Farrington (1990) model.}
 \usage{
-farrington_model(data, start, fixed = list())
+farrington_model(
+  data,
+  start,
+  fixed = list(),
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)}
 
 \item{start}{Named list of vectors or single vector.
 Initial values for optimizer.}
 
 \item{fixed}{Named list of vectors or single vector.
 Parameter values to keep fixed during optimization.}
+
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
 a list of class farrington_model with 5 items

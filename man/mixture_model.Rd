@@ -13,15 +13,15 @@ mixture_model(
 )
 }
 \arguments{
-\item{antibody_level}{- vector of the corresponding raw antibody level}
+\item{antibody_level}{vector of the corresponding raw antibody level}
 
-\item{breaks}{- number of intervals which the antibody_level are grouped into}
+\item{breaks}{number of intervals which the antibody_level are grouped into}
 
-\item{pi}{- proportion of susceptible, infected}
+\item{pi}{proportion of susceptible, infected}
 
-\item{mu}{- a vector of means of component distributions (vector of 2 numbers in ascending order)}
+\item{mu}{a vector of means of component distributions (vector of 2 numbers in ascending order)}
 
-\item{sigma}{-  a vector of standard deviations of component distributions (vector of 2 number)}
+\item{sigma}{a vector of standard deviations of component distributions (vector of 2 number)}
 }
 \value{
 a list of class mixture_model with the following items

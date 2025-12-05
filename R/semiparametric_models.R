@@ -84,11 +84,16 @@
 #' tatistics for Biology and Health. Springer New York.
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` column for aggregated data OR `age`, `status` for linelisting data
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+#' columns for `age`, `status` (for linelisting data)
 #' @param s smoothing basis to use
 #' @param sp smoothing parameter
 #' @param link link function to use
 #' @param framework which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @importFrom mgcv gam gamm
 #' @importFrom stats binomial
@@ -111,10 +116,12 @@
 #' model <- penalized_spline_model(data, framework="glmm")
 #' model$info$gam
 #' plot(model)
-penalized_spline_model <- function(data, s = "bs", link = "logit", framework = "pl", sp = NULL){
+penalized_spline_model <- function(data,
+                                   age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                                   s = "bs", link = "logit", framework = "pl", sp = NULL){
   model <- list()
 
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

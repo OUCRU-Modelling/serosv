@@ -7,15 +7,23 @@ and subsequently decreases exponentially.
 ## Usage
 
 ``` r
-farrington_model(data, start, fixed = list())
+farrington_model(
+  data,
+  start,
+  fixed = list(),
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 ```
 
 ## Arguments
 
 - data:
 
-  the input data frame, must either have \`age\`, \`pos\`, \`tot\`
-  columns (for aggregated data) OR \`age\`, \`status\` for (linelisting
+  the input data frame, must either have columns for \`age\`, \`pos\`,
+  \`tot\` (for aggregated data) OR \`age\`, \`status\` (for linelisting
   data)
 
 - start:
@@ -26,6 +34,22 @@ farrington_model(data, start, fixed = list())
 
   Named list of vectors or single vector. Parameter values to keep fixed
   during optimization.
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 ## Value
 

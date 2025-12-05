@@ -2,12 +2,12 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
   UseMethod("compute_ci")
 }
 
-#' Compute confidence interval
+#' Compute confidence interval for a model of serosv
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param le - number of data for computing confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param le number of data for computing confidence interval
+#' @param ... arbitrary argument
 #'
 #' @importFrom stats qt predict.glm
 #' @import dplyr
@@ -15,7 +15,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #'
 #' @export
-compute_ci <- function(x, ci = 0.95, le = 100, ...){
+compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -40,10 +40,10 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 
 #' Compute confidence interval for fractional polynomial model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param le - number of data for computing confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param le number of data for computing confidence interval
+#' @param ... arbitrary argument
 #'
 #' @import dplyr
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
@@ -74,9 +74,9 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 
 #' Compute confidence interval for Weibull model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary argument
 #'
 #' @import dplyr
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
@@ -109,9 +109,9 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 
 #' Compute confidence interval for local polynomial model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param ... - arbitrary arguments
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
@@ -126,9 +126,9 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 
 #' Compute confidence interval for penalized_spline_model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param ... - arbitrary arguments
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
@@ -181,8 +181,8 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
 
 #' Compute 95\% credible interval for hierarchical Bayesian model
 #'
-#' @param x - serosv models
-#' @param ... - arbitrary arguments
+#' @param x serosv models
+#' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
@@ -233,9 +233,9 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 
 #' Compute confidence interval for mixture model
 #'
-#' @param x - serosv mixture_model object
-#' @param ci - confidence interval
-#' @param ... - arbitrary arguments
+#' @param x serosv mixture_model object
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
 #' @importFrom stats qnorm
 #'
 #' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
@@ -258,10 +258,10 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 
 #' Compute confidence interval for time age model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param le - number of data for computing confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param le number of data for computing confidence interval
+#' @param ... arbitrary argument
 #'
 #' @importFrom mgcv predict.gam
 #' @import dplyr

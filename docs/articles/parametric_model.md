@@ -49,31 +49,11 @@ infection would be \\(\lambda(a) = \beta\\)
 
 **Muench**’s model can be estimated by either defining `k = 1` (a degree
 one linear predictor, note that it is irrelevant to the k in the
-proposed model) or setting the `type = "Muench"`.
+proposed model).
 
 ``` r
-muench1 <- polynomial_model(data, k = 1)
-summary(muench1$info)
-#> 
-#> Call:
-#> glm(formula = age(k), family = binomial(link = link), data = df)
-#> 
-#> Coefficients:
-#>      Estimate Std. Error z value Pr(>|z|)    
-#> Age -0.050500   0.002457  -20.55   <2e-16 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> (Dispersion parameter for binomial family taken to be 1)
-#> 
-#>     Null deviance:    Inf  on 83  degrees of freedom
-#> Residual deviance: 97.275  on 82  degrees of freedom
-#> AIC: 219.19
-#> 
-#> Number of Fisher Scoring iterations: 5
-
-muench2 <- polynomial_model(data, type = "Muench")
-summary(muench2$info)
+muench <- polynomial_model(data, k = 1)
+summary(muench$info)
 #> 
 #> Call:
 #> glm(formula = age(k), family = binomial(link = link), data = df)
@@ -97,7 +77,7 @@ We can plot any model with the
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) function.
 
 ``` r
-plot(muench2) 
+plot(muench) 
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-4-1.png)
@@ -119,7 +99,7 @@ Similarly, we can estimate **Griffith**’s model either by defining
 `k = 2`, or setting the `type = "Griffith"`
 
 ``` r
-gf_model <- polynomial_model(data, type = "Griffith")
+gf_model <- polynomial_model(data, k=2)
 plot(gf_model)
 ```
 
@@ -144,94 +124,11 @@ Which implies that force of infection equals \\(\lambda(a) = \Sigma
 And Grenfell and Anderson’s model.
 
 ``` r
-grf_model <- polynomial_model(data, type = "Grenfell")
+grf_model <- polynomial_model(data, k=3)
 plot(grf_model)
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
-
-------------------------------------------------------------------------
-
-### Nonlinear models
-
-Refer to `Chapter 6.1.2` of the book by Hens et al.
-([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
-
-#### Farrington model
-
-**Proposed model**
-
-For Farrington’s model, the force of infection was defined non-negative
-for all a \\(\lambda(a) \geq 0\\) and increases to a peak in a linear
-fashion followed by an exponential decrease
-
-\\\[ \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma \\\]
-
-Where \\(\gamma\\) is called the long term residual for FOI, as \\(a
-\rightarrow \infty\\) , \\(\lambda (a) \rightarrow \gamma\\)
-
-Integrating \\(\lambda(a)\\) would results in the following non-linear
-model for prevalence
-
-\\\[ \pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\\\ = 1 - exp\\{
-\frac{\alpha}{\beta}ae^{-\beta a} +
-\frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
-a \\} \\\]
-
-**Fitting data**
-
-Use
-[`farrington_model()`](https://oucru-modelling.github.io/serosv/reference/farrington_model.md)
-to fit a **Farrington**’s model.
-
-``` r
-farrington_md <- farrington_model(
-   rubella_uk_1986_1987,
-   start=list(alpha=0.07,beta=0.1,gamma=0.03)
-   )
-plot(farrington_md)
-```
-
-![](parametric_model_files/figure-html/unnamed-chunk-7-1.png)
-
-#### Weibull model
-
-**Proposed model**
-
-For a Weibull model, the prevalence is given by
-
-\\\[ \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}} \\\]
-
-Where \\(d\\) is exposure time (difference between age of injection and
-age at test)
-
-The model was reformulated as a GLM model with log - log link and linear
-predictor using log(d)
-
-\\\[\eta(d) = log(\beta_0) + \beta_1 log(d)\\\]
-
-Thus implies that the force of infection is a monotone function of the
-exposure time as followed
-
-\\\[ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1} \\\]
-
-**Fitting data**
-
-Use
-[`weibull_model()`](https://oucru-modelling.github.io/serosv/reference/weibull_model.md)
-to fit a Weibull model.
-
-``` r
-hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
-
-wb_md <- hcv %>% 
-  rename(
-    t = dur, status = seropositive
-  ) %>% weibull_model()
-plot(wb_md) 
-```
-
-![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
 
 ------------------------------------------------------------------------
 
@@ -296,6 +193,86 @@ to fit a fractional polynomial model
 ``` r
 model <- fp_model(hav, p=c(1.5, 1.6), link="cloglog")
 plot(model)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
+
+------------------------------------------------------------------------
+
+### Nonlinear models
+
+Refer to `Chapter 6.1.2` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
+
+#### Farrington model
+
+**Proposed model**
+
+For Farrington’s model, the force of infection was defined non-negative
+for all a \\(\lambda(a) \geq 0\\) and increases to a peak in a linear
+fashion followed by an exponential decrease
+
+\\\[ \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma \\\]
+
+Where \\(\gamma\\) is called the long term residual for FOI, as \\(a
+\rightarrow \infty\\) , \\(\lambda (a) \rightarrow \gamma\\)
+
+Integrating \\(\lambda(a)\\) would results in the following non-linear
+model for prevalence
+
+\\\[ \pi (a) = 1 - e^{-\int_0^a \lambda(s) ds} \\\\ = 1 - exp\\{
+\frac{\alpha}{\beta}ae^{-\beta a} +
+\frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
+a \\} \\\]
+
+**Fitting data**
+
+Use
+[`farrington_model()`](https://oucru-modelling.github.io/serosv/reference/farrington_model.md)
+to fit a **Farrington**’s model.
+
+``` r
+farrington_md <- farrington_model(
+   rubella_uk_1986_1987,
+   start=list(alpha=0.07,beta=0.1,gamma=0.03)
+   )
+plot(farrington_md)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-9-1.png)
+
+#### Weibull model
+
+**Proposed model**
+
+For a Weibull model, the prevalence is given by
+
+\\\[ \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}} \\\]
+
+Where \\(d\\) is exposure time (difference between age of injection and
+age at test)
+
+The model was reformulated as a GLM model with log - log link and linear
+predictor using log(d)
+
+\\\[\eta(d) = log(\beta_0) + \beta_1 log(d)\\\]
+
+Thus implies that the force of infection is a monotone function of the
+exposure time as followed
+
+\\\[ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1} \\\]
+
+**Fitting data**
+
+Use
+[`weibull_model()`](https://oucru-modelling.github.io/serosv/reference/weibull_model.md)
+to fit a Weibull model.
+
+``` r
+hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
+
+wb_md <- hcv %>% weibull_model(t_lab = "dur", status_col="seropositive")
+plot(wb_md) 
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-10-1.png)
@@ -384,8 +361,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 5.5e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.55 seconds.
+#> Chain 1: Gradient evaluation took 0.00019 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.9 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -402,9 +379,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 1.586 seconds (Warm-up)
-#> Chain 1:                9.213 seconds (Sampling)
-#> Chain 1:                10.799 seconds (Total)
+#> Chain 1:  Elapsed Time: 16.816 seconds (Warm-up)
+#> Chain 1:                96.63 seconds (Sampling)
+#> Chain 1:                113.446 seconds (Total)
 #> Chain 1:
 #> Warning: There were 288 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
@@ -510,8 +487,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000209 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.09 seconds.
+#> Chain 1: Gradient evaluation took 5.7e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.57 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -528,9 +505,9 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 0.307 seconds (Warm-up)
-#> Chain 1:                0.42 seconds (Sampling)
-#> Chain 1:                0.727 seconds (Total)
+#> Chain 1:  Elapsed Time: 4.207 seconds (Warm-up)
+#> Chain 1:                5.846 seconds (Sampling)
+#> Chain 1:                10.053 seconds (Total)
 #> Chain 1:
 #> Warning: There were 583 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup

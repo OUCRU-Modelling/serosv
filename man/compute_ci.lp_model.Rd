@@ -4,14 +4,14 @@
 \alias{compute_ci.lp_model}
 \title{Compute confidence interval for local polynomial model}
 \usage{
-compute_ci.lp_model(x, ci = 0.95, ...)
+\method{compute_ci}{lp_model}(x, ci = 0.95, ...)
 }
 \arguments{
-\item{x}{- serosv models}
+\item{x}{serosv models}
 
-\item{ci}{- confidence interval}
+\item{ci}{confidence interval}
 
-\item{...}{- arbitrary arguments}
+\item{...}{arbitrary arguments}
 }
 \value{
 confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval

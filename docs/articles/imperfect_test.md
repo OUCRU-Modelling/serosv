@@ -15,9 +15,13 @@ Arguments:
 
 - `data` the input data frame, must either have:
 
-  - `age`, `pos`, `tot` columns (for aggregated data)
+  - age, pos, tot columns (for aggregated data)
 
-  - **OR** `age`, `status` columns for (linelisting data)
+  - **OR** age, status columns for (linelisting data)
+
+  - Users can specifiy the name for these columns in the input data
+    frame using arguments `age_col`, `pos_col`, `tot_col`or `age_col`,
+    `status_col` respectively
 
 - `bayesian` whether to adjust sero-prevalence using the Bayesian or
   frequentist approach. If set to `TRUE`, true sero-prevalence is
@@ -61,8 +65,8 @@ output <- correct_prevalence(data, warmup = 1000, iter = 4000, init_se=0.9, init
 #> 
 #> SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000109 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.09 seconds.
+#> Chain 1: Gradient evaluation took 9.4e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.94 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -79,9 +83,9 @@ output <- correct_prevalence(data, warmup = 1000, iter = 4000, init_se=0.9, init
 #> Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)
 #> Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 2.033 seconds (Warm-up)
-#> Chain 1:                4.045 seconds (Sampling)
-#> Chain 1:                6.078 seconds (Total)
+#> Chain 1:  Elapsed Time: 2.054 seconds (Warm-up)
+#> Chain 1:                4.11 seconds (Sampling)
+#> Chain 1:                6.164 seconds (Total)
 #> Chain 1:
 
 # check fitted value 
@@ -118,9 +122,10 @@ plot_corrected_prev(freq_output)
 plot_corrected_prev(output)
 ```
 
-![](imperfect_test_files/figure-html/unnamed-chunk-3-2.png) To compare
-both correction methods in a single plot, provide the output from the
-second method as the optional `y` argument in
+![](imperfect_test_files/figure-html/unnamed-chunk-3-2.png)
+
+To compare both correction methods in a single plot, provide the output
+from the second method as the optional `y` argument in
 [`plot_corrected_prev()`](https://oucru-modelling.github.io/serosv/reference/plot_corrected_prev.md)
 
 ``` r

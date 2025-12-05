@@ -99,10 +99,13 @@ true prevalence if the serological test used is imperfect</p>
 <li>
 <p><code>data</code> the input data frame, must either have:</p>
 <ul>
-<li><p><code>age</code>, <code>pos</code>, <code>tot</code> columns (for
-aggregated data)</p></li>
-<li><p><strong>OR</strong> <code>age</code>, <code>status</code> columns
-for (linelisting data)</p></li>
+<li><p>age, pos, tot columns (for aggregated data)</p></li>
+<li><p><strong>OR</strong> age, status columns for (linelisting
+data)</p></li>
+<li><p>Users can specifiy the name for these columns in the input data
+frame using arguments <code>age_col</code>, <code>pos_col</code>,
+<code>tot_col</code>or <code>age_col</code>, <code>status_col</code>
+respectively</p></li>
 </ul>
 </li>
 <li><p><code>bayesian</code> whether to adjust sero-prevalence using the
@@ -148,8 +151,8 @@ prevalence)</p></li>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000109 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.09 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 9.4e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.94 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -166,9 +169,9 @@ prevalence)</p></li>
 <span><span class="co">#&gt; Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 2.033 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                4.045 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                6.078 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 2.054 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                4.11 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                6.164 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
 <span></span>
 <span><span class="co"># check fitted value </span></span>
@@ -196,9 +199,9 @@ prevalence)</p></li>
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Plot output of the bayesian approach </span></span>
 <span><span class="fu"><a href="../reference/plot_corrected_prev.html">plot_corrected_prev</a></span><span class="op">(</span><span class="va">output</span><span class="op">)</span></span></code></pre></div>
-<p><img src="imperfect_test_files/figure-html/unnamed-chunk-3-2.png" class="r-plt" width="700">
-To compare both correction methods in a single plot, provide the output
-from the second method as the optional <code>y</code> argument in
+<p><img src="imperfect_test_files/figure-html/unnamed-chunk-3-2.png" class="r-plt" width="700"></p>
+<p>To compare both correction methods in a single plot, provide the
+output from the second method as the optional <code>y</code> argument in
 <code><a href="../reference/plot_corrected_prev.html">plot_corrected_prev()</a></code></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_corrected_prev.html">plot_corrected_prev</a></span><span class="op">(</span><span class="va">output</span>, <span class="va">freq_output</span><span class="op">)</span></span></code></pre></div>

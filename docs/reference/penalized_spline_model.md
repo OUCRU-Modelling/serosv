@@ -10,6 +10,10 @@ model framework
 ``` r
 penalized_spline_model(
   data,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status",
   s = "bs",
   link = "logit",
   framework = "pl",
@@ -21,8 +25,25 @@ penalized_spline_model(
 
 - data:
 
-  the input data frame, must either have \`age\`, \`pos\`, \`tot\`
-  column for aggregated data OR \`age\`, \`status\` for linelisting data
+  the input data frame, must either have columns for \`age\`, \`pos\`,
+  \`tot\` (for aggregated data) OR columns for \`age\`, \`status\` (for
+  linelisting data)
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 - s:
 

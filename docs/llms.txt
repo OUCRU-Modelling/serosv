@@ -328,21 +328,21 @@ parvob19 |>
   : Preprocess data
 - [`compare_models()`](https://oucru-modelling.github.io/serosv/reference/compare_models.md)
   : Compare models
-- [`compute_ci()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.md)
-  : Compute confidence interval
-- [`compute_ci.fp_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.md)
+- [`compute_ci(`*`<default>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.default.md)
+  : Compute confidence interval for a model of serosv
+- [`compute_ci(`*`<fp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.md)
   : Compute confidence interval for fractional polynomial model
-- [`compute_ci.lp_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.lp_model.md)
+- [`compute_ci(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.lp_model.md)
   : Compute confidence interval for local polynomial model
-- [`compute_ci.weibull_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.weibull_model.md)
+- [`compute_ci(`*`<weibull_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.weibull_model.md)
   : Compute confidence interval for Weibull model
-- [`compute_ci.penalized_spline_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.penalized_spline_model.md)
+- [`compute_ci(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.penalized_spline_model.md)
   : Compute confidence interval for penalized_spline_model
-- [`compute_ci.mixture_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.mixture_model.md)
+- [`compute_ci(`*`<mixture_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.mixture_model.md)
   : Compute confidence interval for mixture model
-- [`compute_ci.age_time_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.md)
+- [`compute_ci(`*`<age_time_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.md)
   : Compute confidence interval for time age model
-- [`compute_ci.hierarchical_bayesian_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
+- [`compute_ci(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
   : Compute 95% credible interval for hierarchical Bayesian model
 - [`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
   : Returns the powers of the fractional polynomial model which has the

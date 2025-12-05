@@ -8,6 +8,10 @@ Estimate the true sero prevalence using Frequentist/Bayesian estimation
 correct_prevalence(
   data,
   bayesian = TRUE,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status",
   init_se = 0.95,
   init_sp = 0.8,
   study_size_se = 1000,
@@ -22,8 +26,8 @@ correct_prevalence(
 
 - data:
 
-  the input data frame, must either have \`age\`, \`pos\`, \`tot\`
-  columns (for aggregated data) OR \`age\`, \`status\` for (linelisting
+  the input data frame, must either have columns for \`age\`, \`pos\`,
+  \`tot\` (for aggregated data) OR \`age\`, \`status\` (for linelisting
   data)
 
 - bayesian:
@@ -31,6 +35,22 @@ correct_prevalence(
   whether to adjust sero-prevalence using the Bayesian or frequentist
   approach. If set to \`TRUE\`, true sero-prevalence is estimated using
   MCMC.
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 - init_se:
 
@@ -91,8 +111,8 @@ correct_prevalence(data)
 #> 
 #> SAMPLING FOR MODEL 'prevalence_correction' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000166 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.66 seconds.
+#> Chain 1: Gradient evaluation took 0.000167 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.67 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -109,9 +129,9 @@ correct_prevalence(data)
 #> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 1.655 seconds (Warm-up)
-#> Chain 1:                1.249 seconds (Sampling)
-#> Chain 1:                2.904 seconds (Total)
+#> Chain 1:  Elapsed Time: 1.641 seconds (Warm-up)
+#> Chain 1:                1.234 seconds (Sampling)
+#> Chain 1:                2.875 seconds (Total)
 #> Chain 1: 
 #> $info
 #>                    mean      se_mean          sd          2.5%           25%

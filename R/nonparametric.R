@@ -39,7 +39,7 @@
 #' tatistics for Biology and Health. Springer New York.
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 #' @param kern Weight function, default = "tcub".
 #' Other choices are "rect", "trwt", "tria", "epan", "bisq" and "gauss".
 #' Choices may be restricted when derivatives are required;
@@ -48,6 +48,10 @@
 #' Default value is 0.7, unless either h is provided, in which case the default is 0.
 #' @param h The constant component of the smoothing parameter. Default: 0.
 #' @param deg Degree of polynomial to use. Default: 2.
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @examples
 #' df <- mumps_uk_1986_1987
@@ -71,7 +75,8 @@
 #' @seealso [locfit::locfit()] for more information on the fitted locfit object
 #'
 #' @export
-lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2) {
+lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
   if (missing(nn) & missing(h)) {
     nn <- 0.7 # default nn from lp()
   }
@@ -79,7 +84,7 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2) {
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

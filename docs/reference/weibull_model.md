@@ -7,15 +7,38 @@ monotonically with duration.
 ## Usage
 
 ``` r
-weibull_model(data)
+weibull_model(
+  data,
+  t_lab = "t",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 ```
 
 ## Arguments
 
 - data:
 
-  the input data frame, must either have \`t\`, \`pos\`, \`tot\` column
-  for aggregated data OR \`t\`, \`status\` for linelisting data
+  the input data frame, must either have columns for \`t\`, \`pos\`,
+  \`tot\` (for aggregated data) OR \`t\`, \`status\` (for linelisting
+  data)
+
+- t_lab:
+
+  name of the \`t\` column (default t_lab="t").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
 
 ## Value
 
@@ -72,7 +95,7 @@ tatistics for Biology and Health. Springer New York.
 df <- hcv_be_2006[order(hcv_be_2006$dur), ]
 df$t <- df$dur
 df$status <- df$seropositive
-model <- weibull_model(df)
+model <- weibull_model(df, t_lab="dur", status_col="seropositive")
 plot(model)
 
 ```

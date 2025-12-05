@@ -40,29 +40,28 @@ test_that("farrington_model works with linelisting data", {
 test_that("polynomial_model works with line listing data", {
 
   data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age),]
-  data$status <- data$seropositive
-  expect_no_error(polynomial_model(data, type = "Muench"))
-
+  expect_no_error(polynomial_model(data, k=1,
+                                   status_col = "seropositive"))
 
 })
 
-test_that("polynomial_model returns same result as in the book (Muench)", {
-  expected <- c(-0.0505004)
-
-  model <- polynomial_model(
-    hav_bg_1964,
-    type= "Muench"
-  )
-  actual <- unname(c(
-    coef(model$info)[1]
-  ))
-
-  expect_equal(actual, expected, tolerance=0.000001)
-
-  # make sure utilities work
-  expect_no_error(compute_ci(model))
-  expect_no_error(plot(model))
-})
+# test_that("polynomial_model returns same result as in the book (Muench)", {
+#   expected <- c(-0.0505004)
+#
+#   model <- polynomial_model(
+#     hav_bg_1964,
+#     type= "Muench"
+#   )
+#   actual <- unname(c(
+#     coef(model$info)[1]
+#   ))
+#
+#   expect_equal(actual, expected, tolerance=0.000001)
+#
+#   # make sure utilities work
+#   expect_no_error(compute_ci(model))
+#   expect_no_error(plot(model))
+# })
 
 test_that("polynomial_model returns same result as in the book (Muench)", {
   expected <- c(-0.0505004)
@@ -78,20 +77,20 @@ test_that("polynomial_model returns same result as in the book (Muench)", {
   expect_equal(actual, expected, tolerance=0.000001)
 })
 
-test_that("polynomial_model returns same result as in the book (Griffiths)", {
-  expected <- c(-0.0442615740, -0.0001888796)
-
-  model <- polynomial_model(
-    hav_bg_1964,
-    type = "Griffith"
-  )
-  actual <- unname(c(
-    coef(model$info)[1],
-    coef(model$info)[2]
-  ))
-
-  expect_equal(actual, expected, tolerance=0.000001)
-})
+# test_that("polynomial_model returns same result as in the book (Griffiths)", {
+#   expected <- c(-0.0442615740, -0.0001888796)
+#
+#   model <- polynomial_model(
+#     hav_bg_1964,
+#     type = "Griffith"
+#   )
+#   actual <- unname(c(
+#     coef(model$info)[1],
+#     coef(model$info)[2]
+#   ))
+#
+#   expect_equal(actual, expected, tolerance=0.000001)
+# })
 
 
 
@@ -110,21 +109,21 @@ test_that("polynomial_model returns same result as in the book (Griffiths)", {
   expect_equal(actual, expected, tolerance=0.000001)
 })
 
-test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
-  expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)
-
-  model <- polynomial_model(
-    hav_bg_1964,
-    type = "Grenfell"
-  )
-  actual <- unname(c(
-    coef(model$info)[1],
-    coef(model$info)[2],
-    coef(model$info)[3]
-  ))
-
-  expect_equal(actual, expected, tolerance=0.000001)
-})
+# test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
+#   expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)
+#
+#   model <- polynomial_model(
+#     hav_bg_1964,
+#     type = "Grenfell"
+#   )
+#   actual <- unname(c(
+#     coef(model$info)[1],
+#     coef(model$info)[2],
+#     coef(model$info)[3]
+#   ))
+#
+#   expect_equal(actual, expected, tolerance=0.000001)
+# })
 
 test_that("polynomial_model returns same result as in the book (Grenfell & Anderson)", {
   expected <- c(-5.325918e-02, 5.065095e-04, -1.018736e-05)

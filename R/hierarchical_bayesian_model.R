@@ -55,11 +55,15 @@
 #' tatistics for Biology and Health. Springer New York.
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 #' @param type type of model ("far2", "far3" or "log_logistic")
 #' @param chains number of Markov chains
 #' @param warmup number of warmup runs
 #' @param iter number of iterations
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @importFrom rstan sampling summary
 #' @importFrom boot inv.logit
@@ -83,11 +87,12 @@
 #' plot(model)
 #' }
 hierarchical_bayesian_model <- function(data,
+                            age_col="age",pos_col="pos", tot_col="tot", status_col="status",
                             type="far3",chains = 1,warmup = 1500,iter = 5000){
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   model$datatype <- data$type
   age <- data$age
   pos <- data$pos

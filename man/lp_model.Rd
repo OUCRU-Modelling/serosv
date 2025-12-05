@@ -4,10 +4,20 @@
 \alias{lp_model}
 \title{A local polynomial model.}
 \usage{
-lp_model(data, kern = "tcub", nn = 0, h = 0, deg = 2)
+lp_model(
+  data,
+  kern = "tcub",
+  nn = 0,
+  h = 0,
+  deg = 2,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)}
 
 \item{kern}{Weight function, default = "tcub".
 Other choices are "rect", "trwt", "tria", "epan", "bisq" and "gauss".
@@ -20,6 +30,14 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 \item{h}{The constant component of the smoothing parameter. Default: 0.}
 
 \item{deg}{Degree of polynomial to use. Default: 2.}
+
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
 a list of class lp_model with 6 items

@@ -91,7 +91,7 @@ reference:
   - transform_data
   - standardize_data
   - compare_models
-  - compute_ci
+  - compute_ci.default
   - compute_ci.fp_model
   - compute_ci.lp_model
   - compute_ci.weibull_model

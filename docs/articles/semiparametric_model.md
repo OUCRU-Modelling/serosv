@@ -111,8 +111,7 @@ documentation](https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/smooth.te
 
 ``` r
 pl <- parvob19_be_2001_2003 %>% 
-  rename(status = seropositive) %>% 
-  penalized_spline_model(s = "tp", framework = "pl") 
+  penalized_spline_model(status_col = "seropositive", s = "tp", framework = "pl") 
 pl$info
 #> 
 #> Family: binomial 
@@ -172,8 +171,7 @@ To fit the data using the penalized likelihood framework, specify
 
 ``` r
 glmm <- parvob19_be_2001_2003 %>% 
-  rename(status = seropositive) %>% 
-  penalized_spline_model(s = "tp", framework = "glmm") 
+  penalized_spline_model(status_col = "seropositive", s = "tp", framework = "glmm") 
 #> 
 #>  Maximum number of PQL iterations:  20
 #> iteration 1

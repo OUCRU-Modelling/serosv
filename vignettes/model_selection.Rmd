@@ -14,18 +14,17 @@ library(magrittr)
 ```
 
 ```{r, warning=FALSE}
-data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] %>% 
-  rename(status = seropositive)
+data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] 
   
-aggregated <- transform_data(data$age, data$status, stratum_col = "age")
+aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 
 # fit with linelisting data
-model1 <- polynomial_model(data, type = "Muench")
+model1 <- polynomial_model(data, status_col = "seropositive", k=1)
 # fit with aggregated data
-model2 <- polynomial_model(aggregated, type = "Muench")
+model2 <- polynomial_model(aggregated, k=1)
 # fit with aggregated data
-model3 <- polynomial_model(aggregated, type = "Griffith")
-# fit with gam
+model3 <- polynomial_model(aggregated, k=2)
+# fit with semiparametric model
 model4 <- penalized_spline_model(aggregated)
 ```
 

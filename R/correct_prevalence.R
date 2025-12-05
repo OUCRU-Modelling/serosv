@@ -1,6 +1,6 @@
 #' Estimate the true sero prevalence using Frequentist/Bayesian estimation
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 #' @param bayesian whether to adjust sero-prevalence using the Bayesian or frequentist approach. If set to `TRUE`, true sero-prevalence is estimated using MCMC.
 #' @param init_se sensitivity of the serological test
 #' @param init_sp specificity of the serological test
@@ -9,6 +9,10 @@
 #' @param chains (applicable when `bayesian=TRUE`) number of Markov chains
 #' @param warmup (applicable when `bayesian=TRUE`) number of warm up runs
 #' @param iter (applicable when `bayesian=TRUE`) number of iterations
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @importFrom rstan sampling summary
 #' @importFrom dplyr mutate
@@ -25,6 +29,7 @@
 #' data <- rubella_uk_1986_1987
 #' correct_prevalence(data)
 correct_prevalence <- function(data, bayesian=TRUE,
+                               age_col="age",pos_col="pos", tot_col="tot", status_col="status",
                          init_se = 0.95, init_sp = 0.8, study_size_se = 1000, study_size_sp = 1000,
                          chains = 1, warmup = 1000, iter = 2000){
   # resolve no visible binding note
@@ -32,7 +37,7 @@ correct_prevalence <- function(data, bayesian=TRUE,
 
   output <- list()
 
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot

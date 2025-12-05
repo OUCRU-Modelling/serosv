@@ -4,10 +4,29 @@
 \alias{find_best_fp_powers}
 \title{Returns the powers of the fractional polynomial model which has the lowest deviance score.}
 \usage{
-find_best_fp_powers(data, p, mc, degree, link = "logit")
+find_best_fp_powers(
+  data,
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status",
+  p,
+  mc,
+  degree,
+  link = "logit"
+)
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+`age`, `status` (for linelisting data)}
+
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 
 \item{p}{a powers sequence to be tested.}
 

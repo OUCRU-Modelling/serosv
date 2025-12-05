@@ -132,8 +132,7 @@ For more options, refer to the [mgcv documentation](https://stat.ethz.ch/R-manua
 
 ```{r}
 pl <- parvob19_be_2001_2003 %>% 
-  rename(status = seropositive) %>% 
-  penalized_spline_model(s = "tp", framework = "pl") 
+  penalized_spline_model(status_col = "seropositive", s = "tp", framework = "pl") 
 pl$info
 ```
 
@@ -170,8 +169,7 @@ To fit the data using the penalized likelihood framework, specify `framework = "
 
 ```{r}
 glmm <- parvob19_be_2001_2003 %>% 
-  rename(status = seropositive) %>% 
-  penalized_spline_model(s = "tp", framework = "glmm") 
+  penalized_spline_model(status_col = "seropositive", s = "tp", framework = "glmm") 
 glmm$info$gam
 ```
 
