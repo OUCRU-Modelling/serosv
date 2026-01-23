@@ -59,6 +59,7 @@ Collate:
     'compare_models.R'
     'correct_prevalence.R'
     'weibull_model.R'
+    'farrington_model.R'
     'nonparametric.R'
     'semiparametric_models.R'
     'mixture_model.R'

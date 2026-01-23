@@ -4,18 +4,27 @@
 \alias{compare_models}
 \title{Compare models}
 \usage{
-compare_models(...)
+compare_models(data, method = "AIC/BIC", ...)
 }
 \arguments{
+\item{data}{input data to fit into the models}
+
+\item{method}{method to compare models. Can be one of the built-in methods or a function to compute the returned metrics (see Details).}
+
 \item{...}{models to be compared. Must be models created by serosv. If models' names are not provided, indices will be used instead for the `model` column in the returned data.frame.}
 }
 \value{
 a data.frame of 4 columns
-  \item{model}{name or index of the model}
+  \item{label}{name or index of the model}
   \item{type}{model type of the given model (a serosv model name)}
   \item{AIC}{AIC value for the model (lower value indicates better fit)}
   \item{BIC}{BIC value for the model (lower value indicates better fit)}
 }
 \description{
 Compare models
+}
+\details{
+Built-in comparison methods include:
+- computing AIC and BIC, which returns AIC, BIC values of the model if available
+- cross validation, which reutns
 }
