@@ -91,11 +91,11 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   model$datatype <- data$type
 
   y <- pos/tot
-  estimator <- lp(age, deg=deg, nn=nn, h=h)
-  model$pi  <- locfit(y~estimator, family="binomial", kern=kern)
-  model$eta <- locfit(y~estimator, family="binomial", kern=kern, deriv=1)
-  model$sp  <- fitted(model$pi)
-  model$foi <- fitted(model$eta)*fitted(model$pi) # λ(a)=η′(a)π(a)
+  # estimator <- lp(age, deg=deg, nn=nn, h=h)
+  model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern)
+  model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1)
+  model$sp  <- fitted(model$info)
+  model$foi <- fitted(model$eta)*fitted(model$info) # λ(a)=η′(a)π(a)
   model$df  <- list(age=age, pos=pos, tot=tot)
 
   class(model) <- "lp_model"

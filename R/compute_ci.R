@@ -23,10 +23,10 @@ compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
   link_inv <- x$info$family$linkinv
   dataset <- x$info$data
   n <- nrow(dataset) - length(x$info$coefficients)
-  age_range <- range(dataset$Age)
+  age_range <- range(dataset$age)
   ages <- seq(age_range[1], age_range[2], le = le)
 
-  mod1 <- predict.glm(x$info,data.frame(Age = ages), se.fit = TRUE)
+  mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- mod1 %>% as_tibble() %>%  select(fit, se.fit) %>%
     mutate(age = ages ) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
@@ -116,8 +116,8 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 #' @export
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
-  crit<- crit(x$pi,cov = ci)$crit.val
-  mod1 <- predict(x$pi, data.frame(a = ages),se.fit = TRUE)
+  crit<- crit(x$info,cov = ci)$crit.val
+  mod1 <- predict(x$info, data.frame(a = ages),se.fit = TRUE)
   out.DF <- data.frame(x = ages, y = mod1$fit,ymin= mod1$fit-crit*(mod1$se.fit/100),
                        ymax= mod1$fit+crit*(mod1$se.fit/100))
   out.DF
@@ -340,6 +340,8 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
       })
     ) %>%
     select(!!sym(x$grouping_col), sp_df, foi_df)
+
+  out
 }
 
 
