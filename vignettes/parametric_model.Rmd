@@ -56,27 +56,30 @@ Refer to `Chapter 6.1.1` of the book by @Hens2012 for a more detailed explanatio
 
 **Fitting data**
 
-We will use the `Hepatitis A` data from Belgium 1993--1994 for this example.
+We will use the `Parvo B19` data from Finland 1997--1998 for this example.
 
 ```{r}
-data <- hav_bg_1964
+data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
 ```
 
 To fit a polynomial model, use the `polynomial_model()` function.
 
 ```{r}
 # Fit a Muench model
-muench <- polynomial_model(data, k = 1)
+muench <- polynomial_model(data, k = 1, status_col = "seropositive")
 summary(muench$info)
 plot(muench) 
+```
 
-# Fit a Griffith model
-gf_model <- polynomial_model(data, k=2)
-plot(gf_model)
+The users can also choose to provide a range of values for $k$ in which case the package will try to find the best $k$ parameter determined by Loglikelihood Ratio test (LRT)
 
-# Fit a Grenfell & Anderson model
-grf_model <- polynomial_model(data, k=3)
-plot(grf_model)
+```{r}
+# Provide a range of values for k
+best_param <- polynomial_model(data, k = 1:5, status_col = "seropositive")
+plot(best_param)
+
+# View the best model here which suggests k = 4 is the best parameter value
+best_param$info
 ```
 
 ------------------------------------------------------------------------
@@ -309,4 +312,3 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 model$type
 plot(model)
 ```
-

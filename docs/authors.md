@@ -22,13 +22,13 @@ Source:
 [`DESCRIPTION`](https://github.com/OUCRU-Modelling/serosv/blob/HEAD/DESCRIPTION)
 
 Phan Truong Quynh A, Pham Nguyen The N, Bui Thanh L, Huynh T, Ong T,
-Choisy M (2025). *serosv: Model Infectious Disease Parameters from
+Choisy M (2026). *serosv: Model Infectious Disease Parameters from
 Serosurveys*. https://oucru-modelling.github.io/serosv/,
 https://github.com/OUCRU-Modelling/serosv.
 
     @Manual{,
       title = {serosv: Model Infectious Disease Parameters from Serosurveys},
       author = {Anh {Phan Truong Quynh} and Nguyen {Pham Nguyen The} and Long {Bui Thanh} and Tuyen Huynh and Thinh Ong and Marc Choisy},
-      year = {2025},
+      year = {2026},
       note = {https://oucru-modelling.github.io/serosv/, https://github.com/OUCRU-Modelling/serosv},
     }

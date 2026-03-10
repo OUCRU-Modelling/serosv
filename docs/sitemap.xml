@@ -83,6 +83,14 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot_standard_curve.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot_titer_qc.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/polynomial_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.age_time_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.farrington_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.fp_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.hierarchical_bayesian_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.lp_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.penalized_spline_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.polynomial_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.weibull_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/rubella_mumps_uk.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/rubella_uk_1986_1987.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/serosv-package.html</loc></url>

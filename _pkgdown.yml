@@ -99,6 +99,14 @@ reference:
   - compute_ci.mixture_model
   - compute_ci.age_time_model
   - compute_ci.hierarchical_bayesian_model
+  - predict.age_time_model
+  - predict.farrington_model
+  - predict.fp_model
+  - predict.hierarchical_bayesian_model
+  - predict.lp_model
+  - predict.penalized_spline_model
+  - predict.weibull_model
+  - predict.polynomial_model
   - find_best_fp_powers
 
 articles:

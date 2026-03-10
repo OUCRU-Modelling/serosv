@@ -24,69 +24,152 @@ library(magrittr)
 
 ``` r
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] 
-  
-aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 
-# fit with linelisting data
-model1 <- polynomial_model(data, status_col = "seropositive", k=1)
-# fit with aggregated data
-model2 <- polynomial_model(aggregated, k=1)
-# fit with aggregated data
-model3 <- polynomial_model(aggregated, k=2)
-# fit with semiparametric model
-model4 <- penalized_spline_model(aggregated)
+aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
 ```
 
 ## Generate models comparison `data.frame`
 
 Function
 [`compare_models()`](https://oucru-modelling.github.io/serosv/reference/compare_models.md)
-is used for quickly computing AIC and BIC values for given model(s).
+is used for quickly computing comparison metrics for a set of models on
+a given dataset.
 
-The function can take an arbitrary number of models and all models must
-be created from `serosv`’s set of `*_model()` functions. It will then
-return a `data.frame` of 4 columns:
+The function takes the following arguments:
 
-- `model` model identifier. Either user defined name or index based on
+- `data` the dataset that will be fitted to the models
+
+- `method` the method to generate comparison metrics. It can be the name
+  of one of the built-in methods, or a user-defined function.
+
+- `…` functions that take a data and return a fitted `serosv` model.
+
+It will then return a `data.frame` with the following columns
+
+- `label` model identifier. Either user defined name or index based on
   the order provided.
 
 - `type` type of model (a `serosv` model class)
 
-- `AIC` AIC value for the fitted model (if applicable)
+- metrics depending on the method selected
 
-- `BIC` AIC value for the fitted model (if applicable)
+**Built-in `method`**
+
+`serosv` currently provide 2 built-in metrics generating methods
+
+- `"AIC/BIC"` which returns fitted model’s AIC, BIC and Log-likelihood
+  (where applicable)
+
+- `"CV"` which split the data into “train” and “test” set then return
+  logloss and AUC from model’s prediction on the test set
 
 **Sample usage**
 
-Compare 4 models defined above
-
 ``` r
-# provide models with name
-compare_models(muench_linelist = model1, muench_aggregated = model2, griffith = model3, penalized_spline = model4)
+# ----- Return AIC, BIC ----- 
+aic_bic_out <- compare_models(
+  data = data %>% rename(status=seropositive),
+  method = "AIC/BIC",
+  griffith = ~polynomial_model(.x, k=3),
+  penalized_spline = penalized_spline_model,
+  farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+  local_polynomial = lp_model # expect to not return any values
+  ) %>% suppressWarnings()
+
+# ----- Return Cross-validation metrics ----- 
+cv_out <- compare_models(
+    data %>% rename(status=seropositive),
+    method = "CV",
+    griffith = ~polynomial_model(.x, k=3),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
 ```
 
-    ##               model                   type       AIC       BIC
-    ## 1   muench_linelist       polynomial_model 1368.9096 1373.9280
-    ## 2 muench_aggregated       polynomial_model  505.5269  508.8787
-    ## 3          griffith       polynomial_model  489.1185  495.8223
-    ## 4  penalized_spline penalized_spline_model  256.7061  271.3522
+    ## Setting levels: control = 0, case = 1
+
+    ## Setting direction: controls > cases
+
+    ## Setting levels: control = 0, case = 1
+
+    ## Setting direction: controls < cases
+
+    ## Setting levels: control = 0, case = 1
+
+    ## Setting direction: controls < cases
+
+    ## Setting levels: control = 0, case = 1
+
+    ## Setting direction: controls < cases
 
 ``` r
-# provide models without name
-compare_models(model1, model2, model3, model4)
+aic_bic_out
 ```
 
-    ##   model                   type       AIC       BIC
-    ## 1     1       polynomial_model 1368.9096 1373.9280
-    ## 2     2       polynomial_model  505.5269  508.8787
-    ## 3     3       polynomial_model  489.1185  495.8223
-    ## 4     4 penalized_spline_model  256.7061  271.3522
+    ## # A tibble: 4 × 7
+    ##   label            type                     AIC   BIC logLik    df mod_out   
+    ##   <chr>            <chr>                  <dbl> <dbl>  <dbl> <dbl> <list>    
+    ## 1 griffith         polynomial_model       1347. 1362.  -671.  3    <plynml_m>
+    ## 2 penalized_spline penalized_spline_model 1330. 1365.  -658.  6.88 <pnlzd_s_>
+    ## 3 farrington       farrington_model       1337.   NA   -665.  3    <frrngtn_>
+    ## 4 local_polynomial lp_model                 NA    NA     NA  NA    <lp_model>
 
 ``` r
-# user can provide arbitrary number of models
-compare_models(model3, model4)
+cv_out
 ```
 
-    ##   model                   type      AIC      BIC
-    ## 1     1       polynomial_model 489.1185 495.8223
-    ## 2     2 penalized_spline_model 256.7061 271.3522
+    ## # A tibble: 4 × 5
+    ##   label            type                   logloss   auc mod_out   
+    ##   <chr>            <chr>                    <dbl> <dbl> <list>    
+    ## 1 griffith         polynomial_model         -209. 0.700 <plynml_m>
+    ## 2 penalized_spline penalized_spline_model   -132. 0.673 <pnlzd_s_>
+    ## 3 farrington       farrington_model         -133. 0.700 <frrngtn_>
+    ## 4 local_polynomial lp_model                 -131. 0.700 <lp_model>
+
+With aggregated data
+
+``` r
+# ----- Return AIC, BIC ----- 
+aic_bic_out <- compare_models(
+  data = aggregated,
+  method = "AIC/BIC",
+  griffith = ~polynomial_model(.x, k=3),
+  penalized_spline = penalized_spline_model,
+  farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+  local_polynomial = lp_model # expect to not return any values
+  ) %>% suppressWarnings()
+
+# ----- Return Cross-validation metrics ----- 
+cv_out <- compare_models(
+    data = aggregated,
+    method = "CV",
+    griffith = ~polynomial_model(.x, k=3),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
+
+
+aic_bic_out
+```
+
+    ## # A tibble: 4 × 7
+    ##   label            type                     AIC   BIC logLik    df mod_out   
+    ##   <chr>            <chr>                  <dbl> <dbl>  <dbl> <dbl> <list>    
+    ## 1 griffith         polynomial_model        484.  494.  -239.  3    <plynml_m>
+    ## 2 penalized_spline penalized_spline_model  257.  271.  -124.  4.37 <pnlzd_s_>
+    ## 3 farrington       farrington_model       1337.   NA   -665.  3    <frrngtn_>
+    ## 4 local_polynomial lp_model                 NA    NA     NA  NA    <lp_model>
+
+``` r
+cv_out
+```
+
+    ## # A tibble: 4 × 5
+    ##   label            type                      mae logloss mod_out   
+    ##   <chr>            <chr>                   <dbl>   <dbl> <list>    
+    ## 1 griffith         polynomial_model       1.82     -85.0 <plynml_m>
+    ## 2 penalized_spline penalized_spline_model 0.0261   -43.2 <pnlzd_s_>
+    ## 3 farrington       farrington_model       0.234    -42.1 <frrngtn_>
+    ## 4 local_polynomial lp_model               0.0161   -42.7 <lp_model>

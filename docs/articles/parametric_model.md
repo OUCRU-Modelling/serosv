@@ -10,132 +10,107 @@ library(magrittr)
 
 ### Polynomial models
 
-Refer to `Chapter 6.1.1` of the book by Hens et al.
-([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
+Seroprevalence is modeled using the following serocatalytic model
 
-Use
-[`polynomial_model()`](https://oucru-modelling.github.io/serosv/reference/polynomial_model.md)
-to fit a polynomial model.
-
-We will use the `Hepatitis A` data from Belgium 1993–1994 for this
-example.
-
-``` r
-data <- hav_bg_1964
-```
-
-#### Muench model
-
-**Proposed model**
-
-([Muench 1934](#ref-muench_derivation_1934)) suggested to model the
-infection process with so-called “catalytic model”, in which the
-distribution of the time spent in the susceptible class in SIR model is
-exponential with rate \\(\beta\\)
-
-\\\[ \pi(a) = k(1 - e^{-\beta a} ) \\\]
+\\\[ \pi(a) = 1 - \text{exp}({-\Sigma\_{i=1}^k \beta_i a^i}) \\\]
 
 Where:
 
-- \\(\pi\\) is the seroprevalence at age \\(a\\)
-- \\(1 - k\\) is the proportion of population that stay uninfected for a
-  lifetime
 - \\(a\\) is the variable age
 
-Under this catalytic model and assuming that \\(k = 1\\), force
-infection would be \\(\lambda(a) = \beta\\)
+- \\(\pi\\) is the seroprevalence of the population at age \\(a\\)
+
+- \\(k\\) is the degree of the polynomial
+
+- \\(\beta_i\\) are the model parameters
+
+Which implies the force of infection is \\(\lambda(a) = \Sigma\_{i=1}^k
+\beta_i i a^{i-1}\\)
+
+This generalization encompasses several classical serocatalytic model
+including
+
+- **Muench model** (assuming \\(k=1\\)) ([Muench
+  1934](#ref-muench_derivation_1934))
+
+- **Griffith model** (assuming \\(k = 2\\))
+
+- **Grenfell and Anderson model** (assuming higher degree \\(k\\))
+  ([Grenfell and Anderson 1985](#ref-grenfell_estimation_1985))
+
+Refer to `Chapter 6.1.1` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
 
 **Fitting data**
 
-**Muench**’s model can be estimated by either defining `k = 1` (a degree
-one linear predictor, note that it is irrelevant to the k in the
-proposed model).
+We will use the `Parvo B19` data from Finland 1997–1998 for this
+example.
 
 ``` r
-muench <- polynomial_model(data, k = 1)
+data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
+```
+
+To fit a polynomial model, use the
+[`polynomial_model()`](https://oucru-modelling.github.io/serosv/reference/polynomial_model.md)
+function.
+
+``` r
+# Fit a Muench model
+muench <- polynomial_model(data, k = 1, status_col = "seropositive")
 summary(muench$info)
 #> 
 #> Call:
-#> glm(formula = age(k), family = binomial(link = link), data = df)
+#> glm(formula = Age(k), family = binomial(link = link), data = df)
 #> 
 #> Coefficients:
 #>      Estimate Std. Error z value Pr(>|z|)    
-#> Age -0.050500   0.002457  -20.55   <2e-16 ***
+#> age -0.029088   0.001375  -21.15   <2e-16 ***
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> (Dispersion parameter for binomial family taken to be 1)
 #> 
-#>     Null deviance:    Inf  on 83  degrees of freedom
-#> Residual deviance: 97.275  on 82  degrees of freedom
-#> AIC: 219.19
+#>     Null deviance:    Inf  on 1117  degrees of freedom
+#> Residual deviance: 1366.9  on 1116  degrees of freedom
+#> AIC: 1368.9
 #> 
-#> Number of Fisher Scoring iterations: 5
+#> Number of Fisher Scoring iterations: 6
+plot(muench) 
 ```
 
-We can plot any model with the
-[`plot()`](https://rdrr.io/r/graphics/plot.default.html) function.
+![](parametric_model_files/figure-html/unnamed-chunk-3-1.png)
+
+The users can also choose to provide a range of values for \\(k\\) in
+which case the package will try to find the best \\(k\\) parameter
+determined by Loglikelihood Ratio test (LRT)
 
 ``` r
-plot(muench) 
+# Provide a range of values for k
+best_param <- polynomial_model(data, k = 1:5, status_col = "seropositive")
+plot(best_param)
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-4-1.png)
 
-#### Griffith model
-
-**Proposed model**
-
-Griffith proposed a model for force of infection as followed
-
-\\\[ \lambda(a) = \beta_1 + 2\beta_2a \\\]
-
-Which can be estimated using a GLM where the for which the linear
-predictor was \\(\eta(a) = \beta_1a + \beta_2a^{2}\\)
-
-**Fitting data**
-
-Similarly, we can estimate **Griffith**’s model either by defining
-`k = 2`, or setting the `type = "Griffith"`
-
 ``` r
-gf_model <- polynomial_model(data, k=2)
-plot(gf_model)
+
+# View the best model here which suggests k = 4 is the best parameter value
+best_param$info
+#> 
+#> Call:  glm(formula = Age(k), family = binomial(link = link), data = df)
+#> 
+#> Coefficients:
+#>        age    I(age^2)    I(age^3)    I(age^4)  
+#> -3.381e-02  -9.950e-04   5.551e-05  -5.737e-07  
+#> 
+#> Degrees of Freedom: 1117 Total (i.e. Null);  1113 Residual
+#> Null Deviance:       Inf 
+#> Residual Deviance: 1336  AIC: 1344
 ```
-
-![](parametric_model_files/figure-html/unnamed-chunk-5-1.png)
-
-#### Grenfell and Anderson model
-
-**Proposed model**
-
-([Grenfell and Anderson 1985](#ref-grenfell_estimation_1985)) extended
-the models of Muench and Griffiths further suggest the use of higher
-order polynomial functions to model the force of infection which assumes
-prevalence model as followed
-
-\\\[ \pi(a) = 1 - e^{-\Sigma_i \beta_i a^i} \\\]
-
-Which implies that force of infection equals \\(\lambda(a) = \Sigma
-\beta_i i a^{i-1}\\)
-
-**Fitting data**
-
-And Grenfell and Anderson’s model.
-
-``` r
-grf_model <- polynomial_model(data, k=3)
-plot(grf_model)
-```
-
-![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
 
 ------------------------------------------------------------------------
 
 ### Fractional polynomial model
-
-Refer to `Chapter 6.2` of the book by Hens et al.
-([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
 
 **Proposed model**
 
@@ -151,6 +126,9 @@ sequence of powers, and \\(H_i(a)\\) is a transformation given by
 
 \\\[ H_i = \begin{cases} a^{p_i} & \text{ if } p_i \neq p\_{i-1}, \\\\
 H\_{i-1}(a) \times log(a) & \text{ if } p_i = p\_{i-1}, \end{cases} \\\]
+
+Refer to `Chapter 6.2` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
 
 **Best power selection**
 
@@ -195,14 +173,11 @@ model <- fp_model(hav, p=c(1.5, 1.6), link="cloglog")
 plot(model)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
 
 ------------------------------------------------------------------------
 
 ### Nonlinear models
-
-Refer to `Chapter 6.1.2` of the book by Hens et al.
-([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
 
 #### Farrington model
 
@@ -225,6 +200,9 @@ model for prevalence
 \frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
 a \\} \\\]
 
+Refer to `Chapter 6.1.2` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
+
 **Fitting data**
 
 Use
@@ -239,7 +217,7 @@ farrington_md <- farrington_model(
 plot(farrington_md)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-9-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-7-1.png)
 
 #### Weibull model
 
@@ -262,6 +240,9 @@ exposure time as followed
 
 \\\[ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1} \\\]
 
+Refer to `Chapter 6.1.2` of the book by Hens et al.
+([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
+
 **Fitting data**
 
 Use
@@ -275,7 +256,7 @@ wb_md <- hcv %>% weibull_model(t_lab = "dur", status_col="seropositive")
 plot(wb_md) 
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-10-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
 
 ## Bayesian methods
 
@@ -361,8 +342,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.00019 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.9 seconds.
+#> Chain 1: Gradient evaluation took 0.000168 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.68 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -379,9 +360,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 16.816 seconds (Warm-up)
-#> Chain 1:                96.63 seconds (Sampling)
-#> Chain 1:                113.446 seconds (Total)
+#> Chain 1:  Elapsed Time: 16.62 seconds (Warm-up)
+#> Chain 1:                96.524 seconds (Sampling)
+#> Chain 1:                113.144 seconds (Total)
 #> Chain 1:
 #> Warning: There were 288 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
@@ -439,7 +420,7 @@ model$info
 plot(model)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-11-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-9-1.png)
 
 ### Log-logistic
 
@@ -487,8 +468,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 5.7e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.57 seconds.
+#> Chain 1: Gradient evaluation took 6.1e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -505,8 +486,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.207 seconds (Warm-up)
-#> Chain 1:                5.846 seconds (Sampling)
+#> Chain 1:  Elapsed Time: 4.21 seconds (Warm-up)
+#> Chain 1:                5.843 seconds (Sampling)
 #> Chain 1:                10.053 seconds (Total)
 #> Chain 1:
 #> Warning: There were 583 divergent transitions after warmup. See
@@ -525,7 +506,7 @@ model$type
 plot(model)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-12-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-10-1.png)
 
 Grenfell, B. T., and R. M. Anderson. 1985. “The Estimation of
 Age-Related Rates of Infection from Case Notifications and Serological

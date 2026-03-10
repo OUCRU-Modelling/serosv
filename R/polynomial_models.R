@@ -93,20 +93,88 @@ polynomial_model <- function(data, k, link = "log",
 
   df <- data.frame(cbind(age, pos,neg))
 
-  Age <- function(k){
-    if(k>1){
-      formula<- paste0("I","(",paste("age", 2:k,sep = "^"),")",collapse = "+")
-      paste0("cbind(neg,pos)"," ~","-1+age+",formula)
-    } else {
-      paste0("cbind(neg,pos)"," ~","-1+age")
+  # helper function to generate the polynomial given a k value
+  # to be used for parameter selection if multiple values for k are given
+  generate_polynomial <- function(k, df, link="log"){
+    Age <- function(k){
+      if(k>1){
+        formula<- paste0("I","(",paste("age", 2:k,sep = "^"),")",collapse = "+")
+        paste0("cbind(neg,pos)"," ~","-1+age+",formula)
+      } else {
+        paste0("cbind(neg,pos)"," ~","-1+age")
+      }
     }
+
+    glm(Age(k), family=binomial(link=link),df)
   }
-  model$info <- glm(Age(k), family=binomial(link=link),df)
+
+  # TODO: accept a vector of k then use LRT to determine the best k
+  if(length(k) > 1){
+    out <- nested_mod_selection(
+      list("k" = k),
+      model_fn = \(k, df){
+        generate_polynomial(k, df, link=link)
+      },
+      dat = df
+    )
+
+    k <- out$best_par$k
+    model$info <- out$mod
+  }else{
+    model$info <- generate_polynomial(k, df, link=link)
+  }
+
   X <- X(age, k)
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
   model$df <- list(age=age, pos=pos, tot= pos + neg)
   class(model) <- "polynomial_model"
   model
+}
+
+# TODO: check if this can be generalized to other functions as well (e.g. fractional polynomial)
+# function to return the best parameter of nested glm models using LRT
+# par_range - list of parameters and its possible values
+# model_fn - function to fit and return a model, must takes 2 arguments: par, df
+# @import purrr tidyr
+nested_mod_selection <- function(par_range, model_fn, dat, method="LRT"){
+  # generate all combinations of parameters values
+  par_combs <- tidyr::crossing(!!!par_range)
+
+  # fit the model using specified parameter values
+  mods_out <- par_combs %>%
+    purrr::pmap(\(...){model_fn(..., df=dat)})
+  # perform LRT
+  lrt_out <- do.call(
+    anova,
+    c(mods_out, list(test="LRT"))
+  )
+
+  # get the best model
+  best_idx <- lrt_out %>%
+    as.data.frame() %>%
+    mutate(
+      idx = 1:n()
+    ) %>%
+    filter(
+      `Pr(>Chi)` < 0.05
+    ) %>%
+    arrange(
+      Deviance
+    ) %>%
+    pull(idx)
+
+  # handle scenario when the reference model (i.e., the first model) is in fact the best option
+  # i.e., when the other parameter combinations do not result in statistically significant improvement
+  if(length(best_idx)>1){
+    best_idx <- best_idx[1]
+  }else{
+    best_idx <- 1
+  }
+
+  list(
+    best_par = par_combs[best_idx, ] %>% as.list(),
+    mod = mods_out[best_idx][[1]]
+  )
 }
 

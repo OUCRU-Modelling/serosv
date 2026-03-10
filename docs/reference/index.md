@@ -180,6 +180,22 @@
   : Compute confidence interval for time age model
 - [`compute_ci(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
   : Compute 95% credible interval for hierarchical Bayesian model
+- [`predict(`*`<age_time_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.age_time_model.md)
+  : Predict from the age_time_mdoel
+- [`predict(`*`<farrington_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.farrington_model.md)
+  : Prediction for serosv Farrington model
+- [`predict(`*`<fp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.fp_model.md)
+  : Prediction for serosv fractional polynomial model
+- [`predict(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.hierarchical_bayesian_model.md)
+  : Predict from an hierarchical bayesian model
+- [`predict(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.lp_model.md)
+  : Prediction for serosv local polynomial model
+- [`predict(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.penalized_spline_model.md)
+  : Prediction for serosv penalized spline model
+- [`predict(`*`<weibull_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.weibull_model.md)
+  : Prediction for serosv Weibull model
+- [`predict(`*`<polynomial_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.polynomial_model.md)
+  : Prediction for serosv polynomial model
 - [`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
   : Returns the powers of the fractional polynomial model which has the
   lowest deviance score.
