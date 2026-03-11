@@ -42,7 +42,6 @@ compare_models <- function(data, method="AIC/BIC",...){
       assert_that(is.function(metric_func),
                   msg = "Function to compute the metrics must be provided")
 
-      # TODO: apply cross validation to get comparison metrics instead
       out <- metric_func(data, as_mapper(.x))
 
       assert_that("data.frame" %in% class(out),

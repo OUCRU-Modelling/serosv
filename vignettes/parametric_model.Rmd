@@ -105,26 +105,54 @@ $$
 
 Refer to `Chapter 6.2` of the book by @Hens2012 for a more detailed explanation of the methods.
 
-**Best power selection**
-
-Use `find_best_fp_powers()` to find the powers which gives the lowest deviance score
-
-```{r, warning=FALSE}
-hav <- hav_be_1993_1994
-best_p <- find_best_fp_powers(
-  hav,
-  p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-)
-best_p
-```
-
 **Fitting data**
 
-Use `fp_model()` to fit a fractional polynomial model
+Use `fp_model()` to fit a fractional polynomial model.
+
+The parameter `p` specifies the powers of each polynomial term (length of `p` is thus the model's degree)
 
 ```{r}
-model <- fp_model(hav, p=c(1.5, 1.6), link="cloglog")
+hav <- hav_be_1993_1994
+model <- fp_model(hav, p=c(1, 1.5), link="cloglog")
 plot(model)
+```
+
+The users can also tell the package to perform parameter selection by providing `p` as a named list with 2 elements:
+
+-   `degree` the maximum number of terms to search over
+
+```{=html}
+<!-- -->
+```
+-   `p_range` the possible powers for each term
+
+```{r, warning=FALSE}
+model <- fp_model(hav, 
+                  p=list(
+                    p_range=seq(-2,3,0.1),
+                    degree=2
+                  ), 
+                  monotonic=FALSE,
+                  link="cloglog")
+plot(model)
+# the best set of powers for this dataset is 1.5 and 1.6
+model$info
+```
+
+To restrict the parameters search such that the predictions are monotonic (thus ensuring the FOI to be $\lambda \geq 0$) set `monotonic=TRUE`
+
+```{r warning=FALSE}
+# ---- Best model with the monotonic constraint -----
+model <- fp_model(hav, 
+                  p=list(
+                    p_range=seq(-2,3,0.1),
+                    degree=2
+                  ), 
+                  monotonic=TRUE,
+                  link="cloglog")
+plot(model)
+# the best set of powers with the monotonic constraint is 0.5 and 1.1
+model$info
 ```
 
 ------------------------------------------------------------------------
@@ -312,3 +340,4 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 model$type
 plot(model)
 ```
+

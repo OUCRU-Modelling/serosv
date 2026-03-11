@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, output=FALSE}
+```{r setup, output=FALSE, warning=FALSE, message=FALSE}
 library(serosv)
 library(dplyr)
 library(magrittr)
@@ -49,9 +49,9 @@ It will then return a `data.frame` with the following columns
 
 **Sample usage**
 
-```{r}
+```{r message=FALSE}
 # ----- Return AIC, BIC ----- 
-compare_models(
+aic_bic_out <- compare_models(
   data = data %>% rename(status=seropositive),
   method = "AIC/BIC",
   griffith = ~polynomial_model(.x, k=3),
@@ -61,7 +61,7 @@ compare_models(
   ) %>% suppressWarnings()
 
 # ----- Return Cross-validation metrics ----- 
-compare_models(
+cv_out <- compare_models(
     data %>% rename(status=seropositive),
     method = "CV",
     griffith = ~polynomial_model(.x, k=3),
@@ -69,13 +69,16 @@ compare_models(
     farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
     local_polynomial = lp_model 
   ) %>% suppressWarnings()
+
+aic_bic_out
+cv_out
 ```
 
 With aggregated data
 
-```{r}
+```{r message=FALSE}
 # ----- Return AIC, BIC ----- 
-compare_models(
+aic_bic_out <- compare_models(
   data = aggregated,
   method = "AIC/BIC",
   griffith = ~polynomial_model(.x, k=3),
@@ -85,7 +88,7 @@ compare_models(
   ) %>% suppressWarnings()
 
 # ----- Return Cross-validation metrics ----- 
-compare_models(
+cv_out <- compare_models(
     data = aggregated,
     method = "CV",
     griffith = ~polynomial_model(.x, k=3),
@@ -93,4 +96,8 @@ compare_models(
     farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
     local_polynomial = lp_model 
   ) %>% suppressWarnings()
+
+
+aic_bic_out
+cv_out
 ```

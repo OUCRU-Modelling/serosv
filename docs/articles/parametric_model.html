@@ -201,25 +201,40 @@ a^{p_i} &amp; \text{ if } p_i \neq p_{i-1},
 \]</span></p>
 <p>Refer to <code>Chapter 6.2</code> of the book by <span class="citation">Hens et al. (<a href="#ref-Hens2012" role="doc-biblioref">2012</a>)</span> for a more detailed explanation of
 the methods.</p>
-<p><strong>Best power selection</strong></p>
-<p>Use <code><a href="../reference/find_best_fp_powers.html">find_best_fp_powers()</a></code> to find the powers which gives
-the lowest deviance score</p>
+<p><strong>Fitting data</strong></p>
+<p>Use <code><a href="../reference/fp_model.html">fp_model()</a></code> to fit a fractional polynomial model.</p>
+<p>The parameter <code>p</code> specifies the powers of each polynomial
+term (length of <code>p</code> is thus the model’s degree)</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hav</span> <span class="op">&lt;-</span> <span class="va">hav_be_1993_1994</span></span>
-<span><span class="va">best_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_best_fp_powers.html">find_best_fp_powers</a></span><span class="op">(</span></span>
-<span>  <span class="va">hav</span>,</span>
-<span>  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">0.1</span><span class="op">)</span>, mc<span class="op">=</span><span class="cn">FALSE</span>, degree<span class="op">=</span><span class="fl">2</span>, link<span class="op">=</span><span class="st">"cloglog"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">best_p</span></span>
-<span><span class="co">#&gt; $p</span></span>
-<span><span class="co">#&gt; [1] 1.5 1.6</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span><span class="va">hav</span>, p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.5</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="700"></p>
+<p>The users can also tell the package to perform parameter selection by
+providing <code>p</code> as a named list with 2 elements:</p>
+<ul>
+<li>
+<code>degree</code> the maximum number of terms to search over</li>
+</ul>
+<!-- --><ul>
+<li>
+<code>p_range</code> the possible powers for each term</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span><span class="va">hav</span>, </span>
+<span>                  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                    p_range<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>                    degree<span class="op">=</span><span class="fl">2</span></span>
+<span>                  <span class="op">)</span>, </span>
+<span>                  monotonic<span class="op">=</span><span class="cn">FALSE</span>,</span>
+<span>                  link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># the best set of powers for this dataset is 1.5 and 1.6</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">info</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $deviance</span></span>
-<span><span class="co">#&gt; [1] 81.60333</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $model</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:  glm(formula = as.formula(formulate(p_cur)), family = binomial(link = link))</span></span>
+<span><span class="co">#&gt; Call:  glm(formula = as.formula(formulate(curr_p)), family = binomial(link = link))</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt; (Intercept)   I(age^1.5)   I(age^1.6)  </span></span>
@@ -228,12 +243,33 @@ the lowest deviance score</p>
 <span><span class="co">#&gt; Degrees of Freedom: 85 Total (i.e. Null);  83 Residual</span></span>
 <span><span class="co">#&gt; Null Deviance:       1320 </span></span>
 <span><span class="co">#&gt; Residual Deviance: 81.6  AIC: 361.2</span></span></code></pre></div>
-<p><strong>Fitting data</strong></p>
-<p>Use <code><a href="../reference/fp_model.html">fp_model()</a></code> to fit a fractional polynomial model</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span><span class="va">hav</span>, p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.6</span><span class="op">)</span>, link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
+<p>To restrict the parameters search such that the predictions are
+monotonic (thus ensuring the FOI to be <span class="math inline">\(\lambda \geq 0\)</span>) set
+<code>monotonic=TRUE</code></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---- Best model with the monotonic constraint -----</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_model.html">fp_model</a></span><span class="op">(</span><span class="va">hav</span>, </span>
+<span>                  p<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                    p_range<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>                    degree<span class="op">=</span><span class="fl">2</span></span>
+<span>                  <span class="op">)</span>, </span>
+<span>                  monotonic<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>                  link<span class="op">=</span><span class="st">"cloglog"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="parametric_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># the best set of powers with the monotonic constraint is 0.5 and 1.1</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">info</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:  glm(formula = as.formula(formulate(curr_p)), family = binomial(link = link))</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt; (Intercept)   I(age^0.5)   I(age^1.1)  </span></span>
+<span><span class="co">#&gt;    -7.64170      1.67492     -0.05304  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Degrees of Freedom: 85 Total (i.e. Null);  83 Residual</span></span>
+<span><span class="co">#&gt; Null Deviance:       1320 </span></span>
+<span><span class="co">#&gt; Residual Deviance: 106   AIC: 385.5</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
@@ -266,13 +302,13 @@ the methods.</p>
 <p><strong>Fitting data</strong></p>
 <p>Use <code><a href="../reference/farrington_model.html">farrington_model()</a></code> to fit a
 <strong>Farrington</strong>’s model.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">farrington_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span></span>
 <span>   <span class="va">rubella_uk_1986_1987</span>,</span>
 <span>   start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span></span>
 <span>   <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">farrington_md</span><span class="op">)</span></span></code></pre></div>
-<p><img src="parametric_model_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="weibull-model">Weibull model<a class="anchor" aria-label="anchor" href="#weibull-model"></a>
@@ -297,12 +333,12 @@ the exposure time as followed</p>
 the methods.</p>
 <p><strong>Fitting data</strong></p>
 <p>Use <code><a href="../reference/weibull_model.html">weibull_model()</a></code> to fit a Weibull model.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hcv</span> <span class="op">&lt;-</span> <span class="va">hcv_be_2006</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">hcv_be_2006</span><span class="op">$</span><span class="va">dur</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="va">wb_md</span> <span class="op">&lt;-</span> <span class="va">hcv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/weibull_model.html">weibull_model</a></span><span class="op">(</span>t_lab <span class="op">=</span> <span class="st">"dur"</span>, status_col<span class="op">=</span><span class="st">"seropositive"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">wb_md</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="parametric_model_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
 </div>
 </div>
 </div>
@@ -382,7 +418,7 @@ parameters (<span class="math inline">\(\alpha_3 = 0\)</span>)</p></li>
 parameters (<span class="math inline">\(\alpha_3 &gt;
 0\)</span>)</p></li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">mumps_uk_1986_1987</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hierarchical_bayesian_model.html">hierarchical_bayesian_model</a></span><span class="op">(</span><span class="va">df</span>, type<span class="op">=</span><span class="st">"far3"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -391,8 +427,8 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span></span>
 <span><span class="co">#&gt; Chain 1:   Stan can't start sampling from this initial value.</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000168 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.68 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000159 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.59 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -409,9 +445,9 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 16.62 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                96.524 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                113.144 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 16.768 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                96.491 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                113.259 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
 <span><span class="co">#&gt; Warning: There were 288 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
@@ -467,7 +503,7 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; sigma_alpha3 0.9997146</span></span>
 <span><span class="co">#&gt; lp__         1.0215691</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="parametric_model_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="log-logistic">Log-logistic<a class="anchor" aria-label="anchor" href="#log-logistic"></a>
@@ -508,14 +544,14 @@ the method.</p>
 <p>To fit Log-logistic model, use
 <code><a href="../reference/hierarchical_bayesian_model.html">hierarchical_bayesian_model()</a></code> and define
 <code>type = "log_logistic"</code></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">rubella_uk_1986_1987</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hierarchical_bayesian_model.html">hierarchical_bayesian_model</a></span><span class="op">(</span><span class="va">df</span>, type<span class="op">=</span><span class="st">"log_logistic"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.1e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.7e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.67 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -532,9 +568,9 @@ the method.</p>
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.21 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                5.843 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                10.053 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.195 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                5.814 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                10.009 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
 <span><span class="co">#&gt; Warning: There were 583 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
@@ -550,7 +586,7 @@ the method.</p>
 <span><span class="va">model</span><span class="op">$</span><span class="va">type</span></span>
 <span><span class="co">#&gt; [1] "log_logistic"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="parametric_model_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="700"></p>
+<p><img src="parametric_model_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="700"></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-grenfell_estimation_1985" class="csl-entry">
 Grenfell, B. T., and R. M. Anderson. 1985. <span>“The Estimation of

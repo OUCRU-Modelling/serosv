@@ -3,22 +3,6 @@
 ``` r
 library(serosv)
 library(dplyr)
-```
-
-    ## Warning: package 'dplyr' was built under R version 4.3.1
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 library(magrittr)
 ```
 
@@ -85,25 +69,7 @@ cv_out <- compare_models(
     farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
     local_polynomial = lp_model 
   ) %>% suppressWarnings()
-```
 
-    ## Setting levels: control = 0, case = 1
-
-    ## Setting direction: controls > cases
-
-    ## Setting levels: control = 0, case = 1
-
-    ## Setting direction: controls < cases
-
-    ## Setting levels: control = 0, case = 1
-
-    ## Setting direction: controls < cases
-
-    ## Setting levels: control = 0, case = 1
-
-    ## Setting direction: controls < cases
-
-``` r
 aic_bic_out
 ```
 

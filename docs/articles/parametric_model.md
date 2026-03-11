@@ -130,28 +130,50 @@ H\_{i-1}(a) \times log(a) & \text{ if } p_i = p\_{i-1}, \end{cases} \\\]
 Refer to `Chapter 6.2` of the book by Hens et al.
 ([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
 
-**Best power selection**
+**Fitting data**
 
 Use
-[`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
-to find the powers which gives the lowest deviance score
+[`fp_model()`](https://oucru-modelling.github.io/serosv/reference/fp_model.md)
+to fit a fractional polynomial model.
+
+The parameter `p` specifies the powers of each polynomial term (length
+of `p` is thus the model’s degree)
 
 ``` r
 hav <- hav_be_1993_1994
-best_p <- find_best_fp_powers(
-  hav,
-  p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-)
-best_p
-#> $p
-#> [1] 1.5 1.6
+model <- fp_model(hav, p=c(1, 1.5), link="cloglog")
+plot(model)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-5-1.png)
+
+The users can also tell the package to perform parameter selection by
+providing `p` as a named list with 2 elements:
+
+- `degree` the maximum number of terms to search over
+
+&nbsp;
+
+- `p_range` the possible powers for each term
+
+``` r
+model <- fp_model(hav, 
+                  p=list(
+                    p_range=seq(-2,3,0.1),
+                    degree=2
+                  ), 
+                  monotonic=FALSE,
+                  link="cloglog")
+plot(model)
+```
+
+![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
+
+``` r
+# the best set of powers for this dataset is 1.5 and 1.6
+model$info
 #> 
-#> $deviance
-#> [1] 81.60333
-#> 
-#> $model
-#> 
-#> Call:  glm(formula = as.formula(formulate(p_cur)), family = binomial(link = link))
+#> Call:  glm(formula = as.formula(formulate(curr_p)), family = binomial(link = link))
 #> 
 #> Coefficients:
 #> (Intercept)   I(age^1.5)   I(age^1.6)  
@@ -162,18 +184,38 @@ best_p
 #> Residual Deviance: 81.6  AIC: 361.2
 ```
 
-**Fitting data**
-
-Use
-[`fp_model()`](https://oucru-modelling.github.io/serosv/reference/fp_model.md)
-to fit a fractional polynomial model
+To restrict the parameters search such that the predictions are
+monotonic (thus ensuring the FOI to be \\(\lambda \geq 0\\)) set
+`monotonic=TRUE`
 
 ``` r
-model <- fp_model(hav, p=c(1.5, 1.6), link="cloglog")
+# ---- Best model with the monotonic constraint -----
+model <- fp_model(hav, 
+                  p=list(
+                    p_range=seq(-2,3,0.1),
+                    degree=2
+                  ), 
+                  monotonic=TRUE,
+                  link="cloglog")
 plot(model)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-7-1.png)
+
+``` r
+# the best set of powers with the monotonic constraint is 0.5 and 1.1
+model$info
+#> 
+#> Call:  glm(formula = as.formula(formulate(curr_p)), family = binomial(link = link))
+#> 
+#> Coefficients:
+#> (Intercept)   I(age^0.5)   I(age^1.1)  
+#>    -7.64170      1.67492     -0.05304  
+#> 
+#> Degrees of Freedom: 85 Total (i.e. Null);  83 Residual
+#> Null Deviance:       1320 
+#> Residual Deviance: 106   AIC: 385.5
+```
 
 ------------------------------------------------------------------------
 
@@ -217,7 +259,7 @@ farrington_md <- farrington_model(
 plot(farrington_md)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-7-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
 
 #### Weibull model
 
@@ -256,7 +298,7 @@ wb_md <- hcv %>% weibull_model(t_lab = "dur", status_col="seropositive")
 plot(wb_md) 
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-9-1.png)
 
 ## Bayesian methods
 
@@ -342,8 +384,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000168 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.68 seconds.
+#> Chain 1: Gradient evaluation took 0.000159 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.59 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -360,9 +402,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 16.62 seconds (Warm-up)
-#> Chain 1:                96.524 seconds (Sampling)
-#> Chain 1:                113.144 seconds (Total)
+#> Chain 1:  Elapsed Time: 16.768 seconds (Warm-up)
+#> Chain 1:                96.491 seconds (Sampling)
+#> Chain 1:                113.259 seconds (Total)
 #> Chain 1:
 #> Warning: There were 288 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
@@ -420,7 +462,7 @@ model$info
 plot(model)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-9-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-10-1.png)
 
 ### Log-logistic
 
@@ -468,8 +510,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 6.1e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
+#> Chain 1: Gradient evaluation took 6.7e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.67 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -486,9 +528,9 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.21 seconds (Warm-up)
-#> Chain 1:                5.843 seconds (Sampling)
-#> Chain 1:                10.053 seconds (Total)
+#> Chain 1:  Elapsed Time: 4.195 seconds (Warm-up)
+#> Chain 1:                5.814 seconds (Sampling)
+#> Chain 1:                10.009 seconds (Total)
 #> Chain 1:
 #> Warning: There were 583 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
@@ -506,7 +548,7 @@ model$type
 plot(model)
 ```
 
-![](parametric_model_files/figure-html/unnamed-chunk-10-1.png)
+![](parametric_model_files/figure-html/unnamed-chunk-11-1.png)
 
 Grenfell, B. T., and R. M. Anderson. 1985. “The Estimation of
 Age-Related Rates of Infection from Case Notifications and Serological
