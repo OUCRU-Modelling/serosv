@@ -71,48 +71,50 @@ find_best_fp_powers <- function(data,
     # arrange by increasing order of power in first->second degree and so on
     p_combis <- p_combis[do.call(order,p_combis),,drop=FALSE]
 
-    # generate formulas for all the combinations of powers
-    # get model with lowest deviance
-    best_dev <- 1e8 # best deviance for current degree
-    curr_deg_mod <- NULL # best model for current degree
-    curr_deg_p <- NULL # best powers for current degree
+    # fit model with all the combinations of p and degree
+    mods <- p_combis %>%
+      pmap_dfr(\(...){
+        curr_p <- as.numeric(c(...))
 
-    for (row_id in 1:nrow(p_combis)){
-      curr_p <- as.numeric(p_combis[row_id,])
-      curr_mod <- glm(
-        as.formula(formulate(curr_p)),
-        family=binomial(link=link)
-      )
+        curr_mod <- glm(
+          as.formula(formulate(curr_p)),
+          family=binomial(link=link)
+        )
 
-      if(curr_mod$converged==TRUE){
-        curr_dev <- curr_mod$deviance
-        if (is.null(curr_deg_mod) || curr_dev < best_dev) {
-          # make sure to only accept monotone model if specified
-          if ((mc && is_monotone(curr_mod)) | !mc) {
-            best_dev <- curr_dev
-            curr_deg_mod <- curr_mod
-            curr_deg_p <- curr_p
-          }
-        }
-      }
-    }
+        # only accept the parameters if the model converged
+        if(curr_mod$converged==FALSE) return(NULL)
+
+        # only accept the parameters if the model is monotonic (if enforced)
+        if(mc && !is_monotone(curr_mod)) return(NULL)
+
+        tibble(
+          p = list(curr_p),
+          mod = list(curr_mod),
+          deviance = curr_mod$deviance
+        )
+      })
+
+    # handle scenario where no models converged at current degree
+    if(nrow(mods) == 0) next
+    # get the best model and powers for the current degree
+    best_idx <- which.min(mods$deviance)
+    curr_deg_mod <- mods[best_idx, ][["mod"]][[1]]
+    curr_deg_p <- mods[best_idx, ][["p"]][[1]]
 
     # check if the best model with current degree is better than the last degree
-    if(!is.null(curr_deg_mod)){
-      if(!is.null(best_mod)){
-        # perform LRT
-        lrt_out <- anova(best_mod, curr_deg_mod, test="LRT")
-        lrt_out <- as.data.frame(lrt_out)
+    if(!is.null(best_mod)){
+      # perform LRT
+      lrt_out <- anova(best_mod, curr_deg_mod, test="LRT")
+      lrt_out <- as.data.frame(lrt_out)
 
-        # Royston&Altman (1994) suggests significance level of 0.1
-        if(lrt_out$`Pr(>Chi)`[2] < 0.1){
-          best_mod <- curr_deg_mod
-          best_p <- curr_deg_p
-        }
-      }else{
+      # Royston&Altman (1994) suggests significance level of 0.1
+      if(!is.na(lrt_out$`Pr(>Chi)`[2]) && lrt_out$`Pr(>Chi)`[2] < 0.1){
         best_mod <- curr_deg_mod
         best_p <- curr_deg_p
       }
+    }else{
+      best_mod <- curr_deg_mod
+      best_p <- curr_deg_p
     }
   }
 
