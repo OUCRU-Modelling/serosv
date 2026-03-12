@@ -2,6 +2,7 @@
 
 ``` r
 library(serosv)
+library(magrittr)
 ```
 
 ## Local estimation by polynomial
@@ -49,10 +50,42 @@ detailed explanation of the method.
 mump <- mumps_uk_1986_1987
 ```
 
-Use
+To fit a local estimation by polynomials, use
+[`lp_model()`](https://oucru-modelling.github.io/serosv/reference/lp_model.md)
+function.
+
+``` r
+lp <- lp_model(mump, kern="tcub", nn = 0.5, deg=2)
+plot(lp)
+```
+
+![](nonparametric_model_files/figure-html/unnamed-chunk-3-1.png)
+
+The users can also provide `h` or `nn` as a numeric vector, in which
+case the package will use the parameter value that minimize the
+generalized cross-validation (GCV) criterion.
+
+``` r
+# ----- Tune nearest neighbor (nn) parameter
+lp_model(mump, kern="tcub", nn = seq(0.2, 0.8, 0.1), deg=2) %>% 
+  plot()
+```
+
+![](nonparametric_model_files/figure-html/unnamed-chunk-4-1.png)
+
+``` r
+
+# ----- Tune bandwidth (h) parameter
+lp_model(mump, kern="tcub", h = seq(5,25), deg=2) %>% 
+  plot()
+```
+
+![](nonparametric_model_files/figure-html/unnamed-chunk-4-2.png)
+
+Alternatively, use
 [`plot_gcv()`](https://oucru-modelling.github.io/serosv/reference/plot_gcv.md)
 to show GCV curves for the nearest neighbor method (left) and constant
-bandwidth (right).
+bandwidth (right) for manual parameter selection.
 
 ``` r
 plot_gcv(
@@ -62,18 +95,25 @@ plot_gcv(
  )
 ```
 
-![](nonparametric_model_files/figure-html/unnamed-chunk-3-1.png)
+![](nonparametric_model_files/figure-html/unnamed-chunk-5-1.png)
 
-Use
-[`lp_model()`](https://oucru-modelling.github.io/serosv/reference/lp_model.md)
-to fit a local estimation by polynomials.
+Based on the plot, we can then fit the model using the parameter value
+that give the lowest GCV (`nn = 0.3` and `h = 14`)
 
 ``` r
-lp <- lp_model(mump, kern="tcub", nn=0.7, deg=2)
-plot(lp)
+lp_model(mump, kern="tcub", nn = 0.3, deg=2) %>% 
+  plot()
 ```
 
-![](nonparametric_model_files/figure-html/unnamed-chunk-4-1.png)
+![](nonparametric_model_files/figure-html/unnamed-chunk-6-1.png)
+
+``` r
+
+lp_model(mump, kern="tcub", h = 14, deg=2)  %>% 
+  plot()
+```
+
+![](nonparametric_model_files/figure-html/unnamed-chunk-6-2.png)
 
 Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
 Philippe Beutels. 2012. *Modeling Infectious Disease Parameters Based on

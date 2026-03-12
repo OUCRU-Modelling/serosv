@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -66,7 +66,7 @@ To fit a polynomial model, use the `polynomial_model()` function.
 
 ```{r}
 # Fit a Muench model
-muench <- polynomial_model(data, k = 1, status_col = "seropositive")
+muench <- polynomial_model(data, k = 1, status_col="seropositive")
 summary(muench$info)
 plot(muench) 
 ```
@@ -120,10 +120,6 @@ plot(model)
 The users can also tell the package to perform parameter selection by providing `p` as a named list with 2 elements:
 
 -   `degree` the maximum number of terms to search over
-
-```{=html}
-<!-- -->
-```
 -   `p_range` the possible powers for each term
 
 ```{r, warning=FALSE}
@@ -340,4 +336,3 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 model$type
 plot(model)
 ```
-

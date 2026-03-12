@@ -56,7 +56,7 @@ function.
 
 ``` r
 # Fit a Muench model
-muench <- polynomial_model(data, k = 1, status_col = "seropositive")
+muench <- polynomial_model(data, k = 1, status_col="seropositive")
 summary(muench$info)
 #> 
 #> Call:
@@ -151,9 +151,6 @@ The users can also tell the package to perform parameter selection by
 providing `p` as a named list with 2 elements:
 
 - `degree` the maximum number of terms to search over
-
-&nbsp;
-
 - `p_range` the possible powers for each term
 
 ``` r
@@ -384,8 +381,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000159 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.59 seconds.
+#> Chain 1: Gradient evaluation took 0.000163 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.63 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -402,9 +399,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 16.768 seconds (Warm-up)
-#> Chain 1:                96.491 seconds (Sampling)
-#> Chain 1:                113.259 seconds (Total)
+#> Chain 1:  Elapsed Time: 16.671 seconds (Warm-up)
+#> Chain 1:                96.284 seconds (Sampling)
+#> Chain 1:                112.955 seconds (Total)
 #> Chain 1:
 #> Warning: There were 288 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
@@ -510,8 +507,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 6.7e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.67 seconds.
+#> Chain 1: Gradient evaluation took 6.6e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.66 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -528,9 +525,9 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.195 seconds (Warm-up)
-#> Chain 1:                5.814 seconds (Sampling)
-#> Chain 1:                10.009 seconds (Total)
+#> Chain 1:  Elapsed Time: 4.183 seconds (Warm-up)
+#> Chain 1:                5.808 seconds (Sampling)
+#> Chain 1:                9.991 seconds (Total)
 #> Chain 1:
 #> Warning: There were 583 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup

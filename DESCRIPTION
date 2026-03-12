@@ -71,6 +71,7 @@ Collate:
     'compute_ci.R'
     'age_time_model.R'
     'predict.R'
+    'print.R'
 Config/testthat/edition: 3
 URL: https://oucru-modelling.github.io/serosv/, https://github.com/OUCRU-Modelling/serosv
 VignetteBuilder: knitr

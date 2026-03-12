@@ -77,10 +77,11 @@
 #' @export
 lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
                      age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
-  if (missing(nn) & missing(h)) {
-    nn <- 0.7 # default nn from lp()
+  if (all(nn==0) & all(h==0))  {
+    # default nn from lp()
+    nn <- 0.7
+    h <- 0
   }
-
   model <- list()
 
   # check input whether it is line-listing or aggregated data
@@ -91,7 +92,25 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   model$datatype <- data$type
 
   y <- pos/tot
-  # estimator <- lp(age, deg=deg, nn=nn, h=h)
+
+  if(length(nn) > 1 & length(h) > 1) stop("Tuning both `h` and `nn` may lead to parameter idenfifiability issues, please fix one of the parameters instead")
+
+  if(length(nn) > 1 || length(h)>1){
+    best_param <- best_lp_params(
+      data=data,
+      nn = nn,
+      h = h,
+      family="binomial",
+      kern=kern
+    )
+
+    nn <- best_param$nn
+    h <- best_param$h
+  }
+
+  # print(paste0("nn: ", nn))
+  # print(paste0("h: ", h))
+
   model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern)
   model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1)
   model$sp  <- fitted(model$info)
@@ -101,3 +120,57 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   class(model) <- "lp_model"
   model
 }
+
+# function to return the best parameter of local polynomial model using GCV
+# nn - range of values for nearest neighbor
+# h - range of values for constant bandwidth
+# if both nn and h are given, select either best nn or h, whichever gives the lowest GCV
+#' @import purrr tidyr dplyr locfit
+best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial"){
+  # helper function to get df and GCV
+  summary.gcvplot <- function(object, ...){
+    z <- cbind(object$df, object$values)
+    dimnames(z) <- list(NULL, c("df", object$cri))
+    z
+  }
+
+  # helper function which return parameter value which gives the lowest gcv
+  get_best_gcv <- function(nn_vals=0, h_vals=0){
+    is_nn <- length(nn_vals) > 1 # check if we are tuning for nn or h
+    par_vals <- if (is_nn) nn_vals else h_vals
+    # generate parameters matrix
+    alpha <-
+      if (is_nn)
+        cbind(nn_vals, rep(h_vals, length(nn_vals)))
+      else
+        cbind(rep(nn_vals, length(h_vals)), h_vals)
+
+    # compute gcv
+    gcv_out <- gcvplot(
+      pos / tot ~ age,
+      deg = deg,
+      kern = kern,
+      family = family,
+      alpha = alpha,
+      data=data
+    )
+
+    gcv_out <- cbind(par_vals, gcv_out$values)
+    best_idx <- which.min(gcv_out[,2])
+
+    c(
+      gcv_out[best_idx, 1],
+      gcv_out[best_idx, 2]
+    )
+  }
+
+  res <- list()
+
+  if(length(nn) > 1 & length(h) > 1) stop("Tuning both `h` and `nn` may lead to parameter idenfifiability issues, please fix one of the parameters instead")
+  if(length(nn) > 1) res[c("h", "nn", "nn_gcv")] <- c(h, get_best_gcv(nn_vals=nn, h_vals=h))
+  if(length(h) > 1) res[c("nn", "h", "h_gcv")] <- c(nn, get_best_gcv(nn_vals=nn, h_vals=h))
+
+  res
+}
+
+

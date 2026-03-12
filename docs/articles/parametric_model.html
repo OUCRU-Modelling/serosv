@@ -134,7 +134,7 @@ for this example.</p>
 function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit a Muench model</span></span>
-<span><span class="va">muench</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, k <span class="op">=</span> <span class="fl">1</span>, status_col <span class="op">=</span> <span class="st">"seropositive"</span><span class="op">)</span></span>
+<span><span class="va">muench</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">data</span>, k <span class="op">=</span> <span class="fl">1</span>, status_col<span class="op">=</span><span class="st">"seropositive"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">muench</span><span class="op">$</span><span class="va">info</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -215,8 +215,6 @@ providing <code>p</code> as a named list with 2 elements:</p>
 <ul>
 <li>
 <code>degree</code> the maximum number of terms to search over</li>
-</ul>
-<!-- --><ul>
 <li>
 <code>p_range</code> the possible powers for each term</li>
 </ul>
@@ -427,8 +425,8 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span></span>
 <span><span class="co">#&gt; Chain 1:   Stan can't start sampling from this initial value.</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000159 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.59 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000163 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.63 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -445,9 +443,9 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 16.768 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                96.491 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                113.259 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 16.671 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                96.284 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                112.955 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
 <span><span class="co">#&gt; Warning: There were 288 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>
@@ -550,8 +548,8 @@ the method.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.7e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.67 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.6e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.66 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -568,9 +566,9 @@ the method.</p>
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.195 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                5.814 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                10.009 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.183 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                5.808 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                9.991 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span>
 <span><span class="co">#&gt; Warning: There were 583 divergent transitions after warmup. See</span></span>
 <span><span class="co">#&gt; https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></span>

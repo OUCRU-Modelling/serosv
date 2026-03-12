@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, output=FALSE}
 library(serosv)
+library(magrittr)
 ```
 
 ## Local estimation by polynomial
@@ -61,7 +62,34 @@ Refer to `Chapter 7.1` of the book by @Hens2012 for a more detailed explanation 
 mump <- mumps_uk_1986_1987
 ```
 
-Use `plot_gcv()` to show GCV curves for the nearest neighbor method (left) and constant bandwidth (right).
+To fit a local estimation by polynomials, use `lp_model()` function with model parameters include:
+
+-   `nn` the number of nearest neighbors to be included in the approximation (i.e., the nearest neighbor component of the smoothing parameter)
+
+-   `h` the constant component of the smoothing parameter
+
+-   `deg` the degree of the polynomial
+
+-   `kern` the type of kernel
+
+```{r}
+lp <- lp_model(mump, kern="tcub", nn = 0.5, deg=2)
+plot(lp)
+```
+
+The users can also provide `h` or `nn` as a numeric vector, in which case the package will use the parameter value that minimize the generalized cross-validation (GCV) criterion.
+
+```{r}
+# ----- Tune nearest neighbor (nn) parameter
+lp_model(mump, kern="tcub", nn = seq(0.2, 0.8, 0.1), deg=2) %>% 
+  plot()
+
+# ----- Tune bandwidth (h) parameter
+lp_model(mump, kern="tcub", h = seq(5,25), deg=2) %>% 
+  plot()
+```
+
+Alternatively, use `plot_gcv()` to show GCV curves for the nearest neighbor method (left) and constant bandwidth (right) for manual parameter selection.
 
 ```{r, fig.width=7, fig.height=3}
 plot_gcv(
@@ -71,9 +99,12 @@ plot_gcv(
  )
 ```
 
-Use `lp_model()` to fit a local estimation by polynomials.
+Based on the plot, we can then fit the model using the parameter value that give the lowest GCV (`nn = 0.3` and `h = 14`)
 
 ```{r}
-lp <- lp_model(mump, kern="tcub", nn=0.7, deg=2)
-plot(lp)
+lp_model(mump, kern="tcub", nn = 0.3, deg=2) %>% 
+  plot()
+
+lp_model(mump, kern="tcub", h = 14, deg=2)  %>% 
+  plot()
 ```

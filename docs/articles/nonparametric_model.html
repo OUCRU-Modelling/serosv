@@ -88,7 +88,8 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oucru-modelling.github.io/serosv/">serosv</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="local-estimation-by-polynomial">Local estimation by polynomial<a class="anchor" aria-label="anchor" href="#local-estimation-by-polynomial"></a>
 </h2>
@@ -133,21 +134,48 @@ explanation of the method.</p>
 <p><strong>Fitting data</strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mump</span> <span class="op">&lt;-</span> <span class="va">mumps_uk_1986_1987</span></span></code></pre></div>
-<p>Use <code><a href="../reference/plot_gcv.html">plot_gcv()</a></code> to show GCV curves for the nearest
-neighbor method (left) and constant bandwidth (right).</p>
+<p>To fit a local estimation by polynomials, use <code><a href="../reference/lp_model.html">lp_model()</a></code>
+function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn <span class="op">=</span> <span class="fl">0.5</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
+<p>The users can also provide <code>h</code> or <code>nn</code> as a
+numeric vector, in which case the package will use the parameter value
+that minimize the generalized cross-validation (GCV) criterion.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ----- Tune nearest neighbor (nn) parameter</span></span>
+<span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span><span class="op">)</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># ----- Tune bandwidth (h) parameter</span></span>
+<span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">25</span><span class="op">)</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" width="700"></p>
+<p>Alternatively, use <code><a href="../reference/plot_gcv.html">plot_gcv()</a></code> to show GCV curves for the
+nearest neighbor method (left) and constant bandwidth (right) for manual
+parameter selection.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_gcv.html">plot_gcv</a></span><span class="op">(</span></span>
 <span>   <span class="va">mump</span><span class="op">$</span><span class="va">age</span>, <span class="va">mump</span><span class="op">$</span><span class="va">pos</span>, <span class="va">mump</span><span class="op">$</span><span class="va">tot</span>,</span>
 <span>   nn_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span>, by<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>   h_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">25</span>, by<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span> <span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="672"></p>
-<p>Use <code><a href="../reference/lp_model.html">lp_model()</a></code> to fit a local estimation by
-polynomials.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn<span class="op">=</span><span class="fl">0.7</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="672"></p>
+<p>Based on the plot, we can then fit the model using the parameter
+value that give the lowest GCV (<code>nn = 0.3</code> and
+<code>h = 14</code>)</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn <span class="op">=</span> <span class="fl">0.3</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, h <span class="op">=</span> <span class="fl">14</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" width="700"></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Hens2012" class="csl-entry">
 Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
