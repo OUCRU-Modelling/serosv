@@ -6,7 +6,7 @@
 #' @param ci confidence interval for the titer estimates
 #' @param negative_control if TRUE, output tibble will include the result for negative controls
 #' @importFrom magrittr %>%
-#' @import dplyr purrr
+#' @import dplyr
 #'
 #' @return a data.frame with 8 columns
 #'   \item{plate_id}{id of the plate}
@@ -293,7 +293,7 @@ plot_standard_curve <- function(x, facet=TRUE,
 #' @param shift_text adjust how much the text is shifted along the x-axis (relative to the threshold line)
 #'
 #' @importFrom magrittr %>%
-#' @import ggplot2 dplyr purrr
+#' @import ggplot2 dplyr
 #'
 #' @export
 add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
@@ -333,7 +333,7 @@ add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
 #' @param n_dilutions - number of dilutions used for testing
 #'
 #' @importFrom magrittr %>%
-#' @import ggplot2 dplyr purrr
+#' @import ggplot2 dplyr
 #'
 #' @export
 plot_titer_qc <- function(x, n_plates=18, n_samples=22, n_dilutions = 3){

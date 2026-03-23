@@ -78,26 +78,26 @@ a list of class polynomial_model with 5 items
 
 The seroprevalence is assumed to follow the general format \$\$ \pi(a) =
 1 - e^{-\Sigma\_{i=1}^k \beta_i a^i} \$\$ Which implies the force of
-infection to be \\(\lambda(a) = \Sigma\_{i=1}^k \beta_i i a^{i-1}\\)
+infection to be \\\lambda(a) = \Sigma\_{i=1}^k \beta_i i a^{i-1}\\
 
 Where:
 
-\- \\(\pi\\) is the seroprevalence at age \\(a\\)
+\- \\\pi\\ is the seroprevalence at age \\a\\
 
-\- \\(a\\) is the variable age
+\- \\a\\ is the variable age
 
-\- \\(k\\) is the degree of the polynomial
+\- \\k\\ is the degree of the polynomial
 
-The seroprevalence \\(\pi(a)\\) is fitted using a GLM with log link with
-the linear predictor \\(\eta(a) = \Sigma\_{i=1}^k \beta_i a^{i}\\)
+The seroprevalence \\\pi(a)\\ is fitted using a GLM with log link with
+the linear predictor \\\eta(a) = \Sigma\_{i=1}^k \beta_i a^{i}\\
 
-Muench (1934) model is equivalent to a degree 1 (\\(k=1\\)) linear
+Muench (1934) model is equivalent to a degree 1 (\\k=1\\) linear
 predictor
 
-Griffith model is equivalent to a degree 2 (\\(k=2\\)) linear predictor
+Griffith model is equivalent to a degree 2 (\\k=2\\) linear predictor
 
-Grenfell & Anderson (1985) suggested a higher order polynomials (\\(k
-\geq 3\\))
+Grenfell & Anderson (1985) suggested a higher order polynomials (\\k
+\geq 3\\)
 
 Refer to section 6.1.1. of the the book by Hens et al. (2012) for
 further details.

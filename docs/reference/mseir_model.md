@@ -48,25 +48,25 @@ list of class mseir_model with the following parameters
 Follow the MSEIR described in the book by Hens et al. (section 3.5.1.)
 
 The model is described by the following system of equations \$\$
-\begin{cases} \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\\\
-\frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\\\
-\frac{dE(a)}{da} = \lambda(a) S(a) - (\sigma + \mu(a)) E(a) \\\\
-\frac{dI(a)}{da} = \sigma(a) E(a) - (\nu + \mu(a)) I(a) \\\\
+\begin{cases} \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\
+\frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\
+\frac{dE(a)}{da} = \lambda(a) S(a) - (\sigma + \mu(a)) E(a) \\
+\frac{dI(a)}{da} = \sigma(a) E(a) - (\nu + \mu(a)) I(a) \\
 \frac{dR(a)}{da} = \nu I(a) - \mu(a) R(a) \end{cases} \$\$
 
 Where:
 
-\- \\(M(0)\\) = B, the number of births in the population
+\- \\M(0)\\ = B, the number of births in the population
 
-\- \\(\gamma\\) is the rate of antibody decaying
+\- \\\gamma\\ is the rate of antibody decaying
 
-\- \\(\lambda(a)\\) is the force of infection at age \\(a\\)
+\- \\\lambda(a)\\ is the force of infection at age \\a\\
 
-\- \\(\mu(a)\\) is the natural death rate at age \\(a\\)
+\- \\\mu(a)\\ is the natural death rate at age \\a\\
 
-\- \\(\sigma\\) is the rate of becoming infected after being exposed
+\- \\\sigma\\ is the rate of becoming infected after being exposed
 
-\- \\(\nu\\) is the recovery rate
+\- \\\nu\\ is the recovery rate
 
 ## References
 

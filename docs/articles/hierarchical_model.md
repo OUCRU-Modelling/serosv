@@ -10,20 +10,20 @@ Currently, `serosv` only has models under parametric Bayesian framework
 
 **Proposed approach**
 
-Prevalence has a parametric form $\pi\left( a_{i},\alpha \right)$ where
-$\alpha$ is a parameter vector
+Prevalence has a parametric form $`\pi(a_i, \alpha)`$ where $`\alpha`$
+is a parameter vector
 
 One can constraint the parameter space of the prior distribution
-$P(\alpha)$ in order to achieve the desired monotonicity of the
-posterior distribution $P\left( \pi_{1},\pi_{2},...,\pi_{m}|y,n \right)$
+$`P(\alpha)`$ in order to achieve the desired monotonicity of the
+posterior distribution $`P(\pi_1, \pi_2, ..., \pi_m|y,n)`$
 
 Where:
 
-- $n = \left( n_{1},n_{2},...,n_{m} \right)$ and $n_{i}$ is the sample
-  size at age $a_{i}$
+- $`n = (n_1, n_2, ..., n_m)`$ and $`n_i`$ is the sample size at age
+  $`a_i`$
 
-- $y = \left( y_{1},y_{2},...,y_{m} \right)$ and $y_{i}$ is the number
-  of infected individual from the $n_{i}$ sampled subjects
+- $`y = (y_1, y_2, ..., y_m)`$ and $`y_i`$ is the number of infected
+  individual from the $`n_i`$ sampled subjects
 
 ### Farrington
 
@@ -33,33 +33,48 @@ Refer to `Chapter 10.3.1`
 
 The model for prevalence is as followed
 
-$$\pi(a) = 1 - exp\{\frac{\alpha_{1}}{\alpha_{2}}ae^{- \alpha_{2}a} + \frac{1}{\alpha_{2}}\left( \frac{\alpha_{1}}{\alpha_{2}} - \alpha_{3} \right)\left( e^{- \alpha_{2}a} - 1 \right) - \alpha_{3}a\}$$
+``` math
+
+\pi (a) = 1 - exp\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} + \frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2 a} - 1) -\alpha_3 a \}
+```
 
 For likelihood model, independent binomial distribution are assumed for
-the number of infected individuals at age $a_{i}$
+the number of infected individuals at age $`a_i`$
 
-$$y_{i} \sim Bin\left( n_{i},\pi_{i} \right),{\mspace{6mu}\text{for}\mspace{6mu}}i = 1,2,3,...m$$
+``` math
+
+y_i \sim Bin(n_i, \pi_i), \text{  for } i = 1,2,3,...m
+```
 
 The constraint on the parameter space can be incorporated by assuming
-truncated normal distribution for the components of $\alpha$,
-$\alpha = \left( \alpha_{1},\alpha_{2},\alpha_{3} \right)$ in
-$\pi_{i} = \pi\left( a_{i},\alpha \right)$
+truncated normal distribution for the components of $`\alpha`$,
+$`\alpha = (\alpha_1, \alpha_2, \alpha_3)`$ in
+$`\pi_i = \pi(a_i,\alpha)`$
 
-$$\alpha_{j} \sim {\text{truncated}\mspace{6mu}}\mathcal{N}\left( \mu_{j},\tau_{j} \right),{\mspace{6mu}\mspace{6mu}}j = 1,2,3$$
+``` math
 
-The joint posterior distribution for $\alpha$ can be derived by
+\alpha_j \sim \text{truncated  } \mathcal{N}(\mu_j, \tau_j), \text{ } j = 1,2,3
+```
+
+The joint posterior distribution for $`\alpha`$ can be derived by
 combining the likelihood and prior as followed
 
-$$P\left( \alpha|y \right) \propto \prod\limits_{i = 1}^{m}\text{Bin}\left( y_{i}|n_{i},\pi\left( a_{i},\alpha \right) \right)\prod\limits_{i = 1}^{3} - \frac{1}{\tau_{j}}\text{exp}\left( \frac{1}{2\tau_{j}^{2}}\left( \alpha_{j} - \mu_{j} \right)^{2} \right)$$
+``` math
+
+P(\alpha|y) \propto \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha)) \prod^3_{i=1}-\frac{1}{\tau_j}\text{exp}(\frac{1}{2\tau^2_j} (\alpha_j - \mu_j)^2)
+```
 
 - Where the flat hyperprior distribution is defined as followed:
 
-  - $\mu_{j} \sim \mathcal{N}(0,10000)$
+  - $`\mu_j \sim \mathcal{N}(0, 10000)`$
 
-  - $\tau_{j}^{- 2} \sim \Gamma(100,100)$
+  - $`\tau^{-2}_j \sim \Gamma(100,100)`$
 
-The full conditional distribution of $\alpha_{i}$ is thus
-$$P\left( \alpha_{i}|\alpha_{j},\alpha_{k},k,j \neq i \right) \propto - \frac{1}{\tau_{i}}\text{exp}\left( \frac{1}{2\tau_{i}^{2}}\left( \alpha_{i} - \mu_{i} \right)^{2} \right)\prod\limits_{i = 1}^{m}\text{Bin}\left( y_{i}|n_{i},\pi\left( a_{i},\alpha \right) \right)$$
+The full conditional distribution of $`\alpha_i`$ is thus
+``` math
+
+P(\alpha_i|\alpha_j,\alpha_k, k, j \neq i) \propto  -\frac{1}{\tau_i}\text{exp}(\frac{1}{2\tau^2_i} (\alpha_i - \mu_i)^2) \prod^m_{i=1} \text{Bin}(y_i|n_i, \pi(a_i, \alpha))
+```
 
 **Fitting data**
 
@@ -68,10 +83,10 @@ To fit Farrington model, use
 and define `type = "far2"` or `type = "far3"` where
 
 - `type = "far2"` refers to Farrington model with 2 parameters
-  ($\alpha_{3} = 0$)
+  ($`\alpha_3 = 0`$)
 
 - `type = "far3"` refers to Farrington model with 3 parameters
-  ($\alpha_{3} > 0$)
+  ($`\alpha_3 > 0`$)
 
 ``` r
 df <- mumps_uk_1986_1987
@@ -168,27 +183,37 @@ plot(model)
 
 The model for seroprevalence is as followed
 
-$$\pi(a) = \frac{\beta a^{\alpha}}{1 + \beta a^{\alpha}},{\mspace{6mu}\mspace{6mu}}\alpha,\beta > 0$$
+``` math
+
+\pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ } \alpha, \beta > 0
+```
 
 The likelihood is specified to be the same as Farrington model
-($y_{i} \sim Bin\left( n_{i},\pi_{i} \right)$) with
+($`y_i \sim Bin(n_i, \pi_i)`$) with
 
-$$\text{logit}\left( \pi(a) \right) = \alpha_{2} + \alpha_{1}\log(a)$$
+``` math
 
-- Where $\alpha_{2} = \text{log}(\beta)$
+\text{logit}(\pi(a)) = \alpha_2 + \alpha_1\log(a)
+```
 
-The prior model of $\alpha_{1}$ is specified as
-$\alpha_{1} \sim {\text{truncated}\mspace{6mu}}\mathcal{N}\left( \mu_{1},\tau_{1} \right)$
-with flat hyperprior as in Farrington model
+- Where $`\alpha_2 = \text{log}(\beta)`$
 
-$\beta$ is constrained to be positive by specifying
-$\alpha_{2} \sim \mathcal{N}\left( \mu_{2},\tau_{2} \right)$
+The prior model of $`\alpha_1`$ is specified as
+$`\alpha_1 \sim \text{truncated  } \mathcal{N}(\mu_1, \tau_1)`$ with
+flat hyperprior as in Farrington model
 
-The full conditional distribution of $\alpha_{1}$ is thus
+$`\beta`$ is constrained to be positive by specifying
+$`\alpha_2 \sim \mathcal{N}(\mu_2, \tau_2)`$
 
-$$P\left( \alpha_{1}|\alpha_{2} \right) \propto - \frac{1}{\tau_{1}}\text{exp}\left( \frac{1}{2\tau_{1}^{2}}\left( \alpha_{1} - \mu_{1} \right)^{2} \right)\prod\limits_{i = 1}^{m}\text{Bin}\left( y_{i}|n_{i},\pi\left( a_{i},\alpha_{1},\alpha_{2} \right) \right)$$
+The full conditional distribution of $`\alpha_1`$ is thus
 
-And $\alpha_{2}$ can be derived in the same way
+``` math
+
+P(\alpha_1|\alpha_2) \propto -\frac{1}{\tau_1} \text{exp} (\frac{1}{2 \tau_1^2} (\alpha_1 - \mu_1)^2)
+\prod_{i=1}^m \text{Bin}(y_i|n_i,\pi(a_i, \alpha_1, \alpha_2) )
+```
+
+And $`\alpha_2`$ can be derived in the same way
 
 **Fitting data**
 

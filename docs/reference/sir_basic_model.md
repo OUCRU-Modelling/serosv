@@ -68,24 +68,22 @@ the individual) then transfer to infected class and recovered class
 The model is described by a system of 3 differential equations
 
 \$\$ \begin{cases} \frac{dS(t)}{dt} = B(t) (1-p) - \lambda(t)S(t) - \mu
-S(t) \\\\ \frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) -
-\alpha I(t) \\\\ \frac{dR(t)}{dt} = B(t) p + \nu I(t) - \mu R(t)
-\end{cases} \$\$
+S(t) \\ \frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) - \alpha
+I(t) \\ \frac{dR(t)}{dt} = B(t) p + \nu I(t) - \mu R(t) \end{cases} \$\$
 
 Where:
 
-\- \\(B(t) = \mu N(t)\\)
+\- \\B(t) = \mu N(t)\\
 
-\- \\(\lambda(t) = \beta I(t)\\) with \\(\beta\\) is the transmission
-rate
+\- \\\lambda(t) = \beta I(t)\\ with \\\beta\\ is the transmission rate
 
-\- \\(\mu\\) is the natural death rate
+\- \\\mu\\ is the natural death rate
 
-\- \\(\nu\\) is the recovery rate
+\- \\\nu\\ is the recovery rate
 
-\- \\(\alpha\\) is the disease related death rate
+\- \\\alpha\\ is the disease related death rate
 
-\- \\(p\\) is the proportion of newborn vaccinated and moved directly to
+\- \\p\\ is the proportion of newborn vaccinated and moved directly to
 the recovered compartment
 
 ## References

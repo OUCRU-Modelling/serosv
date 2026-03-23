@@ -195,6 +195,7 @@ estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, 
 
   # save fitted df
   model$df <- data.frame(age = age, antibody_level = antibody_level)
+  model$monotonize <- monotonize
 
   if (!is.null(threshold_status)){
     model$df[["threshold_status"]] <- threshold_status

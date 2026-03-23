@@ -60,18 +60,18 @@ Assumptions:
 
 The model is described by a system of 3 differential equations
 
-\$\$ \begin{cases} \frac{ds(a)}{da} = -\lambda s(a) \\\\
-\frac{di(a)}{da} = \lambda s(a) - \nu i(a) \\\\ \frac{dr(a)}{da} = \nu
-i(a) \end{cases} \$\$
+\$\$ \begin{cases} \frac{ds(a)}{da} = -\lambda s(a) \\ \frac{di(a)}{da}
+= \lambda s(a) - \nu i(a) \\ \frac{dr(a)}{da} = \nu i(a) \end{cases}
+\$\$
 
 Where:
 
-\- \\(s(a), i(a), r(a)\\) are proportion of susceptible, infected,
-recovered population of age group \\(a\\) respectively
+\- \\s(a), i(a), r(a)\\ are proportion of susceptible, infected,
+recovered population of age group \\a\\ respectively
 
-\- \\(\lambda\\) is the force of infection
+\- \\\lambda\\ is the force of infection
 
-\- \\(\nu\\) is the recovery rate
+\- \\\nu\\ is the recovery rate
 
 ## References
 

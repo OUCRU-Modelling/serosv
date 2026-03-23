@@ -22,20 +22,18 @@ With the following assumptions:
 
 And described by a system of 3 differential equations
 
-\\\[ \begin{cases} \frac{dS(t)}{dt} = B(t) (1-p) - \lambda(t)S(t) - \mu
-S(t) \\\\ \frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) -
-\alpha I(t) \\\\ \frac{dR(t)}{dt} = B(t) p + \nu I(t) - \mu R(t)
-\end{cases} \\\]
+\\ \begin{cases} \frac{dS(t)}{dt} = B(t) (1-p) - \lambda(t)S(t) - \mu
+S(t) \\ \frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) - \alpha
+I(t) \\ \frac{dR(t)}{dt} = B(t) p + \nu I(t) - \mu R(t) \end{cases} \\
 
 Where:
 
-- \\(B(t) = \mu N(t)\\)
-- \\(\lambda(t) = \beta I(t)\\) with \\(\beta\\) is the transmission
-  rate
-- \\(\mu\\) is the natural death rate
-- \\(\nu\\) is the recovery rate
-- \\(\alpha\\) is the disease related death rate
-- \\(p\\) is the proportion of newborn vaccinated and moved directly to
+- \\B(t) = \mu N(t)\\
+- \\\lambda(t) = \beta I(t)\\ with \\\beta\\ is the transmission rate
+- \\\mu\\ is the natural death rate
+- \\\nu\\ is the recovery rate
+- \\\alpha\\ is the disease related death rate
+- \\p\\ is the proportion of newborn vaccinated and moved directly to
   the recovered compartment
 
 **Simulating data**
@@ -84,16 +82,15 @@ With the following assumptions:
 
 Described by a system of 3 differential equations
 
-\\\[ \begin{cases} \frac{ds(a)}{da} = -\lambda s(a) \\\\
-\frac{di(a)}{da} = \lambda s(a) - \nu i(a) \\\\ \frac{dr(a)}{da} = \nu
-i(a) \end{cases} \\\]
+\\ \begin{cases} \frac{ds(a)}{da} = -\lambda s(a) \\ \frac{di(a)}{da} =
+\lambda s(a) - \nu i(a) \\ \frac{dr(a)}{da} = \nu i(a) \end{cases} \\
 
 Where:
 
-- \\(s(a), i(a), r(a)\\) are proportion of susceptible, infected,
-  recovered population of age group \\(a\\) respectively
-- \\(\lambda\\) is the force of infection
-- \\(\nu\\) is the recovery rate
+- \\s(a), i(a), r(a)\\ are proportion of susceptible, infected,
+  recovered population of age group \\a\\ respectively
+- \\\lambda\\ is the force of infection
+- \\\nu\\ is the recovery rate
 
 **Simulating data**
 
@@ -132,19 +129,18 @@ Extends on the SIR model by having interacting sub-populations
 
 With K subpopulations, the WAIFW matrix or mixing matrix is given by
 
-\\\[ C = \begin{bmatrix} \beta\_{11} & \beta\_{12} & ... & \beta\_{1K}
-\\\\ \beta\_{21} & \beta\_{22} & ... & \beta\_{2K} \\\\ \vdots & \vdots
-& ... & \vdots \\\\ \beta\_{K1} & \beta\_{K2} & ... & \beta\_{KK} \\\\
-\end{bmatrix} \\\]
+\\ C = \begin{bmatrix} \beta\_{11} & \beta\_{12} & ... & \beta\_{1K} \\
+\beta\_{21} & \beta\_{22} & ... & \beta\_{2K} \\ \vdots & \vdots & ... &
+\vdots \\ \beta\_{K1} & \beta\_{K2} & ... & \beta\_{KK} \\ \end{bmatrix}
+\\
 
-The system of differential equations for the i\\(th\\) subpopulation is
+The system of differential equations for the i\\th\\ subpopulation is
 given by
 
-\\\[ \begin{cases} \frac{dS_i(t)}{dt} =
--(\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) + N_i\mu_i - \mu_i S_i(t) \\\\
-\frac{dI_i(t)}{dt} = (\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) - (\nu_i +
-\mu_i) I_i(t) \\\\ \frac{dR_i(t)}{dt} = \nu_i I_i(t) - \mu_i R_i(t)
-\end{cases} \\\]
+\\ \begin{cases} \frac{dS_i(t)}{dt} = -(\sum^K\_{j=1}\beta\_{ij}I_j(t))
+S_i(t) + N_i\mu_i - \mu_i S_i(t) \\ \frac{dI_i(t)}{dt} =
+(\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) - (\nu_i + \mu_i) I_i(t) \\
+\frac{dR_i(t)}{dt} = \nu_i I_i(t) - \mu_i R_i(t) \end{cases} \\
 
 **Simulating data**
 
@@ -214,25 +210,25 @@ Extends on SIR model with 2 additional compartments: maternal immunity
 
 And described by the following system of ordinary differential equation
 
-\\\[ \begin{cases} \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\\\
-\frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\\\
-\frac{dE(a)}{da} = \lambda(a) S(a) - (\sigma + \mu(a)) E(a) \\\\
-\frac{dI(a)}{da} = \sigma(a) E(a) - (\nu + \mu(a)) I(a) \\\\
-\frac{dR(a)}{da} = \nu I(a) - \mu(a) R(a) \end{cases} \\\]
+\\ \begin{cases} \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\
+\frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\
+\frac{dE(a)}{da} = \lambda(a) S(a) - (\sigma + \mu(a)) E(a) \\
+\frac{dI(a)}{da} = \sigma(a) E(a) - (\nu + \mu(a)) I(a) \\
+\frac{dR(a)}{da} = \nu I(a) - \mu(a) R(a) \end{cases} \\
 
 Where
 
-- \\(M(0)\\) = B, the number of births in the population
+- \\M(0)\\ = B, the number of births in the population
 
-- \\(\gamma\\) is the rate of antibody decaying
+- \\\gamma\\ is the rate of antibody decaying
 
-- \\(\lambda(a)\\) is the force of infection at age \\(a\\)
+- \\\lambda(a)\\ is the force of infection at age \\a\\
 
-- \\(\mu(a)\\) is the natural death rate at age \\(a\\)
+- \\\mu(a)\\ is the natural death rate at age \\a\\
 
-- \\(\sigma\\) is the rate of becoming infected after being exposed
+- \\\sigma\\ is the rate of becoming infected after being exposed
 
-- \\(\nu\\) is the recovery rate
+- \\\nu\\ is the recovery rate
 
 **Simulating data**
 

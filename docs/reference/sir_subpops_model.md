@@ -55,15 +55,15 @@ et al. (section 3.5.1.)
 With K subpopulations, the WAIFW matrix or mixing matrix is given by
 
 \$\$ C = \begin{bmatrix} \beta\_{11} & \beta\_{12} & ... & \beta\_{1K}
-\\\\ \beta\_{21} & \beta\_{22} & ... & \beta\_{2K} \\\\ \vdots & \vdots
-& ... & \vdots \\\\ \beta\_{K1} & \beta\_{K2} & ... & \beta\_{KK} \\\\
+\\ \beta\_{21} & \beta\_{22} & ... & \beta\_{2K} \\ \vdots & \vdots &
+... & \vdots \\ \beta\_{K1} & \beta\_{K2} & ... & \beta\_{KK} \\
 \end{bmatrix} \$\$
 
-And the \\(i^{th}\\) sub population is described by the following system
+And the \\i^{th}\\ sub population is described by the following system
 of differential equations \$\$ \begin{cases} \frac{dS_i(t)}{dt} =
--(\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) + N_i\mu_i - \mu_i S_i(t) \\\\
+-(\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) + N_i\mu_i - \mu_i S_i(t) \\
 \frac{dI_i(t)}{dt} = (\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) - (\nu_i +
-\mu_i) I_i(t) \\\\ \frac{dR_i(t)}{dt} = \nu_i I_i(t) - \mu_i R_i(t)
+\mu_i) I_i(t) \\ \frac{dR_i(t)}{dt} = \nu_i I_i(t) - \mu_i R_i(t)
 \end{cases} \$\$
 
 ## References

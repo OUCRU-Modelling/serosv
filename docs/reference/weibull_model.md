@@ -67,7 +67,7 @@ list of class weibull_model with the following items
 ## Details
 
 For a Weibull model, the prevalence is given by \$\$ \pi (d) = 1 - e^{ -
-\beta_0 d ^ {\beta_1}} \$\$ Where \\(d\\) is exposure time (difference
+\beta_0 d ^ {\beta_1}} \$\$ Where \\d\\ is exposure time (difference
 between age of vaccination and age at test)
 
 Which implies the force of infection to be the monotonic function \$\$

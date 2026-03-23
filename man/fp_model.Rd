@@ -7,6 +7,7 @@
 fp_model(
   data,
   p,
+  monotonic = FALSE,
   link = "logit",
   age_col = "age",
   pos_col = "pos",
@@ -17,7 +18,12 @@ fp_model(
 \arguments{
 \item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
-\item{p}{the powers of the predictor.}
+\item{p}{is either:
+(1) a numeric vector specifying the powers to apply to the predictors, or
+(2) a named list with two elements, \code{"p_range"} and \code{"degree"}. \code{"p_range"} \
+   is a sequence of powers and \code{"degree"} is the maximum degree to search over
+If (1), the supplied values are used directly as the powers for the predictors.
+If (2), the package searches for the best degree and power combinations}
 
 \item{link}{the link function for model. Defaulted to "logit".}
 
@@ -28,6 +34,8 @@ fp_model(
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
+
+\item{degree}{the degree of the model (i.e. number of power terms). Recommended to be <= 2.}
 }
 \value{
 a list of class fp_model with 5 items
@@ -73,7 +81,6 @@ and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
 Serological and Social Contact Data: A Modern Statistical Perspective.
 tatistics for Biology and Health. Springer New York.
 \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
-data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 }
 \seealso{
 [stats::glm()] for more information on glm object

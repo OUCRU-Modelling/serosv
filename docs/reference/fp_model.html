@@ -69,6 +69,7 @@ fit for data where asymptotic behavior is expected.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fp_model</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">p</span>,</span>
+<span>  monotonic <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  link <span class="op">=</span> <span class="st">"logit"</span>,</span>
 <span>  age_col <span class="op">=</span> <span class="st">"age"</span>,</span>
 <span>  pos_col <span class="op">=</span> <span class="st">"pos"</span>,</span>
@@ -86,7 +87,12 @@ fit for data where asymptotic behavior is expected.</p>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>the powers of the predictor.</p></dd>
+<dd><p>is either:
+(1) a numeric vector specifying the powers to apply to the predictors, or
+(2) a named list with two elements, <code>"p_range"</code> and <code>"degree"</code>. <code>"p_range"</code> \
+   is a sequence of powers and <code>"degree"</code> is the maximum degree to search over
+If (1), the supplied values are used directly as the powers for the predictors.
+If (2), the package searches for the best degree and power combinations</p></dd>
 
 
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
@@ -107,6 +113,10 @@ fit for data where asymptotic behavior is expected.</p>
 
 <dt id="arg-status-col">status_col<a class="anchor" aria-label="anchor" href="#arg-status-col"></a></dt>
 <dd><p>name of the `status` column (default status_col="status").</p></dd>
+
+
+<dt id="arg-degree">degree<a class="anchor" aria-label="anchor" href="#arg-degree"></a></dt>
+<dd><p>the degree of the model (i.e. number of power terms). Recommended to be &lt;= 2.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -151,8 +161,7 @@ and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
 Serological and Social Contact Data: A Modern Statistical Perspective.
 tatistics for Biology and Health. Springer New York.
 <a href="https://doi.org/10.1007/978-1-4614-4072-7" class="external-link">doi:10.1007/978-1-4614-4072-7</a>
-.
-data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)</p>
+.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

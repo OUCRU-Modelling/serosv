@@ -74,19 +74,19 @@ a list of class estimated_from_mixture with the following items
 
 ## Details
 
-Antibody level (denoted \\(Z\\)) is modeled using a 2-component Gaussian
-mixture model. Each component \\(Z_j\\) (\\(j \in \\{I, S\\}\\))
-represents the antibody level of the latent Infected and Susceptible
-sub-populations, following density \\(f_j(z_j\|\theta_j)\\)
+Antibody level (denoted \\Z\\) is modeled using a 2-component Gaussian
+mixture model. Each component \\Z_j\\ (\\j \in \\I, S\\\\) represents
+the antibody level of the latent Infected and Susceptible
+sub-populations, following density \\f_j(z_j\|\theta_j)\\
 
-Let \\(\pi\_{\text{TRUE}}(a)\\) denotes the age-dependent mixing
+Let \\\pi\_{\text{TRUE}}(a)\\ denotes the age-dependent mixing
 probability (i.e., the true prevalence), the density of the mixture is
 formulated as
 
 \$\$f(z\|z_I, z_S,a) =
 (1-\pi\_{\text{TRUE}}(a))f_S(z_S\|\theta_S)+\pi\_{\text{TRUE}}(a)f_I(z_I\|\theta_I)\$\$
 
-The mean \\(E(Z\|a)\\) thus equals \$\$\mu(a) =
+The mean \\E(Z\|a)\\ thus equals \$\$\mu(a) =
 (1-\pi\_{\text{TRUE}}(a))\mu_S+\pi\_{\text{TRUE}}(a)\mu_I\$\$
 
 From which true prevalence can be computed as \$\$\pi\_{\text{TRUE}}(a)
@@ -96,11 +96,11 @@ And FOI can then be inferred as \$\$\lambda\_{TRUE} =
 \frac{\mu'(a)}{\mu_I - \mu(a)}\$\$
 
 Function \[serosv::mixture_model()\] fits antibody level data to
-\\(f_S(z_S\|\theta_S)\\) and \\(f_I(z_I\|\theta_I)\\)
+\\f_S(z_S\|\theta_S)\\ and \\f_I(z_I\|\theta_I)\\
 
 Function \[serosv::estimate_mixture()\] will then estimate age-specific
-antibody level \\(\mu(a)\\) and infer the estimation for
-\\(\pi\_{\text{TRUE}}(a)\\) and \\(\lambda\_{TRUE}\\)
+antibody level \\\mu(a)\\ and infer the estimation for
+\\\pi\_{\text{TRUE}}(a)\\ and \\\lambda\_{TRUE}\\
 
 Refer to section 11.3. of the the book by Hens et al. (2012) for further
 details.

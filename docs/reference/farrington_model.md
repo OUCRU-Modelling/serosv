@@ -80,13 +80,13 @@ a list of class farrington_model with 5 items
 The force of infection is defined as followed
 
 \$\$ \lambda(a) = (\alpha a - \gamma)e^{-\beta a} + \gamma \$\$ Where
-\\(\gamma\\) is called the long term residual for FOI, as \\(a
-\rightarrow \infty\\) , \\(\lambda (a) \rightarrow \gamma\\)
+\\\gamma\\ is called the long term residual for FOI, as \\a \rightarrow
+\infty\\ , \\\lambda (a) \rightarrow \gamma\\
 
 The seroprevalence can thus be estimated using the non-linear model \$\$
-\pi(a) = 1 - exp\\{ \frac{\alpha}{\beta}ae^{-\beta a} +
+\pi(a) = 1 - exp\\ \frac{\alpha}{\beta}ae^{-\beta a} +
 \frac{1}{\beta}(\frac{\alpha}{\beta} - \gamma)(e^{-\beta a} - 1) -\gamma
-a \\} \$\$
+a \\ \$\$
 
 Refer to section 6.1.2. of the the book by Hens et al. (2012) for
 further details.

@@ -117,15 +117,18 @@ seroprevalence line</p>
 <div class="section level2">
 <h2 id="customize-the-plot">Customize the plot<a class="anchor" aria-label="anchor" href="#customize-the-plot"></a>
 </h2>
-<p>Function <code><a href="../reference/set_plot_style.html">set_plot_style()</a></code> is provided to customize some
-attributes of the plot.</p>
+<div class="section level3">
+<h3 id="built-in-function">Built-in function<a class="anchor" aria-label="anchor" href="#built-in-function"></a>
+</h3>
+<p><code>serosv</code> offers the function <code><a href="../reference/set_plot_style.html">set_plot_style()</a></code>
+to customize some key attributes of the plot.</p>
 <p>Current modifiable attributes include color, linetype for
 seroprevalence, foi and fill color for confidence interval</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gf_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">hav_bg_1964</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">hav_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">hav_bg_1964</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># customize plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gf_model</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hav_mod</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/set_plot_style.html">set_plot_style</a></span><span class="op">(</span></span>
 <span>    sero <span class="op">=</span> <span class="st">"#3de071"</span>,</span>
 <span>    foi <span class="op">=</span> <span class="st">"#2f22e0"</span>,</span>
@@ -140,6 +143,48 @@ seroprevalence, foi and fill color for confidence interval</p>
 <span><span class="co">#&gt; Scale for <span style="color: #00BB00;">fill</span> is already present.</span></span>
 <span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">fill</span>, which will replace the existing scale.</span></span></code></pre></div>
 <p><img src="visualizing_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="ggplot2-functions">
+<code>ggplot2</code> functions<a class="anchor" aria-label="anchor" href="#ggplot2-functions"></a>
+</h3>
+<p>Since <code>serosv</code> uses <code>ggplot2</code> for plotting, the
+returned plot is a <code>gg</code> object meaning any standard
+<code>ggplot2</code> layer can be appended with <code>+</code> for
+further configurations.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># return gg object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hav_mod</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "gg"     "ggplot"</span></span></code></pre></div>
+<p><strong>Examples</strong></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set x and y limits</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hav_mod</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Coordinate system already present. Adding new coordinate system, which will</span></span>
+<span><span class="co">#&gt; replace the existing one.</span></span></code></pre></div>
+<p><img src="visualizing_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Configure the plot theme</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hav_mod</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="visualizing_model_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Set titles and omit legends</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hav_mod</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Age-stratified Hepatitis A prevalence in Bulgaria (1964)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span></span>
+<span>    colour <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>    linetype <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>    fill <span class="op">=</span> <span class="st">"none"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="visualizing_model_files/figure-html/unnamed-chunk-6-3.png" class="r-plt" width="700"></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

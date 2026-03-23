@@ -136,19 +136,14 @@ seroprevalence and FOI</p></li>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>,<span class="op">]</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">$</span><span class="va">VZVmIUml</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixture_model.html">mixture_model</a></span><span class="op">(</span>antibody_level <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
-<span><span class="va">model</span><span class="op">$</span><span class="va">info</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Mixture model </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameters:</span></span>
-<span><span class="co">#&gt;       pi    mu  sigma</span></span>
-<span><span class="co">#&gt; 1 0.1088 2.349 0.6804</span></span>
-<span><span class="co">#&gt; 2 0.8912 6.439 0.9437</span></span>
+<span><span class="co">#&gt; Estimated proportion:</span></span>
+<span><span class="co">#&gt;  Susceptible=0.1088, Infected=0.8912 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Distribution:</span></span>
-<span><span class="co">#&gt; [1] "norm"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Constraints:</span></span>
-<span><span class="co">#&gt;    conpi    conmu consigma </span></span>
-<span><span class="co">#&gt;   "NONE"   "NONE"   "NONE"</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated mean Log(Antibody):</span></span>
+<span><span class="co">#&gt;  Susceptible=2.349, Infected=6.439</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
@@ -156,11 +151,25 @@ seroprevalence and FOI</p></li>
 <code>estimate_from_mixture</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">est_mixture</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_from_mixture.html">estimate_from_mixture</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span>, <span class="va">data</span>, mixture_model <span class="op">=</span> <span class="va">model</span>, threshold_status <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">seropositive</span>, sp<span class="op">=</span><span class="fl">83</span>, monotonize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">est_mixture</span></span>
+<span><span class="co">#&gt; Age-varying seroprevalence estimated from mixture model </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Monotonized seroprevalence:  FALSE</span></span>
+<span><span class="co">#&gt; Family: gaussian </span></span>
+<span><span class="co">#&gt; Link function: identity </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Formula:</span></span>
+<span><span class="co">#&gt; log_antibody ~ s(age, bs = "ps", sp = 83)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Estimated degrees of freedom:</span></span>
+<span><span class="co">#&gt; 5.13  total = 6.13 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; GCV score: 2.056333</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">est_mixture</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
 <span><span class="co">#&gt; data's <span style="color: #00BB00;">fill</span> values.</span></span></code></pre></div>
 <p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Hens2012" class="csl-entry">
 Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
 Philippe Beutels. 2012. <em>Modeling Infectious Disease Parameters Based

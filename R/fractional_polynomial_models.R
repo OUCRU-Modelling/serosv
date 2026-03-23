@@ -51,6 +51,7 @@ formulate <- function(p) {
 #'
 #' @importFrom stats glm binomial as.formula
 #' @import dplyr tidyr
+#' @importFrom purrr pmap_dfr
 find_best_fp_powers <- function(data,
                                 p, mc, degree, link="logit"){
   age <- data$age
@@ -152,7 +153,6 @@ find_best_fp_powers <- function(data,
 #' Serological and Social Contact Data: A Modern Statistical Perspective.
 #' tatistics for Biology and Health. Springer New York.
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
-#'data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
 #' @param p is either:
 #'   (1) a numeric vector specifying the powers to apply to the predictors, or
@@ -204,11 +204,13 @@ fp_model <- function(data,p,monotonic=FALSE,link="logit",
       as.formula(formulate(p)),
       family=binomial(link=link)
     )
+    model$p <- p
   }else if(is.list(p) && all(c("p_range", "degree") %in% names(p))){
     out <- find_best_fp_powers(
       data = data.frame(age=age, pos=pos, tot=tot),
       p = p$p_range, degree = p$degree, mc = monotonic, link = link
     )
+    model$p <- out$p
     model$info <- out$model
   }else{
     stop("Invalid value for `p`: either a numeric vector or a named list with

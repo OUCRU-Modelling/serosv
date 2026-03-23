@@ -74,6 +74,7 @@ To fit a local estimation by polynomials, use `lp_model()` function with model p
 
 ```{r}
 lp <- lp_model(mump, kern="tcub", nn = 0.5, deg=2)
+lp
 plot(lp)
 ```
 

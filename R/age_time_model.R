@@ -17,6 +17,7 @@
 #'
 #' @import scam assertthat
 #' @importFrom mgcv gam predict.gam betar
+#' @importFrom purrr map map_dbl map2
 #'
 #' @return a list of class time_age_model with 4 items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
@@ -239,6 +240,7 @@ age_time_model <- function(data,
     )
 
   model$out <- out
+  model$monotonize_method <- monotonize_method
   model$grouping_col <- grouping_col
   model$age_correct <- age_correct
 

@@ -35,18 +35,20 @@ plot(farrington_md)
 
 ## Customize the plot
 
-Function
+### Built-in function
+
+`serosv` offers the function
 [`set_plot_style()`](https://oucru-modelling.github.io/serosv/reference/set_plot_style.md)
-is provided to customize some attributes of the plot.
+to customize some key attributes of the plot.
 
 Current modifiable attributes include color, linetype for
 seroprevalence, foi and fill color for confidence interval
 
 ``` r
-gf_model <- polynomial_model(hav_bg_1964, k=3)
+hav_mod <- polynomial_model(hav_bg_1964, k=3)
 
 # customize plot
-plot(gf_model) +
+plot(hav_mod) +
   set_plot_style(
     sero = "#3de071",
     foi = "#2f22e0",
@@ -63,3 +65,53 @@ plot(gf_model) +
 ```
 
 ![](visualizing_model_files/figure-html/unnamed-chunk-4-1.png)
+
+### `ggplot2` functions
+
+Since `serosv` uses `ggplot2` for plotting, the returned plot is a `gg`
+object meaning any standard `ggplot2` layer can be appended with `+` for
+further configurations.
+
+``` r
+# return gg object
+class(plot(hav_mod))
+#> [1] "gg"     "ggplot"
+```
+
+**Examples**
+
+``` r
+library(ggplot2)
+
+# Set x and y limits
+plot(hav_mod) +
+  coord_cartesian(xlim = c(0, 50), ylim = c(0, 1.5))
+#> Coordinate system already present. Adding new coordinate system, which will
+#> replace the existing one.
+```
+
+![](visualizing_model_files/figure-html/unnamed-chunk-6-1.png)
+
+``` r
+
+# Configure the plot theme
+plot(hav_mod) +
+  theme_bw()
+```
+
+![](visualizing_model_files/figure-html/unnamed-chunk-6-2.png)
+
+``` r
+
+# Set titles and omit legends
+plot(hav_mod) +
+  theme_bw() +
+  ggtitle("Age-stratified Hepatitis A prevalence in Bulgaria (1964)") +
+  guides(
+    colour = "none",
+    linetype = "none",
+    fill = "none"
+  )
+```
+
+![](visualizing_model_files/figure-html/unnamed-chunk-6-3.png)

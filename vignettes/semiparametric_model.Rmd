@@ -90,14 +90,13 @@ $$
 
 The first approach to fit the model is by maximizing the following penalized likelihood
 
-```{=tex}
 \begin{equation}
 \phi^{-1}[y^T(\textbf{X}\beta + \textbf{Zu} ) -  \textbf{1}^Tc(\textbf{X}\beta + \textbf{Zu} )] - \frac{1}{2}\lambda^2 
 \begin{bmatrix} \beta \\ \textbf{u} \end{bmatrix}^T D\begin{bmatrix} \beta \\ \textbf{u} \end{bmatrix}
 
 (\#eq:penlikelihood)
 \end{equation}
-```
+
 Where:
 
 -   $X\beta + Zu$ is the predictor
@@ -133,7 +132,7 @@ For more options, refer to the [mgcv documentation](https://stat.ethz.ch/R-manua
 ```{r}
 pl <- parvob19_be_2001_2003 %>% 
   penalized_spline_model(status_col = "seropositive", s = "tp", framework = "pl") 
-pl$info
+pl
 ```
 
 ```{r, fig.width=7, fig.height=4}
@@ -170,7 +169,7 @@ To fit the data using the penalized likelihood framework, specify `framework = "
 ```{r}
 glmm <- parvob19_be_2001_2003 %>% 
   penalized_spline_model(status_col = "seropositive", s = "tp", framework = "glmm") 
-glmm$info$gam
+glmm
 ```
 
 ```{r, fig.width=7, fig.height=4}

@@ -9,37 +9,37 @@ library(magrittr)
 
 **Proposed model**
 
-Within the local polynomial framework, the linear predictor
-\\(\eta(a)\\) is approximated locally at one particular value \\(a_0\\)
-for age by a line (local linear, degree \\(p=1\\)) or a parabola (local
-quadratic, degree \\(p=2\\)).
+Within the local polynomial framework, the linear predictor \\\eta(a)\\
+is approximated locally at one particular value \\a_0\\ for age by a
+line (local linear, degree \\p=1\\) or a parabola (local quadratic,
+degree \\p=2\\).
 
-For a general degree \\(p\\), the linear predictor for a neighbor of
-\\(a_0\\), labeled \\(a_i\\) is the Taylor approximation
+For a general degree \\p\\, the linear predictor for a neighbor of
+\\a_0\\, labeled \\a_i\\ is the Taylor approximation
 
-\\\[ \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
+\\ \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
 \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... +
-\frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p \\\]
+\frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p \\
 
-Where the estimator for the \\(k\\)-th derivative of \\(\eta(a_0)\\),
-for \\(k = 0,1,…,p\\) (degree of local polynomial) is as followed:
+Where the estimator for the \\k\\-th derivative of \\\eta(a_0)\\, for
+\\k = 0,1,…,p\\ (degree of local polynomial) is as followed:
 
-\\\[ \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}\_k(a_0) \\\]
+\\ \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}\_k(a_0) \\
 
-The estimator for the prevalence at age \\(a_0\\) is then given by
+The estimator for the prevalence at age \\a_0\\ is then given by
 
-\\\[ \hat{\pi}(a_0) = g^{-1}\\{ \hat{\beta}\_0(a_0) \\} \\\]
+\\ \hat{\pi}(a_0) = g^{-1}\\ \hat{\beta}\_0(a_0) \\ \\
 
-- Where \\(g\\) is the link function
+- Where \\g\\ is the link function
 
-The estimator for the force of infection at age \\(a_0\\) by assuming
-\\(p \ge 1\\) is as followed
+The estimator for the force of infection at age \\a_0\\ by assuming \\p
+\ge 1\\ is as followed
 
-\\\[ \hat{\lambda}(a_0) = \hat{\beta}\_1(a_0) \delta \\{ \hat{\beta}\_0
-(a_0) \\} \\\]
+\\ \hat{\lambda}(a_0) = \hat{\beta}\_1(a_0) \delta \\ \hat{\beta}\_0
+(a_0) \\ \\
 
-- Where \\(\delta \\{ \hat{\beta}\_0(a_0) \\} = \frac{dg^{-1} \\{
-  \hat{\beta}\_0(a_0) \\} } {d\hat{\beta}\_0(a_0)}\\)
+- Where \\\delta \\ \hat{\beta}\_0(a_0) \\ = \frac{dg^{-1} \\
+  \hat{\beta}\_0(a_0) \\ } {d\hat{\beta}\_0(a_0)}\\
 
 Refer to `Chapter 7.1` of the book by Hens et al. (2012) for a more
 detailed explanation of the method.
@@ -52,10 +52,34 @@ mump <- mumps_uk_1986_1987
 
 To fit a local estimation by polynomials, use
 [`lp_model()`](https://oucru-modelling.github.io/serosv/reference/lp_model.md)
-function.
+function with model parameters include:
+
+- `nn` the number of nearest neighbors to be included in the
+  approximation (i.e., the nearest neighbor component of the smoothing
+  parameter)
+
+- `h` the constant component of the smoothing parameter
+
+- `deg` the degree of the polynomial
+
+- `kern` the type of kernel
 
 ``` r
 lp <- lp_model(mump, kern="tcub", nn = 0.5, deg=2)
+lp
+#> Local polynomial model 
+#> 
+#> Input type:  aggregated 
+#> Configs:  nn=0.5, bandwidth(h)=0, degree=2, kernel=tcub 
+#> 
+#> Call:
+#> locfit(formula = y ~ lp(age, deg = deg, nn = nn, h = h), family = "binomial", 
+#>     kern = kern)
+#> 
+#> Number of observations:          44 
+#> Family:  Logistic 
+#> Fitted Degrees of freedom:       6.463 
+#> Residual scale:                  1
 plot(lp)
 ```
 

@@ -108,7 +108,7 @@ polynomial_model <- function(data, k, link = "log",
     glm(Age(k), family=binomial(link=link),df)
   }
 
-  # TODO: accept a vector of k then use LRT to determine the best k
+  # If a vector of values for k is provided -> select best value
   if(length(k) > 1){
     out <- nested_mod_selection(
       list("k" = k),
@@ -128,6 +128,7 @@ polynomial_model <- function(data, k, link = "log",
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
   model$df <- list(age=age, pos=pos, tot= pos + neg)
+  model$k <- k
   class(model) <- "polynomial_model"
   model
 }
@@ -136,7 +137,8 @@ polynomial_model <- function(data, k, link = "log",
 # function to return the best parameter of nested glm models using LRT
 # par_range - list of parameters and its possible values
 # model_fn - function to fit and return a model, must takes 2 arguments: par, df
-# @import purrr tidyr
+#' @import tidyr
+#' @importFrom purrr pmap
 nested_mod_selection <- function(par_range, model_fn, dat, method="LRT"){
   # generate all combinations of parameters values
   par_combs <- tidyr::crossing(!!!par_range)

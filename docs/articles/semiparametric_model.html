@@ -144,36 +144,40 @@ g(P(Y_i = 1| a _i)) = g(\pi(a_i)) = \eta(a_i)
 </h3>
 <p><strong>Proposed approach</strong></p>
 <p>The first approach to fit the model is by maximizing the following penalized likelihood</p>
-<span class="math display" id="eq:penlikelihood">\[\begin{equation}
+<p><span class="math display" id="eq:penlikelihood">\[\begin{equation}
 \phi^{-1}[y^T(\textbf{X}\beta + \textbf{Zu} ) -  \textbf{1}^Tc(\textbf{X}\beta + \textbf{Zu} )] - \frac{1}{2}\lambda^2
 \begin{bmatrix} \beta \\ \textbf{u} \end{bmatrix}^T D\begin{bmatrix} \beta \\ \textbf{u} \end{bmatrix}
 
 \tag{1}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Where:</p>
 <ul>
 <li><p><span class="math inline">\(X\beta + Zu\)</span> is the predictor</p></li>
-<li><p><span class="math inline">\(D\)</span> is a known semi-definite penalty matrix <span class="citation">(<a href="#ref-Wahba1978" role="doc-biblioref">Wahba 1978</a>)</span>, <span class="citation">(<a href="#ref-Green1993" role="doc-biblioref">Green and Silverman 1993</a>)</span></p></li>
+<li><p><span class="math inline">\(D\)</span> is a known semi-definite penalty matrix <span class="citation">(<a href="#ref-Wahba1978">Wahba 1978</a>)</span>, <span class="citation">(<a href="#ref-Green1993">Green and Silverman 1993</a>)</span></p></li>
 <li><p><span class="math inline">\(y\)</span> is the response vector</p></li>
 <li><p><span class="math inline">\(\textbf{1}\)</span> is the unit vector, <span class="math inline">\(c(.)\)</span> is determined by the link function used</p></li>
 <li><p><span class="math inline">\(\lambda\)</span> is the smoothing parameter (larger values –&gt; smoother curves)</p></li>
 <li><p><span class="math inline">\(\phi\)</span> is the overdispersion parameter and equals 1 if there is no overdispersion</p></li>
 </ul>
-<p>Refer to Chapter <code>8.2.1</code> of the book by <span class="citation">Hens et al. (<a href="#ref-Hens2012" role="doc-biblioref">2012</a>)</span> for a more detailed explanation of the method.</p>
+<p>Refer to Chapter <code>8.2.1</code> of the book by <span class="citation">Hens et al. (<a href="#ref-Hens2012">2012</a>)</span> for a more detailed explanation of the method.</p>
 <p><strong>Fitting data</strong></p>
 <p>To fit the data using the penalized likelihood framework, specify <code>framework = "pl"</code></p>
 <p>Basis function can be defined via the <code>s</code> parameter, some values for s includes:</p>
 <ul>
 <li><p><code>"tp"</code> thin plate regression splines</p></li>
 <li><p><code>"cr"</code> cubic regression splines</p></li>
-<li><p><code>"ps"</code> P-splines proposed by <span class="citation">(<a href="#ref-Eilers1996" role="doc-biblioref">Eilers and Marx 1996</a>)</span></p></li>
+<li><p><code>"ps"</code> P-splines proposed by <span class="citation">(<a href="#ref-Eilers1996">Eilers and Marx 1996</a>)</span></p></li>
 <li><p><code>"ad"</code> for Adaptive smoothers</p></li>
 </ul>
-<p>For more options, refer to the <a href="https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/smooth.terms.html" class="external-link">mgcv documentation</a> <span class="citation">(<a href="#ref-Wood2017" role="doc-biblioref">Wood 2017</a>)</span></p>
+<p>For more options, refer to the <a href="https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/smooth.terms.html" class="external-link">mgcv documentation</a> <span class="citation">(<a href="#ref-Wood2017">Wood 2017</a>)</span></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="va">parvob19_be_2001_2003</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/penalized_spline_model.html">penalized_spline_model</a></span><span class="op">(</span>status_col <span class="op">=</span> <span class="st">"seropositive"</span>, s <span class="op">=</span> <span class="st">"tp"</span>, framework <span class="op">=</span> <span class="st">"pl"</span><span class="op">)</span> </span>
-<span><span class="va">pl</span><span class="op">$</span><span class="va">info</span></span>
+<span><span class="va">pl</span></span>
+<span><span class="co">#&gt; Penalized spline model </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Input type:  linelisting </span></span>
+<span><span class="co">#&gt; Framework:  Penalized likelihood </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Family: binomial </span></span>
 <span><span class="co">#&gt; Link function: logit </span></span>
@@ -196,7 +200,7 @@ g(P(Y_i = 1| a _i)) = g(\pi(a_i)) = \eta(a_i)
 <p><strong>Proposed approach</strong></p>
 <p>Looking back at <a href="#eq:penlikelihood">(1)</a>, a constraint for <span class="math inline">\(\textbf{u}\)</span> would be <span class="math inline">\(\Sigma_ku_k^2 &lt; C\)</span> for some positive value <span class="math inline">\(C\)</span></p>
 <p>This is equivalent to choosing <span class="math inline">\((\beta, \textbf{u})\)</span> to maximise <a href="#eq:penlikelihood">(1)</a> with <span class="math inline">\(D = diag(\textbf{0}, \textbf{1})\)</span> where <span class="math inline">\(\textbf{0}\)</span> denotes zero vector length <span class="math inline">\(p+1\)</span> and <span class="math inline">\(\textbf{1}\)</span> denotes the unit vector of length <span class="math inline">\(K\)</span></p>
-<p>For a fixed value for <span class="math inline">\(\lambda\)</span> this is equivalent to fitting the following generalized linear mixed model <span class="citation">Ngo and Wand (<a href="#ref-Ngo2004" role="doc-biblioref">2004</a>)</span></p>
+<p>For a fixed value for <span class="math inline">\(\lambda\)</span> this is equivalent to fitting the following generalized linear mixed model <span class="citation">Ngo and Wand (<a href="#ref-Ngo2004">2004</a>)</span></p>
 <p><span class="math display">\[
 f(y|u) = exp\{ \phi^{-1} [y^T(X\beta + Zu) - c(X\beta + Zu)] + 1^Tc(y)\},\\
 u \sim N(0, G)
@@ -206,7 +210,7 @@ u \sim N(0, G)
 </li>
 </ul>
 <p>Thus <span class="math inline">\(Z\)</span> is penalized by assuming the corresponding coefficients <span class="math inline">\(\textbf{u}\)</span> are random effect with <span class="math inline">\(\textbf{u} \sim N(\textbf{0}, \mathbf{\sigma}^2_u \textbf{I})\)</span>.</p>
-<p>Refer to Chapter <code>8.2.2</code> of the book by <span class="citation">Hens et al. (<a href="#ref-Hens2012" role="doc-biblioref">2012</a>)</span> for a more detailed explanation of the method.</p>
+<p>Refer to Chapter <code>8.2.2</code> of the book by <span class="citation">Hens et al. (<a href="#ref-Hens2012">2012</a>)</span> for a more detailed explanation of the method.</p>
 <p><strong>Fitting data</strong></p>
 <p>To fit the data using the penalized likelihood framework, specify <code>framework = "glmm"</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -218,7 +222,34 @@ u \sim N(0, G)
 <span><span class="co">#&gt; iteration 2</span></span>
 <span><span class="co">#&gt; iteration 3</span></span>
 <span><span class="co">#&gt; iteration 4</span></span>
-<span><span class="va">glmm</span><span class="op">$</span><span class="va">info</span><span class="op">$</span><span class="va">gam</span></span>
+<span><span class="va">glmm</span></span>
+<span><span class="co">#&gt; Penalized spline model </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Input type:  linelisting </span></span>
+<span><span class="co">#&gt; Framework:  Mixed model </span></span>
+<span><span class="co">#&gt; $lme</span></span>
+<span><span class="co">#&gt; Linear mixed-effects model fit by maximum likelihood</span></span>
+<span><span class="co">#&gt;   Data: data </span></span>
+<span><span class="co">#&gt;   Log-likelihood: -6977.429</span></span>
+<span><span class="co">#&gt;   Fixed: fixed </span></span>
+<span><span class="co">#&gt; X(Intercept)   Xs(age)Fx1 </span></span>
+<span><span class="co">#&gt;    0.7122306    3.6123783 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Random effects:</span></span>
+<span><span class="co">#&gt;  Formula: ~Xr - 1 | g</span></span>
+<span><span class="co">#&gt;  Structure: pdIdnot</span></span>
+<span><span class="co">#&gt;              Xr1      Xr2      Xr3      Xr4      Xr5      Xr6      Xr7      Xr8</span></span>
+<span><span class="co">#&gt; StdDev: 6.020273 6.020273 6.020273 6.020273 6.020273 6.020273 6.020273 6.020273</span></span>
+<span><span class="co">#&gt;         Residual</span></span>
+<span><span class="co">#&gt; StdDev:        1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variance function:</span></span>
+<span><span class="co">#&gt;  Structure: fixed weights</span></span>
+<span><span class="co">#&gt;  Formula: ~invwt </span></span>
+<span><span class="co">#&gt; Number of Observations: 3080</span></span>
+<span><span class="co">#&gt; Number of Groups: 1 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $gam</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Family: binomial </span></span>
 <span><span class="co">#&gt; Link function: logit </span></span>
@@ -227,11 +258,15 @@ u \sim N(0, G)
 <span><span class="co">#&gt; spos ~ s(age, bs = s, sp = sp)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated degrees of freedom:</span></span>
-<span><span class="co">#&gt; 6.45  total = 7.45</span></span></code></pre></div>
+<span><span class="co">#&gt; 6.45  total = 7.45 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "gamm" "list"</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">glmm</span><span class="op">)</span></span></code></pre></div>
 <p><img src="semiparametric_model_files/figure-html/unnamed-chunk-5-1.png"><!-- --></p>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Eilers1996" class="csl-entry">
 Eilers, Paul H. C., and Brian D. Marx. 1996. <span>“Flexible Smoothing with b-Splines and Penalties.”</span> <em>Statistical Science</em> 11 (2). <a href="https://doi.org/10.1214/ss/1038425655" class="external-link">https://doi.org/10.1214/ss/1038425655</a>.
 </div>

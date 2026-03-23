@@ -77,9 +77,8 @@ The users can also choose to provide a range of values for $k$ in which case the
 # Provide a range of values for k
 best_param <- polynomial_model(data, k = 1:5, status_col = "seropositive")
 plot(best_param)
-
 # View the best model here which suggests k = 4 is the best parameter value
-best_param$info
+best_param
 ```
 
 ------------------------------------------------------------------------
@@ -114,6 +113,7 @@ The parameter `p` specifies the powers of each polynomial term (length of `p` is
 ```{r}
 hav <- hav_be_1993_1994
 model <- fp_model(hav, p=c(1, 1.5), link="cloglog")
+model
 plot(model)
 ```
 
@@ -132,7 +132,7 @@ model <- fp_model(hav,
                   link="cloglog")
 plot(model)
 # the best set of powers for this dataset is 1.5 and 1.6
-model$info
+model
 ```
 
 To restrict the parameters search such that the predictions are monotonic (thus ensuring the FOI to be $\lambda \geq 0$) set `monotonic=TRUE`
@@ -148,7 +148,7 @@ model <- fp_model(hav,
                   link="cloglog")
 plot(model)
 # the best set of powers with the monotonic constraint is 0.5 and 1.1
-model$info
+model
 ```
 
 ------------------------------------------------------------------------
@@ -184,6 +184,7 @@ farrington_md <- farrington_model(
    rubella_uk_1986_1987,
    start=list(alpha=0.07,beta=0.1,gamma=0.03)
    )
+farrington_md
 plot(farrington_md)
 ```
 
@@ -219,6 +220,7 @@ Use `weibull_model()` to fit a Weibull model.
 hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
 
 wb_md <- hcv %>% weibull_model(t_lab = "dur", status_col="seropositive")
+wb_md
 plot(wb_md) 
 ```
 
@@ -284,11 +286,13 @@ To fit Farrington model, use `hierarchical_bayesian_model()` and define `type = 
 
 -   `type = "far3"` refers to Farrington model with 3 parameters ($\alpha_3 > 0$)
 
-```{r}
+```{r message=FALSE, output=FALSE, warning=FALSE}
 df <- mumps_uk_1986_1987
 model <- hierarchical_bayesian_model(df, type="far3")
+```
 
-model$info
+```{r}
+model
 plot(model)
 ```
 
@@ -329,10 +333,12 @@ Refer to `Chapter 10.3.3` of the book by @Hens2012 for a more detailed explanati
 
 To fit Log-logistic model, use `hierarchical_bayesian_model()` and define `type = "log_logistic"`
 
-```{r}
+```{r message=FALSE, output=FALSE, warning=FALSE}
 df <- rubella_uk_1986_1987
 model <- hierarchical_bayesian_model(df, type="log_logistic")
+```
 
-model$type
+```{r}
+model
 plot(model)
 ```

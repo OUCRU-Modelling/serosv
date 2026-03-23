@@ -98,55 +98,54 @@ a list of class hierarchical_bayesian_model with 6 items
 
 ## Details
 
-Consider a model for prevalence that has a parametric form \\(\pi(a_i,
-\alpha)\\) where \\(\alpha\\) is a parameter vector
+Consider a model for prevalence that has a parametric form \\\pi(a_i,
+\alpha)\\ where \\\alpha\\ is a parameter vector
 
 Under a Bayesian framework, we can constraint the parameter space of the
-prior distribution \\(P(\alpha)\\) to achieve monotonicity of the
-posterior distribution \\(P(\pi_1, \pi_2, ..., \pi_m\|y,n)\\)
+prior distribution \\P(\alpha)\\ to achieve monotonicity of the
+posterior distribution \\P(\pi_1, \pi_2, ..., \pi_m\|y,n)\\
 
 Where:
 
-\- \\(n = (n_1, n_2, ..., n_m)\\) and \\(n_i\\) is the sample size at
-age \\(a_i\\)
+\- \\n = (n_1, n_2, ..., n_m)\\ and \\n_i\\ is the sample size at age
+\\a_i\\
 
-\- \\(y = (y_1, y_2, ..., y_m)\\) and \\(y_i\\) is the number of
-infected individual from the \\(n_i\\) sampled subjects
+\- \\y = (y_1, y_2, ..., y_m)\\ and \\y_i\\ is the number of infected
+individual from the \\n_i\\ sampled subjects
 
 For **Farrington** model with 3 parameters, prevalence is formulated as
 follow
 
-\$\$ \pi (a) = 1 - exp\\{ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} +
+\$\$ \pi (a) = 1 - exp\\ \frac{\alpha_1}{\alpha_2}ae^{-\alpha_2 a} +
 \frac{1}{\alpha_2}(\frac{\alpha_1}{\alpha_2} - \alpha_3)(e^{-\alpha_2
-a} - 1) -\alpha_3 a \\} \$\$
+a} - 1) -\alpha_3 a \\ \$\$
 
-The likelihood model is defined as \\(y_i \sim Bin(n_i, \pi_i), \text{
-for } i = 1,2,3,...m\\)
+The likelihood model is defined as \\y_i \sim Bin(n_i, \pi_i), \text{
+for } i = 1,2,3,...m\\
 
 The constraint on the parameter space can be incorporated by assuming
-truncated normal distribution for the components of \\(\alpha\\),
-\\(\alpha = (\alpha_1, \alpha_2, \alpha_3)\\) in \\(\pi_i =
-\pi(a_i,\alpha)\\)
+truncated normal distribution for the components of \\\alpha\\, \\\alpha
+= (\alpha_1, \alpha_2, \alpha_3)\\ in \\\pi_i = \pi(a_i,\alpha)\\
 
-The flat hyperpriors are defined as \\(\mu_j \sim \mathcal{N}(0,
-10000)\\) and \\(\tau^{-2}\_j \sim \Gamma(100,100)\\)
+The flat hyperpriors are defined as \\\mu_j \sim \mathcal{N}(0, 10000)\\
+and \\\tau^{-2}\_j \sim \Gamma(100,100)\\
 
 For **Farrington** model with 2 parameters, it is equivalent to the
-previous model with \\(\alpha_3 = 0\\)
+previous model with \\\alpha_3 = 0\\
 
 For **Log logistic model**, seroprevalence is instead defined as
 
 \$\$\pi(a) = \frac{\beta a^\alpha}{1 + \beta a^\alpha}, \text{ } \alpha,
 \beta \> 0\$\$
 
-The likelihood is similarly defined as \\(y_i \sim Bin(n_i, \pi_i))\\)
+The likelihood is similarly defined as \\y_i \sim Bin(n_i, \pi_i))\\
 
-The prior model of \\(\alpha_1\\) is specified as \\(\alpha_1 \sim
-\text{truncated } \mathcal{N}(\mu_1, \tau_1)\\) with flat hyperpriors as
+The prior model of \\\alpha_1\\ is specified as \\\alpha_1 \sim
+\text{truncated } \mathcal{N}(\mu_1, \tau_1)\\ with flat hyperpriors as
 in Farrington model
 
-\\(\beta\\) is constrained to be positive by specifying \\(\alpha_2 \sim
-\mathcal{N}(\mu_2, \tau_2)\\)
+\\\beta\\ is constrained to be positive by specifying \\\alpha_2 \sim
+\mathcal{N}(\mu_2, \tau_2)\\
 
 Refer to section Chapter 10.3 of the the book by Hens et al. (2012) for
 further details.

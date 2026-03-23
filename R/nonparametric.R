@@ -112,6 +112,10 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   # print(paste0("h: ", h))
 
   model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern)
+  model$nn <- nn
+  model$h <- h
+  model$deg <- deg
+  model$kern <- kern
   model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1)
   model$sp  <- fitted(model$info)
   model$foi <- fitted(model$eta)*fitted(model$info) # λ(a)=η′(a)π(a)
@@ -125,7 +129,7 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
 # nn - range of values for nearest neighbor
 # h - range of values for constant bandwidth
 # if both nn and h are given, select either best nn or h, whichever gives the lowest GCV
-#' @import purrr tidyr dplyr locfit
+#' @import tidyr dplyr locfit
 best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial"){
   # helper function to get df and GCV
   summary.gcvplot <- function(object, ...){
