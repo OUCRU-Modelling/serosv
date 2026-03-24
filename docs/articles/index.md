@@ -4,8 +4,6 @@
 
 - [Input
   data](https://oucru-modelling.github.io/serosv/articles/linelisting_vs_aggregated.md):
-- [SIR
-  model](https://oucru-modelling.github.io/serosv/articles/sir_model.md):
 - [Parametric
   models](https://oucru-modelling.github.io/serosv/articles/parametric_model.md):
 - [Nonparametric

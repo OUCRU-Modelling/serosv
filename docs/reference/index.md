@@ -71,14 +71,6 @@
 
 ## Models
 
-- [`sir_basic_model()`](https://oucru-modelling.github.io/serosv/reference/sir_basic_model.md)
-  : Basic SIR model
-- [`sir_static_model()`](https://oucru-modelling.github.io/serosv/reference/sir_static_model.md)
-  : SIR static model (age-heterogeneous, endemic equilibrium)
-- [`sir_subpops_model()`](https://oucru-modelling.github.io/serosv/reference/sir_subpops_model.md)
-  : SIR Model with Interacting Subpopulations
-- [`mseir_model()`](https://oucru-modelling.github.io/serosv/reference/mseir_model.md)
-  : MSEIR model
 - [`polynomial_model()`](https://oucru-modelling.github.io/serosv/reference/polynomial_model.md)
   : Polynomial models
 - [`farrington_model()`](https://oucru-modelling.github.io/serosv/reference/farrington_model.md)
@@ -121,14 +113,6 @@
   : plot() overloading for fractional polynomial model
 - [`plot(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.lp_model.md)
   : plot() overloading for local polynomial model
-- [`plot(`*`<mseir_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.mseir_model.md)
-  : plot() overloading for MSEIR model
-- [`plot(`*`<sir_basic_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.sir_basic_model.md)
-  : plot() overloading for SIR model
-- [`plot(`*`<sir_static_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.sir_static_model.md)
-  : plot() overloading for SIR static model
-- [`plot(`*`<sir_subpops_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.sir_subpops_model.md)
-  : plot() overloading for SIR sub populations model
 - [`plot(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.hierarchical_bayesian_model.md)
   : plot() overloading for hierarchical_bayesian_model
 - [`plot(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.penalized_spline_model.md)
