@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,15 +100,32 @@ particular value <span class="math inline">\(a_0\)</span> for age by a
 line (local linear, degree <span class="math inline">\(p=1\)</span>) or
 a parabola (local quadratic, degree <span class="math inline">\(p=2\)</span>).</p>
 <p>For a general degree <span class="math inline">\(p\)</span>, the
-linear predictor for a neighbor of <span class="math inline">\(a_0\)</span>, labeled <span class="math inline">\(a_i\)</span> is the Taylor approximation</p>
+linear predictor for a neighbor of <span class="math inline">\(a_0\)</span>, labeled <span class="math inline">\(a_i\)</span> is equivalent to the Taylor
+approximation</p>
 <p><span class="math display">\[
 \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
 \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... +
 \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
 \]</span></p>
-<p>Where the estimator for the <span class="math inline">\(k\)</span>-th
+<p><span class="math inline">\(\eta(a_i)\)</span> can be estimated by
+maximizing</p>
+<p><span class="math display">\[
+\Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+
+\beta_2(a_i-a_0)^2 ... +
+\beta_p(a_i-a_0)^p) \} K_h(a_i - a_0)
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><p><span class="math inline">\(\ell_i\)</span> is the binomial
+log-likelihood <span class="math inline">\(\ell_i\{Y_i, \pi\} =
+Y_ilog\{\pi\} + (1-Y_i)log\{1-\pi\}\)</span></p></li>
+<li><p><span class="math inline">\(K_h\)</span> is the kernel function
+with the specified smoothing parameter <span class="math inline">\(h\)</span>, also called “bandwidth” or “window
+width”</p></li>
+</ul>
+<p>The estimator for the <span class="math inline">\(k\)</span>-th
 derivative of <span class="math inline">\(\eta(a_0)\)</span>, for <span class="math inline">\(k = 0,1,…,p\)</span> (degree of local polynomial)
-is as followed:</p>
+is thus</p>
 <p><span class="math display">\[
 \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)
 \]</span></p>

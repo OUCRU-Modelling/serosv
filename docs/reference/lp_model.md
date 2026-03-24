@@ -41,7 +41,7 @@ lp_model(
 
 - h:
 
-  The constant component of the smoothing parameter. Default: 0.
+  The constant bandwidth of the smoothing parameter. Default: 0.
 
 - deg:
 
@@ -97,12 +97,17 @@ Consider a linear predictor \\\eta(a)\\ approximated locally at one
 particular value \\a_0\\.
 
 For a general degree \\p\\, the linear predictor for a neighbor of
-\\a_0\\, labeled \\a_i\\ is the Taylor approximation \$\$ \eta(a_i) =
-\eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) + \frac{\eta^{(2)}(a_0)}{2}(a_i -
-a_0)^2 + ... + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p \$\$
+\\a_0\\, labeled \\a_i\\ is equivalent to the Taylor approximation \$\$
+\eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
+\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... +
+\frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p \$\$
 
-Where the estimator for the \\k\\-th derivative of \\\eta(a_0)\\, for
-\\k = 0,1,…,p\\ (degree of local polynomial) is as followed: \$\$
+\\\eta(a_i)\\ can be estimated by maximizing \$\$ \Sigma\_{i=1}^{N}
+\ell_i \\Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2
+... + \beta_p(a_i-a_0)^p) \\ K_h(a_i - a_0) \$\$
+
+The estimator for the \\k\\-th derivative of \\\eta(a_0)\\, for \\k =
+0,1,…,p\\ (degree of local polynomial) is thus: \$\$
 \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}\_k(a_0) \$\$
 
 The estimator for the prevalence at age \\a_0\\ is then given by \$\$

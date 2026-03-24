@@ -80,18 +80,20 @@ library(serosv)
 rubella <- rubella_uk_1986_1987
 ```
 
-Find the power for the best second degree fractional polynomial with
-monotonicity constraint and a logit link function. The power appears to
-be (-0.9,-0.9).
+Fit the data using a fractional polynomial model via
+[`fp_model()`](https://oucru-modelling.github.io/serosv/reference/fp_model.md).
+In this example, the model searches for the best combination of powers
+within a specified range.
 
 ``` r
 rubella_mod <- fp_model(
   rubella,
   p=list(
-    p_range=seq(-2,3,0.1),
-    degree=2
+    p_range=seq(-2,3,0.1), # range of powers to search over
+    degree=2 # maximum degree for the search
   ), 
-  monotonic = T, link="logit"
+  monotonic = T, # enforce model to be monotonic
+  link="logit"
 )
 rubella_mod
 #> Fractional polynomial model 
@@ -124,15 +126,6 @@ plot(rubella_mod)
 
 ``` r
 library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.3.1
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 parvob19 <- parvob19_fi_1997_1998
 
 # for linelisting data, either transform it to aggregated

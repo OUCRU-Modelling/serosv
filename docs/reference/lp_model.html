@@ -15,7 +15,7 @@ where the linear predictor is approximated locally at one particular age."><meta
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 
 
 <dt id="arg-h">h<a class="anchor" aria-label="anchor" href="#arg-h"></a></dt>
-<dd><p>The constant component of the smoothing parameter. Default: 0.</p></dd>
+<dd><p>The constant bandwidth of the smoothing parameter. Default: 0.</p></dd>
 
 
 <dt id="arg-deg">deg<a class="anchor" aria-label="anchor" href="#arg-deg"></a></dt>
@@ -146,13 +146,18 @@ Default value is 0.7, unless either h is provided, in which case the default is 
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Consider a linear predictor \(\eta(a)\) approximated locally at one particular value \(a_0\).</p>
-<p>For a general degree \(p\), the linear predictor for a neighbor of \(a_0\), labeled \(a_i\) is the Taylor approximation
+<p>For a general degree \(p\), the linear predictor for a neighbor of \(a_0\), labeled \(a_i\) is equivalent to the Taylor approximation
 $$
 \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
 \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
 $$</p>
-<p>Where the estimator for the \(k\)-th derivative of \(\eta(a_0)\), for \(k = 0,1,…,p\)
-(degree of local polynomial) is as followed:
+<p>\(\eta(a_i)\) can be estimated by maximizing
+$$
+ \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 ... +
+ \beta_p(a_i-a_0)^p) \} K_h(a_i - a_0)
+$$</p>
+<p>The estimator for the \(k\)-th derivative of \(\eta(a_0)\), for \(k = 0,1,…,p\)
+(degree of local polynomial) is thus:
 $$
  \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)
 $$</p>
