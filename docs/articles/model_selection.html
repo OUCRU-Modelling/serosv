@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a></li>
-    <li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
     <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
@@ -136,7 +135,7 @@ set</p></li>
 <span><span class="va">aic_bic_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>status<span class="op">=</span><span class="va">seropositive</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"AIC/BIC"</span>,</span>
-<span>  griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>,</span>
+<span>  griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  penalized_spline <span class="op">=</span> <span class="va">penalized_spline_model</span>,</span>
 <span>  farrington <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span><span class="va">.x</span>, start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  local_polynomial <span class="op">=</span> <span class="va">lp_model</span> <span class="co"># expect to not return any values</span></span>
@@ -146,7 +145,7 @@ set</p></li>
 <span><span class="va">cv_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span></span>
 <span>    <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>status<span class="op">=</span><span class="va">seropositive</span><span class="op">)</span>,</span>
 <span>    method <span class="op">=</span> <span class="st">"CV"</span>,</span>
-<span>    griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>,</span>
+<span>    griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>    penalized_spline <span class="op">=</span> <span class="va">penalized_spline_model</span>,</span>
 <span>    farrington <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span><span class="va">.x</span>, start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    local_polynomial <span class="op">=</span> <span class="va">lp_model</span> </span>
@@ -156,36 +155,36 @@ set</p></li>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
 <span><span class="co">##   label            type                     AIC   BIC logLik    df mod_out   </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         polynomial_model       <span style="text-decoration: underline;">1</span>347. <span style="text-decoration: underline;">1</span>362.  -<span style="color: #BB0000;">671.</span>  3    <span style="color: #949494;">&lt;plynml_m&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         polynomial_model       <span style="text-decoration: underline;">1</span>353. <span style="text-decoration: underline;">1</span>363.  -<span style="color: #BB0000;">674.</span>  2    <span style="color: #949494;">&lt;plynml_m&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> penalized_spline penalized_spline_model <span style="text-decoration: underline;">1</span>330. <span style="text-decoration: underline;">1</span>365.  -<span style="color: #BB0000;">658.</span>  6.88 <span style="color: #949494;">&lt;pnlzd_s_&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> farrington       farrington_model       <span style="text-decoration: underline;">1</span>337.   <span style="color: #BB0000;">NA</span>   -<span style="color: #BB0000;">665.</span>  3    <span style="color: #949494;">&lt;frrngtn_&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">4</span> local_polynomial lp_model                 <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>  <span style="color: #BB0000;">NA</span>    <span style="color: #949494;">&lt;lp_model&gt;</span></span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv_out</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
-<span><span class="co">##   label            type                   logloss   auc mod_out   </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         polynomial_model         -<span style="color: #BB0000;">209.</span> 0.700 <span style="color: #949494;">&lt;plynml_m&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> penalized_spline penalized_spline_model   -<span style="color: #BB0000;">132.</span> 0.673 <span style="color: #949494;">&lt;pnlzd_s_&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> farrington       farrington_model         -<span style="color: #BB0000;">133.</span> 0.700 <span style="color: #949494;">&lt;frrngtn_&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> local_polynomial lp_model                 -<span style="color: #BB0000;">131.</span> 0.700 <span style="color: #949494;">&lt;lp_model&gt;</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
+<span><span class="co">##   label            logloss   auc type                  </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith            277. 0.594 polynomial_model      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> penalized_spline    197. 0.601 penalized_spline_model</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> farrington          356. 0.600 farrington_model      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> local_polynomial    237. 0.588 lp_model</span></span></code></pre>
 <p>With aggregated data</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ----- Return AIC, BIC ----- </span></span>
 <span><span class="va">aic_bic_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">aggregated</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"AIC/BIC"</span>,</span>
-<span>  griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>,</span>
+<span>  griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  penalized_spline <span class="op">=</span> <span class="va">penalized_spline_model</span>,</span>
 <span>  farrington <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span><span class="va">.x</span>, start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  local_polynomial <span class="op">=</span> <span class="va">lp_model</span> <span class="co"># expect to not return any values</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ----- Return Cross-validation metrics ----- </span></span>
+<span><span class="co"># ----- Return Cross-validation metrics (default with 4 folds) ----- </span></span>
 <span><span class="va">cv_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_models.html">compare_models</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">aggregated</span>,</span>
 <span>    method <span class="op">=</span> <span class="st">"CV"</span>,</span>
-<span>    griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">3</span><span class="op">)</span>,</span>
+<span>    griffith <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/polynomial_model.html">polynomial_model</a></span><span class="op">(</span><span class="va">.x</span>, k<span class="op">=</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>    penalized_spline <span class="op">=</span> <span class="va">penalized_spline_model</span>,</span>
 <span>    farrington <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="../reference/farrington_model.html">farrington_model</a></span><span class="op">(</span><span class="va">.x</span>, start<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.07</span>,beta<span class="op">=</span><span class="fl">0.1</span>,gamma<span class="op">=</span><span class="fl">0.03</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    local_polynomial <span class="op">=</span> <span class="va">lp_model</span> </span>
@@ -196,19 +195,19 @@ set</p></li>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
 <span><span class="co">##   label            type                     AIC   BIC logLik    df mod_out   </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         polynomial_model        484.  494.  -<span style="color: #BB0000;">239.</span>  3    <span style="color: #949494;">&lt;plynml_m&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         polynomial_model        489.  496.  -<span style="color: #BB0000;">243.</span>  2    <span style="color: #949494;">&lt;plynml_m&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> penalized_spline penalized_spline_model  257.  271.  -<span style="color: #BB0000;">124.</span>  4.37 <span style="color: #949494;">&lt;pnlzd_s_&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> farrington       farrington_model       <span style="text-decoration: underline;">1</span>337.   <span style="color: #BB0000;">NA</span>   -<span style="color: #BB0000;">665.</span>  3    <span style="color: #949494;">&lt;frrngtn_&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">4</span> local_polynomial lp_model                 <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>  <span style="color: #BB0000;">NA</span>    <span style="color: #949494;">&lt;lp_model&gt;</span></span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv_out</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
-<span><span class="co">##   label            type                      mae logloss mod_out   </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         polynomial_model       1.82     -<span style="color: #BB0000;">85.0</span> <span style="color: #949494;">&lt;plynml_m&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> penalized_spline penalized_spline_model 0.026<span style="text-decoration: underline;">1</span>   -<span style="color: #BB0000;">43.2</span> <span style="color: #949494;">&lt;pnlzd_s_&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> farrington       farrington_model       0.234    -<span style="color: #BB0000;">42.1</span> <span style="color: #949494;">&lt;frrngtn_&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> local_polynomial lp_model               0.016<span style="text-decoration: underline;">1</span>   -<span style="color: #BB0000;">42.7</span> <span style="color: #949494;">&lt;lp_model&gt;</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
+<span><span class="co">##   label              mse logloss type                  </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> griffith         0.217   178.  polynomial_model      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> penalized_spline 0.123    79.7 penalized_spline_model</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> farrington       0.117    65.5 farrington_model      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> local_polynomial 0.117    71.3 lp_model</span></span></code></pre>
 </div>
   </main>
 </div>

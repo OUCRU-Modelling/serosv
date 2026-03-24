@@ -12,9 +12,8 @@ articles:
   reading_to_titer: reading_to_titer.html
   repeated_cross_sectional: repeated_cross_sectional.html
   semiparametric_model: semiparametric_model.html
-  sir_model: sir_model.html
   visualizing_model: visualizing_model.html
-last_built: 2026-03-24T06:45Z
+last_built: 2026-03-24T11:10Z
 urls:
   reference: https://oucru-modelling.github.io/serosv/reference
   article: https://oucru-modelling.github.io/serosv/articles

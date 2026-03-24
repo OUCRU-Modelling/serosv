@@ -54,7 +54,7 @@ It will then return a `data.frame` with the following columns
 aic_bic_out <- compare_models(
   data = data %>% rename(status=seropositive),
   method = "AIC/BIC",
-  griffith = ~polynomial_model(.x, k=3),
+  griffith = ~polynomial_model(.x, k=2),
   penalized_spline = penalized_spline_model,
   farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
   local_polynomial = lp_model # expect to not return any values
@@ -64,7 +64,7 @@ aic_bic_out <- compare_models(
 cv_out <- compare_models(
     data %>% rename(status=seropositive),
     method = "CV",
-    griffith = ~polynomial_model(.x, k=3),
+    griffith = ~polynomial_model(.x, k=2),
     penalized_spline = penalized_spline_model,
     farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
     local_polynomial = lp_model 
@@ -81,17 +81,17 @@ With aggregated data
 aic_bic_out <- compare_models(
   data = aggregated,
   method = "AIC/BIC",
-  griffith = ~polynomial_model(.x, k=3),
+  griffith = ~polynomial_model(.x, k=2),
   penalized_spline = penalized_spline_model,
   farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
   local_polynomial = lp_model # expect to not return any values
   ) %>% suppressWarnings()
 
-# ----- Return Cross-validation metrics ----- 
+# ----- Return Cross-validation metrics (default with 4 folds) ----- 
 cv_out <- compare_models(
     data = aggregated,
     method = "CV",
-    griffith = ~polynomial_model(.x, k=3),
+    griffith = ~polynomial_model(.x, k=2),
     penalized_spline = penalized_spline_model,
     farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
     local_polynomial = lp_model 

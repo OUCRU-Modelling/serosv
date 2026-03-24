@@ -82,42 +82,58 @@ aic_bic <- function(dat, mod_func){
 # assess the generalization/prediction of the model
 #' @importFrom stats4 logLik AIC BIC
 #' @importFrom stats predict.glm
-cv <- function(dat, mod_func){
-  # making sure samples are the same across models
-  set.seed(123)
+#' @import tidyr magrittr dplyr pROC
+cv <- function(dat, mod_func, k=4){
+  # assign each row of data to each fold
+  idx_fold <- sort(rep(1:k, length.out=nrow(dat)))
 
-  idx <- sample(nrow(dat), size = floor(0.2*nrow(dat)), replace=FALSE)
-  fit_dat <- dat[-idx, ]
-  test_dat <- dat[idx, ]
+  metrics <- lapply(1:k, \(fold){
+    curr_metric <- list()
 
-  out <- mod_func(fit_dat)
+    # split data
+    fit_dat <- dat[idx_fold != fold, ]
+    test_dat <- dat[idx_fold == fold, ]
 
-  # generate prediction
-  pred <- predict(out, data.frame(age=test_dat[,1]), type="response")
+    # get model info
+    out <- mod_func(fit_dat)
+    curr_metric$type <- class(out)
+    # generate prediction
+    pred <- predict(out, data.frame(age=test_dat[,1]), type="response")
 
-  metrics <- list()
-  metrics$type <- class(out)
+    if(out$datatype == "aggregated"){
+      # if data is aggregated
+      seroprev_obs <- test_dat$pos/test_dat$tot
 
-  if(out$datatype == "aggregated"){
-    # if data is aggregated
-    seroprev_obs <- test_dat$pos/test_dat$tot
+      # MSE
+      curr_metric$mse <- sum((pred - seroprev_obs)**2)/nrow(test_dat)
+      # compute logloss (negative binomial loglikelihood)
+      curr_metric$logloss <- -sum(
+        dbinom(test_dat$pos, test_dat$tot, prob=pred, log=TRUE),
+        na.rm = TRUE)
 
-    # MAE - agnostic to sample size
-    metrics$mae <- sum(pred - seroprev_obs)**2/nrow(test_dat)
-    # compute logloss
-    metrics$logloss <- sum(dbinom(test_dat$pos, test_dat$tot, prob=pred, log=TRUE))
+    }else{
+      # if data is linelisting
+      # make sure pred is slightly higher than 0 and lower than 1 to avoid log(0)
+      eps <- .Machine$double.eps  # smallest positive floating point number ~ 2.2e-16
+      pred <- pmax(eps, pmin(1 - eps, pred))
 
-  }else{
-    # if data is linelisting
-    # compute log-loss
-    metrics$logloss <- sum(test_dat$status*log(pred) + (1 - test_dat$status)*log(1-pred))
-    # and estimate auc
-    metrics$auc <- as.numeric(pROC::auc(test_dat$status, pred))
-  }
+      # compute logloss (negative bernoulli loglikelihood)
+      curr_metric$logloss <- -sum(test_dat$status*log(pred) + (1 - test_dat$status)*log(1-pred),
+                                  na.rm = TRUE)
+      # and estimate auc
+      curr_metric$auc <- as.numeric(pROC::auc(test_dat$status, pred))
+    }
 
-  metrics$mod_out <- list(out)
+    curr_metric
+  }) %>%
+  bind_rows() %>%
+  summarise(
+    # compute average of the metrics
+    across(where(is.numeric), mean),
+    # for type, simply get the first one
+    type = first(type))
 
-  as_tibble(metrics)
+  metrics
 }
 
 

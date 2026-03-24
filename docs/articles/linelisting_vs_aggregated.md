@@ -2,6 +2,8 @@
 
 ``` r
 library(serosv)
+#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
+#> loading 'serosv'
 library(magrittr)
 ```
 

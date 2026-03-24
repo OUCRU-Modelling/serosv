@@ -180,8 +180,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000131 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.31 seconds.
+#> Chain 1: Gradient evaluation took 0.00013 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.3 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -198,9 +198,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 15.752 seconds (Warm-up)
-#> Chain 1:                140.008 seconds (Sampling)
-#> Chain 1:                155.76 seconds (Total)
+#> Chain 1:  Elapsed Time: 15.235 seconds (Warm-up)
+#> Chain 1:                139.842 seconds (Sampling)
+#> Chain 1:                155.077 seconds (Total)
 #> Chain 1: 
 #> Warning: There were 324 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
