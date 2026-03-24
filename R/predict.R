@@ -4,6 +4,7 @@
 #' A wrapper of predict.glm for direct prediction from polynomial_model object
 #'
 #' @param x serosv models
+#' @param newdata data.frame with age column to generate prediction
 #' @param ... arbitrary argument
 #'
 #' @importFrom stats predict.glm
@@ -20,6 +21,7 @@ predict.polynomial_model <- function(x, newdata=NULL, ...){
 #' Prediction for serosv fractional polynomial model
 #'
 #' @param x serosv models
+#' @param newdata data.frame with age column to generate prediction
 #' @param ... arbitrary argument
 #'
 #' @importFrom stats predict.glm
@@ -35,6 +37,7 @@ predict.fp_model <- function(x, newdata=NULL, ...){
 #' Prediction for serosv Weibull model
 #'
 #' @param x serosv models
+#' @param newdata data.frame with age column to generate prediction
 #' @param ... arbitrary argument
 #'
 #' @importFrom stats predict.glm
@@ -105,6 +108,7 @@ predict.farrington_model <- function(x, newdata=NULL,...){
 #' Predict from an hierarchical bayesian model
 #'
 #' @param x serosv models
+#' @param newdata data.frame with age column to generate prediction
 #' @param ... arbitrary arguments
 #' @import dplyr
 #'

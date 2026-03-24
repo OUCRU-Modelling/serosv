@@ -35,12 +35,3 @@ list of 3 elements:
 \description{
 Return the best powers for a given degree
 }
-\examples{
-df <- hav_be_1993_1994
-best_p <- find_best_fp_powers(
-df,
-p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-)
-best_p
-
-}

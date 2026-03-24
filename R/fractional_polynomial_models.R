@@ -35,19 +35,10 @@ formulate <- function(p) {
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
 #'
-#'
 #' @return list of 3 elements:
 #'   \item{p}{The best power for fp model.}
 #'   \item{deviance}{Deviance of the best fitted model.}
 #'   \item{model}{The best model fitted}
-#'
-#' @examples
-#' df <- hav_be_1993_1994
-#' best_p <- find_best_fp_powers(
-#' df,
-#' p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-#' )
-#' best_p
 #'
 #' @importFrom stats glm binomial as.formula
 #' @import dplyr tidyr
