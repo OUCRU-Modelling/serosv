@@ -37,6 +37,7 @@ fit for data where asymptotic behavior is expected."><meta property="og:image" c
     <li><a class="dropdown-item" href="../articles/repeated_cross_sectional.html">Model repeated cross-sectional data</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Utilities</h6></li>
+    <li><a class="dropdown-item" href="../articles/reading_to_titer.html">Convert assay readings to titer</a></li>
     <li><a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a></li>
     <li><a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a></li>
     <li><a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a></li>
@@ -87,12 +88,15 @@ fit for data where asymptotic behavior is expected.</p>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>is either:
-(1) a numeric vector specifying the powers to apply to the predictors, or
-(2) a named list with two elements, <code>"p_range"</code> and <code>"degree"</code>. <code>"p_range"</code> \
-   is a sequence of powers and <code>"degree"</code> is the maximum degree to search over
-If (1), the supplied values are used directly as the powers for the predictors.
-If (2), the package searches for the best degree and power combinations</p></dd>
+<dd><p>is either:</p><ul><li><p>a numeric vector specifying the powers to apply to the predictors</p></li>
+<li><p>a named list with two elements, <code>"p_range"</code> and <code>"degree"</code>. <code>"p_range"</code>
+   is a sequence of powers and <code>"degree"</code> is the maximum degree.
+   In which case the package will search for the best degree and power combinations</p></li>
+</ul></dd>
+
+
+<dt id="arg-monotonic">monotonic<a class="anchor" aria-label="anchor" href="#arg-monotonic"></a></dt>
+<dd><p>whether the returned model should be monotonic (if a search is specified)</p></dd>
 
 
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
@@ -113,10 +117,6 @@ If (2), the package searches for the best degree and power combinations</p></dd>
 
 <dt id="arg-status-col">status_col<a class="anchor" aria-label="anchor" href="#arg-status-col"></a></dt>
 <dd><p>name of the `status` column (default status_col="status").</p></dd>
-
-
-<dt id="arg-degree">degree<a class="anchor" aria-label="anchor" href="#arg-degree"></a></dt>
-<dd><p>the degree of the model (i.e. number of power terms). Recommended to be &lt;= 2.</p></dd>
 
 </dl></div>
     <div class="section level2">

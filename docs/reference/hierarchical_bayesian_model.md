@@ -198,9 +198,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 15.299 seconds (Warm-up)
-#> Chain 1:                137.202 seconds (Sampling)
-#> Chain 1:                152.501 seconds (Total)
+#> Chain 1:  Elapsed Time: 15.752 seconds (Warm-up)
+#> Chain 1:                140.008 seconds (Sampling)
+#> Chain 1:                155.76 seconds (Total)
 #> Chain 1: 
 #> Warning: There were 324 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup

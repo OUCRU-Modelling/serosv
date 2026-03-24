@@ -154,7 +154,7 @@
 - [`pava()`](https://oucru-modelling.github.io/serosv/reference/pava.md)
   : Monotonize seroprevalence
 - [`to_titer()`](https://oucru-modelling.github.io/serosv/reference/to_titer.md)
-  : Process assay test result to titer
+  : Convert assay readings to titers
 - [`correct_prevalence()`](https://oucru-modelling.github.io/serosv/reference/correct_prevalence.md)
   : Estimate the true sero prevalence using Frequentist/Bayesian
   estimation

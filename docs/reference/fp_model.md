@@ -29,12 +29,19 @@ fp_model(
 
 - p:
 
-  is either: (1) a numeric vector specifying the powers to apply to the
-  predictors, or (2) a named list with two elements, `"p_range"` and
-  `"degree"`. `"p_range"` \\ is a sequence of powers and `"degree"` is
-  the maximum degree to search over If (1), the supplied values are used
-  directly as the powers for the predictors. If (2), the package
-  searches for the best degree and power combinations
+  is either:
+
+  - a numeric vector specifying the powers to apply to the predictors
+
+  - a named list with two elements, `"p_range"` and `"degree"`.
+    `"p_range"` is a sequence of powers and `"degree"` is the maximum
+    degree. In which case the package will search for the best degree
+    and power combinations
+
+- monotonic:
+
+  whether the returned model should be monotonic (if a search is
+  specified)
 
 - link:
 
@@ -55,11 +62,6 @@ fp_model(
 - status_col:
 
   name of the \`status\` column (default status_col="status").
-
-- degree:
-
-  the degree of the model (i.e. number of power terms). Recommended to
-  be \<= 2.
 
 ## Value
 

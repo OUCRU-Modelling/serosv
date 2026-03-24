@@ -45,7 +45,7 @@ plot_data <- function(x){
 }
 
 #=== Helper function for plotting =====
-plot_util <- function(age, pos, tot, sero, foi, cex = 20){
+plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
   # resolve no visible binding
   x <- y <- ymin <- ymax <- NULL
 
@@ -55,7 +55,7 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
     coord_cartesian(xlim=c(0,max(age)), ylim=c(0, 1)) +
     scale_y_continuous(
       name = "Seroprevalence",
-      sec.axis = sec_axis(~.*1, name = " Force of infection")
+      sec.axis = sec_axis(~.*scale_foi, name = " Force of infection")
     ) + set_plot_style()
 
   # === Add seroprevalence layer
@@ -81,22 +81,51 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
       # --- Handle cases where FOI is a data.frame (with CI)
       # plot <- plot + geom_smooth(aes_auto(foi, col = "foi", linetype="foi", fill="ci"), data=foi,
       #                          stat="identity",lwd=0.5)
-      plot <- plot + geom_smooth(aes(x = x, y=y, ymin =ymin, ymax = ymax, col = "foi", linetype="foi", fill="ci"), data=foi,
-                               stat="identity",lwd=0.5)
+      plot <- plot + geom_smooth(
+        aes(
+          x = x,
+          # scale FOI if specified
+          y = y/scale_foi,
+          ymin = ymin/scale_foi,
+          ymax = ymax/scale_foi,
+          col = "foi",
+          linetype = "foi",
+          fill = "ci"
+        ),
+        data = foi,
+        stat = "identity",
+        lwd = 0.5
+      )
     }else{
       # --- Handle cases where CI for FOI is not computable & length of age for foi differs from provided age vector
-      plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data=foi,
-                               stat="identity",lwd=0.5)
+      plot <- plot + geom_line(
+        aes(
+          x = x,
+          # scale FOI if specified
+          y = y/scale_foi,
+          col = "foi",
+          linetype = "foi"
+        ),
+        data = foi,
+        stat = "identity",
+        lwd = 0.5
+      )
     }
   }else if (length(age) != length(foi)){
     # --- handle some cases when length of age differs from length of foi
     age <- age[c(-1,-length(age))]
     foi <- data.frame(x = age, y = foi)
-    plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data = foi,
-                             lwd = 0.5)
+    plot <- plot + geom_line(aes(
+      x = x,
+      y = y/scale_foi,
+      col = "foi",
+      linetype = "foi"
+    ),
+    data = foi,
+    lwd = 0.5)
   }else{
     # --- Simply plot foi
-    plot <- plot + geom_line(aes(x = age, y = foi, col = "foi", linetype="foi"),
+    plot <- plot + geom_line(aes(x = age, y = foi/scale_foi, col = "foi", linetype="foi"),
                 lwd = 0.5)
   }
   plot

@@ -123,6 +123,7 @@ articles:
 - title: Utilities
   navbar: Utilities
   contents:
+  - reading_to_titer
   - data_transformation
   - imperfect_test
   - visualizing_model

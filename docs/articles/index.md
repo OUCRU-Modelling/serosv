@@ -19,6 +19,8 @@
 
 ### Utilities
 
+- [Convert assay readings to
+  titer](https://oucru-modelling.github.io/serosv/articles/reading_to_titer.md):
 - [Data
   transformation](https://oucru-modelling.github.io/serosv/articles/data_transformation.md):
 - [Imperfect serological

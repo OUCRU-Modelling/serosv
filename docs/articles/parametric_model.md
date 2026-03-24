@@ -432,8 +432,8 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000164 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.64 seconds.
+#> Chain 1: Gradient evaluation took 0.00011 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.1 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -450,9 +450,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 16.746 seconds (Warm-up)
-#> Chain 1:                95.814 seconds (Sampling)
-#> Chain 1:                112.56 seconds (Total)
+#> Chain 1:  Elapsed Time: 17.183 seconds (Warm-up)
+#> Chain 1:                98.228 seconds (Sampling)
+#> Chain 1:                115.411 seconds (Total)
 #> Chain 1:
 ```
 
@@ -518,8 +518,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 6.1e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
+#> Chain 1: Gradient evaluation took 6.3e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.63 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -536,9 +536,9 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.17 seconds (Warm-up)
-#> Chain 1:                5.845 seconds (Sampling)
-#> Chain 1:                10.015 seconds (Total)
+#> Chain 1:  Elapsed Time: 4.184 seconds (Warm-up)
+#> Chain 1:                5.866 seconds (Sampling)
+#> Chain 1:                10.05 seconds (Total)
 #> Chain 1:
 ```
 

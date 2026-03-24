@@ -53,6 +53,7 @@
     <li><a class="dropdown-item" href="../articles/repeated_cross_sectional.html">Model repeated cross-sectional data</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Utilities</h6></li>
+    <li><a class="dropdown-item" href="../articles/reading_to_titer.html">Convert assay readings to titer</a></li>
     <li><a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a></li>
     <li><a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a></li>
     <li><a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a></li>
@@ -93,27 +94,25 @@
 <div class="section level2">
 <h2 id="input-data-format">Input data format<a class="anchor" aria-label="anchor" href="#input-data-format"></a>
 </h2>
-<p>Most <code>*_model()</code> functions in <code>serosv</code> require
+<p>All <code>*_model()</code> functions in <code>serosv</code> require
 <code>data</code> argument as the input data to be fitted.</p>
 <p>The package can handle both linelisting and aggregated data, and it
-infers the format from the column names of the input data frame. This
-means that input data is <u>expected to follow a specific
-format.</u></p>
-<p>For linelisting data: data must have <code>age</code>,
-<code>pos</code> and <code>tot</code> columns, where</p>
+infers the format from the structure of the input data frame. This means
+that input data is <u>expected to follow a specific format.</u></p>
+<p>For linelisting data: data must have 3 columns as follows</p>
 <ul>
-<li><p><code>age</code> is the age vector</p></li>
-<li><p><code>pos</code> is the vector of counts of sero positives of
-that age group</p></li>
-<li><p><code>tot</code> is the vector is the total population of that
-age group</p></li>
+<li><p>the age vector (column name specified via <code>age_col</code>
+parameter)</p></li>
+<li><p>the vector of counts of sero positives of that age group (column
+name specified via <code>pos_col</code> parameter)</p></li>
+<li><p>the vector is the total population of that age group (column name
+specified via <code>tot_col</code> parameter)</p></li>
 </ul>
-<p>For aggregated data: data must have <code>age</code>,
-<code>status</code> columns, where</p>
+<p>For aggregated data: data must have 2 columns as follows</p>
 <ul>
-<li><p><code>age</code> is the age vector of individuals</p></li>
-<li><p><code>status</code> is the vector for the sero positivity of that
-individual</p></li>
+<li><p>the age vector of individuals</p></li>
+<li><p>is the vector indicating the serostatus of that individual
+(column name specified via <code>status_col</code> parameter)</p></li>
 </ul>
 <p><strong>Example:</strong> Fitting linelisting and aggregated data
 using <code><a href="../reference/polynomial_model.html">polynomial_model()</a></code></p>

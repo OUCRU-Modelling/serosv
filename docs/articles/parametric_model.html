@@ -53,6 +53,7 @@
     <li><a class="dropdown-item" href="../articles/repeated_cross_sectional.html">Model repeated cross-sectional data</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Utilities</h6></li>
+    <li><a class="dropdown-item" href="../articles/reading_to_titer.html">Convert assay readings to titer</a></li>
     <li><a class="dropdown-item" href="../articles/data_transformation.html">Data transformation</a></li>
     <li><a class="dropdown-item" href="../articles/imperfect_test.html">Imperfect serological test</a></li>
     <li><a class="dropdown-item" href="../articles/visualizing_model.html">Model visualization</a></li>
@@ -477,8 +478,8 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span></span>
 <span><span class="co">#&gt; Chain 1:   Stan can't start sampling from this initial value.</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000164 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.64 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.00011 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.1 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -495,9 +496,9 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 16.746 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                95.814 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                112.56 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 17.183 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                98.228 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                115.411 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span></span>
@@ -558,8 +559,8 @@ for a more detailed explanation of the method.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.1e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.3e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.63 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -576,9 +577,9 @@ for a more detailed explanation of the method.</p>
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.17 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                5.845 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                10.015 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.184 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                5.866 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                10.05 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span></span>

@@ -19,11 +19,16 @@ fp_model(
 \item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
 \item{p}{is either:
-(1) a numeric vector specifying the powers to apply to the predictors, or
-(2) a named list with two elements, \code{"p_range"} and \code{"degree"}. \code{"p_range"} \
-   is a sequence of powers and \code{"degree"} is the maximum degree to search over
-If (1), the supplied values are used directly as the powers for the predictors.
-If (2), the package searches for the best degree and power combinations}
+\itemize{
+ \item{a numeric vector specifying the powers to apply to the predictors}
+ \item{
+   a named list with two elements, \code{"p_range"} and \code{"degree"}. \code{"p_range"}
+   is a sequence of powers and \code{"degree"} is the maximum degree.
+   In which case the package will search for the best degree and power combinations
+ }
+}}
+
+\item{monotonic}{whether the returned model should be monotonic (if a search is specified)}
 
 \item{link}{the link function for model. Defaulted to "logit".}
 
@@ -34,8 +39,6 @@ If (2), the package searches for the best degree and power combinations}
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
-
-\item{degree}{the degree of the model (i.e. number of power terms). Recommended to be <= 2.}
 }
 \value{
 a list of class fp_model with 5 items
