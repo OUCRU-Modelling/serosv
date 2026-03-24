@@ -82,7 +82,7 @@ aic_bic <- function(dat, mod_func){
 # assess the generalization/prediction of the model
 #' @importFrom stats4 logLik AIC BIC
 #' @importFrom stats predict.glm
-#' @import tidyr magrittr dplyr pROC
+#' @import tidyr dplyr pROC
 cv <- function(dat, mod_func, k=4){
   # assign each row of data to each fold
   idx_fold <- sort(rep(1:k, length.out=nrow(dat)))
