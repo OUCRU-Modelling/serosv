@@ -15,7 +15,7 @@
 #' @details
 #' Built-in comparison methods include:
 #' - computing AIC and BIC, which returns AIC, BIC values of the model if available
-#' - cross validation, which reutns
+#' - cross validation, which returns MSE and logloss (negative )
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr imap_dfr as_mapper
@@ -32,12 +32,16 @@ compare_models <- function(data, method="AIC/BIC",...){
       # }
 
       # get function to compute comparison metrics
-      metric_func <- switch(
-        method,
-        "AIC/BIC" = aic_bic,
-        "CV" = cv,
+      metric_func <- if(is.character(method)){
+        switch(
+          method,
+          "AIC/BIC" = aic_bic,
+          "CV" = cv,
+          method
+        )
+      }else{
         method
-      )
+      }
 
       assert_that(is.function(metric_func),
                   msg = "Function to compute the metrics must be provided")
@@ -73,7 +77,8 @@ aic_bic <- function(dat, mod_func){
     BIC = bic,
     logLik = if (!is.null(ll)) as.numeric(ll) else NA,
     df = if (!is.null(ll) && !is.null(attr(ll, "df"))) attr(ll, "df") else NA,
-    mod_out = list(out)
+    mod_out = list(out),
+    plots = list(plot(out)+ggtitle(paste("Fitted model using", class(out))))
   )
 }
 
@@ -133,7 +138,14 @@ cv <- function(dat, mod_func, k=4){
     # for type, simply get the first one
     type = first(type))
 
-  metrics
+  # also return the model when it is fitted using the whole data
+  out <- mod_func(dat)
+
+  metrics %>%
+    mutate(
+      mod_out = list(out),
+      plots = list(plot(out)+ggtitle(paste("Fitted model using", class(out))))
+    )
 }
 
 
