@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a></li>
-    <li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
     <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
@@ -478,8 +477,8 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.</span></span>
 <span><span class="co">#&gt; Chain 1:   Stan can't start sampling from this initial value.</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.00011 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.1 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 0.000165 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.65 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -496,9 +495,9 @@ parameters (<span class="math inline">\(\alpha_3 &gt;
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 17.183 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                98.228 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                115.411 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 17.494 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                100.35 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                117.844 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span></span>
@@ -559,8 +558,8 @@ for a more detailed explanation of the method.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.3e-05 seconds</span></span>
-<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.63 seconds.</span></span>
+<span><span class="co">#&gt; Chain 1: Gradient evaluation took 6.5e-05 seconds</span></span>
+<span><span class="co">#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.65 seconds.</span></span>
 <span><span class="co">#&gt; Chain 1: Adjust your expectations accordingly!</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
@@ -577,9 +576,9 @@ for a more detailed explanation of the method.</p>
 <span><span class="co">#&gt; Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)</span></span>
 <span><span class="co">#&gt; Chain 1: </span></span>
-<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.184 seconds (Warm-up)</span></span>
-<span><span class="co">#&gt; Chain 1:                5.866 seconds (Sampling)</span></span>
-<span><span class="co">#&gt; Chain 1:                10.05 seconds (Total)</span></span>
+<span><span class="co">#&gt; Chain 1:  Elapsed Time: 4.337 seconds (Warm-up)</span></span>
+<span><span class="co">#&gt; Chain 1:                6.096 seconds (Sampling)</span></span>
+<span><span class="co">#&gt; Chain 1:                10.433 seconds (Total)</span></span>
 <span><span class="co">#&gt; Chain 1:</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span></span>

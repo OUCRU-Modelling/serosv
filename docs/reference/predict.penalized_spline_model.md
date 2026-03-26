@@ -6,12 +6,12 @@ Prediction for serosv penalized spline model
 
 ``` r
 # S3 method for class 'penalized_spline_model'
-predict(x, newdata = NULL, ...)
+predict(object, newdata = NULL, ...)
 ```
 
 ## Arguments
 
-- x:
+- object:
 
   serosv models
 

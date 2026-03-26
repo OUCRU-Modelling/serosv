@@ -6,14 +6,23 @@ Predict from the age_time_mdoel
 
 ``` r
 # S3 method for class 'age_time_model'
-predict(x, ci = 0.95, le = 100, ...)
+predict(object, newdata, modtype = "monotonized", ...)
 ```
 
 ## Arguments
 
-- x:
+- object:
 
   serosv models
+
+- newdata:
+
+  data.frame with age column to generate prediction
+
+- modtype:
+
+  either "monotonized" (to predict using monotonized model) or
+  "non-monotonized"
 
 - ...:
 

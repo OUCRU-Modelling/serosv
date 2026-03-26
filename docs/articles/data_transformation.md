@@ -2,8 +2,6 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 ```
 
 ## Aggregate data
@@ -24,10 +22,10 @@ Arguments:
 
 ``` r
 linelisting_data <- hcv_be_2006
-aggregated_data <- transform_data(linelisting_data$dur, linelisting_data$seropositive)
+aggregated_data <- transform_data(linelisting_data, stratum_col = "dur", status_col="seropositive")
 aggregated_data
 #> # A tibble: 116 × 3
-#>        t   pos   tot
+#>      age   pos   tot
 #>    <dbl> <int> <int>
 #>  1   0.1     0     1
 #>  2   0.3     0     1

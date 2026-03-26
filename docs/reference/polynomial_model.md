@@ -127,7 +127,7 @@ Catalytic Curve.” Journal of the American Statistical Association 29
 
 ``` r
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
+aggregated <- transform_data(data, stratum_col = "age", status_col="seropositive")
 
 # fit with aggregated data
 model <- polynomial_model(aggregated, k = 1)

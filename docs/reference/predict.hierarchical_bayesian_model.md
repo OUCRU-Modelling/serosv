@@ -6,14 +6,18 @@ Predict from an hierarchical bayesian model
 
 ``` r
 # S3 method for class 'hierarchical_bayesian_model'
-predict(x, newdata = NULL, ...)
+predict(object, newdata = NULL, ...)
 ```
 
 ## Arguments
 
-- x:
+- object:
 
   serosv models
+
+- newdata:
+
+  data.frame with age column to generate prediction
 
 - ...:
 

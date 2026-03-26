@@ -63,23 +63,23 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">transform_data</span><span class="op">(</span><span class="va">t</span>, <span class="va">spos</span>, stratum_col <span class="op">=</span> <span class="st">"t"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">transform_data</span><span class="op">(</span><span class="va">data</span>, stratum_col <span class="op">=</span> <span class="st">"age"</span>, status_col <span class="op">=</span> <span class="st">"status"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-t">t<a class="anchor" aria-label="anchor" href="#arg-t"></a></dt>
-<dd><p>the time vector (for stratification).</p></dd>
-
-
-<dt id="arg-spos">spos<a class="anchor" aria-label="anchor" href="#arg-spos"></a></dt>
-<dd><p>the seropositive vector.</p></dd>
+<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dd><p>a data frame with columns for age and serostatus</p></dd>
 
 
 <dt id="arg-stratum-col">stratum_col<a class="anchor" aria-label="anchor" href="#arg-stratum-col"></a></dt>
-<dd><p>new name for the time vector (default to "t")</p></dd>
+<dd><p>name of the column to stratify by (default to "age")</p></dd>
+
+
+<dt id="arg-status-col">status_col<a class="anchor" aria-label="anchor" href="#arg-status-col"></a></dt>
+<dd><p>name of the column for serostatus</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -90,10 +90,10 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">hcv_be_2006</span></span></span>
-<span class="r-in"><span><span class="va">hcv_df</span> <span class="op">&lt;-</span> <span class="fu">transform_data</span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">dur</span>, <span class="va">df</span><span class="op">$</span><span class="va">seropositive</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">hcv_df</span> <span class="op">&lt;-</span> <span class="fu">transform_data</span><span class="op">(</span><span class="va">df</span>, stratum_col<span class="op">=</span><span class="st">"dur"</span>, status_col<span class="op">=</span><span class="st">"seropositive"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">hcv_df</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 116 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        t   pos   tot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      age   pos   tot</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>   0.1     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>   0.3     0     1</span>

@@ -6,14 +6,18 @@ Prediction for serosv Weibull model
 
 ``` r
 # S3 method for class 'weibull_model'
-predict(x, newdata = NULL, ...)
+predict(object, newdata = NULL, ...)
 ```
 
 ## Arguments
 
-- x:
+- object:
 
   serosv models
+
+- newdata:
+
+  data.frame with age column to generate prediction
 
 - ...:
 

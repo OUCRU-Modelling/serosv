@@ -2,8 +2,6 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 library(magrittr)
 ```
 
@@ -83,9 +81,9 @@ transformation](https://oucru-modelling.github.io/serosv/articles/data_transform
 
 ``` r
 transform_data(
-  linelisting$age, 
-  linelisting$seropositive,
-  stratum_col = "age") %>% 
+  linelisting,
+  stratum_col="age", 
+  status_col="seropositive") %>% 
   polynomial_model(k=1) %>% 
   plot()
 ```

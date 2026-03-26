@@ -6,14 +6,18 @@ Prediction for serosv fractional polynomial model
 
 ``` r
 # S3 method for class 'fp_model'
-predict(x, newdata = NULL, ...)
+predict(object, newdata = NULL, ...)
 ```
 
 ## Arguments
 
-- x:
+- object:
 
   serosv models
+
+- newdata:
+
+  data.frame with age column to generate prediction
 
 - ...:
 

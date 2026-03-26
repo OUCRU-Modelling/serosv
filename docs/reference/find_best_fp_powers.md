@@ -33,22 +33,6 @@ find_best_fp_powers(data, p, mc, degree, link = "logit")
 
   the link function. Defaulted to "logit".
 
-- age_col:
-
-  name of the \`age\` column (default age_col="age").
-
-- pos_col:
-
-  name of the \`pos\` column (default pos_col="pos").
-
-- tot_col:
-
-  name of the \`tot\` column (default tot_col="tot").
-
-- status_col:
-
-  name of the \`status\` column (default status_col="status").
-
 ## Value
 
 list of 3 elements:
@@ -64,16 +48,3 @@ list of 3 elements:
 - model:
 
   The best model fitted
-
-## Examples
-
-``` r
-df <- hav_be_1993_1994
-best_p <- find_best_fp_powers(
-df,
-p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-)
-#> Error in find_best_fp_powers(df, p = seq(-2, 3, 0.1), mc = FALSE, degree = 2,     link = "cloglog"): could not find function "find_best_fp_powers"
-best_p
-#> Error: object 'best_p' not found
-```

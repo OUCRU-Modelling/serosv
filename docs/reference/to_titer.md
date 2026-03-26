@@ -1,5 +1,8 @@
 # Convert assay readings to titers
 
+to_titer() converts raw assay readings (e.g., OD, fluorescence
+intensity) to titer by fitting a calibrating model
+
 ## Usage
 
 ``` r
@@ -22,11 +25,11 @@ to_titer(
 
   either:
 
-  - A string naming a built-in model (currently supported: \`"4PL"\`),
-    or
+  1.  A string naming a built-in model (currently supported: `"4PL"`),
+      or
 
-  - A named list with two functions: \`\$mod\` for curve fitting and
-    \`\$quantify_ci\` for titer estimation with confidence intervals.
+  2.  A named list with two functions: `$mod` for curve fitting and
+      `$quantify_ci` for titer estimation with confidence intervals.
 
 - positive_threshold:
 
@@ -34,11 +37,45 @@ to_titer(
 
 - ci:
 
-  confidence interval for the titer estimates (default is .95 i.e., 95
+  confidence interval for the titer estimates (default is .95 i.e., 95%
+  CI)
 
-  negative_controlif TRUE, output tibble will include the result for
-  negative controls
+- negative_control:
 
-a data.frame with 8 columns to_titer() converts raw assay readings
-(e.g., OD, fluorescence intensity) to titer by fitting a calibrating
-model
+  if TRUE, output tibble will include the result for negative controls
+
+## Value
+
+a data.frame with 8 columns
+
+- plate_id:
+
+  id of the plate
+
+- data:
+
+  list of \`data.frame\`s containing the raw sample results from each
+  plate
+
+- antitoxin_df:
+
+  list of \`data.frame\`s containing the raw results for antitoxins from
+  each plate
+
+- standard_curve_func:
+
+  list of functions mapping from assay reading to titer for each plate
+
+- std_crv_midpoint:
+
+  midpoint of the standard curve, for qualitative analysis
+
+- processed_data:
+
+  list of \`tibble\`s containing samples with titer estimates (lower,
+  median, upper)
+
+- negative_control:
+
+  list of \`tibble\`s containing negative control check results (if
+  \`negative_control=TRUE\`)

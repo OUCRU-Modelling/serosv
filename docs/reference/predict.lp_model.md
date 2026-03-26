@@ -6,12 +6,12 @@ Prediction for serosv local polynomial model
 
 ``` r
 # S3 method for class 'lp_model'
-predict(x, newdata = NULL, ...)
+predict(object, newdata = NULL, ...)
 ```
 
 ## Arguments
 
-- x:
+- object:
 
   serosv models
 
