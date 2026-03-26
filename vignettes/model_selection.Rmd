@@ -14,9 +14,10 @@ library(magrittr)
 ```
 
 ```{r, warning=FALSE}
-data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] 
+data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] %>% 
+  rename(status = seropositive) 
 
-aggregated <- transform_data(data, stratum_col = "age", status_col="seropositive")
+aggregated <- transform_data(data, stratum_col = "age", status_col="status")
 ```
 
 ## Generate models comparison `data.frame`
@@ -52,7 +53,7 @@ It will then return a `data.frame` with the following columns
 ```{r message=FALSE}
 # ----- Return AIC, BIC ----- 
 aic_bic_out <- compare_models(
-  data = data %>% rename(status=seropositive),
+  data = data,
   method = "AIC/BIC",
   griffith = ~polynomial_model(.x, k=2),
   penalized_spline = penalized_spline_model,
@@ -62,7 +63,7 @@ aic_bic_out <- compare_models(
 
 # ----- Return Cross-validation metrics ----- 
 cv_out <- compare_models(
-    data %>% rename(status=seropositive),
+    data,
     method = "CV",
     griffith = ~polynomial_model(.x, k=2),
     penalized_spline = penalized_spline_model,
@@ -100,4 +101,64 @@ cv_out <- compare_models(
 
 aic_bic_out
 cv_out
+```
+
+## Generate custom metrics
+
+The users can also provide a custom function to generate the comparison metrics.
+
+This function must accepts 2 parameters:
+
+-   `dat` the input data
+
+-   `model_func` a function that takes an input data and returns a `serosv` model
+
+And it must returns a data frame with 1 row where each column represents one metric.
+
+***Example:***
+
+The following implements holdout validation and returns MAE:
+
+```{r}
+generate_mae <- function(dat, model_func){
+  n_train <- round(nrow(dat)*0.8)
+  train <- dat[1:n_train,]
+  test <- dat[n_train:nrow(dat),]
+  
+  fit <- model_func(dat)
+  pred <- predict(fit, test[, 1, drop=FALSE])
+  
+  # handle error differently depending on datatype
+  mae <- if(fit$datatype == "linelisting"){
+    sum(abs(test$status - pred), na.rm=TRUE)/nrow(test)
+  }else{
+    sum(abs(test$pos/test$tot - pred), na.rm=TRUE)/nrow(test)
+  }
+  
+  data.frame(
+    mae = mae
+  )
+}
+```
+
+We can then run `compare_models` with the custom metrics function
+
+```{r}
+compare_models(
+    data = aggregated,
+    method = generate_mae,
+    griffith = ~polynomial_model(.x, k=2),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
+
+compare_models(
+    data = data,
+    method = generate_mae,
+    griffith = ~polynomial_model(.x, k=2),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
 ```
