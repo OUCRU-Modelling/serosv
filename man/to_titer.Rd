@@ -16,15 +16,15 @@ to_titer(
 \item{df}{a standardized data.frame returned by`standardize_data()`}
 
 \item{model}{either:
-\itemize{
-  \item A string naming a built-in model (currently supported: `"4PL"`), or
-  \item A named list with two functions: `$mod` for curve fitting and
-    `$quantify_ci` for titer estimation with confidence intervals.
+\enumerate{
+  \item {A string naming a built-in model (currently supported: \code{"4PL"}), or}
+  \item  {A named list with two functions: \code{$mod} for curve fitting and
+    \code{$quantify_ci} for titer estimation with confidence intervals.}
 }}
 
 \item{positive_threshold}{if not NULL, processed_data will have the serostatus labeled}
 
-\item{ci}{confidence interval for the titer estimates (default is .95 i.e., 95% CI)}
+\item{ci}{confidence interval for the titer estimates (default is .95 i.e., 95\% CI)}
 
 \item{negative_control}{if TRUE, output tibble will include the result for negative controls}
 }

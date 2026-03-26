@@ -63,9 +63,9 @@ plot(model2)
 
 ```{r}
 transform_data(
-  linelisting$age, 
-  linelisting$seropositive,
-  stratum_col = "age") %>% 
+  linelisting,
+  stratum_col="age", 
+  status_col="seropositive") %>% 
   polynomial_model(k=1) %>% 
   plot()
 ```

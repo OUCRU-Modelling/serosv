@@ -43,7 +43,7 @@ correct_prevalence <- function(data, bayesian=TRUE,
   tot <- data$tot
 
   if (data$type == "linelisting"){
-    transform_df <- transform_data(age, pos)
+    transform_df <- transform_data(data, stratum_col="age", status_col="pos")
     age <- transform_df$t
     pos <- transform_df$pos
     tot <- transform_df$tot

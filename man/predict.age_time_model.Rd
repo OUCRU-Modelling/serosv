@@ -4,10 +4,14 @@
 \alias{predict.age_time_model}
 \title{Predict from the age_time_mdoel}
 \usage{
-\method{predict}{age_time_model}(x, ci = 0.95, le = 100, ...)
+\method{predict}{age_time_model}(object, newdata, modtype = "monotonized", ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
+
+\item{newdata}{data.frame with age column to generate prediction}
+
+\item{modtype}{either "monotonized" (to predict using monotonized model) or "non-monotonized"}
 
 \item{...}{arbitrary argument}
 }

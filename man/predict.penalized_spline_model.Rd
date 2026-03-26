@@ -4,10 +4,10 @@
 \alias{predict.penalized_spline_model}
 \title{Prediction for serosv penalized spline model}
 \usage{
-\method{predict}{penalized_spline_model}(x, newdata = NULL, ...)
+\method{predict}{penalized_spline_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
 
 \item{newdata}{data.frame with age column to generate prediction}
 

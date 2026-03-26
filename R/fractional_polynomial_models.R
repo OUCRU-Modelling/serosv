@@ -30,10 +30,6 @@ formulate <- function(p) {
 #' @param mc indicates if the returned model should be monotonic.
 #' @param degree the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
-#' @param age_col name of the `age` column (default age_col="age").
-#' @param pos_col name of the `pos` column (default pos_col="pos").
-#' @param tot_col name of the `tot` column (default tot_col="tot").
-#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @return list of 3 elements:
 #'   \item{p}{The best power for fp model.}

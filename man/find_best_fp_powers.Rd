@@ -17,14 +17,6 @@ find_best_fp_powers(data, p, mc, degree, link = "logit")
 \item{degree}{the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.}
 
 \item{link}{the link function. Defaulted to "logit".}
-
-\item{age_col}{name of the `age` column (default age_col="age").}
-
-\item{pos_col}{name of the `pos` column (default pos_col="pos").}
-
-\item{tot_col}{name of the `tot` column (default tot_col="tot").}
-
-\item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
 list of 3 elements:

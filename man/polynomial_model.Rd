@@ -68,7 +68,7 @@ Refer to section 6.1.1. of the the book by Hens et al. (2012) for further detail
 }
 \examples{
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
+aggregated <- transform_data(data, stratum_col = "age", status_col="seropositive")
 
 # fit with aggregated data
 model <- polynomial_model(aggregated, k = 1)

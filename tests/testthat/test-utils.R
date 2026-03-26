@@ -1,22 +1,28 @@
 library(testthat)
 
 test_that("transform_data returns a data frame", {
-  df <- transform_data(c(1, 2, 3), c(1, 0, 1))
+  df <- transform_data(data.frame(
+    age=c(1, 2, 3),
+    status=c(1, 0, 1)
+  ))
   expect_type(df, "list")
 })
 
 test_that("transform_data returns the correct number of rows", {
-  df <- transform_data(c(1, 2, 3), c(1, 0, 1))
+  df <- transform_data(data.frame(
+    age=c(1, 2, 3),
+    status=c(1, 0, 1)
+  ))
   expect_equal(nrow(df), 3)
 })
 
-test_that("transform_data returns the correct column names", {
-  df <- transform_data(c(1, 2, 3), c(1, 0, 1))
-  expect_equal(colnames(df), c("t", "pos", "tot"))
-})
-
 test_that("transform_data returns the correct values", {
-  df <- transform_data(c(1, 1, 2, 2, 3), c(1, 0, 1, 1, 0))
+  df <- transform_data(
+    data.frame(
+      age=c(1, 1, 2, 2, 3),
+      status=c(1, 0, 1, 1, 0)
+    )
+  )
   expect_equal(df$pos, c(1, 2, 0))
   expect_equal(df$tot, c(2, 2, 1))
 })

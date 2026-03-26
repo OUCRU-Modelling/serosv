@@ -243,6 +243,7 @@ age_time_model <- function(data,
   model$monotonize_method <- monotonize_method
   model$grouping_col <- grouping_col
   model$age_correct <- age_correct
+  model$ci <- ci
 
 
   class(model) <- "age_time_model"

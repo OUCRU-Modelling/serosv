@@ -4,10 +4,12 @@
 \alias{predict.fp_model}
 \title{Prediction for serosv fractional polynomial model}
 \usage{
-\method{predict}{fp_model}(x, newdata = NULL, ...)
+\method{predict}{fp_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
+
+\item{newdata}{data.frame with age column to generate prediction}
 
 \item{...}{arbitrary argument}
 }

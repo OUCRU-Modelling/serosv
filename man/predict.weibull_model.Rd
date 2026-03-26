@@ -4,10 +4,12 @@
 \alias{predict.weibull_model}
 \title{Prediction for serosv Weibull model}
 \usage{
-\method{predict}{weibull_model}(x, newdata = NULL, ...)
+\method{predict}{weibull_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
+
+\item{newdata}{data.frame with age column to generate prediction}
 
 \item{...}{arbitrary argument}
 }

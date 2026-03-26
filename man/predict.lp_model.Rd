@@ -4,10 +4,10 @@
 \alias{predict.lp_model}
 \title{Prediction for serosv local polynomial model}
 \usage{
-\method{predict}{lp_model}(x, newdata = NULL, ...)
+\method{predict}{lp_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
 
 \item{newdata}{data.frame with age column to generate prediction}
 

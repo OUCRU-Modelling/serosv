@@ -4,10 +4,12 @@
 \alias{predict.polynomial_model}
 \title{Prediction for serosv polynomial model}
 \usage{
-\method{predict}{polynomial_model}(x, newdata = NULL, ...)
+\method{predict}{polynomial_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
+
+\item{newdata}{data.frame with age column to generate prediction}
 
 \item{...}{arbitrary argument}
 }

@@ -28,8 +28,8 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
 plot_data <- function(x){
   if(x$datatype == "linelisting"){
     # transform data before plotting
-    df_ <- transform_data(x$df$age, x$df$pos)
-    age <- df_$t
+    df_ <- transform_data(x$df, stratum_col="age", status_col="pos")
+    age <- df_$age
     pos <- df_$pos
     tot <- df_$tot
     # use pre-aggregated age for FOI
@@ -417,12 +417,17 @@ plot.estimate_from_mixture <- function(x, ... ){
   returned_plot <- ggplot()
 
   if(!is.null(x$df$threshold_status)){
-    aggregated <- transform_data(round(x$df$age), x$df$threshold_status)
+    aggregated <- transform_data(
+      data.frame(
+        age = round(x$df$age),
+        status = x$df$threshold_status
+      )
+    )
     # resolve no visible binding note
-    t <- pos <- tot <- NULL
+    age <- pos <- tot <- NULL
 
     returned_plot <-  returned_plot +
-      geom_point(aes( x = t, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
+      geom_point(aes( x = age, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
                  shape = 1, show.legend = FALSE)
   }
 

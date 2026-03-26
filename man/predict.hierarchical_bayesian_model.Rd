@@ -4,10 +4,12 @@
 \alias{predict.hierarchical_bayesian_model}
 \title{Predict from an hierarchical bayesian model}
 \usage{
-\method{predict}{hierarchical_bayesian_model}(x, newdata = NULL, ...)
+\method{predict}{hierarchical_bayesian_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
+
+\item{newdata}{data.frame with age column to generate prediction}
 
 \item{...}{arbitrary arguments}
 }

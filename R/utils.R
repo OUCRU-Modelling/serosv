@@ -55,18 +55,19 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
   return(list(pai1=pai1,pai2=pai2))
 }
 
+# TODO: update aggregate func here to be "pipe"-able
 #' Aggregate data
 #'
 #' Generate a dataframe with `t`, `pos` and `tot` columns from
 #' `t` and `seropositive` vectors.
 #'
-#' @param t the time vector (for stratification).
-#' @param spos the seropositive vector.
-#' @param stratum_col new name for the time vector (default to "t")
+#' @param data a data frame with columns for age and serostatus
+#' @param status_col name of the column for serostatus
+#' @param stratum_col name of the column to stratify by (default to "age")
 #'
 #' @examples
 #' df <- hcv_be_2006
-#' hcv_df <- transform_data(df$dur, df$seropositive)
+#' hcv_df <- transform_data(df, stratum_col="dur", status_col="seropositive")
 #' hcv_df
 #'
 #' @importFrom dplyr group_by
@@ -76,15 +77,29 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #'
 #' @return dataframe in aggregated format
 #' @export
-transform_data <- function(t, spos, stratum_col = "t") {
-  df <- data.frame(t, spos)
+transform_data <- function(data, stratum_col="age", status_col="status") {
+  df <- NULL
+
+  if( all(c(stratum_col, status_col) %in% names(data)) ) {
+    df <- data.frame(
+      age = data[[stratum_col]],
+      status = data[[status_col]]
+    )
+  }else{
+    stop(paste0(
+      "Data must have `",
+      stratum_col,
+      "`, `",status_col ,"` columns"
+    ))
+  }
+
+
   df_agg <- df %>%
-    group_by(t) %>%
+    group_by(age) %>%
     summarize(
-      pos = sum(spos),
+      pos = sum(status),
       tot = n()
     )
-  colnames(df_agg) <- c(stratum_col, "pos", "tot")
 
   df_agg
 }

@@ -4,10 +4,10 @@
 \alias{predict.farrington_model}
 \title{Prediction for serosv Farrington model}
 \usage{
-\method{predict}{farrington_model}(x, newdata = NULL, ...)
+\method{predict}{farrington_model}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{x}{serosv models}
+\item{object}{serosv models}
 
 \item{newdata}{data.frame with age column to generate prediction}
 
