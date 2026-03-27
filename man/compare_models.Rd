@@ -2,7 +2,7 @@
 % Please edit documentation in R/compare_models.R
 \name{compare_models}
 \alias{compare_models}
-\title{Compare models}
+\title{Generate table of metrics for model comparison}
 \usage{
 compare_models(data, method = "AIC/BIC", ...)
 }
@@ -14,17 +14,35 @@ compare_models(data, method = "AIC/BIC", ...)
 \item{...}{models to be compared. Must be models created by serosv. If models' names are not provided, indices will be used instead for the `model` column in the returned data.frame.}
 }
 \value{
-a data.frame of 4 columns
+a data.frame with the following columns
   \item{label}{name or index of the model}
   \item{type}{model type of the given model (a serosv model name)}
-  \item{AIC}{AIC value for the model (lower value indicates better fit)}
-  \item{BIC}{BIC value for the model (lower value indicates better fit)}
+  \item{metrics columns}{the columns for metrics of comparison, the number of which depends on the function that generate these metrics}
 }
 \description{
-Compare models
+Generate table of metrics for model comparison
 }
 \details{
 Built-in comparison methods include:
-- computing AIC and BIC, which returns AIC, BIC values of the model if available
-- cross validation, which reutns
+\itemize{
+\item{computing AIC and BIC, which returns AIC, BIC values of the model if available}
+\item{cross validation (perform k-fold validation), which returns MSE and logloss (negative log Binomial likelihood)
+ for aggregated data, or AUC and logloss (negative log Bernoulli likelihood)
+ for linelisting data}
+}
+}
+\examples{
+comparison_table <- suppressWarnings(
+  compare_models(
+    data = hav_bg_1964,
+    method = "CV",
+    polynomial_mod = ~polynomial_model(.x, k=1),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.3,beta=0.1,gamma=0.03))
+  )
+)
+# view table of metrics
+comparison_table
+# view the model fitted with the whole dataset
+comparison_table$plots
 }

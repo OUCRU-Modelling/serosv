@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_titer.R
 \name{standardize_data}
 \alias{standardize_data}
-\title{Preprocess data}
+\title{Standardize raw serological test data for titer conversion}
 \usage{
 standardize_data(
   df,
@@ -33,5 +33,5 @@ standardize_data(
 a standardized data.frame that can be passed to `to_titer()`
 }
 \description{
-Preprocess data
+Validate and prepare raw serological test results for use with `to_titer()`
 }

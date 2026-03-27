@@ -1,4 +1,4 @@
-#' Compare models
+#' Generate table of metrics for model comparison
 #'
 #' @param data input data to fit into the models
 #' @param method method to compare models. Can be one of the built-in methods or a function to compute the returned metrics (see Details).
@@ -6,22 +6,39 @@
 #'
 #'
 #' @return
-#' a data.frame of 4 columns
+#' a data.frame with the following columns
 #'   \item{label}{name or index of the model}
 #'   \item{type}{model type of the given model (a serosv model name)}
-#'   \item{AIC}{AIC value for the model (lower value indicates better fit)}
-#'   \item{BIC}{BIC value for the model (lower value indicates better fit)}
+#'   \item{metrics columns}{the columns for metrics of comparison, the number of which depends on the function that generate these metrics}
 #'
 #' @details
 #' Built-in comparison methods include:
-#' - computing AIC and BIC, which returns AIC, BIC values of the model if available
-#' - cross validation, which returns MSE and logloss (negative )
+#' \itemize{
+#' \item{computing AIC and BIC, which returns AIC, BIC values of the model if available}
+#' \item{cross validation (perform k-fold validation), which returns MSE and logloss (negative log Binomial likelihood)
+#'  for aggregated data, or AUC and logloss (negative log Bernoulli likelihood)
+#'  for linelisting data}
+#' }
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr imap_dfr as_mapper
 #' @importFrom stringr str_detect
 #' @importFrom assertthat assert_that
 #'
+#' @examples
+#' comparison_table <- suppressWarnings(
+#'   compare_models(
+#'     data = hav_bg_1964,
+#'     method = "CV",
+#'     polynomial_mod = ~polynomial_model(.x, k=1),
+#'     penalized_spline = penalized_spline_model,
+#'     farrington = ~farrington_model(.x, start=list(alpha=0.3,beta=0.1,gamma=0.03))
+#'   )
+#' )
+#' # view table of metrics
+#' comparison_table
+#' # view the model fitted with the whole dataset
+#' comparison_table$plots
 #' @export
 compare_models <- function(data, method="AIC/BIC",...){
   list(...) %>%
@@ -118,15 +135,11 @@ cv <- function(dat, mod_func, k=4){
 
     }else{
       # if data is linelisting
-      # make sure pred is slightly higher than 0 and lower than 1 to avoid log(0)
-      eps <- .Machine$double.eps  # smallest positive floating point number ~ 2.2e-16
-      pred <- pmax(eps, pmin(1 - eps, pred))
-
       # compute logloss (negative bernoulli loglikelihood)
-      curr_metric$logloss <- -sum(test_dat$status*log(pred) + (1 - test_dat$status)*log(1-pred),
+      curr_metric$logloss <- -sum(dbinom(test_dat$status, 1, prob=pred, log=TRUE),
                                   na.rm = TRUE)
       # and estimate auc
-      curr_metric$auc <- as.numeric(pROC::auc(test_dat$status, pred))
+      curr_metric$auc <- as.numeric(pROC::auc(test_dat$status, pred, quiet=TRUE))
     }
 
     curr_metric

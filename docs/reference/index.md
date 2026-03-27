@@ -145,9 +145,9 @@
 - [`transform_data()`](https://oucru-modelling.github.io/serosv/reference/transform_data.md)
   : Aggregate data
 - [`standardize_data()`](https://oucru-modelling.github.io/serosv/reference/standardize_data.md)
-  : Preprocess data
+  : Standardize raw serological test data for titer conversion
 - [`compare_models()`](https://oucru-modelling.github.io/serosv/reference/compare_models.md)
-  : Compare models
+  : Generate table of metrics for model comparison
 - [`compute_ci(`*`<default>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.default.md)
   : Compute confidence interval for a model of serosv
 - [`compute_ci(`*`<fp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.md)

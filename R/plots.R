@@ -1,11 +1,11 @@
 #' Helper to adjust styling of a plot
 #'
-#' @param sero - color for seroprevalence line
-#' @param ci - color for confidence interval
-#' @param foi - color for force of infection line
-#' @param sero_line - linetype for seroprevalence line
-#' @param foi_line - linetype for force of infection line
-#' @param xlabel - x label
+#' @param sero color for seroprevalence line
+#' @param ci color for confidence interval
+#' @param foi color for force of infection line
+#' @param sero_line linetype for seroprevalence line
+#' @param foi_line linetype for force of infection line
+#' @param xlabel x label
 #'
 #' @return list of updated aesthetic values
 #' @export

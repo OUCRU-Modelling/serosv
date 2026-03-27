@@ -98,7 +98,6 @@ cv_out <- compare_models(
     local_polynomial = lp_model 
   ) %>% suppressWarnings()
 
-
 aic_bic_out
 cv_out
 ```

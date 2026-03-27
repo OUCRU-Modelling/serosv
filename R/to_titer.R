@@ -81,7 +81,9 @@ to_titer <- function(df, model="4PL", positive_threshold=NULL, ci = .95,
   out
 }
 
-#' Preprocess data
+#' Standardize raw serological test data for titer conversion
+#'
+#' Validate and prepare raw serological test results for use with `to_titer()`
 #'
 #' @param df data.frame with columns for plate id, sample id, result, dilution factor, and (optionally) negative controls
 #' @param plate_id_col name of the column storing plates id
@@ -339,10 +341,10 @@ add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
 #' The figure below demonstrates the interpretation of the plot.
 #' \figure{interpret_titer_qc.png}{options: width="70\%"}
 #'
-#' @param x - output of `to_titer()`
-#' @param n_plates - maximum number of plates to plot
-#' @param n_samples - maximum number of samples per plate to plot
-#' @param n_dilutions - number of dilutions used for testing
+#' @param x output of `to_titer()`
+#' @param n_plates maximum number of plates to plot
+#' @param n_samples maximum number of samples per plate to plot
+#' @param n_dilutions number of dilutions used for testing
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr walk
