@@ -47,6 +47,17 @@ tb_nl <- tb_nl_1966_1973 %>%
   filter(survey_year > 1966) %>% 
   group_by(age, survey_year, survey_time) %>% 
   summarize(pos = sum(pos), tot = sum(tot), .groups = "drop")
+
+head(tb_nl)
+#> # A tibble: 6 × 5
+#>     age survey_year survey_time   pos    tot
+#>   <int>       <dbl> <date>      <int>  <int>
+#> 1     6        1970 1970-01-01    140  40868
+#> 2     6        1971 1971-01-01     55  17874
+#> 3     6        1972 1972-01-01      4   2163
+#> 4     7        1970 1970-01-01    328 105960
+#> 5     7        1971 1971-01-01    308  96326
+#> 6     7        1972 1972-01-01     11   2807
 ```
 
 The monotonization method can be specified via the `monotonize_method`
@@ -105,7 +116,31 @@ where each row corresponds to a single survey period. The columns are:
 - `monotonized_foi` - estimated force of infection from `monotonized_sp`
 
 ``` r
-out_pava$out
+out_pava
+#> Age-time varying seroprevalence model 
+#> 
+#> Input type:  aggregated 
+#> Grouping variable:  survey_year 
+#> Monotonization method:  pava 
+#> Monotonize across:  age group 
+#> # A tibble: 7 × 9
+#>   survey_year monotonized_info monotonized_ci_mod df       info   sp        
+#>         <dbl> <list>           <list>             <list>   <list> <list>    
+#> 1        1967 <gam>            <named list [2]>   <tibble> <gam>  <dbl [5]> 
+#> 2        1968 <gam>            <named list [2]>   <tibble> <gam>  <dbl [5]> 
+#> 3        1969 <gam>            <named list [2]>   <tibble> <gam>  <dbl [6]> 
+#> 4        1970 <gam>            <named list [2]>   <tibble> <gam>  <dbl [13]>
+#> 5        1971 <gam>            <named list [2]>   <tibble> <gam>  <dbl [8]> 
+#> 6        1972 <gam>            <named list [2]>   <tibble> <gam>  <dbl [8]> 
+#> 7        1973 <gam>            <named list [2]>   <tibble> <gam>  <dbl [5]> 
+#> # ℹ 3 more variables: foi <list>, monotonized_sp <list>, monotonized_foi <list>
+out_scam
+#> Age-time varying seroprevalence model 
+#> 
+#> Input type:  aggregated 
+#> Grouping variable:  survey_year 
+#> Monotonization method:  scam 
+#> Monotonize across:  birth cohort 
 #> # A tibble: 7 × 9
 #>   survey_year monotonized_info monotonized_ci_mod df       info   sp        
 #>         <dbl> <list>           <list>             <list>   <list> <list>    
@@ -133,16 +168,12 @@ following configurations
 
 ``` r
 plot(out_pava, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
-#> Scale for y is already present.
-#> Adding another scale for y, which will replace the existing scale.
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
 plot(out_pava, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
-#> Scale for y is already present.
-#> Adding another scale for y, which will replace the existing scale.
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-5-2.png)
@@ -150,8 +181,6 @@ plot(out_pava, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 ``` r
 
 plot(out_pava, facet = FALSE, modtype = "monotonized") + ylim(c(0, 0.07))
-#> Scale for y is already present.
-#> Adding another scale for y, which will replace the existing scale.
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-5-3.png)
@@ -160,16 +189,12 @@ plot(out_pava, facet = FALSE, modtype = "monotonized") + ylim(c(0, 0.07))
 
 ``` r
 plot(out_scam, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
-#> Scale for y is already present.
-#> Adding another scale for y, which will replace the existing scale.
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
 plot(out_scam, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
-#> Scale for y is already present.
-#> Adding another scale for y, which will replace the existing scale.
 ```
 
 ![](repeated_cross_sectional_files/figure-html/unnamed-chunk-6-2.png)

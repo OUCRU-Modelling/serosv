@@ -4,14 +4,14 @@
 \alias{compute_ci.mixture_model}
 \title{Compute confidence interval for mixture model}
 \usage{
-compute_ci.mixture_model(x, ci = 0.95, ...)
+\method{compute_ci}{mixture_model}(x, ci = 0.95, ...)
 }
 \arguments{
-\item{x}{- serosv mixture_model object}
+\item{x}{serosv mixture_model object}
 
-\item{ci}{- confidence interval}
+\item{ci}{confidence interval}
 
-\item{...}{- arbitrary arguments}
+\item{...}{arbitrary arguments}
 }
 \value{
 list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.

@@ -4,16 +4,12 @@
 
 - [Input
   data](https://oucru-modelling.github.io/serosv/articles/linelisting_vs_aggregated.md):
-- [SIR
-  model](https://oucru-modelling.github.io/serosv/articles/sir_model.md):
 - [Parametric
   models](https://oucru-modelling.github.io/serosv/articles/parametric_model.md):
 - [Nonparametric
   model](https://oucru-modelling.github.io/serosv/articles/nonparametric_model.md):
 - [Semiparametric
   model](https://oucru-modelling.github.io/serosv/articles/semiparametric_model.md):
-- [Hierarchical Bayesian
-  models](https://oucru-modelling.github.io/serosv/articles/hierarchical_model.md):
 - [Modeling directly from antibody
   levels](https://oucru-modelling.github.io/serosv/articles/model_quantitative_data.md):
 - [Model repeated cross-sectional
@@ -21,6 +17,8 @@
 
 ### Utilities
 
+- [Convert assay readings to
+  titer](https://oucru-modelling.github.io/serosv/articles/reading_to_titer.md):
 - [Data
   transformation](https://oucru-modelling.github.io/serosv/articles/data_transformation.md):
 - [Imperfect serological

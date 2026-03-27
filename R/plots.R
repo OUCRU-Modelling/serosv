@@ -28,8 +28,8 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
 plot_data <- function(x){
   if(x$datatype == "linelisting"){
     # transform data before plotting
-    df_ <- transform_data(x$df$age, x$df$pos)
-    age <- df_$t
+    df_ <- transform_data(x$df, stratum_col="age", status_col="pos")
+    age <- df_$age
     pos <- df_$pos
     tot <- df_$tot
     # use pre-aggregated age for FOI
@@ -45,7 +45,7 @@ plot_data <- function(x){
 }
 
 #=== Helper function for plotting =====
-plot_util <- function(age, pos, tot, sero, foi, cex = 20){
+plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
   # resolve no visible binding
   x <- y <- ymin <- ymax <- NULL
 
@@ -55,7 +55,7 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
     coord_cartesian(xlim=c(0,max(age)), ylim=c(0, 1)) +
     scale_y_continuous(
       name = "Seroprevalence",
-      sec.axis = sec_axis(~.*1, name = " Force of infection")
+      sec.axis = sec_axis(~.*scale_foi, name = " Force of infection")
     ) + set_plot_style()
 
   # === Add seroprevalence layer
@@ -81,22 +81,51 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
       # --- Handle cases where FOI is a data.frame (with CI)
       # plot <- plot + geom_smooth(aes_auto(foi, col = "foi", linetype="foi", fill="ci"), data=foi,
       #                          stat="identity",lwd=0.5)
-      plot <- plot + geom_smooth(aes(x = x, y=y, ymin =ymin, ymax = ymax, col = "foi", linetype="foi", fill="ci"), data=foi,
-                               stat="identity",lwd=0.5)
+      plot <- plot + geom_smooth(
+        aes(
+          x = x,
+          # scale FOI if specified
+          y = y/scale_foi,
+          ymin = ymin/scale_foi,
+          ymax = ymax/scale_foi,
+          col = "foi",
+          linetype = "foi",
+          fill = "ci"
+        ),
+        data = foi,
+        stat = "identity",
+        lwd = 0.5
+      )
     }else{
       # --- Handle cases where CI for FOI is not computable & length of age for foi differs from provided age vector
-      plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data=foi,
-                               stat="identity",lwd=0.5)
+      plot <- plot + geom_line(
+        aes(
+          x = x,
+          # scale FOI if specified
+          y = y/scale_foi,
+          col = "foi",
+          linetype = "foi"
+        ),
+        data = foi,
+        stat = "identity",
+        lwd = 0.5
+      )
     }
   }else if (length(age) != length(foi)){
     # --- handle some cases when length of age differs from length of foi
     age <- age[c(-1,-length(age))]
     foi <- data.frame(x = age, y = foi)
-    plot <- plot + geom_line(aes(x = x, y=y, col = "foi", linetype="foi"), data = foi,
-                             lwd = 0.5)
+    plot <- plot + geom_line(aes(
+      x = x,
+      y = y/scale_foi,
+      col = "foi",
+      linetype = "foi"
+    ),
+    data = foi,
+    lwd = 0.5)
   }else{
     # --- Simply plot foi
-    plot <- plot + geom_line(aes(x = age, y = foi, col = "foi", linetype="foi"),
+    plot <- plot + geom_line(aes(x = age, y = foi/scale_foi, col = "foi", linetype="foi"),
                 lwd = 0.5)
   }
   plot
@@ -107,129 +136,6 @@ plot_util <- function(age, pos, tot, sero, foi, cex = 20){
 #   UseMethod("plot")
 # }
 
-#### SIR model ####
-
-#' plot() overloading for SIR model
-#'
-#' @param x the sir_basic_model object.
-#' @param ... arbitrary params.
-#' @import ggplot2
-#' @importFrom methods is
-#' @importFrom graphics plot
-#'
-#' @return ggplot object
-#' @export
-plot.sir_basic_model <- function(x, ...){
-  comp_lvl <-  c("S", "I", "R")
-  time <- S <- I <- R <- NULL
-
-  ggplot(x$output) +
-    geom_line(aes(x = time, y = S, color = factor("S", levels = comp_lvl))) +
-    geom_line(aes(x = time, y = I, color = factor("I", levels = comp_lvl))) +
-    geom_line(aes(x = time, y = R, color = factor("R", levels = comp_lvl))) +
-    list(
-      scale_colour_manual(
-        values = c("S" = "blueviolet", "I" = "#fc0328", "R" = "royalblue1"),
-        labels = c("S"="susceptible", "I"="infected", "R"="recovered")
-      ),
-      labs( x = "Time",
-            y = "Count",
-            colour = "Compartment")
-    )
-}
-
-#' plot() overloading for SIR static model
-#'
-#' @param x the sir_static_model object.
-#' @param ... arbitrary params.
-#' @import ggplot2
-#' @importFrom methods is
-#' @importFrom graphics plot
-#'
-#' @return ggplot object
-#' @export
-plot.sir_static_model <- function(x, ...){
-  comp_lvl <-  c("s", "i", "r")
-  time <- s <- i <- r <- NULL
-
-  ggplot(x$output) +
-    geom_line(aes(x = time, y = s, color = factor("s", levels = comp_lvl))) +
-    geom_line(aes(x = time, y = i, color = factor("i", levels = comp_lvl))) +
-    geom_line(aes(x = time, y = r, color = factor("r", levels = comp_lvl))) +
-    list(
-      scale_colour_manual(
-        values = c("s" = "blueviolet", "i" = "#fc0328", "r" = "royalblue1"),
-        labels = c("s"="susceptible", "i"="infected", "r"="recovered")
-      ),
-      labs(
-        colour = "Compartment",
-        x = "Age",
-        y = "Fraction")
-    )
-}
-
-
-#' plot() overloading for SIR sub populations model
-#'
-#' @param x the sir_subpops_models object.
-#' @param ... arbitrary params.
-#' @import ggplot2
-#' @importFrom methods is
-#' @importFrom graphics plot
-#'
-#' @return list of ggplot objects, each object is the plot for the corresponding subpopulation
-#' @export
-plot.sir_subpops_model <- function(x, ...){
-  time <- s <- i <- r <- NULL
-  comp_lvl <-  c("s", "i", "r")
-
-  # using for loop here would not work due to ggplot lazy eval
-  subpop_plots <- lapply(1:x$parameters$k, function(subpop) {
-    ggplot(x$output) +
-      geom_line(aes(x = time, y = get(paste0("s", subpop)), color = factor("s", levels = comp_lvl))) +
-      geom_line(aes(x = time, y = get(paste0("i", subpop)), color = factor("i", levels = comp_lvl))) +
-      geom_line(aes(x = time, y = get(paste0("r", subpop)), color = factor("r", levels = comp_lvl))) +
-      scale_colour_manual(
-        values = c("s" = "blueviolet", "i" = "#fc0328", "r" = "royalblue1"),
-        labels = c("s"="susceptible", "i"="infected", "r"="recovered")
-      ) +
-      labs(title= paste0("Plot for subpopulation ", subpop),
-           x = "Time",
-           y = "Fraction",
-           colour = "Compartment")
-  })
-
-  names(subpop_plots) <- paste0("subpop_", 1:x$parameters$k)
-  subpop_plots
-}
-
-#' plot() overloading for MSEIR model
-#'
-#' @param x the mseir_model object.
-#' @param ... arbitrary params.
-#' @import ggplot2
-#' @importFrom methods is
-#' @importFrom graphics plot
-#'
-#' @return ggplot object
-#' @export
-plot.mseir_model <- function(x, ...){
-  a <- m <- s <- e <- i <- r <- NULL
-  # make leveled factor to force legend show color in order
-  comp_lvl <- c("m", "s", "e", "i", "r")
-
-  ggplot(x$output) +
-    geom_line(aes(x = a, y = m, color = factor("m", levels = comp_lvl))) +
-    geom_line(aes(x = a, y = s, color = factor("s", levels = comp_lvl))) +
-    geom_line(aes(x = a, y = e, color = factor("e", levels = comp_lvl))) +
-    geom_line(aes(x = a, y = i, color = factor("i", levels = comp_lvl))) +
-    geom_line(aes(x = a, y = r, color = factor("r", levels = comp_lvl))) +
-    scale_colour_manual(
-      values = c("m"="#3ea379","s" = "blueviolet", "e"="#3e45a3", "i" = "#fc0328", "r" = "royalblue1"),
-      labels = c("m"="maternal immunity", "s"="susceptible", "e"="exposed", "i"="infected", "r"="recovered")
-    ) +
-    labs(x = "Age", y = "Fraction", color = "Compartment")
-}
 
 #### Polynomial model ####
 #' plot() overloading for polynomial model
@@ -511,12 +417,17 @@ plot.estimate_from_mixture <- function(x, ... ){
   returned_plot <- ggplot()
 
   if(!is.null(x$df$threshold_status)){
-    aggregated <- transform_data(round(x$df$age), x$df$threshold_status)
+    aggregated <- transform_data(
+      data.frame(
+        age = round(x$df$age),
+        status = x$df$threshold_status
+      )
+    )
     # resolve no visible binding note
-    t <- pos <- tot <- NULL
+    age <- pos <- tot <- NULL
 
     returned_plot <-  returned_plot +
-      geom_point(aes( x = t, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
+      geom_point(aes( x = age, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
                  shape = 1, show.legend = FALSE)
   }
 
@@ -529,6 +440,7 @@ plot.estimate_from_mixture <- function(x, ... ){
   returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")
 }
 
+# ------- Plot age time varying seroprevalence ----------
 #' Plot output for age_time_model
 #'
 #' @param x - a `age_time_model` object
@@ -665,12 +577,13 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
   nn_plot + h_plot + plot_layout(ncol=2)
 }
 
+# ----- Plot corrected prevalence -------
 #' Plot output for corrected_prevalence
 #'
 #' @param x - the output of `correct_prevalence()` function
 #' @param y - another output of `correct_prevalence()` function (optional, for comparison only)
 #' @param facet - whether to plot as facets or on the same plot (only when y is provided)
-#' @import ggplot2 tidyr patchwork 
+#' @import ggplot2 tidyr patchwork
 #' @importFrom magrittr %>%
 #' @importFrom assertthat assert_that
 #'
@@ -712,7 +625,7 @@ plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
           ymax = sero_upr,
           color = label
         ),
-        alpha = 0.7, data = data
+        alpha = 0.5, data = data
       )
     }
     # them add label layer
@@ -739,9 +652,15 @@ plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
 
   plot <- ggplot() +
     geom_point(aes(
-      x = age, y = pos / tot,
+      x = age, y = sero,
       color = "apparent prevalence"
-    ), data = dat)
+    ), alpha = 0.8, data = dat)+
+    geom_errorbar(
+      aes(
+        x = age, y = sero, ymin = sero_lwr, ymax = sero_upr,
+        color = "apparent prevalence"
+      ), alpha = 0.5,data = dat
+    )
 
   if(!facet){
     plot <- plot + generate_layers(corrected_dat, title = if(is.null(y)) paste0("Plot for ", x$method, " approach") else NULL)

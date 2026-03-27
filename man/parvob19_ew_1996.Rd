@@ -31,17 +31,17 @@ Finland, Italy, and Poland. The sera were collected between 1995 and 2004 and
 were obtained from residual sera submitted for routine laboratory testing.
 }
 \examples{
-# Reproduce Fig 4.5 (right upper panel), p. 68
-# NB: This figure will look different to that of in the book, since we
+# Note: This figure will look different to that of in the book, since we
 # believe that the original authors has made some errors in specifying
 # the sample size of the dots.
+
 library(dplyr)
 df <- parvob19_ew_1996 \%>\%
   mutate(age = round(age)) \%>\%
   group_by(age) \%>\%
   summarise(pos = sum(seropositive), tot = n())
 plot(df$age, df$pos / df$tot,
-  cex = 0.02 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+  cex = 0.3 * sqrt(df$tot), pch = 16, xlab = "age", ylab = "seroprevalence",
   xlim = c(0, 82), ylim = c(0, 1)
 )
 

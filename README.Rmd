@@ -49,14 +49,26 @@ The following methods are available to estimate seroprevalence and force of infe
 
 Parametric approaches:
 
--   Polynomial models:
-    -   Muench's model
-    -   Griffiths' model
-    -   Grenfell and Anderson's model
--   Nonlinear models:
-    -   Farrington's model
-    -   Weibull model
--   Fractional polynomial models
+-   Frequentist methods:
+
+    -   Polynomial models:
+
+        -   Muench's model
+        -   Griffiths' model
+        -   Grenfell and Anderson's model
+
+    -   Nonlinear models:
+
+        -   Farrington's model
+        -   Weibull model
+
+    -   Fractional polynomial models
+
+-   Bayesian methods:
+
+    -   Hierarchical Farrington model
+
+    -   Hierarchical log-logistic model
 
 Nonparametric approaches:
 
@@ -70,12 +82,6 @@ Semiparametric approaches:
 
     -   Generalized Linear Mixed Model framework
 
-Hierarchical Bayesian approaches:
-
--   Hierarchical Farrington model
-
--   Hierarchical log-logistic model
-
 ## Demo
 
 ### Fitting rubella data from the UK
@@ -84,34 +90,33 @@ Load the rubella in UK dataset.
 
 ```{r}
 library(serosv)
-```
-
-Find the power for the best second degree fractional polynomial with monotonicity constraint and a logit link function. The power appears to be (-0.9,-0.9).
-
-```{r}
 rubella <- rubella_uk_1986_1987
-
-best_2d_mn <- find_best_fp_powers(
-  rubella,
-  p=seq(-2,3,0.1), mc = T, degree=2, link="logit"
-)
-
-best_2d_mn
 ```
 
-Finally, fit the second degree fractional polynomial.
+Fit the data using a fractional polynomial model via `fp_model()`. In this example, the model searches for the best combination of powers within a specified range.
 
 ```{r}
-fpmd <- fp_model(
+rubella_mod <- fp_model(
   rubella,
-  p=c(-0.9, -0.9), link="logit")
+  p=list(
+    p_range=seq(-2,3,0.1), # range of powers to search over
+    degree=2 # maximum degree for the search
+  ), 
+  monotonic = T, # enforce model to be monotonic
+  link="logit"
+)
+rubella_mod
+```
 
-plot(fpmd)
+Visualize the model
+
+```{r}
+plot(rubella_mod)
 ```
 
 ### Fitting Parvo B19 data from Finland
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 library(dplyr)
 parvob19 <- parvob19_fi_1997_1998
 
@@ -120,12 +125,12 @@ transform_data(
   parvob19$age, 
   parvob19$seropositive,
   stratum_col = "age") |>
-  polynomial_model(type = "Muench") |>
+  polynomial_model(k = 1) |>
   plot()
 
 # or fit data as is
 parvob19 |>
   rename(status = seropositive) |>
-  polynomial_model(type = "Muench") |>
+  polynomial_model(k = 1) |>
   plot()
 ```

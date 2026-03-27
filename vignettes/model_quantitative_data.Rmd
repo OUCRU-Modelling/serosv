@@ -1,6 +1,7 @@
 ---
 title: "Modeling directly from antibody levels"
 output: rmarkdown::html_vignette
+bibliography: references.bib
 vignette: >
   %\VignetteIndexEntry{Modeling directly from antibody levels}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,13 +23,17 @@ library(serosv)
 
 **Proposed model**
 
-Two-component mixture model for test result $Z$ with $Z_j (j = \{I, S\})$ being the latent mixing component having density $f_j(z_j|\theta_j)$ and with $\pi_{\text{TRUE}}(a)$ being the age-dependent mixing probability can be represented as
+Consider a two-component Gaussian mixture model for the antibody level $Z$, where each component $Z_j$ represent antibody level arising from the 2 latent sub-populations $j \in \{I, S\}$ (i.e., Infected and Susceptible groups).
+
+Let $f_j(z_j|\theta_j)$ denotes the density of component $Z_j$, where $\theta_I$ and $\theta_S$ are the parameters for the Susceptible and Infected components respectively.
+
+With $\pi_{\text{TRUE}}(a)$ being the age-dependent mixing probability (i.e., the true prevalence), the density of the mixture is formulated as
 
 $$
 f(z|z_I, z_S,a) = (1-\pi_{\text{TRUE}}(a))f_S(z_S|\theta_S)+\pi_{\text{TRUE}}(a)f_I(z_I|\theta_I)
 $$
 
-The mean $E(Z|a)$ thus equals
+The age-specific mean antibody level $E(Z|a)$ thus equals
 
 $$
 \mu(a) = (1-\pi_{\text{TRUE}}(a))\mu_S+\pi_{\text{TRUE}}(a)\mu_I$$
@@ -39,22 +44,30 @@ $$
 \pi_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S}
 $$
 
-Force of infection can then be calculated by
+Force of infection can then be inferred by
 
 $$
 \lambda_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)}
 $$
 
+Refer to Chapter `11.3` of the book by @Hens2012 for a more detailed explanation of the method.
+
 **Fitting data**
 
-To fit the mixture data, use `mixture_model` function
+General workflow:
+
+-   Step 1: Fit the antibody level data to a 2-component mixture model
+
+-   Step 2: From the fitted mixture model, estimate the seroprevalence and FOI
+
+To fit the antibody data, use `mixture_model` function
 
 ```{r}
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
 df <- df[order(df$age),]
 data <- df$VZVmIUml
 model <- mixture_model(antibody_level = data)
-model$info
+print(model)
 ```
 
 ```{r}
@@ -65,5 +78,6 @@ sero-prevalence and FOI can then be esimated using function `estimate_from_mixtu
 
 ```{r}
 est_mixture <- estimate_from_mixture(df$age, data, mixture_model = model, threshold_status = df$seropositive, sp=83, monotonize = FALSE)
+est_mixture
 plot(est_mixture)
 ```

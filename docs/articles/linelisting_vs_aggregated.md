@@ -2,44 +2,34 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
-library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.3.1
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 library(magrittr)
 ```
 
 ## Input data format
 
-Most `*_model()` functions in `serosv` require `data` argument as the
+All `*_model()` functions in `serosv` require `data` argument as the
 input data to be fitted.
 
 The package can handle both linelisting and aggregated data, and it
-infers the format from the column names of the input data frame. This
-means that input data is *expected to follow a specific format.*
+infers the format from the structure of the input data frame. This means
+that input data is *expected to follow a specific format.*
 
-For linelisting data: data must have `age`, `pos` and `tot` columns,
-where
+For linelisting data: data must have 3 columns as follows
 
-- `age` is the age vector
+- the age vector (column name specified via `age_col` parameter)
 
-- `pos` is the vector of counts of sero positives of that age group
+- the vector of counts of sero positives of that age group (column name
+  specified via `pos_col` parameter)
 
-- `tot` is the vector is the total population of that age group
+- the vector is the total population of that age group (column name
+  specified via `tot_col` parameter)
 
-For aggregated data: data must have `age`, `status` columns, where
+For aggregated data: data must have 2 columns as follows
 
-- `age` is the age vector of individuals
+- the age vector of individuals
 
-- `status` is the vector for the sero positivity of that individual
+- is the vector indicating the serostatus of that individual (column
+  name specified via `status_col` parameter)
 
 **Example:** Fitting linelisting and aggregated data using
 [`polynomial_model()`](https://oucru-modelling.github.io/serosv/reference/polynomial_model.md)
@@ -67,7 +57,7 @@ head(aggregated)
 #> 6   6   4  15
 
 # fit with aggregated data
-model1 <- polynomial_model(aggregated, type = "Muench")
+model1 <- polynomial_model(aggregated, k=1)
 plot(model1)
 ```
 
@@ -75,9 +65,7 @@ plot(model1)
 
 ``` r
 # fit with linelisting data
-model2 <- linelisting %>% 
-  rename(status = seropositive) %>% 
-  polynomial_model(type = "Muench")
+model2 <- polynomial_model(linelisting, k=1, status_col = "seropositive")
 plot(model2)
 ```
 
@@ -93,10 +81,10 @@ transformation](https://oucru-modelling.github.io/serosv/articles/data_transform
 
 ``` r
 transform_data(
-  linelisting$age, 
-  linelisting$seropositive,
-  stratum_col = "age") %>% 
-  polynomial_model(type = "Muench") %>% 
+  linelisting,
+  stratum_col="age", 
+  status_col="seropositive") %>% 
+  polynomial_model(k=1) %>% 
   plot()
 ```
 

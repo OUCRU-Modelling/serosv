@@ -5,7 +5,7 @@ plot() overloading for hierarchical_bayesian_model
 ## Usage
 
 ``` r
-# S3 method for hierarchical_bayesian_model
+# S3 method for class 'hierarchical_bayesian_model'
 plot(x, ...)
 ```
 

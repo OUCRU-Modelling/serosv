@@ -55,18 +55,19 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
   return(list(pai1=pai1,pai2=pai2))
 }
 
+# TODO: update aggregate func here to be "pipe"-able
 #' Aggregate data
 #'
 #' Generate a dataframe with `t`, `pos` and `tot` columns from
 #' `t` and `seropositive` vectors.
 #'
-#' @param t the time vector (for stratification).
-#' @param spos the seropositive vector.
-#' @param stratum_col new name for the time vector (default to "t")
+#' @param data a data frame with columns for age and serostatus
+#' @param status_col name of the column for serostatus
+#' @param stratum_col name of the column to stratify by (default to "age")
 #'
 #' @examples
 #' df <- hcv_be_2006
-#' hcv_df <- transform_data(df$dur, df$seropositive)
+#' hcv_df <- transform_data(df, stratum_col="dur", status_col="seropositive")
 #' hcv_df
 #'
 #' @importFrom dplyr group_by
@@ -76,15 +77,29 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #'
 #' @return dataframe in aggregated format
 #' @export
-transform_data <- function(t, spos, stratum_col = "t") {
-  df <- data.frame(t, spos)
+transform_data <- function(data, stratum_col="age", status_col="status") {
+  df <- NULL
+
+  if( all(c(stratum_col, status_col) %in% names(data)) ) {
+    df <- data.frame(
+      age = data[[stratum_col]],
+      status = data[[status_col]]
+    )
+  }else{
+    stop(paste0(
+      "Data must have `",
+      stratum_col,
+      "`, `",status_col ,"` columns"
+    ))
+  }
+
+
   df_agg <- df %>%
-    group_by(t) %>%
+    group_by(age) %>%
     summarize(
-      pos = sum(spos),
+      pos = sum(status),
       tot = n()
     )
-  colnames(df_agg) <- c(stratum_col, "pos", "tot")
 
   df_agg
 }
@@ -94,7 +109,8 @@ transform_data <- function(t, spos, stratum_col = "t") {
 # - type of data (either linelisting or aggregated)
 # - preprocessed pos and tot columns
 #' @importFrom assertthat assert_that
-check_input <- function(data, stratum_col = "age"){
+check_input <- function(data, pos_col="pos",tot_col="tot",status_col="status",
+                        stratum_col = "age"){
   assert_that(
     is.data.frame(data),
     msg = "Input must be a data.frame or tibble"
@@ -106,23 +122,23 @@ check_input <- function(data, stratum_col = "age"){
   type <- NULL
 
 
-  if( all(c(stratum_col, "pos", "tot") %in% colnames(data)) ){
+  if( all(c(stratum_col, pos_col, tot_col) %in% colnames(data)) ){
     age <- as.numeric(data[[stratum_col]])
-    pos <- as.numeric(data$pos)
-    tot <- as.numeric(data$tot)
+    pos <- as.numeric(data[[pos_col]])
+    tot <- as.numeric(data[[tot_col]])
     type <- "aggregated"
-  }else if( all(c(stratum_col, "status") %in% colnames(data)) ){
+  }else if( all(c(stratum_col, status_col) %in% colnames(data)) ){
     age <- as.numeric(data[[stratum_col]])
-    pos <- as.numeric(data$status)
-    tot <- rep(1, length(data$status))
+    pos <- as.numeric(data[[status_col]])
+    tot <- rep(1, length(data[[status_col]]))
     type <- "linelisting"
   }else{
     stop(paste0(
       "Data must have `",
       stratum_col,
-      "`, `pos`, `tot` columns for aggregated data OR `",
+      "`, `", pos_col, "`, `", tot_col,"` columns for aggregated data OR `",
       stratum_col,
-      "`, `status` columns for linelisting data"
+      "`, `",status_col ,"` columns for linelisting data"
     ))
   }
 

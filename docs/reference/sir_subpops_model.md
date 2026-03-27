@@ -1,6 +1,7 @@
 # SIR Model with Interacting Subpopulations
 
-Refers to section 3.5.1.
+An extension of the basic SIR model that incorporates interaction
+between sub-populations
 
 ## Usage
 
@@ -16,11 +17,23 @@ sir_subpops_model(times, state, parameters)
 
 - state:
 
-  the initial state of the model.
+  the initial state of the model. A named vector with the following
+
+  - `s`: initial susceptible proportion
+
+  - `i`: initial infected proportion
+
+  - `r`: initial recovered proportion
 
 - parameters:
 
-  the parameters of the model.
+  the parameters of the model. A named vector with the following
+
+  - `mu`: natural death rate (1/L).
+
+  - `beta`: the WAIFW matrix, with dimensions `[K, K]`.
+
+  - `nu`: recovery rate
 
 ## Value
 
@@ -36,43 +49,50 @@ list of class sir_subpops_model with the following items
 
 ## Details
 
-In `state`:
+Follow the SIR model with sub populations described in the book by Hens
+et al. (section 3.5.1.)
 
-\- `s`: Percent susceptible
+With K subpopulations, the WAIFW matrix or mixing matrix is given by
 
-\- `i`: Percent infected
+\$\$ C = \begin{bmatrix} \beta\_{11} & \beta\_{12} & ... & \beta\_{1K}
+\\ \beta\_{21} & \beta\_{22} & ... & \beta\_{2K} \\ \vdots & \vdots &
+... & \vdots \\ \beta\_{K1} & \beta\_{K2} & ... & \beta\_{KK} \\
+\end{bmatrix} \$\$
 
-\- `r`: Percent recovered
+And the \\i^{th}\\ sub population is described by the following system
+of differential equations \$\$ \begin{cases} \frac{dS_i(t)}{dt} =
+-(\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) + N_i\mu_i - \mu_i S_i(t) \\
+\frac{dI_i(t)}{dt} = (\sum^K\_{j=1}\beta\_{ij}I_j(t)) S_i(t) - (\nu_i +
+\mu_i) I_i(t) \\ \frac{dR_i(t)}{dt} = \nu_i I_i(t) - \mu_i R_i(t)
+\end{cases} \$\$
 
-In `parameters`:
+## References
 
-\- `mu`: natural death rate (1/L).
-
-\- `beta`: transmission rate w.r.t population (beta tilde)
-
-\- `nu`: recovery rate
-
-\- `k`: number of subpopulations
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+[doi:10.1007/978-1-4614-4072-7](https://doi.org/10.1007/978-1-4614-4072-7)
+.
 
 ## Examples
 
 ``` r
 # \donttest{
-k <- 2
 state <- c(
   s = c(0.8, 0.8),
   i = c(0.2, 0.2),
   r = c(  0,   0)
 )
-beta_matrix <- c(
-  c(0.05, 0.00),
-  c(0.00, 0.05)
+beta_matrix <- matrix(
+  c(0.05, 0.00,
+  0.00, 0.05),
+  2
 )
 parameters <- list(
-  beta = matrix(beta_matrix, nrow=k, ncol=k, byrow=TRUE),
+  beta = beta_matrix,
   nu = c(1/30, 1/30),
-  mu = 0.001,
-  k = k
+  mu = 0.001
 )
 times<-seq(0,10000,by=0.5)
 model <- sir_subpops_model(times, state, parameters)

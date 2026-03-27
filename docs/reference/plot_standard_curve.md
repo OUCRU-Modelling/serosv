@@ -18,21 +18,21 @@ plot_standard_curve(
 
 - x:
 
-  \- output of \`to_titer()\`
+  output of \`to_titer()\`
 
 - facet:
 
-  \- whether to faceted by plates or plot all standard curves on a
-  single plot
+  whether to faceted by plates or plot all standard curves on a single
+  plot
 
 - xlab:
 
-  \- label of the x axis
+  label of the x axis
 
 - ylab:
 
-  \- label of the y axis
+  label of the y axis
 
 - datapoint_size:
 
-  \- size of the data point (only applicable when \`facet=TRUE\`)
+  size of the data point (only applicable when \`facet=TRUE\`)

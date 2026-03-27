@@ -5,22 +5,23 @@ Compute confidence interval for penalized_spline_model
 ## Usage
 
 ``` r
-compute_ci.penalized_spline_model(x, ci = 0.95, ...)
+# S3 method for class 'penalized_spline_model'
+compute_ci(x, ci = 0.95, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- serosv models
+  serosv models
 
 - ci:
 
-  \- confidence interval
+  confidence interval
 
 - ...:
 
-  \- arbitrary arguments
+  arbitrary arguments
 
 ## Value
 

@@ -1,6 +1,7 @@
 # MSEIR model
 
-Refers to section 3.4.
+Simulate a transmission model with 5 compartments: maternal immunity
+(M), susceptible (S), exposed (E), infected (I), recovered (R)
 
 ## Usage
 
@@ -41,6 +42,40 @@ list of class mseir_model with the following parameters
 - output:
 
   matrix of proportion for each compartment over time
+
+## Details
+
+Follow the MSEIR described in the book by Hens et al. (section 3.5.1.)
+
+The model is described by the following system of equations \$\$
+\begin{cases} \frac{dM(a)}{da} = -(\gamma + \mu(a))M(a) \\
+\frac{dS(a)}{da} = \gamma M(a) - (\lambda(a) + \mu(a)) S(a) \\
+\frac{dE(a)}{da} = \lambda(a) S(a) - (\sigma + \mu(a)) E(a) \\
+\frac{dI(a)}{da} = \sigma(a) E(a) - (\nu + \mu(a)) I(a) \\
+\frac{dR(a)}{da} = \nu I(a) - \mu(a) R(a) \end{cases} \$\$
+
+Where:
+
+\- \\M(0)\\ = B, the number of births in the population
+
+\- \\\gamma\\ is the rate of antibody decaying
+
+\- \\\lambda(a)\\ is the force of infection at age \\a\\
+
+\- \\\mu(a)\\ is the natural death rate at age \\a\\
+
+\- \\\sigma\\ is the rate of becoming infected after being exposed
+
+\- \\\nu\\ is the recovery rate
+
+## References
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+[doi:10.1007/978-1-4614-4072-7](https://doi.org/10.1007/978-1-4614-4072-7)
+.
 
 ## Examples
 

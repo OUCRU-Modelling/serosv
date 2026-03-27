@@ -2,12 +2,12 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
   UseMethod("compute_ci")
 }
 
-#' Compute confidence interval
+#' Compute confidence interval for a model of serosv
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param le - number of data for computing confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param le number of data for computing confidence interval
+#' @param ... arbitrary argument
 #'
 #' @importFrom stats qt predict.glm
 #' @import dplyr
@@ -15,7 +15,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #'
 #' @export
-compute_ci <- function(x, ci = 0.95, le = 100, ...){
+compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -23,10 +23,10 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
   link_inv <- x$info$family$linkinv
   dataset <- x$info$data
   n <- nrow(dataset) - length(x$info$coefficients)
-  age_range <- range(dataset$Age)
+  age_range <- range(dataset$age)
   ages <- seq(age_range[1], age_range[2], le = le)
 
-  mod1 <- predict.glm(x$info,data.frame(Age = ages), se.fit = TRUE)
+  mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- mod1 %>% as_tibble() %>%  select(fit, se.fit) %>%
     mutate(age = ages ) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
@@ -40,10 +40,10 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 
 #' Compute confidence interval for fractional polynomial model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param le - number of data for computing confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param le number of data for computing confidence interval
+#' @param ... arbitrary argument
 #'
 #' @import dplyr
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
@@ -74,9 +74,9 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 
 #' Compute confidence interval for Weibull model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary argument
 #'
 #' @import dplyr
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
@@ -109,15 +109,15 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 
 #' Compute confidence interval for local polynomial model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param ... - arbitrary arguments
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
-  crit<- crit(x$pi,cov = ci)$crit.val
-  mod1 <- predict(x$pi, data.frame(a = ages),se.fit = TRUE)
+  crit<- crit(x$info,cov = ci)$crit.val
+  mod1 <- predict(x$info, data.frame(a = ages),se.fit = TRUE)
   out.DF <- data.frame(x = ages, y = mod1$fit,ymin= mod1$fit-crit*(mod1$se.fit/100),
                        ymax= mod1$fit+crit*(mod1$se.fit/100))
   out.DF
@@ -126,9 +126,9 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 
 #' Compute confidence interval for penalized_spline_model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param ... - arbitrary arguments
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
@@ -181,8 +181,8 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
 
 #' Compute 95\% credible interval for hierarchical Bayesian model
 #'
-#' @param x - serosv models
-#' @param ... - arbitrary arguments
+#' @param x serosv models
+#' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
@@ -233,9 +233,9 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 
 #' Compute confidence interval for mixture model
 #'
-#' @param x - serosv mixture_model object
-#' @param ci - confidence interval
-#' @param ... - arbitrary arguments
+#' @param x serosv mixture_model object
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
 #' @importFrom stats qnorm
 #'
 #' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
@@ -258,10 +258,10 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 
 #' Compute confidence interval for time age model
 #'
-#' @param x - serosv models
-#' @param ci - confidence interval
-#' @param le - number of data for computing confidence interval
-#' @param ... - arbitrary argument
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param le number of data for computing confidence interval
+#' @param ... arbitrary argument
 #'
 #' @importFrom mgcv predict.gam
 #' @import dplyr
@@ -340,6 +340,8 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
       })
     ) %>%
     select(!!sym(x$grouping_col), sp_df, foi_df)
+
+  out
 }
 
 

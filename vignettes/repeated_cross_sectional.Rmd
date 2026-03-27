@@ -53,6 +53,8 @@ tb_nl <- tb_nl_1966_1973 %>%
   filter(survey_year > 1966) %>% 
   group_by(age, survey_year, survey_time) %>% 
   summarize(pos = sum(pos), tot = sum(tot), .groups = "drop")
+
+head(tb_nl)
 ```
 
 The monotonization method can be specified via the `monotonize_method` argument, `serosv` currently supports 2 options:
@@ -108,7 +110,8 @@ The output is a `data.frame` with dimension [number of survey, 9], where each ro
 -   `monotonized_foi` - estimated force of infection from `monotonized_sp`
 
 ```{r}
-out_pava$out
+out_pava
+out_scam
 ```
 
 For visualization, the plot function for `age_time_model` offers the following configurations
@@ -119,7 +122,7 @@ For visualization, the plot function for `age_time_model` offers the following c
 
 ***Example:*** output for model with PAVA for monotonization
 
-```{r warning=FALSE}
+```{r warning=FALSE, message=FALSE}
 plot(out_pava, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 plot(out_pava, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 
@@ -128,7 +131,7 @@ plot(out_pava, facet = FALSE, modtype = "monotonized") + ylim(c(0, 0.07))
 
 ***Example:*** output for model with SCAM for monotonization
 
-```{r warning=FALSE}
+```{r warning=FALSE, message=FALSE}
 plot(out_scam, facet = TRUE, modtype = "non-monotonized") + ylim(c(0, 0.07))
 plot(out_scam, facet = TRUE, modtype = "monotonized") + ylim(c(0, 0.07))
 ```

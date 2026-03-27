@@ -13,15 +13,15 @@ plot_standard_curve(
 )
 }
 \arguments{
-\item{x}{- output of `to_titer()`}
+\item{x}{output of `to_titer()`}
 
-\item{facet}{- whether to faceted by plates or plot all standard curves on a single plot}
+\item{facet}{whether to faceted by plates or plot all standard curves on a single plot}
 
-\item{xlab}{- label of the x axis}
+\item{xlab}{label of the x axis}
 
-\item{ylab}{- label of the y axis}
+\item{ylab}{label of the y axis}
 
-\item{datapoint_size}{- size of the data point (only applicable when `facet=TRUE`)}
+\item{datapoint_size}{size of the data point (only applicable when `facet=TRUE`)}
 }
 \description{
 Visualize standard curves for each plate

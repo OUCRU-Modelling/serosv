@@ -10,21 +10,67 @@ X <- function(t, degree) {
 
 #' Polynomial models
 #'
-#' Refers to section 6.1.1
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
-#' @param k  degree of the model.
-#' @param type name of method (Muench, Giffith, Grenfell).
-#' @param link link function.
+#' @description Fit age-stratified seroprevalence data to serocatalytic models formulated as polynomials.
+#'
+#' @details
+#' The seroprevalence is assumed to follow the general format
+#' \deqn{
+#' \pi(a)  = 1 - e^{-\Sigma_{i=1}^k \beta_i a^i}
+#' }
+#' Which implies the force of infection to be \eqn{\lambda(a) = \Sigma_{i=1}^k \beta_i i a^{i-1}}
+#'
+#' Where:
+#'
+#' - \eqn{\pi} is the seroprevalence at age \eqn{a}
+#'
+#' - \eqn{a} is the variable age
+#'
+#' - \eqn{k} is the degree of the polynomial
+#'
+#' The seroprevalence \eqn{\pi(a)} is fitted using a GLM with log link with
+#' the linear predictor \eqn{\eta(a) = \Sigma_{i=1}^k \beta_i a^{i}}
+#'
+#' Muench (1934) model is equivalent to a degree 1 (\eqn{k=1}) linear predictor
+#'
+#' Griffith model is equivalent to a degree 2 (\eqn{k=2}) linear predictor
+#'
+#' Grenfell & Anderson (1985) suggested a higher order polynomials (\eqn{k \geq 3})
+#'
+#' Refer to section 6.1.1. of the the book by Hens et al. (2012) for further details.
+#'
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
+#'
+#' Grenfell, B. T., and R. M. Anderson. 1985. “The Estimation of
+#' Age-Related Rates of Infection from Case Notifications and Serological Data.”
+#' The Journal of Hygiene 95 (2): 419–36. \doi{https://doi.org/10.1017/s0022172400062859}.
+#'
+#' Muench, Hugo. 1934. “Derivation of Rates from Summation Data by the Catalytic Curve.”
+#' Journal of the American Statistical Association 29 (185):
+#' 25–38. \doi{https://doi.org/10.1080/01621459.1934.10502684}.
+#'
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
+#' @param k  degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model).
+#' @param link link function (default link="log").
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @examples
 #' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
-#' data$status <- data$seropositive
-#' aggregated <- transform_data(data$age, data$seropositive, stratum_col = "age")
+#' aggregated <- transform_data(data, stratum_col = "age", status_col="seropositive")
 #'
 #' # fit with aggregated data
-#' model <- polynomial_model(aggregated, type = "Muench")
+#' model <- polynomial_model(aggregated, k = 1)
 #' # fit with linelisting data
-#' model <- polynomial_model(data, type = "Muench")
+#' model <- polynomial_model(data,
+#'     status_col = "seropositive",
+#'     k = 1)
 #' plot(model)
 #'
 #' @return a list of class polynomial_model with 5 items
@@ -35,97 +81,102 @@ X <- function(t, degree) {
 #'   \item{foi}{force of infection}
 #'
 #' @export
-polynomial_model <- function(data, k,type, link = "log"){
+polynomial_model <- function(data, k, link = "log",
+                             age_col="age",pos_col="pos", tot_col="tot", status_col="status"){
   model <- list()
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   model$datatype <- data$type
 
-  Age <- data$age
-  Pos <- data$pos
-  Neg <- data$tot - Pos
+  age <- data$age
+  pos <- data$pos
+  neg <- data$tot - pos
 
-  df <- data.frame(cbind(Age, Pos,Neg))
-  if(missing(k)){
-    k <- switch(type,
-                "Muench" = 1 ,
-                "Griffith" = 2,
-                "Grenfell" = 3)}
-  age <- function(k){
-    if(k>1){
-      formula<- paste0("I","(",paste("Age", 2:k,sep = "^"),")",collapse = "+")
-      paste0("cbind(Neg,Pos)"," ~","-1+Age+",formula)
-    } else {
-      paste0("cbind(Neg,Pos)"," ~","-1+Age")
+  df <- data.frame(cbind(age, pos,neg))
+
+  # helper function to generate the polynomial given a k value
+  # to be used for parameter selection if multiple values for k are given
+  generate_polynomial <- function(k, df, link="log"){
+    Age <- function(k){
+      if(k>1){
+        formula<- paste0("I","(",paste("age", 2:k,sep = "^"),")",collapse = "+")
+        paste0("cbind(neg,pos)"," ~","-1+age+",formula)
+      } else {
+        paste0("cbind(neg,pos)"," ~","-1+age")
+      }
     }
+
+    glm(Age(k), family=binomial(link=link),df)
   }
-  model$info <- glm(age(k), family=binomial(link=link),df)
-  X <- X(Age, k)
+
+  # If a vector of values for k is provided -> select best value
+  if(length(k) > 1){
+    out <- nested_mod_selection(
+      list("k" = k),
+      model_fn = \(k, df){
+        generate_polynomial(k, df, link=link)
+      },
+      dat = df
+    )
+
+    k <- out$best_par$k
+    model$info <- out$mod
+  }else{
+    model$info <- generate_polynomial(k, df, link=link)
+  }
+
+  X <- X(age, k)
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
-  model$df <- list(age=Age, pos=Pos, tot= Pos + Neg)
+  model$df <- list(age=age, pos=pos, tot= pos + neg)
+  model$k <- k
   class(model) <- "polynomial_model"
   model
 }
 
-#' The Farrington (1990) model.
-#'
-#' Refers to section 6.1.2.
-#'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
-#' @param start Named list of vectors or single vector.
-#' Initial values for optimizer.
-#' @param fixed Named list of vectors or single vector.
-#' Parameter values to keep fixed during optimization.
-#'
-#' @return a list of class farrington_model with 5 items
-#'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
-#'   \item{df}{the dataframe used for fitting the model}
-#'   \item{info}{fitted "mle" object}
-#'   \item{sp}{seroprevalence}
-#'   \item{foi}{force of infection}
-#' @seealso [stats4::mle()] for more information on the fitted mle object
-#'
-#' @examples
-#' df <- rubella_uk_1986_1987
-#' model <- farrington_model(
-#'   df,
-#'   start=list(alpha=0.07,beta=0.1,gamma=0.03)
-#'   )
-#' plot(model)
-#'
-#' @importFrom stats4 mle
-#'
-#' @export
-farrington_model <- function(data, start, fixed=list())
-{
-  model <- list()
+# TODO: check if this can be generalized to other functions as well (e.g. fractional polynomial)
+# function to return the best parameter of nested glm models using LRT
+# par_range - list of parameters and its possible values
+# model_fn - function to fit and return a model, must takes 2 arguments: par, df
+#' @import tidyr
+#' @importFrom purrr pmap
+nested_mod_selection <- function(par_range, model_fn, dat, method="LRT"){
+  # generate all combinations of parameters values
+  par_combs <- tidyr::crossing(!!!par_range)
 
-  # check input whether it is line-listing or aggregated data
-  data <- check_input(data)
-  age <- data$age
-  pos <- data$pos
-  tot <- data$tot
-  model$datatype <- data$type
+  # fit the model using specified parameter values
+  mods_out <- par_combs %>%
+    purrr::pmap(\(...){model_fn(..., df=dat)})
+  # perform LRT
+  lrt_out <- do.call(
+    anova,
+    c(mods_out, list(test="LRT"))
+  )
 
-  farrington <- function(alpha,beta,gamma) {
-    p=1-exp((alpha/beta)*age*exp(-beta*age)
-            +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)-gamma*age)
-    ll=pos*log(p)+(tot-pos)*log(1-p)
-    return(-sum(ll))
+  # get the best model
+  best_idx <- lrt_out %>%
+    as.data.frame() %>%
+    mutate(
+      idx = 1:n()
+    ) %>%
+    filter(
+      `Pr(>Chi)` < 0.05
+    ) %>%
+    arrange(
+      Deviance
+    ) %>%
+    pull(idx)
+
+  # handle scenario when the reference model (i.e., the first model) is in fact the best option
+  # i.e., when the other parameter combinations do not result in statistically significant improvement
+  if(length(best_idx)>1){
+    best_idx <- best_idx[1]
+  }else{
+    best_idx <- 1
   }
 
-  model$info <- mle(farrington, fixed=fixed, start=start)
-  alpha <- model$info@coef[1]
-  beta  <- model$info@coef[2]
-  gamma <- model$info@coef[3]
-  model$sp <- 1-exp(
-    (alpha/beta)*age*exp(-beta*age)
-    +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)
-    -gamma*age)
-  model$foi <- (alpha*age-gamma)*exp(-beta*age)+gamma
-  model$df <- list(age=age, pos=pos, tot=tot)
-
-  class(model) <- "farrington_model"
-  model
+  list(
+    best_par = par_combs[best_idx, ] %>% as.list(),
+    mod = mods_out[best_idx][[1]]
+  )
 }
 

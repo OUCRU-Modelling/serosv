@@ -4,16 +4,16 @@
 \alias{compute_ci.fp_model}
 \title{Compute confidence interval for fractional polynomial model}
 \usage{
-compute_ci.fp_model(x, ci = 0.95, le = 100, ...)
+\method{compute_ci}{fp_model}(x, ci = 0.95, le = 100, ...)
 }
 \arguments{
-\item{x}{- serosv models}
+\item{x}{serosv models}
 
-\item{ci}{- confidence interval}
+\item{ci}{confidence interval}
 
-\item{le}{- number of data for computing confidence interval}
+\item{le}{number of data for computing confidence interval}
 
-\item{...}{- arbitrary argument}
+\item{...}{arbitrary argument}
 }
 \value{
 confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval

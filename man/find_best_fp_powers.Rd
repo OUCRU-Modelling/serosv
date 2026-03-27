@@ -2,18 +2,19 @@
 % Please edit documentation in R/fractional_polynomial_models.R
 \name{find_best_fp_powers}
 \alias{find_best_fp_powers}
-\title{Returns the powers of the GLM fitted model which has the lowest deviance score.}
+\title{Returns the powers of the fractional polynomial model which has the lowest deviance score.}
 \usage{
 find_best_fp_powers(data, p, mc, degree, link = "logit")
 }
 \arguments{
-\item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+`age`, `status` (for linelisting data)}
 
-\item{p}{a powers sequence.}
+\item{p}{a powers sequence to be tested.}
 
 \item{mc}{indicates if the returned model should be monotonic.}
 
-\item{degree}{the degree of the model. Recommended to be <= 2.}
+\item{degree}{the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.}
 
 \item{link}{the link function. Defaulted to "logit".}
 }
@@ -24,14 +25,5 @@ list of 3 elements:
   \item{model}{The best model fitted}
 }
 \description{
-Refers to section 6.2.
-}
-\examples{
-df <- hav_be_1993_1994
-best_p <- find_best_fp_powers(
-df,
-p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-)
-best_p
-
+Return the best powers for a given degree
 }

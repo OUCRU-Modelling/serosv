@@ -4,14 +4,14 @@
 \alias{compute_ci.weibull_model}
 \title{Compute confidence interval for Weibull model}
 \usage{
-compute_ci.weibull_model(x, ci = 0.95, ...)
+\method{compute_ci}{weibull_model}(x, ci = 0.95, ...)
 }
 \arguments{
-\item{x}{- serosv models}
+\item{x}{serosv models}
 
-\item{ci}{- confidence interval}
+\item{ci}{confidence interval}
 
-\item{...}{- arbitrary argument}
+\item{...}{arbitrary argument}
 }
 \value{
 confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval

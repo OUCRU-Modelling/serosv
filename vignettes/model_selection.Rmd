@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, output=FALSE}
+```{r setup, output=FALSE, warning=FALSE, message=FALSE}
 library(serosv)
 library(dplyr)
 library(magrittr)
@@ -15,45 +15,150 @@ library(magrittr)
 
 ```{r, warning=FALSE}
 data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ] %>% 
-  rename(status = seropositive)
-  
-aggregated <- transform_data(data$age, data$status, stratum_col = "age")
+  rename(status = seropositive) 
 
-# fit with linelisting data
-model1 <- polynomial_model(data, type = "Muench")
-# fit with aggregated data
-model2 <- polynomial_model(aggregated, type = "Muench")
-# fit with aggregated data
-model3 <- polynomial_model(aggregated, type = "Griffith")
-# fit with gam
-model4 <- penalized_spline_model(aggregated)
+aggregated <- transform_data(data, stratum_col = "age", status_col="status")
 ```
 
 ## Generate models comparison `data.frame`
 
-Function `compare_models()` is used for quickly computing AIC and BIC values for given model(s).
+Function `compare_models()` is used for quickly computing comparison metrics for a set of models on a given dataset.
 
-The function can take an arbitrary number of models and all models must be created from `serosv`'s set of `*_model()` functions. It will then return a `data.frame` of 4 columns:
+The function takes the following arguments:
 
--   `model` model identifier. Either user defined name or index based on the order provided.
+-   `data` the dataset that will be fitted to the models
+
+-   `method` the method to generate comparison metrics. It can be the name of one of the built-in methods, or a user-defined function.
+
+-   `…` functions that take a data and return a fitted `serosv` model.
+
+It will then return a `data.frame` with the following columns
+
+-   `label` model identifier. Either user defined name or index based on the order provided.
 
 -   `type` type of model (a `serosv` model class)
 
--   `AIC` AIC value for the fitted model (if applicable)
+-   metrics depending on the method selected
 
--   `BIC` AIC value for the fitted model (if applicable)
+**Built-in `method`**
+
+`serosv` currently provide 2 built-in metrics generating methods
+
+-   `"AIC/BIC"` which returns fitted model's AIC, BIC and Log-likelihood (where applicable)
+
+-   `"CV"` which split the data into "train" and "test" set then return logloss and AUC from model's prediction on the test set
 
 **Sample usage**
 
-Compare 4 models defined above
+```{r message=FALSE}
+# ----- Return AIC, BIC ----- 
+aic_bic_out <- compare_models(
+  data = data,
+  method = "AIC/BIC",
+  griffith = ~polynomial_model(.x, k=2),
+  penalized_spline = penalized_spline_model,
+  farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+  local_polynomial = lp_model # expect to not return any values
+  ) %>% suppressWarnings()
+
+# ----- Return Cross-validation metrics ----- 
+cv_out <- compare_models(
+    data,
+    method = "CV",
+    griffith = ~polynomial_model(.x, k=2),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
+
+aic_bic_out
+cv_out
+```
+
+With aggregated data
+
+```{r message=FALSE}
+# ----- Return AIC, BIC ----- 
+aic_bic_out <- compare_models(
+  data = aggregated,
+  method = "AIC/BIC",
+  griffith = ~polynomial_model(.x, k=2),
+  penalized_spline = penalized_spline_model,
+  farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+  local_polynomial = lp_model # expect to not return any values
+  ) %>% suppressWarnings()
+
+# ----- Return Cross-validation metrics (default with 4 folds) ----- 
+cv_out <- compare_models(
+    data = aggregated,
+    method = "CV",
+    griffith = ~polynomial_model(.x, k=2),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
+
+
+aic_bic_out
+cv_out
+```
+
+## Generate custom metrics
+
+The users can also provide a custom function to generate the comparison metrics.
+
+This function must accepts 2 parameters:
+
+-   `dat` the input data
+
+-   `model_func` a function that takes an input data and returns a `serosv` model
+
+And it must returns a data frame with 1 row where each column represents one metric.
+
+***Example:***
+
+The following implements holdout validation and returns MAE:
 
 ```{r}
-# provide models with name
-compare_models(muench_linelist = model1, muench_aggregated = model2, griffith = model3, penalized_spline = model4)
+generate_mae <- function(dat, model_func){
+  n_train <- round(nrow(dat)*0.8)
+  train <- dat[1:n_train,]
+  test <- dat[n_train:nrow(dat),]
+  
+  fit <- model_func(dat)
+  pred <- predict(fit, test[, 1, drop=FALSE])
+  
+  # handle error differently depending on datatype
+  mae <- if(fit$datatype == "linelisting"){
+    sum(abs(test$status - pred), na.rm=TRUE)/nrow(test)
+  }else{
+    sum(abs(test$pos/test$tot - pred), na.rm=TRUE)/nrow(test)
+  }
+  
+  data.frame(
+    mae = mae
+  )
+}
+```
 
-# provide models without name
-compare_models(model1, model2, model3, model4)
+We can then run `compare_models` with the custom metrics function
 
-# user can provide arbitrary number of models
-compare_models(model3, model4)
+```{r}
+compare_models(
+    data = aggregated,
+    method = generate_mae,
+    griffith = ~polynomial_model(.x, k=2),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
+
+compare_models(
+    data = data,
+    method = generate_mae,
+    griffith = ~polynomial_model(.x, k=2),
+    penalized_spline = penalized_spline_model,
+    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+    local_polynomial = lp_model 
+  ) %>% suppressWarnings()
 ```

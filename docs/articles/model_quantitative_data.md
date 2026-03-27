@@ -2,58 +2,68 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
 ```
 
 ## Mixture model
 
 **Proposed model**
 
-Two-component mixture model for test result \\(Z\\) with \\(Z_j (j =
-\\{I, S\\})\\) being the latent mixing component having density
-\\(f_j(z_j\|\theta_j)\\) and with \\(\pi\_{\text{TRUE}}(a)\\) being the
-age-dependent mixing probability can be represented as
+Consider a two-component Gaussian mixture model for the antibody level
+\\Z\\, where each component \\Z_j\\ represent antibody level arising
+from the 2 latent sub-populations \\j \in \\I, S\\\\ (i.e., Infected and
+Susceptible groups).
 
-\\\[ f(z\|z_I, z_S,a) =
+Let \\f_j(z_j\|\theta_j)\\ denotes the density of component \\Z_j\\,
+where \\\theta_I\\ and \\\theta_S\\ are the parameters for the
+Susceptible and Infected components respectively.
+
+With \\\pi\_{\text{TRUE}}(a)\\ being the age-dependent mixing
+probability (i.e., the true prevalence), the density of the mixture is
+formulated as
+
+\\ f(z\|z_I, z_S,a) =
 (1-\pi\_{\text{TRUE}}(a))f_S(z_S\|\theta_S)+\pi\_{\text{TRUE}}(a)f_I(z_I\|\theta_I)
-\\\]
+\\
 
-The mean \\(E(Z\|a)\\) thus equals
+The age-specific mean antibody level \\E(Z\|a)\\ thus equals
 
-\\\[ \mu(a) =
-(1-\pi\_{\text{TRUE}}(a))\mu_S+\pi\_{\text{TRUE}}(a)\mu_I\\\]
+\\ \mu(a) = (1-\pi\_{\text{TRUE}}(a))\mu_S+\pi\_{\text{TRUE}}(a)\mu_I\\
 
 From which the true prevalence can be calculated by
 
-\\\[ \pi\_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S} \\\]
+\\ \pi\_{\text{TRUE}}(a) = \frac{\mu(a) - \mu_S}{\mu_I - \mu_S} \\
 
-Force of infection can then be calculated by
+Force of infection can then be inferred by
 
-\\\[ \lambda\_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)} \\\]
+\\ \lambda\_{TRUE} = \frac{\mu'(a)}{\mu_I - \mu(a)} \\
+
+Refer to Chapter `11.3` of the book by Hens et al. (2012) for a more
+detailed explanation of the method.
 
 **Fitting data**
 
-To fit the mixture data, use `mixture_model` function
+General workflow:
+
+- Step 1: Fit the antibody level data to a 2-component mixture model
+
+- Step 2: From the fitted mixture model, estimate the seroprevalence and
+  FOI
+
+To fit the antibody data, use `mixture_model` function
 
 ``` r
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
 df <- df[order(df$age),]
 data <- df$VZVmIUml
 model <- mixture_model(antibody_level = data)
-model$info
+print(model)
+#> Mixture model 
 #> 
-#> Parameters:
-#>       pi    mu  sigma
-#> 1 0.1088 2.349 0.6804
-#> 2 0.8912 6.439 0.9437
+#> Estimated proportion:
+#>  Susceptible=0.1088, Infected=0.8912 
 #> 
-#> Distribution:
-#> [1] "norm"
-#> 
-#> Constraints:
-#>    conpi    conmu consigma 
-#>   "NONE"   "NONE"   "NONE"
+#> Estimated mean Log(Antibody):
+#>  Susceptible=2.349, Infected=6.439
 ```
 
 ``` r
@@ -67,9 +77,29 @@ sero-prevalence and FOI can then be esimated using function
 
 ``` r
 est_mixture <- estimate_from_mixture(df$age, data, mixture_model = model, threshold_status = df$seropositive, sp=83, monotonize = FALSE)
+est_mixture
+#> Age-varying seroprevalence estimated from mixture model 
+#> 
+#> Monotonized seroprevalence:  FALSE
+#> Family: gaussian 
+#> Link function: identity 
+#> 
+#> Formula:
+#> log_antibody ~ s(age, bs = "ps", sp = 83)
+#> 
+#> Estimated degrees of freedom:
+#> 5.13  total = 6.13 
+#> 
+#> GCV score: 2.056333
 plot(est_mixture)
 #> Warning: No shared levels found between `names(values)` of the manual scale and the
 #> data's fill values.
 ```
 
 ![](model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png)
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. *Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective*.
+*Statistics for Biology and Health*. Springer New York.
+<https://doi.org/10.1007/978-1-4614-4072-7>.

@@ -36,14 +36,26 @@ of infection.
 
 Parametric approaches:
 
-- Polynomial models:
-  - Muench’s model
-  - Griffiths’ model
-  - Grenfell and Anderson’s model
-- Nonlinear models:
-  - Farrington’s model
-  - Weibull model
-- Fractional polynomial models
+- Frequentist methods:
+
+  - Polynomial models:
+
+    - Muench’s model
+    - Griffiths’ model
+    - Grenfell and Anderson’s model
+
+  - Nonlinear models:
+
+    - Farrington’s model
+    - Weibull model
+
+  - Fractional polynomial models
+
+- Bayesian methods:
+
+  - Hierarchical Farrington model
+
+  - Hierarchical log-logistic model
 
 Nonparametric approaches:
 
@@ -57,12 +69,6 @@ Semiparametric approaches:
 
   - Generalized Linear Mixed Model framework
 
-Hierarchical Bayesian approaches:
-
-- Hierarchical Farrington model
-
-- Hierarchical log-logistic model
-
 ## Demo
 
 ### Fitting rubella data from the UK
@@ -71,30 +77,31 @@ Load the rubella in UK dataset.
 
 ``` r
 library(serosv)
+rubella <- rubella_uk_1986_1987
 ```
 
-Find the power for the best second degree fractional polynomial with
-monotonicity constraint and a logit link function. The power appears to
-be (-0.9,-0.9).
+Fit the data using a fractional polynomial model via
+[`fp_model()`](https://oucru-modelling.github.io/serosv/reference/fp_model.md).
+In this example, the model searches for the best combination of powers
+within a specified range.
 
 ``` r
-rubella <- rubella_uk_1986_1987
-
-best_2d_mn <- find_best_fp_powers(
+rubella_mod <- fp_model(
   rubella,
-  p=seq(-2,3,0.1), mc = T, degree=2, link="logit"
+  p=list(
+    p_range=seq(-2,3,0.1), # range of powers to search over
+    degree=2 # maximum degree for the search
+  ), 
+  monotonic = T, # enforce model to be monotonic
+  link="logit"
 )
-
-best_2d_mn
-#> $p
-#> [1] -0.9 -0.9
+rubella_mod
+#> Fractional polynomial model 
 #> 
-#> $deviance
-#> [1] 37.57966
+#> Input type:  aggregated 
+#> Powers:  -0.9, -0.9 
 #> 
-#> $model
-#> 
-#> Call:  glm(formula = as.formula(formulate(p_cur)), family = binomial(link = link))
+#> Call:  glm(formula = as.formula(formulate(curr_p)), family = binomial(link = link))
 #> 
 #> Coefficients:
 #>               (Intercept)                I(age^-0.9)  
@@ -107,14 +114,10 @@ best_2d_mn
 #> Residual Deviance: 37.58     AIC: 210.1
 ```
 
-Finally, fit the second degree fractional polynomial.
+Visualize the model
 
 ``` r
-fpmd <- fp_model(
-  rubella,
-  p=c(-0.9, -0.9), link="logit")
-
-plot(fpmd)
+plot(rubella_mod)
 ```
 
 ![](reference/figures/README-unnamed-chunk-5-1.png)
@@ -123,15 +126,6 @@ plot(fpmd)
 
 ``` r
 library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.3.1
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 parvob19 <- parvob19_fi_1997_1998
 
 # for linelisting data, either transform it to aggregated
@@ -139,7 +133,7 @@ transform_data(
   parvob19$age, 
   parvob19$seropositive,
   stratum_col = "age") |>
-  polynomial_model(type = "Muench") |>
+  polynomial_model(k = 1) |>
   plot()
 ```
 
@@ -150,7 +144,7 @@ transform_data(
 # or fit data as is
 parvob19 |>
   rename(status = seropositive) |>
-  polynomial_model(type = "Muench") |>
+  polynomial_model(k = 1) |>
   plot()
 ```
 

@@ -27,14 +27,11 @@ between October 1999 and April 2000. This population was stratified by age
 in order to obtain approximately 100 observations per age group.
 }
 \examples{
-# Reproduce Fig 4.7 (left panel), p.71
-age <- vzv_be_1999_2000$age
-pos <- vzv_be_1999_2000$pos
-tot <- vzv_be_1999_2000$tot
-plot(age, pos / tot,
-  cex = 0.036 * tot, pch = 19, xlab = "age", ylab = "seroprevalence",
-  xlim = c(0, 45), ylim = c(0, 1)
+with(vzv_be_1999_2000,
+  plot(age, pos / tot,
+    cex = 0.1 * sqrt(tot), pch = 19, xlab = "age", ylab = "seroprevalence",
+    xlim = c(0, 45), ylim = c(0, 1)
+  )
 )
-
 }
 \keyword{datasets}

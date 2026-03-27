@@ -1,6 +1,7 @@
 # SIR static model (age-heterogeneous, endemic equilibrium)
 
-Refers to section 3.2.2.
+Simulate transmission model with constant force of infection and
+consists of 3 compartments: susceptible (S), infected (I), recovered (R)
 
 ## Usage
 
@@ -16,11 +17,21 @@ sir_static_model(a, state, parameters)
 
 - state:
 
-  the initial state of the system.
+  the initial state of the system. A named vector with the following
+
+  - `s`: initial susceptible proportion
+
+  - `i`: initial infected proportion
+
+  - `r`: initial recovered proportion
 
 - parameters:
 
-  the model's parameter.
+  the model's parameter. A named vector with the following
+
+  - `lambda`: natural death rate
+
+  - `nu`: recovery rate
 
 ## Value
 
@@ -36,19 +47,40 @@ list of class sir_static_model with the following items
 
 ## Details
 
-In `state`:
+Follow the SIR model at endemic state described in the book by Hens et
+al. (section 3.2.2.)
 
-\- `s`: proportion susceptible
+Assumptions:
 
-\- `i`: proportion infected
+\- Time homogeneity
 
-\- `r`: proportion recovered
+\- Age heterogeneity
 
-In `parameters`:
+\- Constant force of infection
 
-\- `lambda`: natural death rate
+The model is described by a system of 3 differential equations
 
-\- `nu`: recovery rate
+\$\$ \begin{cases} \frac{ds(a)}{da} = -\lambda s(a) \\ \frac{di(a)}{da}
+= \lambda s(a) - \nu i(a) \\ \frac{dr(a)}{da} = \nu i(a) \end{cases}
+\$\$
+
+Where:
+
+\- \\s(a), i(a), r(a)\\ are proportion of susceptible, infected,
+recovered population of age group \\a\\ respectively
+
+\- \\\lambda\\ is the force of infection
+
+\- \\\nu\\ is the recovery rate
+
+## References
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+[doi:10.1007/978-1-4614-4072-7](https://doi.org/10.1007/978-1-4614-4072-7)
+.
 
 ## Examples
 

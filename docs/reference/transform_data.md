@@ -6,22 +6,22 @@ and \`seropositive\` vectors.
 ## Usage
 
 ``` r
-transform_data(t, spos, stratum_col = "t")
+transform_data(data, stratum_col = "age", status_col = "status")
 ```
 
 ## Arguments
 
-- t:
+- data:
 
-  the time vector (for stratification).
-
-- spos:
-
-  the seropositive vector.
+  a data frame with columns for age and serostatus
 
 - stratum_col:
 
-  new name for the time vector (default to "t")
+  name of the column to stratify by (default to "age")
+
+- status_col:
+
+  name of the column for serostatus
 
 ## Value
 
@@ -31,10 +31,10 @@ dataframe in aggregated format
 
 ``` r
 df <- hcv_be_2006
-hcv_df <- transform_data(df$dur, df$seropositive)
+hcv_df <- transform_data(df, stratum_col="dur", status_col="seropositive")
 hcv_df
 #> # A tibble: 116 × 3
-#>        t   pos   tot
+#>      age   pos   tot
 #>    <dbl> <int> <int>
 #>  1   0.1     0     1
 #>  2   0.3     0     1

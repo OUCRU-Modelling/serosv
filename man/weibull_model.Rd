@@ -4,10 +4,25 @@
 \alias{weibull_model}
 \title{The Weibull model.}
 \usage{
-weibull_model(data)
+weibull_model(
+  data,
+  t_lab = "t",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 }
 \arguments{
-\item{data}{the input data frame, must either have `t`, `pos`, `tot` column for aggregated data OR `t`, `status` for linelisting data}
+\item{data}{the input data frame, must either have columns for `t`, `pos`, `tot` (for aggregated data) OR
+`t`, `status` (for linelisting data)}
+
+\item{t_lab}{name of the `t` column (default t_lab="t").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
 list of class weibull_model with the following items
@@ -18,15 +33,37 @@ list of class weibull_model with the following items
   \item{foi}{force of infection}
 }
 \description{
-Refers to section 6.1.2.
+Model seroprevalence as a function of duration since vaccination using the Weibull
+model, where the force of infection is assumed to vary monotonically with duration.
+}
+\details{
+For a Weibull model, the prevalence is given by
+\deqn{
+ \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}}
+}
+Where \eqn{d} is exposure time (difference between age of vaccination and age at test)
+
+Which implies the force of infection to be the monotonic function
+\deqn{
+ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1}
+}
+
+Refer to section 6.1.2. of the the book by Hens et al. (2012) for further details.
 }
 \examples{
 df <- hcv_be_2006[order(hcv_be_2006$dur), ]
 df$t <- df$dur
 df$status <- df$seropositive
-model <- weibull_model(df)
+model <- weibull_model(df, t_lab="dur", status_col="seropositive")
 plot(model)
 
+}
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 }
 \seealso{
 [stats::glm()] for more information on the fitted "glm" object

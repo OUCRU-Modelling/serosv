@@ -20,14 +20,15 @@ formulate <- function(p) {
   equation
 }
 
-#' Returns the powers of the GLM fitted model which has the lowest deviance score.
+#' Returns the powers of the fractional polynomial model which has the lowest deviance score.
 #'
-#' Refers to section 6.2.
+#' Return the best powers for a given degree
 #'
-#' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
-#' @param p a powers sequence.
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+#' `age`, `status` (for linelisting data)
+#' @param p a powers sequence to be tested.
 #' @param mc indicates if the returned model should be monotonic.
-#' @param degree the degree of the model. Recommended to be <= 2.
+#' @param degree the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
 #'
 #' @return list of 3 elements:
@@ -35,88 +36,126 @@ formulate <- function(p) {
 #'   \item{deviance}{Deviance of the best fitted model.}
 #'   \item{model}{The best model fitted}
 #'
-#' @examples
-#' df <- hav_be_1993_1994
-#' best_p <- find_best_fp_powers(
-#' df,
-#' p=seq(-2,3,0.1), mc=FALSE, degree=2, link="cloglog"
-#' )
-#' best_p
-#'
 #' @importFrom stats glm binomial as.formula
-#'
-#' @export
-find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
-  data <- check_input(data)
+#' @import dplyr tidyr
+#' @importFrom purrr pmap_dfr
+find_best_fp_powers <- function(data,
+                                p, mc, degree, link="logit"){
   age <- data$age
   pos <- data$pos
   tot <- data$tot
 
-  glm_best <- NULL
-  d_best <- NULL
-  p_best <- NULL
-  #----
-  min_p <- 1
-  max_p <- length(p)
-  state <- rep(min_p, degree)
-  i <- degree
-  #----
+  best_mod <- NULL # best model
+  best_p <- NULL # best powers (p vector) for the given degree
 
-  get_cur_p <- function(cur_state) {
-    cur_p <- c()
-    for (i in 1:degree) {
-      cur_p <- c(cur_p, p[cur_state[i]])
+  # Starting from the lowest degree
+  # Get the best combinations of powers p
+  # Try increment m and only accept when there is a statistically significant improvement (determined by LRT)
+  for (curr_deg in 1:degree){
+    # generate combinations of powers
+    p_combis <- expand.grid(rep(list(p), curr_deg))
+    # filter the rows that are increasing in order
+    p_combis <- p_combis[apply(p_combis, 1, \(r){all(diff(r)>=0)}), ,drop=FALSE]
+    # arrange by increasing order of power in first->second degree and so on
+    p_combis <- p_combis[do.call(order,p_combis),,drop=FALSE]
+
+    # fit model with all the combinations of p and degree
+    mods <- p_combis %>%
+      pmap_dfr(\(...){
+        curr_p <- as.numeric(c(...))
+
+        curr_mod <- glm(
+          as.formula(formulate(curr_p)),
+          family=binomial(link=link)
+        )
+
+        # only accept the parameters if the model converged
+        if(curr_mod$converged==FALSE) return(NULL)
+
+        # only accept the parameters if the model is monotonic (if enforced)
+        if(mc && !is_monotone(curr_mod)) return(NULL)
+
+        tibble(
+          p = list(curr_p),
+          mod = list(curr_mod),
+          deviance = curr_mod$deviance
+        )
+      })
+
+    # handle scenario where no models converged at current degree
+    if(nrow(mods) == 0) next
+    # get the best model and powers for the current degree
+    best_idx <- which.min(mods$deviance)
+    curr_deg_mod <- mods[best_idx, ][["mod"]][[1]]
+    curr_deg_p <- mods[best_idx, ][["p"]][[1]]
+
+    # check if the best model with current degree is better than the last degree
+    if(!is.null(best_mod)){
+      # perform LRT
+      lrt_out <- anova(best_mod, curr_deg_mod, test="LRT")
+      lrt_out <- as.data.frame(lrt_out)
+
+      # Royston&Altman (1994) suggests significance level of 0.1
+      if(!is.na(lrt_out$`Pr(>Chi)`[2]) && lrt_out$`Pr(>Chi)`[2] < 0.1){
+        best_mod <- curr_deg_mod
+        best_p <- curr_deg_p
+      }
+    }else{
+      best_mod <- curr_deg_mod
+      best_p <- curr_deg_p
     }
-    cur_p
   }
 
-  repeat {
-    if (
-      (i < degree && state[i] == max_p)
-      || (i == degree && state[i] == max_p+1)
-    ) {
-      if (i-1 == 0) break
-      if (state[i-1] < max_p) {
-        state[i-1] <- state[i-1]+1
-        for (j in i:degree) state[j] <- state[i-1]
-        i <- degree
-      } else {
-        i <- i-1
-        next
-      }
-    }
-    #------ iteration implementation -------
-    p_cur <- get_cur_p(state)
+  if(is.null(best_mod)) stop("Cannot find a converged model with the given degree and power")
 
-    glm_cur <- glm(
-      as.formula(formulate(p_cur)),
-      family=binomial(link=link)
-    )
-    if (glm_cur$converged == TRUE) {
-      # d_cur <- deviance(glm_cur)
-      d_cur <- glm_cur$deviance
-      if (is.null(glm_best) || d_cur < d_best) {
-        if ((mc && is_monotone(glm_cur)) | !mc) {
-          glm_best <- glm_cur
-          d_best <- d_cur
-          p_best <- p_cur
-        }
-      }
-    }
-    #---------------------------------------
-    if (sum(state != max_p) == 0) break
-    state[i] <- state[i]+1
-  }
-  return(list(p=p_best, deviance=d_best, model=glm_best))
+  list(p=best_p, model=best_mod)
 }
 
 #' A fractional polynomial model.
 #'
-#' Refers to section 6.2.
+#' @description Fractional polynomial model is a generalization of polynomial models
+#' where the power of the terms can be fractions, allowing more flexibility and better
+#' fit for data where asymptotic behavior is expected.
 #'
+#' @details
+#' Instead of a polynomial, the linear predictor is now defined as
+#' \deqn{
+#'  \eta_m(a, \beta, p_1, p_2, ...,p_m) = \Sigma^m_{i=0} \beta_i H_i(a)
+#' }
+#' Where \eqn{m} is an integer, \eqn{p_1 \le p_2 \le... \le p_m} is a sequence of powers,
+#' and \eqn{H_i(a)} is a transformation given by
+#'
+#' \deqn{
+#' H_i = \begin{cases}
+#' a^{p_i} & \text{ if } p_i \neq p_{i-1},
+#' \\ H_{i-1}(a) \times log(a)  & \text{ if } p_i = p_{i-1},
+#' \end{cases}
+#' }
+#'
+#' Refers to section 6.2. of the the book by Hens et al. (2012) for further details.
+#'
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #' @param data the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)
-#' @param p the powers of the predictor.
+#' @param p is either:
+#'   \itemize{
+#'    \item{a numeric vector specifying the powers to apply to the predictors}
+#'    \item{
+#'      a named list with two elements, \code{"p_range"} and \code{"degree"}. \code{"p_range"}
+#'      is a sequence of powers and \code{"degree"} is the maximum degree.
+#'      In which case the package will search for the best degree and power combinations
+#'    }
+#'   }
 #' @param link the link function for model. Defaulted to "logit".
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
+#' @param monotonic whether the returned model should be monotonic (if a search is specified)
 #'
 #' @importFrom stats predict as.formula
 #'
@@ -126,7 +165,10 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
 #'   \item{info}{a fitted glm model}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
-#' @seealso [stats::glm()] for more information on glm object
+#' @seealso
+#' [stats::glm()] for more information on glm object
+#'
+#' [polynomial_models()]
 #'
 #' @examples
 #' df <- hav_be_1993_1994
@@ -136,20 +178,36 @@ find_best_fp_powers <- function(data, p, mc, degree, link="logit"){
 #' plot(model)
 #'
 #' @export
-fp_model <- function(data,p,  link="logit") {
+fp_model <- function(data,p,monotonic=FALSE,link="logit",
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
   model <- list()
 
-  data <- check_input(data)
+  data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age <- data$age
   pos <- data$pos
   tot <- data$tot
-
   model$datatype <- data$type
 
-  model$info <- glm(
-    as.formula(formulate(p)),
-    family=binomial(link=link)
-  )
+  # handle powers input here
+  if(is.numeric(p)){
+    model$info <- glm(
+      as.formula(formulate(p)),
+      family=binomial(link=link)
+    )
+    model$p <- p
+  }else if(is.list(p) && all(c("p_range", "degree") %in% names(p))){
+    out <- find_best_fp_powers(
+      data = data.frame(age=age, pos=pos, tot=tot),
+      p = p$p_range, degree = p$degree, mc = monotonic, link = link
+    )
+    model$p <- out$p
+    model$info <- out$model
+  }else{
+    stop("Invalid value for `p`: either a numeric vector or a named list with
+         2 elements `p_range` and `degree`")
+  }
+
+
   model$sp  <- model$info$fitted.values
   model$foi <- est_foi(
     t=age,

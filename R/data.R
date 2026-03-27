@@ -7,6 +7,9 @@
 # data are normalized and cleaned for the purpose of this package
 
 
+# ===== Hepatitis A =======
+
+
 #' Hepatitis A serological data from Belgium in 1993 and 1994 (aggregated)
 #'
 #' A study of the prevalence of HAV antibodies conducted in the Flemish
@@ -20,14 +23,12 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.1 (upper left panel), p. 63
-#' age <- hav_be_1993_1994$age
-#' pos <- hav_be_1993_1994$pos
-#' tot <- hav_be_1993_1994$tot
-#' plot(
-#'   age, pos / tot,
-#'   pty = "s", cex = 0.06 * tot, pch = 16, xlab = "age",
-#'   ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+#' with(hav_be_1993_1994,
+#'   plot(
+#'     age, pos / tot,
+#'     pty = "s", cex = 0.34 * sqrt(tot), pch = 16, xlab = "age",
+#'     ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+#'   )
 #' )
 #'
 #' @source Beutels, M., Van Damme, P., Aelvoet, W. et al. Prevalence of
@@ -48,15 +49,18 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.1 (upper right panel), p. 63
 #' library(dplyr)
 #' df <- hav_be_2002 %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
-#' plot(
-#'   df$age, df$pos / df$tot,
-#'   pty = "s", cex = 0.06 * df$tot, pch = 16, xlab = "age",
-#'   ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+#'
+#' with(
+#'   df,
+#'   plot(
+#'     age, pos / tot,
+#'     pty = "s", cex = 0.34 * sqrt(tot), pch = 16, xlab = "age",
+#'     ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+#'   )
 #' )
 #'
 #' @source Thiry, N., Beutels, P., Shkedy, Z. et al. The seroepidemiology
@@ -78,14 +82,13 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.1 (lower panel), p. 63
-#' age <- hav_bg_1964$age
-#' pos <- hav_bg_1964$pos
-#' tot <- hav_bg_1964$tot
-#' plot(
+#' with(
+#'   hav_bg_1964,
+#'   plot(
 #'     age, pos / tot,
-#'     pty = "s", cex = 0.08 * tot, pch = 16, xlab = "age",
+#'     pty = "s", cex = 0.6 * sqrt(tot), pch = 16, xlab = "age",
 #'     ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+#'   )
 #' )
 #'
 #' @source Keiding, Niels. "Age-Specific Incidence and Prevalence: A
@@ -93,6 +96,8 @@
 #' Series A (Statistics in Society) 154, no. 3 (1991): 371-412.
 #' \doi{doi:10.2307/2983150}
 "hav_bg_1964"
+
+# ===== Hepatitis B =======
 
 #' Hepatitis B serological data from Russia in 1999 (aggregated)
 #'
@@ -108,7 +113,6 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.2, p. 65
 #' library(dplyr)
 #' hbv_ru_1999$age <- trunc(hbv_ru_1999$age / 1) * 1
 #' hbv_ru_1999$age[hbv_ru_1999$age > 40] <- trunc(
@@ -117,9 +121,10 @@
 #' df <- hbv_ru_1999 %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(pos), tot = sum(tot))
+#'
 #' plot(
 #'   df$age, df$pos / df$tot,
-#'   cex = 0.05 * df$tot, pch = 16, xlab = "age",
+#'   cex = 0.32 * sqrt(df$tot), pch = 16, xlab = "age",
 #'   ylab = "seroprevalence", xlim = c(0, 72)
 #' )
 #'
@@ -129,6 +134,7 @@
 #' St Petersburg, 2000.
 "hbv_ru_1999"
 
+# ===== Hepatitis C =======
 #' Hepatitis C serological data from Belgium in 2006 (line listing)
 #'
 #' A study of HCV infection among injecting drug users. All injecting drug users
@@ -143,7 +149,6 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.3, p. 66
 #' library(dplyr)
 #' # snapping age to aggregated age group
 #' # (credit: https://stackoverflow.com/a/12861810)
@@ -162,11 +167,13 @@
 #'   group_by(dur) %>%
 #'   summarise(tot = n(), pos = sum(seropositive))
 #'
-#' plot(
-#'   hcv_be_2006$dur, hcv_be_2006$pos / hcv_be_2006$tot,
-#'   cex = 0.1 * hcv_be_2006$tot, pch = 16,
-#'   xlab = "duration of injection (years)",
-#'   ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+#' with(hcv_be_2006,
+#'   plot(
+#'     dur, pos / tot,
+#'     cex = 0.42 * sqrt(tot), pch = 16,
+#'     xlab = "duration of injection (years)",
+#'     ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+#'   )
 #' )
 #'
 #' @source Mathei, C., Shkedy, Z., Denis, B., Kabali, C., Aerts,
@@ -177,6 +184,8 @@
 #' \doi{doi:10.1111/j.1365-2893.2006.00725.x}
 "hcv_be_2006"
 
+# ===== Mumps =======
+
 #' Mumps serological data from the UK in 1986 and 1987 (aggregated)
 #'
 #' a large survey of prevalence of antibodies to mumps and rubella viruses in
@@ -185,25 +194,25 @@
 #'
 #' @format A data frame with 3 variables:
 #' \describe{
-#'  \item{age}{Age group}
+#'  \item{age}{Midpoint of the age group (e.g. 1.5 = 1-2 years old, 2.5 = 2-3 years old)}
 #'  \item{pos}{Number of seropositive individuals}
 #'  \item{tot}{Total number of individuals surveyed}
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.4 (left panel), p. 67
-#' age <- mumps_uk_1986_1987$age
-#' pos <- mumps_uk_1986_1987$pos
-#' tot <- mumps_uk_1986_1987$tot
-#' plot(age, pos / tot,
-#'   cex = 0.008 * tot, pch = 16, xlab = "age", ylab = "seroprevalence",
-#'   xlim = c(0, 45), ylim = c(0, 1)
+#' with(mumps_uk_1986_1987,
+#'   plot(age, pos / tot,
+#'     cex = 0.1 * sqrt(tot), pch = 16, xlab = "age", ylab = "seroprevalence",
+#'     xlim = c(0, 45), ylim = c(0, 1)
+#'   )
 #' )
 #'
 #' @source  Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
 #' antibody to measles, mumps, and rubella by age. British Medical Journal
 #' 1988; 297 :770 \doi{doi:10.1136/bmj.297.6651.770}
 "mumps_uk_1986_1987"
+
+# ===== Parvo 19 =======
 
 #' Parvo B19 serological data from Belgium from 2001-2003 (line listing)
 #'
@@ -222,13 +231,12 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.5 (left upper panel), p. 68
 #' library(dplyr)
 #' df <- parvob19_be_2001_2003 %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
 #' plot(df$age, df$pos / df$tot,
-#'   cex = 0.02 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+#'   cex = 0.3 * sqrt(df$tot), pch = 16, xlab = "age", ylab = "seroprevalence",
 #'   xlim = c(0, 82), ylim = c(0, 1)
 #' )
 #'
@@ -256,17 +264,17 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.5 (right upper panel), p. 68
-#' # NB: This figure will look different to that of in the book, since we
+#' # Note: This figure will look different to that of in the book, since we
 #' # believe that the original authors has made some errors in specifying
 #' # the sample size of the dots.
+#'
 #' library(dplyr)
 #' df <- parvob19_ew_1996 %>%
 #'   mutate(age = round(age)) %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
 #' plot(df$age, df$pos / df$tot,
-#'   cex = 0.02 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+#'   cex = 0.3 * sqrt(df$tot), pch = 16, xlab = "age", ylab = "seroprevalence",
 #'   xlim = c(0, 82), ylim = c(0, 1)
 #' )
 #'
@@ -294,17 +302,17 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.5 (left bottom panel), p. 68
-#' # NB: This figure will look different to that of in the book, since we
+#' # Note: This figure will look different to that of in the book, since we
 #' # believe that the original authors has made some errors in specifying
 #' # the sample size of the dots.
+#'
 #' library(dplyr)
 #' df <- parvob19_fi_1997_1998 %>%
 #'   mutate(age = round(age)) %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
 #' plot(df$age, df$pos / df$tot,
-#'   cex = 0.07 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+#'   cex = 0.4 * sqrt(df$tot), pch = 16, xlab = "age", ylab = "seroprevalence",
 #'   xlim = c(0, 82), ylim = c(0, 1)
 #' )
 #'
@@ -332,16 +340,12 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.5 (middle bottom panel), p. 68
-#' # NB: This figure will look different to that of in the book, since we
-#' # believe that the original authors has made some errors in specifying
-#' # the sample size of the dots.
 #' library(dplyr)
 #' df <- parvob19_it_2003_2004 %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
 #' plot(df$age, df$pos / df$tot,
-#'   cex = 0.07 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+#'   cex = 0.32 * sqrt(df$tot), pch = 16, xlab = "age", ylab = "seroprevalence",
 #'   xlim = c(0, 82), ylim = c(0, 1)
 #' )
 #'
@@ -369,17 +373,17 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.5 (right bottom panel), p. 68
-#' # NB: This figure will look different to that of in the book, since we
+#' # Note: This figure will look different to that of in the book, since we
 #' # believe that the original authors has made some errors in specifying
 #' # the sample size of the dots.
+#'
 #' library(dplyr)
 #' df <- parvob19_pl_1995_2004 %>%
 #'   mutate(age = round(age)) %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
 #' plot(df$age, df$pos / df$tot,
-#'   cex = 0.07 * df$tot, pch = 16, xlab = "age", ylab = "seroprevalence",
+#'   cex = 0.32 * sqrt(df$tot), pch = 16, xlab = "age", ylab = "seroprevalence",
 #'   xlim = c(0, 82), ylim = c(0, 1)
 #' )
 #'
@@ -390,6 +394,9 @@
 #' \doi{doi:10.1017/S0950268807009661}
 "parvob19_pl_1995_2004"
 
+
+# ===== Rubella =======
+
 #' Rubella serological data from the UK in 1986 and 1987 (aggregated)
 #'
 #' Prevalence of rubella in the UK, obtained from a large survey of prevalence
@@ -397,25 +404,25 @@
 #'
 #' @format A data frame with 3 variables:
 #' \describe{
-#'  \item{age}{Age group}
+#'  \item{age}{Midpoint of the age group (e.g. 1.5 = 1-2 years old, 2.5 = 2-3 years old)}
 #'  \item{pos}{Number of seropositive individuals}
 #'  \item{tot}{Total number of individuals surveyed}
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.4 (middle panel), p. 67
-#' age <- rubella_uk_1986_1987$age
-#' pos <- rubella_uk_1986_1987$pos
-#' tot <- rubella_uk_1986_1987$tot
-#' plot(age, pos / tot,
-#'   cex = 0.008 * tot, pch = 16, xlab = "age", ylab = "seroprevalence",
-#'   xlim = c(0, 45), ylim = c(0, 1)
+#' with(rubella_uk_1986_1987,
+#'   plot(age, pos / tot,
+#'     cex = 0.2 * sqrt(tot), pch = 16, xlab = "age", ylab = "seroprevalence",
+#'     xlim = c(0, 45), ylim = c(0, 1)
+#'   )
 #' )
 #'
 #' @source  Morgan-Capner P, Wright J, Miller C L, Miller E. Surveillance of
 #' antibody to measles, mumps, and rubella by age. British Medical Journal
 #' 1988; 297 :770 \doi{doi:10.1136/bmj.297.6651.770}
 "rubella_uk_1986_1987"
+
+# ===== Tuberculosis =======
 
 #' Tuberculosis serological data from the Netherlands 1966-1973 (aggregated)
 #'
@@ -432,19 +439,17 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.6, p.70
-#' age <- tb_nl_1966_1973$age
-#' birthyr <- tb_nl_1966_1973$birthyr
-#' pos <- tb_nl_1966_1973$pos
-#' tot <- tb_nl_1966_1973$tot
-#' # left panel
-#' plot(age, pos / tot,
-#'   pch = 16, cex = 0.00005 * tot, xlab = "age",
-#'   ylab = "prevalence", xlim = c(6, 18)
+#' with(tb_nl_1966_1973,
+#'   plot(age, pos / tot,
+#'     pch = 16, cex = 0.01 * sqrt(tot), xlab = "age",
+#'     ylab = "prevalence", xlim = c(6, 18)
+#'   )
 #' )
-#' # right panel
-#' plot(birthyr, pos / tot,
-#'   pch = 16, cex = 0.00005 * tot, xlab = "year", ylab = "prevalence"
+#'
+#' with(tb_nl_1966_1973,
+#'   plot(birthyr, pos / tot,
+#'     pch = 16, cex = 0.01 * sqrt(tot), xlab = "year", ylab = "prevalence"
+#'   )
 #' )
 #'
 #' @source Nagelkerke, N., Heisterkamp, S., Borgdorff, M., Broekmans, J. and
@@ -452,6 +457,9 @@
 #' infection incidence from serial prevalence data. Statist. Med., 18: 307-320.
 #' \doi{doi:10.1002/(SICI)1097-0258(19990215)18:3<307::AID-SIM15>3.0.CO;2-Z}
 "tb_nl_1966_1973"
+
+
+# ===== VZV =======
 
 #' VZV serological data from Belgium (Flanders) from 1999-2000 (aggregated)
 #'
@@ -467,15 +475,12 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.7 (left panel), p.71
-#' age <- vzv_be_1999_2000$age
-#' pos <- vzv_be_1999_2000$pos
-#' tot <- vzv_be_1999_2000$tot
-#' plot(age, pos / tot,
-#'   cex = 0.036 * tot, pch = 19, xlab = "age", ylab = "seroprevalence",
-#'   xlim = c(0, 45), ylim = c(0, 1)
+#' with(vzv_be_1999_2000,
+#'   plot(age, pos / tot,
+#'     cex = 0.1 * sqrt(tot), pch = 19, xlab = "age", ylab = "seroprevalence",
+#'     xlim = c(0, 45), ylim = c(0, 1)
+#'   )
 #' )
-#'
 #' @source Thiry, N., Beutels, P., Shkedy, Z. et al. The seroepidemiology
 #' of primary varicella-zoster virus infection in Flanders (Belgium).
 #' Eur J Pediatr 161, 588-593 (2002).
@@ -496,14 +501,13 @@
 #' }
 #'
 #' @examples
-#' # Reproduce Fig 4.7 (right panel), p.71
 #' library(dplyr)
 #' df <- vzv_be_2001_2003 %>%
 #'   mutate(age = round(age)) %>%
 #'   group_by(age) %>%
 #'   summarise(pos = sum(seropositive), tot = n())
 #' plot(df$age, df$pos / df$tot,
-#'   cex = 0.036 * df$tot, pch = 19, xlab = "age", ylab = "seroprevalence",
+#'   cex = 0.1 * sqrt(df$tot), pch = 19, xlab = "age", ylab = "seroprevalence",
 #'   xlim = c(0, 45), ylim = c(0, 1)
 #' )
 #'
@@ -513,6 +517,9 @@
 #' of Infection." Epidemiology and Infection 136, no. 8 (2008): 1059-68.
 #' \doi{doi:10.1017/S0950268807009661}
 "vzv_be_2001_2003"
+
+
+# ===== Rubella - Mumps =======
 
 #' Rubella - Mumps data from the UK (aggregated)
 #'
@@ -532,6 +539,7 @@
 #' 1988; 297 :770 \doi{doi:10.1136/bmj.297.6651.770}
 "rubella_mumps_uk"
 
+# ===== VZV - Parvo B19 =======
 
 #' VZV and Parvovirus B19 serological data in Belgium (line listing)
 #' @format A data frame with 7 variables:

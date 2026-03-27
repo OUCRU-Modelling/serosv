@@ -5,10 +5,19 @@ Compare models
 ## Usage
 
 ``` r
-compare_models(...)
+compare_models(data, method = "AIC/BIC", ...)
 ```
 
 ## Arguments
+
+- data:
+
+  input data to fit into the models
+
+- method:
+
+  method to compare models. Can be one of the built-in methods or a
+  function to compute the returned metrics (see Details).
 
 - ...:
 
@@ -20,7 +29,7 @@ compare_models(...)
 
 a data.frame of 4 columns
 
-- model:
+- label:
 
   name or index of the model
 
@@ -35,3 +44,9 @@ a data.frame of 4 columns
 - BIC:
 
   BIC value for the model (lower value indicates better fit)
+
+## Details
+
+Built-in comparison methods include: - computing AIC and BIC, which
+returns AIC, BIC values of the model if available - cross validation,
+which reutns

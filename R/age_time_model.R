@@ -3,15 +3,21 @@
 #'
 #' @description Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or birth cohort) - specific seroprevalence.
 #'
-#' @param data - input data, must have`age`, `status`, time, group columns, where group column determines how data is aggregated
-#' @param time_col - name of the column for time (default to `date`)
-#' @param grouping_col - name of the column for time (default to `group`)
-#' @param age_correct - a boolean, if `TRUE`, monotonize age-specific prevalence. Monotonize birth cohort-specific seroprevalence otherwise.
-#' @param le - number of bins to generate age grid, used when monotonizing data
-#' @param ci - confidence interval for smoothing
-#' @param monotonize_method - either "pava" or "scam"
+#' @param data input data, must have age, status, time, group columns, where group column determines how data is aggregated
+#' @param age_col name of the `age` column (default age_col="age").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
+#' @param time_col name of the column for time (default to "date")
+#' @param grouping_col name of the column for time (default to "group")
+#' @param age_correct a boolean, if `TRUE`, monotonize age-specific prevalence. Monotonize birth cohort-specific seroprevalence otherwise.
+#' @param le number of bins to generate age grid, used when monotonizing data
+#' @param ci confidence interval for smoothing
+#' @param monotonize_method either "pava" or "scam"
+#'
 #' @import scam assertthat
 #' @importFrom mgcv gam predict.gam betar
+#' @importFrom purrr map map_dbl map2
 #'
 #' @return a list of class time_age_model with 4 items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
@@ -20,7 +26,10 @@
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
 #'   \item{datatype}{whether the input data is aggregated or line-listing data}
 #' @export
-age_time_model <- function(data, time_col="date", grouping_col="group", age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
+age_time_model <- function(data,
+                           age_col="age", status_col="status", pos_col="pos", tot_col="tot",
+                           time_col="date", grouping_col="group",
+                           age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
   # work around to resolve no visible binding note NOTE during check()
   x <- label <- family <- fit <- se.fit <- ymin <- ymax <- y <- mean_time <- prevalence <- sim_data <- NULL
   age <- ys <- shift_no <- cohort <- col_time <- monotonized_mod <- df <- info <- sp <- monotonized_info <- monotonized_sp <- NULL
@@ -82,7 +91,8 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
   model <- list()
 
   # --- preprocess data ------
-  check_input <- check_input(data)
+  check_input <- check_input(data,
+                             stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   age_range <- range(data$age)
   age_grid <- seq(age_range[1], age_range[2], length.out = le)
 
@@ -230,8 +240,10 @@ age_time_model <- function(data, time_col="date", grouping_col="group", age_corr
     )
 
   model$out <- out
+  model$monotonize_method <- monotonize_method
   model$grouping_col <- grouping_col
   model$age_correct <- age_correct
+  model$ci <- ci
 
 
   class(model) <- "age_time_model"

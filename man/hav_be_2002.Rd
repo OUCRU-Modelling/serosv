@@ -26,15 +26,18 @@ Parvovirus B19 in Belgium where only individuals living in Flanders were
 selected
 }
 \examples{
-# Reproduce Fig 4.1 (upper right panel), p. 63
 library(dplyr)
 df <- hav_be_2002 \%>\%
   group_by(age) \%>\%
   summarise(pos = sum(seropositive), tot = n())
-plot(
-  df$age, df$pos / df$tot,
-  pty = "s", cex = 0.06 * df$tot, pch = 16, xlab = "age",
-  ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+
+with(
+  df,
+  plot(
+    age, pos / tot,
+    pty = "s", cex = 0.34 * sqrt(tot), pch = 16, xlab = "age",
+    ylab = "seroprevalence", xlim = c(0, 86), ylim = c(0, 1)
+  )
 )
 
 }

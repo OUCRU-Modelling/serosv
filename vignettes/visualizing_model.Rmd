@@ -44,20 +44,55 @@ plot(farrington_md)
 
 ## Customize the plot
 
-Function `set_plot_style()` is provided to customize some attributes of the plot.
+### Built-in function
+
+`serosv` offers the function `set_plot_style()` to customize some key attributes of the plot.
 
 Current modifiable attributes include color, linetype for seroprevalence, foi and fill color for confidence interval
 
 ```{r}
-gf_model <- polynomial_model(hav_bg_1964, type = "Griffith")
+hav_mod <- polynomial_model(hav_bg_1964, k=3)
 
 # customize plot
-plot(gf_model) +
+plot(hav_mod) +
   set_plot_style(
     sero = "#3de071",
     foi = "#2f22e0",
     ci = "#aaf2b2",
     foi_line = "dotted", 
     sero_line = "dotdash"
+  )
+```
+
+### `ggplot2` functions
+
+Since `serosv` uses `ggplot2` for plotting, the returned plot is a `gg` object meaning any standard `ggplot2` layer can be appended with `+` for further configurations. 
+
+```{r}
+# return gg object
+class(plot(hav_mod))
+```
+
+**Examples**
+
+```{r warning=FALSE}
+library(ggplot2)
+
+# Set x and y limits
+plot(hav_mod) +
+  coord_cartesian(xlim = c(0, 50), ylim = c(0, 1.5))
+
+# Configure the plot theme
+plot(hav_mod) +
+  theme_bw()
+
+# Set titles and omit legends
+plot(hav_mod) +
+  theme_bw() +
+  ggtitle("Age-stratified Hepatitis A prevalence in Bulgaria (1964)") +
+  guides(
+    colour = "none",
+    linetype = "none",
+    fill = "none"
   )
 ```

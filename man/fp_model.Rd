@@ -4,14 +4,41 @@
 \alias{fp_model}
 \title{A fractional polynomial model.}
 \usage{
-fp_model(data, p, link = "logit")
+fp_model(
+  data,
+  p,
+  monotonic = FALSE,
+  link = "logit",
+  age_col = "age",
+  pos_col = "pos",
+  tot_col = "tot",
+  status_col = "status"
+)
 }
 \arguments{
 \item{data}{the input data frame, must either have `age`, `pos`, `tot` columns (for aggregated data) OR `age`, `status` for (linelisting data)}
 
-\item{p}{the powers of the predictor.}
+\item{p}{is either:
+\itemize{
+ \item{a numeric vector specifying the powers to apply to the predictors}
+ \item{
+   a named list with two elements, \code{"p_range"} and \code{"degree"}. \code{"p_range"}
+   is a sequence of powers and \code{"degree"} is the maximum degree.
+   In which case the package will search for the best degree and power combinations
+ }
+}}
+
+\item{monotonic}{whether the returned model should be monotonic (if a search is specified)}
 
 \item{link}{the link function for model. Defaulted to "logit".}
+
+\item{age_col}{name of the `age` column (default age_col="age").}
+
+\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+
+\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+
+\item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
 a list of class fp_model with 5 items
@@ -22,7 +49,26 @@ a list of class fp_model with 5 items
   \item{foi}{force of infection}
 }
 \description{
-Refers to section 6.2.
+Fractional polynomial model is a generalization of polynomial models
+where the power of the terms can be fractions, allowing more flexibility and better
+fit for data where asymptotic behavior is expected.
+}
+\details{
+Instead of a polynomial, the linear predictor is now defined as
+\deqn{
+ \eta_m(a, \beta, p_1, p_2, ...,p_m) = \Sigma^m_{i=0} \beta_i H_i(a)
+}
+Where \eqn{m} is an integer, \eqn{p_1 \le p_2 \le... \le p_m} is a sequence of powers,
+and \eqn{H_i(a)} is a transformation given by
+
+\deqn{
+H_i = \begin{cases}
+a^{p_i} & \text{ if } p_i \neq p_{i-1},
+\\ H_{i-1}(a) \times log(a)  & \text{ if } p_i = p_{i-1},
+\end{cases}
+}
+
+Refers to section 6.2. of the the book by Hens et al. (2012) for further details.
 }
 \examples{
 df <- hav_be_1993_1994
@@ -32,6 +78,15 @@ model <- fp_model(
 plot(model)
 
 }
+\references{
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+\doi{https://doi.org/10.1007/978-1-4614-4072-7}.
+}
 \seealso{
 [stats::glm()] for more information on glm object
+
+[polynomial_models()]
 }

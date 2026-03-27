@@ -1,8 +1,35 @@
 #' The Weibull model.
 #'
-#' Refers to section 6.1.2.
+#' @description Model seroprevalence as a function of duration since vaccination using the Weibull
+#' model, where the force of infection is assumed to vary monotonically with duration.
 #'
-#' @param data the input data frame, must either have `t`, `pos`, `tot` column for aggregated data OR `t`, `status` for linelisting data
+#' @details
+#' For a Weibull model, the prevalence is given by
+#' \deqn{
+#'  \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}}
+#' }
+#' Where \eqn{d} is exposure time (difference between age of vaccination and age at test)
+#'
+#' Which implies the force of infection to be the monotonic function
+#' \deqn{
+#'  \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1}
+#' }
+#'
+#' Refer to section 6.1.2. of the the book by Hens et al. (2012) for further details.
+#'
+#' @references
+#' Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme,
+#' and Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+#' Serological and Social Contact Data: A Modern Statistical Perspective.
+#' tatistics for Biology and Health. Springer New York.
+#' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
+#'
+#' @param data the input data frame, must either have columns for `t`, `pos`, `tot` (for aggregated data) OR
+#'  `t`, `status` (for linelisting data)
+#' @param t_lab name of the `t` column (default t_lab="t").
+#' @param pos_col name of the `pos` column (default pos_col="pos").
+#' @param tot_col name of the `tot` column (default tot_col="tot").
+#' @param status_col name of the `status` column (default status_col="status").
 #'
 #' @importFrom stats coef
 #'
@@ -10,7 +37,7 @@
 #' df <- hcv_be_2006[order(hcv_be_2006$dur), ]
 #' df$t <- df$dur
 #' df$status <- df$seropositive
-#' model <- weibull_model(df)
+#' model <- weibull_model(df, t_lab="dur", status_col="seropositive")
 #' plot(model)
 #'
 #' @return list of class weibull_model with the following items
@@ -23,12 +50,13 @@
 #' @seealso [stats::glm()] for more information on the fitted "glm" object
 #'
 #' @export
-weibull_model <- function(data)
+weibull_model <- function(data,
+                          t_lab="t",pos_col="pos", tot_col="tot", status_col="status")
 {
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- check_input(data, stratum_col = "t")
+  data <- check_input(data, stratum_col = t_lab, pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   t <- data$age
   pos <- data$pos
   tot <- data$tot

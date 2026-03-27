@@ -4,14 +4,14 @@
 \alias{transform_data}
 \title{Aggregate data}
 \usage{
-transform_data(t, spos, stratum_col = "t")
+transform_data(data, stratum_col = "age", status_col = "status")
 }
 \arguments{
-\item{t}{the time vector (for stratification).}
+\item{data}{a data frame with columns for age and serostatus}
 
-\item{spos}{the seropositive vector.}
+\item{stratum_col}{name of the column to stratify by (default to "age")}
 
-\item{stratum_col}{new name for the time vector (default to "t")}
+\item{status_col}{name of the column for serostatus}
 }
 \value{
 dataframe in aggregated format
@@ -22,7 +22,7 @@ Generate a dataframe with `t`, `pos` and `tot` columns from
 }
 \examples{
 df <- hcv_be_2006
-hcv_df <- transform_data(df$dur, df$seropositive)
+hcv_df <- transform_data(df, stratum_col="dur", status_col="seropositive")
 hcv_df
 
 }

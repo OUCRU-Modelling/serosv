@@ -5,18 +5,19 @@ Compute 95% credible interval for hierarchical Bayesian model
 ## Usage
 
 ``` r
-compute_ci.hierarchical_bayesian_model(x, ...)
+# S3 method for class 'hierarchical_bayesian_model'
+compute_ci(x, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- serosv models
+  serosv models
 
 - ...:
 
-  \- arbitrary arguments
+  arbitrary arguments
 
 ## Value
 
