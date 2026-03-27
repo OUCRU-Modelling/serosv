@@ -5,7 +5,7 @@ plot() overloading for polynomial model
 ## Usage
 
 ``` r
-# S3 method for polynomial_model
+# S3 method for class 'polynomial_model'
 plot(x, ...)
 ```
 

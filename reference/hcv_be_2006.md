@@ -35,7 +35,6 @@ Viral Hepatitis, 13: 560-570.
 ## Examples
 
 ``` r
-# Reproduce Fig 4.3, p. 66
 library(dplyr)
 # snapping age to aggregated age group
 # (credit: https://stackoverflow.com/a/12861810)
@@ -54,11 +53,13 @@ hcv_be_2006 <- hcv_be_2006 %>%
   group_by(dur) %>%
   summarise(tot = n(), pos = sum(seropositive))
 
-plot(
-  hcv_be_2006$dur, hcv_be_2006$pos / hcv_be_2006$tot,
-  cex = 0.1 * hcv_be_2006$tot, pch = 16,
-  xlab = "duration of injection (years)",
-  ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+with(hcv_be_2006,
+  plot(
+    dur, pos / tot,
+    cex = 0.42 * sqrt(tot), pch = 16,
+    xlab = "duration of injection (years)",
+    ylab = "seroprevalence", xlim = c(0, 25), ylim = c(0, 1)
+  )
 )
 
 ```

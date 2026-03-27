@@ -5,7 +5,7 @@ plot() overloading for SIR model
 ## Usage
 
 ``` r
-# S3 method for sir_basic_model
+# S3 method for class 'sir_basic_model'
 plot(x, ...)
 ```
 

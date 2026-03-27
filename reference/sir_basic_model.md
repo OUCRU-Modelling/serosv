@@ -1,6 +1,7 @@
 # Basic SIR model
 
-Refers to section 3.1.3.
+Simulate a transmission model with 3 compartments: susceptible (S),
+infected (I), recovered (R)
 
 ## Usage
 
@@ -16,11 +17,27 @@ sir_basic_model(times, state, parameters)
 
 - state:
 
-  the initial state of the model.
+  the initial state of the model. A named vector with the following
+
+  - `S`: initial susceptible population
+
+  - `I`: initial infected population
+
+  - `R`: initial recovered population
 
 - parameters:
 
-  the parameters of the model.
+  the parameters of the model. A named vector with the following
+
+  - `alpha`: disease-related death rate
+
+  - `mu`: natural death rate (= 1/life expectancy)
+
+  - `beta`: transmission rate
+
+  - `nu`: recovery rate
+
+  - `p`: proportion vaccinated at birth
 
 ## Value
 
@@ -36,25 +53,47 @@ list of class sir_basic_model with the following items
 
 ## Details
 
-In `state`:
+Follow the SIR model described in the book by Hens et al. (section
+3.1.3.)
 
-\- `S`: number of susceptible
+Assumptions:
 
-\- `I`: number of infected
+\- Individuals are born into susceptible group (exposure time is age of
+the individual) then transfer to infected class and recovered class
 
-\- `R`: number of recovered
+\- Recovered individuals gained lifelong immunity
 
-In `parameters`:
+\- Age homogeneity
 
-\- `alpha`: disease-related death rate
+The model is described by a system of 3 differential equations
 
-\- `mu`: natural death rate (= 1/life expectancy)
+\$\$ \begin{cases} \frac{dS(t)}{dt} = B(t) (1-p) - \lambda(t)S(t) - \mu
+S(t) \\ \frac{dI(t)}{dt} = \lambda(t)S(t) - \nu I(t) - \mu I(t) - \alpha
+I(t) \\ \frac{dR(t)}{dt} = B(t) p + \nu I(t) - \mu R(t) \end{cases} \$\$
 
-\- `beta`: transmission rate
+Where:
 
-\- `nu`: recovery rate
+\- \\B(t) = \mu N(t)\\
 
-\- `p`: percent of population vaccinated at birth
+\- \\\lambda(t) = \beta I(t)\\ with \\\beta\\ is the transmission rate
+
+\- \\\mu\\ is the natural death rate
+
+\- \\\nu\\ is the recovery rate
+
+\- \\\alpha\\ is the disease related death rate
+
+\- \\p\\ is the proportion of newborn vaccinated and moved directly to
+the recovered compartment
+
+## References
+
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
+Philippe Beutels. 2012. Modeling Infectious Disease Parameters Based on
+Serological and Social Contact Data: A Modern Statistical Perspective.
+tatistics for Biology and Health. Springer New York.
+[doi:10.1007/978-1-4614-4072-7](https://doi.org/10.1007/978-1-4614-4072-7)
+.
 
 ## Examples
 

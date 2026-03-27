@@ -5,22 +5,23 @@ Compute confidence interval for Weibull model
 ## Usage
 
 ``` r
-compute_ci.weibull_model(x, ci = 0.95, ...)
+# S3 method for class 'weibull_model'
+compute_ci(x, ci = 0.95, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- serosv models
+  serosv models
 
 - ci:
 
-  \- confidence interval
+  confidence interval
 
 - ...:
 
-  \- arbitrary argument
+  arbitrary argument
 
 ## Value
 

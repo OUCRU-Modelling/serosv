@@ -39,7 +39,6 @@ Report 213 (3), 3rd edn. St Petersburg Pasteur Institute, St Petersburg,
 ## Examples
 
 ``` r
-# Reproduce Fig 4.2, p. 65
 library(dplyr)
 hbv_ru_1999$age <- trunc(hbv_ru_1999$age / 1) * 1
 hbv_ru_1999$age[hbv_ru_1999$age > 40] <- trunc(
@@ -48,9 +47,10 @@ hbv_ru_1999$age[hbv_ru_1999$age > 40] <- trunc(
 df <- hbv_ru_1999 %>%
   group_by(age) %>%
   summarise(pos = sum(pos), tot = sum(tot))
+
 plot(
   df$age, df$pos / df$tot,
-  cex = 0.05 * df$tot, pch = 16, xlab = "age",
+  cex = 0.32 * sqrt(df$tot), pch = 16, xlab = "age",
   ylab = "seroprevalence", xlim = c(0, 72)
 )
 

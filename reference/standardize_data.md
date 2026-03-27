@@ -20,32 +20,32 @@ standardize_data(
 
 - df:
 
-  \- data.frame with columns for plate id, sample id, result, dilution
+  data.frame with columns for plate id, sample id, result, dilution
   factor, and (optionally) negative controls
 
 - plate_id_col:
 
-  \- name of the column storing plates id
+  name of the column storing plates id
 
 - id_col:
 
-  \- name of the column storing sample id
+  name of the column storing sample id
 
 - result_col:
 
-  \- name of the column storing result
+  name of the column storing result
 
 - dilution_fct_col:
 
-  \- name of the column storing dilution factors
+  name of the column storing dilution factors
 
 - antitoxin_label:
 
-  \- how antitoxin is label in the sample id column
+  how antitoxin is label in the sample id column
 
 - negative_col:
 
-  \- regex for columns for negative controls, assumed to be a label
+  regex for columns for negative controls, assumed to be a label
   followed by the dilution factor (e.g. NEGATIVE_50, NEGATIVE_100)
 
 ## Value

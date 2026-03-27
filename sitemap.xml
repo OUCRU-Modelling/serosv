@@ -13,6 +13,7 @@
 <url><loc>https://oucru-modelling.github.io/serosv/articles/model_selection.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/nonparametric_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/parametric_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/articles/reading_to_titer.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/repeated_cross_sectional.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/semiparametric_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/articles/sir_model.html</loc></url>
@@ -26,6 +27,7 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/bivariate_dale_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compare_models.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.default.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.glmm_ps_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.html</loc></url>
@@ -82,6 +84,14 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot_standard_curve.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/plot_titer_qc.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/polynomial_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.age_time_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.farrington_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.fp_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.hierarchical_bayesian_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.lp_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.penalized_spline_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.polynomial_model.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/predict.weibull_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/rubella_mumps_uk.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/rubella_uk_1986_1987.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/serosv-package.html</loc></url>

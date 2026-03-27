@@ -8,6 +8,10 @@ to monotonize age (or birth cohort) - specific seroprevalence.
 ``` r
 age_time_model(
   data,
+  age_col = "age",
+  status_col = "status",
+  pos_col = "pos",
+  tot_col = "tot",
   time_col = "date",
   grouping_col = "group",
   age_correct = F,
@@ -21,33 +25,49 @@ age_time_model(
 
 - data:
 
-  \- input data, must have\`age\`, \`status\`, time, group columns,
-  where group column determines how data is aggregated
+  input data, must have age, status, time, group columns, where group
+  column determines how data is aggregated
+
+- age_col:
+
+  name of the \`age\` column (default age_col="age").
+
+- status_col:
+
+  name of the \`status\` column (default status_col="status").
+
+- pos_col:
+
+  name of the \`pos\` column (default pos_col="pos").
+
+- tot_col:
+
+  name of the \`tot\` column (default tot_col="tot").
 
 - time_col:
 
-  \- name of the column for time (default to \`date\`)
+  name of the column for time (default to "date")
 
 - grouping_col:
 
-  \- name of the column for time (default to \`group\`)
+  name of the column for time (default to "group")
 
 - age_correct:
 
-  \- a boolean, if \`TRUE\`, monotonize age-specific prevalence.
-  Monotonize birth cohort-specific seroprevalence otherwise.
+  a boolean, if \`TRUE\`, monotonize age-specific prevalence. Monotonize
+  birth cohort-specific seroprevalence otherwise.
 
 - le:
 
-  \- number of bins to generate age grid, used when monotonizing data
+  number of bins to generate age grid, used when monotonizing data
 
 - ci:
 
-  \- confidence interval for smoothing
+  confidence interval for smoothing
 
 - monotonize_method:
 
-  \- either "pava" or "scam"
+  either "pava" or "scam"
 
 ## Value
 

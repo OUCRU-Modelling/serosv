@@ -1,6 +1,14 @@
 # Changelog
 
+## serosv (development version)
+
+- clean up documentation
+
 ## serosv 1.2.0
+
+- add to_titer() function to convert assay reading to titer
+- update the docs
+- update article for to_titer() on the website
 
 ## serosv 1.1.0
 

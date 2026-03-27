@@ -71,14 +71,6 @@
 
 ## Models
 
-- [`sir_basic_model()`](https://oucru-modelling.github.io/serosv/reference/sir_basic_model.md)
-  : Basic SIR model
-- [`sir_static_model()`](https://oucru-modelling.github.io/serosv/reference/sir_static_model.md)
-  : SIR static model (age-heterogeneous, endemic equilibrium)
-- [`sir_subpops_model()`](https://oucru-modelling.github.io/serosv/reference/sir_subpops_model.md)
-  : SIR Model with Interacting Subpopulations
-- [`mseir_model()`](https://oucru-modelling.github.io/serosv/reference/mseir_model.md)
-  : MSEIR model
 - [`polynomial_model()`](https://oucru-modelling.github.io/serosv/reference/polynomial_model.md)
   : Polynomial models
 - [`farrington_model()`](https://oucru-modelling.github.io/serosv/reference/farrington_model.md)
@@ -96,8 +88,7 @@
 - [`mixture_model()`](https://oucru-modelling.github.io/serosv/reference/mixture_model.md)
   : Fit a mixture model to classify serostatus
 - [`estimate_from_mixture()`](https://oucru-modelling.github.io/serosv/reference/estimate_from_mixture.md)
-  : Estimate seroprevalence and foi by combining mixture model and
-  regression
+  : Estimate seroprevalence and FOI from a fixed mixture model
 - [`age_time_model()`](https://oucru-modelling.github.io/serosv/reference/age_time_model.md)
   : Age-time varying seroprevalence
 
@@ -122,14 +113,6 @@
   : plot() overloading for fractional polynomial model
 - [`plot(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.lp_model.md)
   : plot() overloading for local polynomial model
-- [`plot(`*`<mseir_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.mseir_model.md)
-  : plot() overloading for MSEIR model
-- [`plot(`*`<sir_basic_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.sir_basic_model.md)
-  : plot() overloading for SIR model
-- [`plot(`*`<sir_static_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.sir_static_model.md)
-  : plot() overloading for SIR static model
-- [`plot(`*`<sir_subpops_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.sir_subpops_model.md)
-  : plot() overloading for SIR sub populations model
 - [`plot(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.hierarchical_bayesian_model.md)
   : plot() overloading for hierarchical_bayesian_model
 - [`plot(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/plot.penalized_spline_model.md)
@@ -155,7 +138,7 @@
 - [`pava()`](https://oucru-modelling.github.io/serosv/reference/pava.md)
   : Monotonize seroprevalence
 - [`to_titer()`](https://oucru-modelling.github.io/serosv/reference/to_titer.md)
-  : Process assay test result to titer
+  : Convert assay readings to titers
 - [`correct_prevalence()`](https://oucru-modelling.github.io/serosv/reference/correct_prevalence.md)
   : Estimate the true sero prevalence using Frequentist/Bayesian
   estimation
@@ -165,22 +148,38 @@
   : Preprocess data
 - [`compare_models()`](https://oucru-modelling.github.io/serosv/reference/compare_models.md)
   : Compare models
-- [`compute_ci()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.md)
-  : Compute confidence interval
-- [`compute_ci.fp_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.md)
+- [`compute_ci(`*`<default>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.default.md)
+  : Compute confidence interval for a model of serosv
+- [`compute_ci(`*`<fp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.md)
   : Compute confidence interval for fractional polynomial model
-- [`compute_ci.lp_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.lp_model.md)
+- [`compute_ci(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.lp_model.md)
   : Compute confidence interval for local polynomial model
-- [`compute_ci.weibull_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.weibull_model.md)
+- [`compute_ci(`*`<weibull_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.weibull_model.md)
   : Compute confidence interval for Weibull model
-- [`compute_ci.penalized_spline_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.penalized_spline_model.md)
+- [`compute_ci(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.penalized_spline_model.md)
   : Compute confidence interval for penalized_spline_model
-- [`compute_ci.mixture_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.mixture_model.md)
+- [`compute_ci(`*`<mixture_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.mixture_model.md)
   : Compute confidence interval for mixture model
-- [`compute_ci.age_time_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.md)
+- [`compute_ci(`*`<age_time_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.md)
   : Compute confidence interval for time age model
-- [`compute_ci.hierarchical_bayesian_model()`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
+- [`compute_ci(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
   : Compute 95% credible interval for hierarchical Bayesian model
+- [`predict(`*`<age_time_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.age_time_model.md)
+  : Predict from the age_time_mdoel
+- [`predict(`*`<farrington_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.farrington_model.md)
+  : Prediction for serosv Farrington model
+- [`predict(`*`<fp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.fp_model.md)
+  : Prediction for serosv fractional polynomial model
+- [`predict(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.hierarchical_bayesian_model.md)
+  : Predict from an hierarchical bayesian model
+- [`predict(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.lp_model.md)
+  : Prediction for serosv local polynomial model
+- [`predict(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.penalized_spline_model.md)
+  : Prediction for serosv penalized spline model
+- [`predict(`*`<weibull_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.weibull_model.md)
+  : Prediction for serosv Weibull model
+- [`predict(`*`<polynomial_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.polynomial_model.md)
+  : Prediction for serosv polynomial model
 - [`find_best_fp_powers()`](https://oucru-modelling.github.io/serosv/reference/find_best_fp_powers.md)
-  : Returns the powers of the GLM fitted model which has the lowest
-  deviance score.
+  : Returns the powers of the fractional polynomial model which has the
+  lowest deviance score.

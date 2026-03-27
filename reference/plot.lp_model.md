@@ -5,7 +5,7 @@ plot() overloading for local polynomial model
 ## Usage
 
 ``` r
-# S3 method for lp_model
+# S3 method for class 'lp_model'
 plot(x, ...)
 ```
 
