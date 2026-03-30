@@ -128,13 +128,23 @@ penalized_spline_model <- function(data,
   model$datatype <- data$type
 
   # s <- mgcv:::s
-  spos <- pos/tot
+  neg <- tot - pos
 
   if (framework == "pl"){
-    model$info <- mgcv::gam(spos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+    model$info <- if(data$type == "aggregated"){
+        mgcv::gam(cbind(pos, neg) ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+      }else{
+        mgcv::gam(pos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+      }
+
     model$sp <- model$info$fitted.values
   }else if(framework == "glmm"){
-    model$info <- mgcv::gamm(spos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+    model$info <- if(data$type == "aggregated"){
+        mgcv::gamm(cbind(pos, neg) ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+      }else{
+        mgcv::gamm(pos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+      }
+
     model$sp <- model$info$gam$fitted.values
   }else{
     stop(paste0('Invalid value for framework. Expected "pl" or "glmm", got ', framework))

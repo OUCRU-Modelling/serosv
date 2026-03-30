@@ -152,9 +152,14 @@ estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, 
   model <- list()
 
   # sort, just in case
-  age <- age[order(age)]
   antibody_level <- antibody_level[order(age)]
   log_antibody <- log(antibody_level + 1)
+  threshold_status <- if(!is.null(threshold_status)){
+    threshold_status[order(age)]
+  }else{
+    NULL
+  }
+  age <- age[order(age)]
 
   # get mu_s and mu_i from mixture model
   mu_s <- mixture_model$info$parameters$mu[1]
