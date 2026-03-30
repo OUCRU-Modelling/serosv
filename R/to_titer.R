@@ -170,16 +170,21 @@ data2function <- function(df) {
 
 # Function to convert samples' OD to LC
 #' @importFrom purrr map_dfr
+#' @import dplyr
 process_samples <- function(plate, std_crv, midpoint=2, positive_threshold = NULL) {
+  # convert from OD to concentration (with dilution taken into account)
   out <- plate %>%
-    bind_cols(purrr::map_dfr(.$result, std_crv))
+    bind_cols(purrr::map_dfr(.$result, std_crv)) %>%
+    # after mapping from OD to LC
+    # multiply by the dilution factors to get the sample actual concentration
+    mutate(across(c(lower, median, upper), ~ 10^.x * dilution_factors))
 
   if(is.numeric(positive_threshold)){
     out <- out %>% mutate(
       positive = if_else(
         # check if upper bound for titer is available
         !is.na(upper),
-        upper >= positive_threshold, # positive if above threshold
+        upper >= (positive_threshold), # positive if above threshold
         # if upper is NA, then OD (or result) is either too high or too low
         # label positive when result is higher than midpoint
         result > midpoint
@@ -240,8 +245,8 @@ get_negative_controls <- function(plate, std_crv){
   plate %>%
     select(starts_with("negative")) %>%
     unique() %>%
-    tidyr::pivot_longer(everything(), names_to = "dilution", values_to = "result") %>%
-    mutate(across(dilution, ~ stringr::str_remove(.x, "negative_") %>%  as.integer()))
+    tidyr::pivot_longer(everything(), names_to = "dilution_factors", values_to = "result") %>%
+    mutate(across(dilution_factors, ~ stringr::str_remove(.x, "negative_") %>%  as.integer()))
 }
 
 # ======== Plot functions ==========
