@@ -7,13 +7,13 @@
 plot_titer_qc(x, n_plates = 18, n_samples = 22, n_dilutions = 3)
 }
 \arguments{
-\item{x}{- output of `to_titer()`}
+\item{x}{output of `to_titer()`}
 
-\item{n_plates}{- maximum number of plates to plot}
+\item{n_plates}{maximum number of plates to plot}
 
-\item{n_samples}{- maximum number of samples per plate to plot}
+\item{n_samples}{maximum number of samples per plate to plot}
 
-\item{n_dilutions}{- number of dilutions used for testing}
+\item{n_dilutions}{number of dilutions used for testing}
 }
 \description{
 Visualize for each sample, whether titer estimates can be computed at the tested dilutions.

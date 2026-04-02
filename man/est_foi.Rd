@@ -7,9 +7,9 @@
 est_foi(t, sp)
 }
 \arguments{
-\item{t}{- time (in this case age) vector}
+\item{t}{time (in this case age) vector}
 
-\item{sp}{- seroprevalence vector}
+\item{sp}{seroprevalence vector}
 }
 \value{
 computed foi vector

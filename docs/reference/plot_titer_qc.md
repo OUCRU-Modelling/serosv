@@ -13,19 +13,19 @@ plot_titer_qc(x, n_plates = 18, n_samples = 22, n_dilutions = 3)
 
 - x:
 
-  \- output of \`to_titer()\`
+  output of \`to_titer()\`
 
 - n_plates:
 
-  \- maximum number of plates to plot
+  maximum number of plates to plot
 
 - n_samples:
 
-  \- maximum number of samples per plate to plot
+  maximum number of samples per plate to plot
 
 - n_dilutions:
 
-  \- number of dilutions used for testing
+  number of dilutions used for testing
 
 ## Details
 

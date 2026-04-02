@@ -1,8 +1,8 @@
 
 #' Estimate force of infection
 #'
-#' @param t - time (in this case age) vector
-#' @param sp - seroprevalence vector
+#' @param t time (in this case age) vector
+#' @param sp seroprevalence vector
 #'
 #' @importFrom stats approx
 #'
@@ -55,7 +55,6 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
   return(list(pai1=pai1,pai2=pai2))
 }
 
-# TODO: update aggregate func here to be "pipe"-able
 #' Aggregate data
 #'
 #' Generate a dataframe with `t`, `pos` and `tot` columns from

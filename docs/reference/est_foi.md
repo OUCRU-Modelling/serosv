@@ -12,11 +12,11 @@ est_foi(t, sp)
 
 - t:
 
-  \- time (in this case age) vector
+  time (in this case age) vector
 
 - sp:
 
-  \- seroprevalence vector
+  seroprevalence vector
 
 ## Value
 

@@ -81,7 +81,9 @@ to_titer <- function(df, model="4PL", positive_threshold=NULL, ci = .95,
   out
 }
 
-#' Preprocess data
+#' Standardize raw serological test data for titer conversion
+#'
+#' Validate and prepare raw serological test results for use with `to_titer()`
 #'
 #' @param df data.frame with columns for plate id, sample id, result, dilution factor, and (optionally) negative controls
 #' @param plate_id_col name of the column storing plates id
@@ -168,16 +170,21 @@ data2function <- function(df) {
 
 # Function to convert samples' OD to LC
 #' @importFrom purrr map_dfr
+#' @import dplyr
 process_samples <- function(plate, std_crv, midpoint=2, positive_threshold = NULL) {
+  # convert from OD to concentration (with dilution taken into account)
   out <- plate %>%
-    bind_cols(purrr::map_dfr(.$result, std_crv))
+    bind_cols(purrr::map_dfr(.$result, std_crv)) %>%
+    # after mapping from OD to LC
+    # multiply by the dilution factors to get the sample actual concentration
+    mutate(across(c(lower, median, upper), ~ 10^.x * dilution_factors))
 
   if(is.numeric(positive_threshold)){
     out <- out %>% mutate(
       positive = if_else(
         # check if upper bound for titer is available
         !is.na(upper),
-        upper >= positive_threshold, # positive if above threshold
+        upper >= (positive_threshold), # positive if above threshold
         # if upper is NA, then OD (or result) is either too high or too low
         # label positive when result is higher than midpoint
         result > midpoint
@@ -238,8 +245,8 @@ get_negative_controls <- function(plate, std_crv){
   plate %>%
     select(starts_with("negative")) %>%
     unique() %>%
-    tidyr::pivot_longer(everything(), names_to = "dilution", values_to = "result") %>%
-    mutate(across(dilution, ~ stringr::str_remove(.x, "negative_") %>%  as.integer()))
+    tidyr::pivot_longer(everything(), names_to = "dilution_factors", values_to = "result") %>%
+    mutate(across(dilution_factors, ~ stringr::str_remove(.x, "negative_") %>%  as.integer()))
 }
 
 # ======== Plot functions ==========
@@ -339,10 +346,10 @@ add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
 #' The figure below demonstrates the interpretation of the plot.
 #' \figure{interpret_titer_qc.png}{options: width="70\%"}
 #'
-#' @param x - output of `to_titer()`
-#' @param n_plates - maximum number of plates to plot
-#' @param n_samples - maximum number of samples per plate to plot
-#' @param n_dilutions - number of dilutions used for testing
+#' @param x output of `to_titer()`
+#' @param n_plates maximum number of plates to plot
+#' @param n_samples maximum number of samples per plate to plot
+#' @param n_dilutions number of dilutions used for testing
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr walk
