@@ -19,27 +19,27 @@ set_plot_style(
 
 - sero:
 
-  \- color for seroprevalence line
+  color for seroprevalence line
 
 - ci:
 
-  \- color for confidence interval
+  color for confidence interval
 
 - foi:
 
-  \- color for force of infection line
+  color for force of infection line
 
 - sero_line:
 
-  \- linetype for seroprevalence line
+  linetype for seroprevalence line
 
 - foi_line:
 
-  \- linetype for force of infection line
+  linetype for force of infection line
 
 - xlabel:
 
-  \- x label
+  x label
 
 ## Value
 

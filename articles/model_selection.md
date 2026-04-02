@@ -91,7 +91,7 @@ cv_out
     ##   <chr>              <dbl> <dbl> <chr>                  <list>     <list>
     ## 1 griffith            277. 0.594 polynomial_model       <plynml_m> <gg>  
     ## 2 penalized_spline    197. 0.601 penalized_spline_model <pnlzd_s_> <gg>  
-    ## 3 farrington          356. 0.600 farrington_model       <frrngtn_> <gg>  
+    ## 3 farrington          185. 0.600 farrington_model       <frrngtn_> <gg>  
     ## 4 local_polynomial    237. 0.588 lp_model               <lp_model> <gg>
 
 With aggregated data
@@ -116,7 +116,6 @@ cv_out <- compare_models(
     farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
     local_polynomial = lp_model 
   ) %>% suppressWarnings()
-
 
 aic_bic_out
 ```

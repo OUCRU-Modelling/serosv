@@ -1,6 +1,7 @@
-# Preprocess data
+# Standardize raw serological test data for titer conversion
 
-Preprocess data
+Validate and prepare raw serological test results for use with
+\`to_titer()\`
 
 ## Usage
 
