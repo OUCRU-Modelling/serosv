@@ -1,4 +1,6 @@
-# serosv (development version)
+# serosv 1.3.0
+* allow parameter selection for nested model
+* allow custom model selection function
 * clean up documentation
 
 # serosv 1.2.0
