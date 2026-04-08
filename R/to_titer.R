@@ -17,6 +17,7 @@
 #' @importFrom magrittr %>%
 #' @import dplyr
 #' @importFrom purrr map_dfr
+#' @importFrom stats median
 #'
 #' @return a data.frame with 8 columns
 #'   \item{plate_id}{id of the plate}
@@ -31,6 +32,10 @@ to_titer <- function(df, model="4PL", positive_threshold=NULL, ci = .95,
                      negative_control=TRUE){
   # Expected format for df
   # have columns: sample_id (which can be id of sample or label as antitoxin), result, dilution_factors, negative control
+
+  # resolve no visible binding note
+  plate_id <- data <- antitoxin_df <- standard_curve_df <- median <- NULL
+  standard_curve_func <- std_crv_midpoint <- sample_id <- age <- status <- NULL
 
   mod <- if (is.character(model) && model == "4PL") {
     nls4PL
@@ -95,8 +100,9 @@ to_titer <- function(df, model="4PL", positive_threshold=NULL, ci = .95,
 #'
 #' @importFrom magrittr %>%
 #' @importFrom janitor clean_names
-#'
 #' @import dplyr
+#' @importFrom rlang `:=`
+#'
 #'
 #' @return a standardized data.frame that can be passed to `to_titer()`
 #' @export
@@ -107,6 +113,8 @@ standardize_data <- function(df,
                              dilution_fct_col = "DILUTION_FACTORS",
                              antitoxin_label = "Anti_toxin",
                              negative_col = "^NEGATIVE_*"){
+  # resolve no visible binding note
+  plate_id <- sample_id <- result <- dilution_factors <- NULL
 
   neg_control_cols <- grep(negative_col, colnames(df), value = TRUE)
   if (length(neg_control_cols) == 0){
@@ -172,6 +180,9 @@ data2function <- function(df) {
 #' @importFrom purrr map_dfr
 #' @import dplyr
 process_samples <- function(plate, std_crv, midpoint=2, positive_threshold = NULL) {
+  # resolve no visible binding note
+  . <- lower <- median <- upper <- result <- NULL
+
   # convert from OD to concentration (with dilution taken into account)
   out <- plate %>%
     bind_cols(purrr::map_dfr(.$result, std_crv)) %>%
@@ -212,6 +223,7 @@ good_guess4PL <- function(x, y, eps = .3) {
 
 
 # function to fit data to a 4PL model
+#' @importFrom stats nls
 nls4PL <- function(df) {
   nls(result ~ d + (a - d) / (1 + 10^((log10(concentration) - c) * b)),
       data = df,
@@ -224,6 +236,8 @@ nls4PL <- function(df) {
 # - use model to compute OD for the new set of parameter values
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom purrr map_dfc
+#' @importFrom stats setNames vcov coef quantile formula
+#' @importFrom mvtnorm rmvnorm
 simulate_nls_ci <- function(object, newdata, nb = 9999, alpha = .025) {
   rowsplit <- function(df) split(df, 1:nrow(df))
 
@@ -242,6 +256,9 @@ simulate_nls_ci <- function(object, newdata, nb = 9999, alpha = .025) {
 # ===== Quality Control functions ========
 # only use dilution factor where negative sample is indeed negative
 get_negative_controls <- function(plate, std_crv){
+  # work around to resolve no visible binding note NOTE during check()
+  dilution_factors <- NULL
+
   plate %>%
     select(starts_with("negative")) %>%
     unique() %>%
@@ -259,6 +276,7 @@ get_negative_controls <- function(plate, std_crv){
 #' @param datapoint_size size of the data point (only applicable when `facet=TRUE`)
 #'
 #' @importFrom magrittr %>%
+#' @importFrom grDevices adjustcolor
 #' @import ggplot2 dplyr
 #'
 #' @export
@@ -266,6 +284,10 @@ plot_standard_curve <- function(x, facet=TRUE,
                                 xlab = "log10(concentration)",
                                 ylab = "Optical density",
                                 datapoint_size = 2){
+  # work around note for
+  plate_id <- standard_curve_df <- antitoxin_df <- logc <- NULL
+  lower <- upper <- result <- status <-  concentration <- NULL
+
   scdf <- x %>% select(plate_id, standard_curve_df) %>% unnest(standard_curve_df) %>% ungroup()
   data <- x %>% select(plate_id, antitoxin_df) %>% unnest(antitoxin_df) %>% ungroup()
 
@@ -317,6 +339,9 @@ plot_standard_curve <- function(x, facet=TRUE,
 #' @export
 add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
                            shift_text = 0.15) {
+  # resolve no visible binding NOTE
+  x <- label <- NULL
+
   list(
     geom_vline(aes(xintercept = log10(
       positive_threshold / c(1, dilution_factors)
@@ -343,9 +368,6 @@ add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
 #'
 #' These sample grids are arranged in columns where each column represent samples from a plate
 #'
-#' The figure below demonstrates the interpretation of the plot.
-#' \figure{interpret_titer_qc.png}{options: width="70\%"}
-#'
 #' @param x output of `to_titer()`
 #' @param n_plates maximum number of plates to plot
 #' @param n_samples maximum number of samples per plate to plot
@@ -353,10 +375,14 @@ add_thresholds <- function(dilution_factors, positive_threshold = 0.1,
 #'
 #' @importFrom magrittr %>%
 #' @importFrom purrr walk
+#' @importFrom utils head
 #' @import ggplot2 dplyr
 #'
 #' @export
 plot_titer_qc <- function(x, n_plates=18, n_samples=22, n_dilutions = 3){
+  # work around to resolve no visible binding NOTE during check()
+  median <- lower <- upper <- NULL
+
   # function to add missing values if there are less than 22 samples in a plate:
   n_estimates <- 3 # number of estimates per dilution (point + confidence interval)
   n_plates <- if(is.numeric(n_plates)) n_plates else nrow(x)

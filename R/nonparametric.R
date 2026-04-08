@@ -9,16 +9,16 @@
 #' For a general degree \eqn{p}, the linear predictor for a neighbor of \eqn{a_0}, labeled \eqn{a_i} is equivalent to the Taylor approximation
 #' \deqn{
 #' \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
-#' \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
+#' \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + \cdots + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
 #' }
 #'
 #' \eqn{\eta(a_i)} can be estimated by maximizing
 #' \deqn{
-#'  \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 ... +
+#'  \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 \cdots +
 #'  \beta_p(a_i-a_0)^p) \} K_h(a_i - a_0)
 #' }
 #'
-#' The estimator for the \eqn{k}-th derivative of \eqn{\eta(a_0)}, for \eqn{k = 0,1,…,p}
+#' The estimator for the \eqn{k-th} derivative of \eqn{\eta(a_0)}, for \eqn{k = 0,1,\cdots,p}
 #' (degree of local polynomial) is thus:
 #' \deqn{
 #'  \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)

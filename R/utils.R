@@ -77,7 +77,7 @@ pava<- function(pos=pos,tot=rep(1,length(pos)))
 #' @return dataframe in aggregated format
 #' @export
 transform_data <- function(data, stratum_col="age", status_col="status") {
-  df <- NULL
+  df <- age <- status <-  NULL
 
   if( all(c(stratum_col, status_col) %in% names(data)) ) {
     df <- data.frame(

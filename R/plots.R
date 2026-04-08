@@ -459,6 +459,9 @@ plot.estimate_from_mixture <- function(x, ... ){
 #' @return ggplot object
 #' @export
 plot.age_time_model <- function(x, ...){
+  # work around to resolve no visible binding note NOTE during check()
+  sp_df <- foi_df <- df <- age <- pos <- tot <- y <- ymin <- ymax <- seroprev <- NULL
+
   # check whether user specify facet
   facet <- if (is.null(list(...)[["facet"]])) TRUE else list(...)$facet
   cex <- if (is.null(list(...)[["cex"]])) 10 else list(...)$cex
@@ -590,6 +593,10 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
 #' @return ggplot object
 #' @export
 plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
+  # work around to resolve no visible binding note NOTE during check()
+  age <- sero <- label <- sero_lwr <- sero_upr <- standard_curve_df <- NULL
+  antitoxin_df <- logc <- median <- lower <- upper <- result <- concentration <- NULL
+
   dat <- x$df
   corrected_dat <- x$corrected_se %>% mutate(label = paste0("estimated prevalence"))
   corrected_dat2 <- NULL

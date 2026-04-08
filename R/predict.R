@@ -166,6 +166,7 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
 predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
   # resolve no visible binding note
   df <- monotonized_info <- monotonized_ci_mod <- age <- info <- fit <- se.fit <- sp_df <- foi_df <- NULL
+  data <- age_df <- NULL
 
   # check which type of model user wants to predict
   modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype

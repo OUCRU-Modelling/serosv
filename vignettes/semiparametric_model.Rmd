@@ -158,7 +158,7 @@ $$
 
 -   With similar notations as before and $G = \sigma^2_uI_{K \times K}$
 
-Thus $Z$ is penalized by assuming the corresponding coefficients $\textbf{u}$ are random effect with $\textbf{u} \sim N(\textbf{0}, \mathbf{\sigma}^2_u \textbf{I})$.
+Thus $Z$ is penalized by assuming the corresponding coefficients $\textbf{u}$ are random effect with $\textbf{u} \sim N(\textbf{0}, \boldsymbol{\sigma}^2_u \textbf{I})$.
 
 Refer to Chapter `8.2.2` of the book by @Hens2012 for a more detailed explanation of the method.
 

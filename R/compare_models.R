@@ -103,9 +103,12 @@ aic_bic <- function(dat, mod_func){
 # function to compute metrics from cross validation
 # assess the generalization/prediction of the model
 #' @importFrom stats4 logLik AIC BIC
-#' @importFrom stats predict.glm
+#' @importFrom stats predict.glm dbinom
 #' @import tidyr dplyr pROC
 cv <- function(dat, mod_func, k=4){
+  # resolve no visible binding NOTE during check()
+  type <- NULL
+
   # assign each row of data to each fold
   idx_fold <- sort(rep(1:k, length.out=nrow(dat)))
 

@@ -139,7 +139,11 @@ polynomial_model <- function(data, k, link = "log",
 # model_fn - function to fit and return a model, must takes 2 arguments: par, df
 #' @import tidyr
 #' @importFrom purrr pmap
+#' @importFrom stats anova
 nested_mod_selection <- function(par_range, model_fn, dat, method="LRT"){
+  # work around to resolve no visible binding note NOTE during check()
+  `Pr(>Chi)` <- Deviance <- idx <- NULL
+
   # generate all combinations of parameters values
   par_combs <- tidyr::crossing(!!!par_range)
 

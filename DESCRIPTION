@@ -16,10 +16,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 3.4.0)
+    R (>= 4.1.0)
 RoxygenNote: 7.3.3
 Imports:
-    deSolve,
     dplyr,
     tidyr,
     janitor,
@@ -41,7 +40,8 @@ Imports:
     rstantools (>= 2.4.0),
     boot,
     pROC,
-    stats4
+    stats4,
+    rlang (>= 1.1.0)
 Suggests: 
     covr,
     knitr,
