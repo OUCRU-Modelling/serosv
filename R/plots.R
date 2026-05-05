@@ -181,24 +181,13 @@ plot.polynomial_model <- function(x, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.farrington_model <- function(x,...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-  # out.DF <- compute_ci(x)
-
+plot.farrington_model <- function(x, cex=20,...) {
   to_plot <- plot_data(x)
 
-
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI & sero
-    foi <- data.frame(x = x$df$age, y = x$foi)
-    sero <- data.frame(x = x$df$age, y = x$sp)
-  }else if (x$datatype == "aggregated"){
-    foi <- x$foi
-    sero <- x$sp
-  }
+  ci_out <- compute_ci.farrington_model(x)
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = sero, foi = foi, cex = cex)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = ci_out[[1]], foi = ci_out[[2]], cex = cex)
   })
 }
 

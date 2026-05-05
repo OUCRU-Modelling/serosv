@@ -70,10 +70,19 @@ farrington_model <- function(data, start, fixed=list(),
   tot <- data$tot
   model$datatype <- data$type
 
+  # model for seroprevalence in terms of age, alpha, beta and gamma
+  seroprev_mod <- function(age, alpha, beta, gamma){
+    1-exp(
+      (alpha/beta)*age*exp(-beta*age)
+      +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)
+      -gamma*age)
+  }
+
   farrington <- function(alpha,beta,gamma) {
-    p=1-exp((alpha/beta)*age*exp(-beta*age)
-            +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)-gamma*age)
-    ll=pos*log(p)+(tot-pos)*log(1-p)
+    p <- seroprev_mod(age, alpha, beta, gamma)
+    # ll=pos*log(p)+(tot-pos)*log(1-p)
+    # compute loglikelihood with dbinom instead
+    ll <- dbinom(pos, size = tot, prob = p, log = TRUE)
     return(-sum(ll))
   }
 
@@ -81,11 +90,13 @@ farrington_model <- function(data, start, fixed=list(),
   alpha <- model$info@coef[1]
   beta  <- model$info@coef[2]
   gamma <- model$info@coef[3]
-  model$sp <- 1-exp(
-    (alpha/beta)*age*exp(-beta*age)
-    +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*age)-1)
-    -gamma*age)
-  model$foi <- (alpha*age-gamma)*exp(-beta*age)+gamma
+  # functions to estimate seroprev and foi given age and parameters
+  model$sp_mod <- seroprev_mod
+  model$foi_mod <- function(age, alpha, beta, gamma){
+    (alpha*age-gamma)*exp(-beta*age)+gamma
+  }
+  model$sp <- seroprev_mod(age, alpha, beta, gamma)
+  model$foi <- model$foi_mod(age, alpha, beta, gamma)
   model$df <- list(age=age, pos=pos, tot=tot)
 
   class(model) <- "farrington_model"
