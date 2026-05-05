@@ -245,8 +245,8 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
   # sample parameter values
   boostrap_out <-  rmvnorm(
       nb,
-      mean = model$info@coef,
-      sigma = model$info@vcov
+      mean = mod@coef,
+      sigma = mod@vcov
     ) %>%
     as.data.frame() %>%
     rowsplit() %>%
@@ -255,7 +255,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
 
   # ----- Estimate CI for seroprevalence
   out.DF <- boostrap_out %>%
-    map_dfc(~do.call(model$sp_mod, .x)) %>%
+    map_dfc(~do.call(x$sp_mod, .x)) %>%
     apply(1, quantile, c(alpha, 1 - alpha)) %>%
     t() %>% as.data.frame() %>%
     setNames(c("ymin", "ymax")) %>%
@@ -263,16 +263,16 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
       data.frame(
         x = age,
         # use the estimated parameter to compute estimated seroprev
-        y = do.call(model$sp_mod, c(
+        y = do.call(x$sp_mod, c(
           list(age=age),
-          model$info@coef
+          mod@coef
         ))
       )
     )
 
   # ----- Estimate CI for FOI
   out.FOI <- boostrap_out %>%
-    map_dfc(~do.call(model$foi_mod, .x)) %>%
+    map_dfc(~do.call(x$foi_mod, .x)) %>%
     apply(1, quantile, c(.05, 1 - .05)) %>%
     t() %>% as.data.frame() %>%
     setNames(c("ymin", "ymax")) %>%
@@ -280,9 +280,9 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
       data.frame(
         x = age,
         # use the estimated parameter to compute estimated FOI
-        y = do.call(model$foi_mod, c(
+        y = do.call(x$foi_mod, c(
           list(age=age),
-          model$info@coef
+          mod@coef
         ))
       )
     )
