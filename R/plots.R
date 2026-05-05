@@ -302,10 +302,10 @@ plot.lp_model <- function(x, cex=20, ...) {
 #' @return ggplot object
 #' @export
 plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
-  out.DF <- compute_ci.hierarchical_bayesian_model(x)
+  out_ci <- compute_ci.hierarchical_bayesian_model(x)
 
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi, cex=cex)
+    plot_util(age = age, pos = pos, tot = tot, sero = out_ci[[1]], foi = out_ci[[2]], cex=cex)
   })
 }
 

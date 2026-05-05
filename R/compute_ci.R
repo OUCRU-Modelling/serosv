@@ -212,6 +212,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
 compute_ci.hierarchical_bayesian_model <- function(x, ...){
   out_x <- x$df$age
   out.DF <- NULL
+  out.FOI <- NULL
 
   if (x$type == "far3"){
     alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
@@ -224,6 +225,12 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
       y = x$sp_func(out_x, alpha1[2], alpha2[2], alpha3[2]),
       ymax = x$sp_func(out_x, alpha1[3], alpha2[3], alpha3[3])
     )
+    out.FOI <- data.frame(
+      x = out_x,
+      ymin = x$foi_func(out_x, alpha1[1], alpha2[1], alpha3[1]),
+      y = x$foi_func(out_x, alpha1[2], alpha2[2], alpha3[2]),
+      ymax = x$foi_func(out_x, alpha1[3], alpha2[3], alpha3[3])
+    )
   }else if(x$type == "far2"){
     alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
     alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
@@ -234,7 +241,12 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
       y = x$sp_func(out_x, alpha1[2], alpha2[2]),
       ymax = x$sp_func(out_x, alpha1[3], alpha2[3])
     )
-
+    out.FOI <- data.frame(
+      x = out_x,
+      ymin = x$foi_func(out_x, alpha1[1], alpha2[1]),
+      y = x$foi_func(out_x, alpha1[2], alpha2[2]),
+      ymax = x$foi_func(out_x, alpha1[3], alpha2[3])
+    )
   }else if(x$type == "log_logistic"){
     alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
     alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
@@ -245,11 +257,17 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
       y = x$sp_func(out_x, alpha1[2], alpha2[2]),
       ymax = x$sp_func(out_x, alpha1[3], alpha2[3])
     )
+    out.FOI <- data.frame(
+      x = out_x,
+      ymin = x$foi_func(out_x, out.DF$ymin, alpha1[1], alpha2[1]),
+      y = x$foi_func(out_x, out.DF$y, alpha1[2], alpha2[2]),
+      ymax = x$foi_func(out_x, out.DF$ymax, alpha1[3], alpha2[3])
+    )
   }else{
     warning('Expect model type to be one of the following: "far3", "far2", "log_logistic"')
   }
 
-  out.DF
+  list(out.DF, out.FOI)
 }
 
 # =========== Nonparametric =============
