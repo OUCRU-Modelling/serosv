@@ -234,7 +234,6 @@ nls4PL <- function(df) {
 # general flow is:
 # - sample different values for parameters (number of samples = nb)
 # - use model to compute OD for the new set of parameter values
-#' @importFrom mvtnorm rmvnorm
 #' @importFrom purrr map_dfc
 #' @importFrom stats setNames vcov coef quantile formula
 #' @importFrom mvtnorm rmvnorm
