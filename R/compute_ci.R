@@ -12,7 +12,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @importFrom stats qt predict.glm
 #' @import dplyr
 #'
-#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #'
 #' @export
 compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
@@ -35,9 +35,21 @@ compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
     select(-se.fit)
 
   out.DF <- data.frame(x = n1$age, y = 1- n1$fit, ymin= 1-  n1$lwr, ymax=1- n1$upr)
-  out.DF
+
+  foi_x <- sort(unique(ages))
+  foi_x <- foi_x[c(-1, -length(foi_x) )]
+
+  out.FOI <- data.frame(
+    x = foi_x,
+    y = est_foi(ages, out.DF$y),
+    ymin = est_foi(ages, out.DF$ymin),
+    ymax = est_foi(ages, out.DF$ymax)
+  )
+
+  list(out.DF, out.FOI)
 }
 
+# ======= Parametric model ===========
 #' Compute confidence interval for fractional polynomial model
 #'
 #' @param x serosv models
@@ -46,7 +58,7 @@ compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... arbitrary argument
 #'
 #' @import dplyr
-#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
   # resolve no visible binding issue with CRAN check
@@ -69,7 +81,18 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
     select(-se.fit)
   out.DF <- data.frame(x = n1$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
-  out.DF
+
+  foi_x <- sort(unique(ages))
+  foi_x <- foi_x[c(-1, -length(foi_x) )]
+
+  out.FOI <- data.frame(
+    x = foi_x,
+    y = est_foi(ages, out.DF$y),
+    ymin = est_foi(ages, out.DF$ymin),
+    ymax = est_foi(ages, out.DF$ymax)
+  )
+
+  list(out.DF, out.FOI)
 }
 
 #' Compute confidence interval for Weibull model
@@ -79,7 +102,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' @param ... arbitrary argument
 #'
 #' @import dplyr
-#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   # resolve no visible binding issue with CRAN check
@@ -104,79 +127,77 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   out.DF <- data.frame(x = x$df$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
   out.DF
-}
 
-
-#' Compute confidence interval for local polynomial model
-#'
-#' @param x serosv models
-#' @param ci confidence interval
-#' @param ... arbitrary arguments
-#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
-#' @export
-compute_ci.lp_model <- function(x,ci = 0.95, ...){
-  ages <- x$df$age
-  crit<- crit(x$info,cov = ci)$crit.val
-  mod1 <- predict(x$info, data.frame(a = ages),se.fit = TRUE)
-  out.DF <- data.frame(x = ages, y = mod1$fit,ymin= mod1$fit-crit*(mod1$se.fit/100),
-                       ymax= mod1$fit+crit*(mod1$se.fit/100))
-  out.DF
-}
-
-
-#' Compute confidence interval for penalized_spline_model
-#'
-#' @param x serosv models
-#' @param ci confidence interval
-#' @param ... arbitrary arguments
-#' @importFrom mgcv predict.gam
-#' @import dplyr
-#'
-#' @return list of confidence interval for seroprevalence and foi Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
-#' @export
-compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
-  # resolve no visible binding issue with CRAN check
-  fit <- se.fit <- NULL
-
-  m <- 1
-  p <- (1 - ci) / 2
-
-  # handle different output for different frameworks
-  if(x$framework == "pl"){
-    link_inv <- x$info$family$linkinv
-    dataset <- x$info$model[,1:2]
-    n <- nrow(dataset) - length(x$info$coefficients)
-    gam_obj <- x$info
-  }else{
-    link_inv <- x$info$gam$family$linkinv
-    dataset <- x$info$gam$model[,1:2]
-    n <- nrow(dataset) - length(x$info$gam$coefficients)
-    gam_obj <- x$info$gam
-  }
-
-  ages <- dataset[2]
-  # print(head(ages))
-
-  mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE)  %>%
-    as_tibble()  %>%
-    select(fit, se.fit) %>%
-    mutate(age = ages)  %>%
-    mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
-           upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
-           fit = m * link_inv(fit))  %>%
-    select(- se.fit)
-
-  out.DF <- data.frame(x = dataset[[2]], y = mod$fit,
-                       ymin= mod$lwr, ymax = mod$upr)
-  foi_x <- sort(unique(ages[[1]]))
+  # estimate FOI numerically
+  foi_x <- sort(unique(x$df$age))
   foi_x <- foi_x[c(-1, -length(foi_x) )]
-  out.FOI <- data.frame(x = foi_x,
-                        y = est_foi(ages[[1]], mod$fit),
-                        ymin= est_foi(ages[[1]],mod$lwr),
-                        ymax = est_foi(ages[[1]],mod$upr)
+  out.FOI <- data.frame(
+    x = foi_x,
+    y = est_foi(x$df$age, out.DF$y),
+    ymin = est_foi(x$df$age, out.DF$ymin),
+    ymax = est_foi(x$df$age, out.DF$ymax)
   )
 
-  return(list(out.DF, out.FOI))
+  list(out.DF, out.FOI)
+}
+
+#' @importFrom mvtnorm rmvnorm
+#' @importFrom purrr map_dfc
+#' @importFrom stats setNames vcov coef quantile formula
+compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
+  rowsplit <- function(df) split(df, 1:nrow(df))
+
+  mod <- x$info
+  age <- unique(x$df$age)
+
+  alpha <- (1-ci)/2
+
+  # sample parameter values
+  boostrap_out <-  rmvnorm(
+    nb,
+    mean = mod@coef,
+    sigma = mod@vcov
+  ) %>%
+    as.data.frame() %>%
+    rowsplit() %>%
+    map(as.list) %>%
+    map(~ c(.x, data.frame(age = age)))
+
+  # ----- Estimate CI for seroprevalence
+  out.DF <- boostrap_out %>%
+    map_dfc(~do.call(x$sp_mod, .x)) %>%
+    apply(1, quantile, c(alpha, 1 - alpha)) %>%
+    t() %>% as.data.frame() %>%
+    setNames(c("ymin", "ymax")) %>%
+    cbind(
+      data.frame(
+        x = age,
+        # use the estimated parameter to compute estimated seroprev
+        y = do.call(x$sp_mod, c(
+          list(age=age),
+          mod@coef
+        ))
+      )
+    )
+
+  # ----- Estimate CI for FOI
+  out.FOI <- boostrap_out %>%
+    map_dfc(~do.call(x$foi_mod, .x)) %>%
+    apply(1, quantile, c(.05, 1 - .05)) %>%
+    t() %>% as.data.frame() %>%
+    setNames(c("ymin", "ymax")) %>%
+    cbind(
+      data.frame(
+        x = age,
+        # use the estimated parameter to compute estimated FOI
+        y = do.call(x$foi_mod, c(
+          list(age=age),
+          mod@coef
+        ))
+      )
+    )
+
+  list(out.DF, out.FOI)
 }
 
 #' Compute 95\% credible interval for hierarchical Bayesian model
@@ -231,88 +252,78 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
   out.DF
 }
 
-#' @importFrom mvtnorm rmvnorm
-#' @importFrom purrr map_dfc
-#' @importFrom stats setNames vcov coef quantile formula
-compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
-  rowsplit <- function(df) split(df, 1:nrow(df))
+# =========== Nonparametric =============
 
-  mod <- x$info
-  age <- unique(x$df$age)
-
-  alpha <- (1-ci)/2
-
-  # sample parameter values
-  boostrap_out <-  rmvnorm(
-      nb,
-      mean = mod@coef,
-      sigma = mod@vcov
-    ) %>%
-    as.data.frame() %>%
-    rowsplit() %>%
-    map(as.list) %>%
-    map(~ c(.x, data.frame(age = age)))
-
-  # ----- Estimate CI for seroprevalence
-  out.DF <- boostrap_out %>%
-    map_dfc(~do.call(x$sp_mod, .x)) %>%
-    apply(1, quantile, c(alpha, 1 - alpha)) %>%
-    t() %>% as.data.frame() %>%
-    setNames(c("ymin", "ymax")) %>%
-    cbind(
-      data.frame(
-        x = age,
-        # use the estimated parameter to compute estimated seroprev
-        y = do.call(x$sp_mod, c(
-          list(age=age),
-          mod@coef
-        ))
-      )
-    )
-
-  # ----- Estimate CI for FOI
-  out.FOI <- boostrap_out %>%
-    map_dfc(~do.call(x$foi_mod, .x)) %>%
-    apply(1, quantile, c(.05, 1 - .05)) %>%
-    t() %>% as.data.frame() %>%
-    setNames(c("ymin", "ymax")) %>%
-    cbind(
-      data.frame(
-        x = age,
-        # use the estimated parameter to compute estimated FOI
-        y = do.call(x$foi_mod, c(
-          list(age=age),
-          mod@coef
-        ))
-      )
-    )
-
-  list(out.DF, out.FOI)
-}
-
-#' Compute confidence interval for mixture model
+#' Compute confidence interval for local polynomial model
 #'
-#' @param x serosv mixture_model object
+#' @param x serosv models
 #' @param ci confidence interval
 #' @param ... arbitrary arguments
-#' @importFrom stats qnorm
-#'
-#' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
+#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
-compute_ci.mixture_model <- function(x,ci = 0.95, ...){
+compute_ci.lp_model <- function(x,ci = 0.95, ...){
+  ages <- x$df$age
+  crit<- crit(x$info,cov = ci)$crit.val
+  mod1 <- predict(x$info, data.frame(a = ages),se.fit = TRUE)
+  out.DF <- data.frame(x = ages, y = mod1$fit,ymin= mod1$fit-crit*(mod1$se.fit/100),
+                       ymax= mod1$fit+crit*(mod1$se.fit/100))
+  out.DF
+}
 
-  susceptible <- x$info$parameters[1, ]
-  infected <- x$info$parameters[2, ]
+# ========== Semi-parametric ==========
+#' Compute confidence interval for penalized_spline_model
+#'
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
+#' @importFrom mgcv predict.gam
+#' @import dplyr
+#'
+#' @return list of confidence interval for seroprevalence and foi Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @export
+compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
 
-  lower_q <- (1 - ci)/2
-  upper_q <- 1 - lower_q
-  susceptible <- list(lower_bound = qnorm(lower_q, mean = susceptible$mu, sd = susceptible$sigma),
-                      upper_bound = qnorm(upper_q, mean = susceptible$mu, sd = susceptible$sigma))
+  m <- 1
+  p <- (1 - ci) / 2
 
-  infected <- list(lower_bound = qnorm(lower_q, mean = infected$mu, sd = infected$sigma),
-                      upper_bound = qnorm(upper_q, mean = infected$mu, sd = infected$sigma))
+  # handle different output for different frameworks
+  if(x$framework == "pl"){
+    link_inv <- x$info$family$linkinv
+    dataset <- x$info$model[,1:2]
+    n <- nrow(dataset) - length(x$info$coefficients)
+    gam_obj <- x$info
+  }else{
+    link_inv <- x$info$gam$family$linkinv
+    dataset <- x$info$gam$model[,1:2]
+    n <- nrow(dataset) - length(x$info$gam$coefficients)
+    gam_obj <- x$info$gam
+  }
 
-  return(list(susceptible= susceptible, infected=infected))
+  ages <- dataset[2]
+  # print(head(ages))
+
+  mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE)  %>%
+    as_tibble()  %>%
+    select(fit, se.fit) %>%
+    mutate(age = ages)  %>%
+    mutate(lwr = m * link_inv(fit + qt(    p, n) * se.fit),
+           upr = m * link_inv(fit + qt(1 - p, n) * se.fit),
+           fit = m * link_inv(fit))  %>%
+    select(- se.fit)
+
+  out.DF <- data.frame(x = dataset[[2]], y = mod$fit,
+                       ymin= mod$lwr, ymax = mod$upr)
+  foi_x <- sort(unique(ages[[1]]))
+  foi_x <- foi_x[c(-1, -length(foi_x) )]
+  out.FOI <- data.frame(x = foi_x,
+                        y = est_foi(ages[[1]], mod$fit),
+                        ymin= est_foi(ages[[1]],mod$lwr),
+                        ymax = est_foi(ages[[1]],mod$upr)
+              )
+
+  return(list(out.DF, out.FOI))
 }
 
 #' Compute confidence interval for time age model
@@ -349,7 +360,7 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
       })
     )
 
-  # --- use the monotonized model for prediction and ci-----
+  # --- use the monotonized model for prediction and ci
   if(modtype == "monotonized"){
     out <- out %>%
       mutate(
@@ -363,7 +374,7 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
         })
       )
   }else{
-    # --- if user specify non-monotonized then simply compute CI from gam model-----
+    # --- if user specify non-monotonized then simply compute CI from gam model
     out <- out %>%
       mutate(
         sp_df = map2(info, age, \(mod, grid){
@@ -385,7 +396,7 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
       )
   }
 
-  # --- finally, compute FOI -----
+  # ------- finally, compute FOI
   out <- out %>%
     mutate(
       foi_df = map2(age, sp_df, \(grid, sp){
@@ -401,6 +412,33 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
     select(!!sym(x$grouping_col), sp_df, foi_df)
 
   out
+}
+
+
+# ========== Mixture model ========
+#' Compute confidence interval for mixture model
+#'
+#' @param x serosv mixture_model object
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
+#' @importFrom stats qnorm
+#'
+#' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
+#' @export
+compute_ci.mixture_model <- function(x,ci = 0.95, ...){
+
+  susceptible <- x$info$parameters[1, ]
+  infected <- x$info$parameters[2, ]
+
+  lower_q <- (1 - ci)/2
+  upper_q <- 1 - lower_q
+  susceptible <- list(lower_bound = qnorm(lower_q, mean = susceptible$mu, sd = susceptible$sigma),
+                      upper_bound = qnorm(upper_q, mean = susceptible$mu, sd = susceptible$sigma))
+
+  infected <- list(lower_bound = qnorm(lower_q, mean = infected$mu, sd = infected$sigma),
+                   upper_bound = qnorm(upper_q, mean = infected$mu, sd = infected$sigma))
+
+  return(list(susceptible= susceptible, infected=infected))
 }
 
 

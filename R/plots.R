@@ -141,29 +141,32 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #' plot() overloading for polynomial model
 #'
 #' @param x the polynomial model object
-#' @param ... arbitrary params.
+#' @param cex adjust size of the datapoints
+#' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
 #' @return ggplot object
 #' @export
-plot.polynomial_model <- function(x, ...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.polynomial_model <- function(x, cex=20, ...) {
+  # out.DF <- compute_ci(x)
+  #
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI
+  #   foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- as.numeric(x$foi)
+  # }
 
-  out.DF <- compute_ci(x)
-
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI
-    foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
-  }else if (x$datatype == "aggregated"){
-    foi <- as.numeric(x$foi)
-  }
+  out_ci <- compute_ci.default(x)
 
   to_plot <- plot_data(x)
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = foi, cex = cex)
+    plot_util(
+      age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
+      sero = out_ci[[1]], foi = out_ci[[2]], cex = cex)
   })
 
 }
@@ -173,8 +176,9 @@ plot.polynomial_model <- function(x, ...) {
 #### Farrington model ####
 #' plot() overloading for Farrington model
 #'
-#' @param x the Farrington model object.
-#' @param ... arbitrary params.
+#' @param x the Farrington model object
+#' @param cex adjust size of the datapoints
+#' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
 #' @importFrom graphics plot
@@ -195,6 +199,7 @@ plot.farrington_model <- function(x, cex=20,...) {
 #' plot() overloading for Weibull model
 #'
 #' @param x the Weibull model object.
+#' @param cex adjust size of the datapoints
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -202,25 +207,24 @@ plot.farrington_model <- function(x, cex=20,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.weibull_model <- function(x, ...) {
+plot.weibull_model <- function(x, cex=20, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
 
-  out.DF <- compute_ci.weibull_model(x)
+  out_ci <- compute_ci.weibull_model(x)
 
   to_plot <- plot_data(x)
 
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI & sero
-    foi <- data.frame(x = x$df$age, y = x$foi)
-  }else if (x$datatype == "aggregated"){
-    foi <- x$foi
-  }
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI & sero
+  #   foi <- data.frame(x = x$df$age, y = x$foi)
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- x$foi
+  # }
 
   suppressMessages(
     returned_plot <- plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
-                               sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi), cex = cex) +
+                               sero = out_ci[[1]], foi = out_ci[[2]], cex = cex) +
       set_plot_style(xlabel = "Exposure time")
   )
 
@@ -231,6 +235,7 @@ plot.weibull_model <- function(x, ...) {
 #' plot() overloading for fractional polynomial model
 #'
 #' @param x the fractional polynomial model object.
+#' @param cex adjust size of the datapoints.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -238,14 +243,19 @@ plot.weibull_model <- function(x, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.fp_model <- function(x,...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.fp_model <- function(x, cex=20, ...) {
+  # out.DF <- compute_ci.fp_model(x)
 
-  out.DF <- compute_ci.fp_model(x)
+  out_ci <- compute_ci.fp_model(x)
   to_plot <- plot_data(x)
 
+  # with(x$df, {
+  #   plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = x$foi, cex = cex)
+  # })
+
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = x$foi, cex = cex)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
+              sero = out_ci[[1]], foi = out_ci[[2]], cex = cex)
   })
 }
 
@@ -255,6 +265,7 @@ plot.fp_model <- function(x,...) {
 #' plot() overloading for local polynomial model
 #'
 #' @param x the local polynomial model object.
+#' @param cex adjust size of the datapoints.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -262,9 +273,7 @@ plot.fp_model <- function(x,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.lp_model <- function(x, ...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-
+plot.lp_model <- function(x, cex=20, ...) {
   out.DF <- compute_ci.lp_model(x)
   to_plot <- plot_data(x)
 
@@ -284,6 +293,7 @@ plot.lp_model <- function(x, ...) {
 #' plot() overloading for hierarchical_bayesian_model
 #'
 #' @param x hierarchical_bayesian_model object created by serosv.
+#' @param cex adjust size of the datapoints.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -291,9 +301,7 @@ plot.lp_model <- function(x, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.hierarchical_bayesian_model <- function(x,  ...){
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-
+plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
   out.DF <- compute_ci.hierarchical_bayesian_model(x)
 
   with(x$df, {
@@ -306,6 +314,7 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #' plot() overloading for penalized spline
 #'
 #' @param x the penalized_spline_model object
+#' @param cex adjust size of the datapoints.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -313,8 +322,7 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #'
 #' @return ggplot object
 #' @export
-plot.penalized_spline_model <- function(x, ...){
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.penalized_spline_model <- function(x, cex=20, ...){
   ci <- compute_ci.penalized_spline_model(x)
 
   out.DF <- ci[[1]]
@@ -392,15 +400,15 @@ plot.mixture_model <- function(x, ...){
 #' plot() overloading for result of estimate_from_mixture
 #'
 #' @param x the mixture_model
-#' @param ... arbitrary params.
+#' @param cex adjust size of the datapoints
+#' @param ... arbitrary params
 #' @importFrom graphics plot
 #' @import ggplot2
 #'
 #' @return ggplot object
 #'
 #' @export
-plot.estimate_from_mixture <- function(x, ... ){
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.estimate_from_mixture <- function(x, cex=20, ... ){
   age <- x$df$age
 
   returned_plot <- ggplot()
@@ -432,29 +440,21 @@ plot.estimate_from_mixture <- function(x, ... ){
 # ------- Plot age time varying seroprevalence ----------
 #' Plot output for age_time_model
 #'
-#' @param x - a `age_time_model` object
-#' @param ... arbitrary params.
-#' Supported options include:
-#'   \itemize{
-#'     \item \code{facet}: Whether to facet the plot by group.
-#'     \item \code{modtype}: Which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}.
-#'     \item \code{le}: Number of bins used to generate the x-axis; higher values produce smoother curves.
-#'     \item \code{cex}: Adjusts the size of data points (only when \code{facet = TRUE}).
-#'   }
+#' @param x a `age_time_model` object
+#' @param facet whether to facet the plot by group
+#' @param modtype specify which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}
+#' @param le number of bins used to generate the x-axis; higher values produce smoother curves
+#' @param cex adjust size of the datapoints (only when \code{facet = TRUE})
+#' @param ... arbitrary params
 #'
 #' @importFrom graphics plot
 #' @import ggplot2 assertthat tidyr
 #'
 #' @return ggplot object
 #' @export
-plot.age_time_model <- function(x, ...){
+plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE,...){
   # work around to resolve no visible binding note NOTE during check()
   sp_df <- foi_df <- df <- age <- pos <- tot <- y <- ymin <- ymax <- seroprev <- NULL
-
-  # check whether user specify facet
-  facet <- if (is.null(list(...)[["facet"]])) TRUE else list(...)$facet
-  cex <- if (is.null(list(...)[["cex"]])) 10 else list(...)$cex
-  le <- if (is.null(list(...)[["le"]])) 100 else list(...)$le
 
   assert_that(
     is.logical(facet),
