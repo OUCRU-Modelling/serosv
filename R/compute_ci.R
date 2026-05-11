@@ -155,44 +155,52 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence interval
+#' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
 #'
+#' @importFrom stats vcov coef
 #' @import dplyr
 #' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
-compute_ci.weibull_model <- function(x, ci = 0.95, ...){
+compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
+  # set up
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
-  dataset <- x$info$model
+  dataset <- data.frame(x$df)
   n <- nrow(dataset) - length(x$info$coefficients)
-  age_range <- range(dataset$`log(t)`)
-  exposure_time <- dataset$`log(t)`
 
-  mod1 <- predict.glm(x$info,data.frame("log(t)" = exposure_time), se.fit = TRUE)
+  mod1 <- predict.glm(x$info,data.frame(t = dataset$age), se.fit = TRUE)
   n1 <- mod1 %>% as_tibble() %>%
     select(fit, se.fit) %>%
-    mutate(exposure = exposure_time) %>%
+    mutate(t = dataset$age) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
 
-  out.DF <- data.frame(x = x$df$age, y = n1$fit,
+  out.DF <- data.frame(x = dataset$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
-  out.DF
 
-  # estimate FOI numerically
-  foi_x <- sort(unique(x$df$age))
-  foi_x <- foi_x[c(-1, -length(foi_x) )]
-  out.FOI <- data.frame(
-    x = foi_x,
-    y = est_foi(x$df$age, out.DF$y),
-    ymin = est_foi(x$df$age, out.DF$ymin),
-    ymax = est_foi(x$df$age, out.DF$ymax)
-  )
+  # estimate FOI CI if specified
+  out.FOI <- if(foi_ci){
+    parametric_bootstrapping(
+      # make sure foi_func match the expected function signature
+      foi_func = \(newdat, coef){
+        x$foi_mod(newdat$x, coef[1], coef[2])
+      },
+      newdat = data.frame(x = dataset$age),
+      coef = coef(x$info), vcov = vcov(x$info),
+      alpha = p
+    )
+  }else{
+    data.frame(
+      x = ages,
+      y = x$foi_mod(ages, coef(x$info)[1], coef(x$info)[2])
+    )
+  }
 
   list(out.DF, out.FOI)
 }
@@ -201,13 +209,14 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence interval
-#' @param nb number of samples
+#' @param nb number of samples for parametric bootstrapping
+#' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
 #'
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom purrr map_dfc
 #' @importFrom stats setNames vcov coef quantile formula
-compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
+compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
   rowsplit <- function(df) split(df, 1:nrow(df))
 
   mod <- x$info
@@ -215,7 +224,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
 
   alpha <- (1-ci)/2
 
-  # sample parameter values
+  # CIs for seroprevalence and FoI are quantified using parametric bootstrapping
   sampling_out <-  rmvnorm(
     nb,
     mean = mod@coef,
@@ -244,21 +253,25 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
     )
 
   # ----- Estimate CI for FOI
-  out.FOI <- sampling_out %>%
-    map_dfc(~do.call(x$foi_mod, .x)) %>%
-    apply(1, quantile, c(alpha, 1 - alpha)) %>%
-    t() %>% as.data.frame() %>%
-    setNames(c("ymin", "ymax")) %>%
-    cbind(
-      data.frame(
-        x = age,
-        # use the estimated parameter to compute estimated FOI
-        y = do.call(x$foi_mod, c(
-          list(age=age),
-          mod@coef
-        ))
-      )
-    )
+  out.FOI <- data.frame(
+    x = age,
+    # use the estimated parameter to compute estimated FOI
+    y = do.call(x$foi_mod, c(
+      list(age=age),
+      mod@coef
+    ))
+  )
+  # compute CI if specified
+  out.FOI <- if(foi_ci){
+    sampling_out %>%
+      map_dfc(~do.call(x$foi_mod, .x)) %>%
+      apply(1, quantile, c(alpha, 1 - alpha)) %>%
+      t() %>% as.data.frame() %>%
+      setNames(c("ymin", "ymax")) %>%
+      cbind(out.FOI)
+  }else{
+    out.FOI
+  }
 
   list(out.DF, out.FOI)
 }

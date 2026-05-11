@@ -44,8 +44,9 @@
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
 #'   \item{info}{fitted "glm" object}
-#'   \item{sp}{seroprevalence}
-#'   \item{foi}{force of infection}
+#'   \item{sp}{estimated seroprevalence}
+#'   \item{foi}{estimated force of infection}
+#'   \item{foi_mod}{function to generate FoI given age, and parameter values}
 #'
 #' @seealso [stats::glm()] for more information on the fitted "glm" object
 #'
@@ -69,8 +70,10 @@ weibull_model <- function(data,
     )
   b0 <- coef(model$info)[1]
   b1 <- coef(model$info)[2]
-  model$foi <- exp(b0)*b1*exp(log(t))^(b1-1)
-  model$sp <- 1-exp(-exp(b0)*t^b1)
+
+  model$sp <- model$info$fitted.values
+  model$foi_mod <- function(age, b0, b1){ exp(b0)*b1*exp(log(age))^(b1-1) }
+  model$foi <- model$foi_mod(t, b0, b1)
   model$df <- data.frame(age=t, pos=pos, tot=tot)
 
   class(model) <- "weibull_model"

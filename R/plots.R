@@ -142,6 +142,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #'
 #' @param x the polynomial model object
 #' @param cex adjust size of the datapoints
+#' @param foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
@@ -178,6 +179,7 @@ plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @param x the Farrington model object
 #' @param cex adjust size of the datapoints
+#' @param foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
@@ -185,10 +187,10 @@ plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.farrington_model <- function(x, cex=20,...) {
+plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ...) {
   to_plot <- plot_data(x)
 
-  ci_out <- compute_ci.farrington_model(x)
+  ci_out <- compute_ci.farrington_model(x, foi_ci = foi_ci)
 
   with(x$df, {
     plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = ci_out[[1]], foi = ci_out[[2]], cex = cex)
@@ -200,6 +202,7 @@ plot.farrington_model <- function(x, cex=20,...) {
 #'
 #' @param x the Weibull model object.
 #' @param cex adjust size of the datapoints
+#' @param foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -207,11 +210,11 @@ plot.farrington_model <- function(x, cex=20,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.weibull_model <- function(x, cex=20, ...) {
+plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
 
-  out_ci <- compute_ci.weibull_model(x)
+  out_ci <- compute_ci.weibull_model(x, foi_ci = foi_ci)
 
   to_plot <- plot_data(x)
 
