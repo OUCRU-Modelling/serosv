@@ -1,11 +1,12 @@
+# compute the i * a^(i-1) matrix
 X <- function(t, degree) {
-  X_matrix <- matrix(rep(1, length(t)), ncol = 1)
-  if (degree > 1) {
-    for (i in 2:degree) {
-      X_matrix <- cbind(X_matrix, i * t^(i-1))
-    }
-  }
-  -X_matrix
+  # X_matrix <- matrix(rep(1, length(t)), ncol = 1)
+  # if (degree > 1) {
+  #   for (i in 2:degree) {
+  #     X_matrix <- cbind(X_matrix, i * t^(i-1))
+  #   }
+  # }
+  -sapply(1:degree, function(i) i * t^max(i-1, 0))
 }
 
 #' Polynomial models
@@ -79,6 +80,7 @@ X <- function(t, degree) {
 #'   \item{info}{fitted "glm" object}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{foi_mod}{function to compute FoI given a vector of age and estimated parameters}
 #'
 #' @export
 polynomial_model <- function(data, k, link = "log",
@@ -128,6 +130,11 @@ polynomial_model <- function(data, k, link = "log",
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
   model$df <- list(age=age, pos=pos, tot= pos + neg)
+  # function to generate FoI given age and coefs
+  model$foi_mod <- function(age, coefs){
+    age_mat <- X(age, k)
+    age_mat %*% coefs
+  }
   model$k <- k
   class(model) <- "polynomial_model"
   model
