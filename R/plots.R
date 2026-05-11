@@ -423,6 +423,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
 
   returned_plot <- ggplot()
 
+  # if prevalence computed using threshold is available -> use that as datapoints
   if(!is.null(x$df$threshold_status)){
     aggregated <- transform_data(
       data.frame(
@@ -438,10 +439,15 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
                  shape = 1, show.legend = FALSE)
   }
 
+  ci <- compute_ci.estimate_from_mixture(x)
+
   # resolve no visible binding note
   foi <- foi_x <- NULL
   returned_plot <- returned_plot +
-    geom_line(aes(x = x$sp$age, y = x$sp$sp, col = "sero", linetype = "sero")) +
+    geom_smooth(
+      aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
+                fill = "sero CI"),
+      data=ci, stat="identity",lwd=0.5) +
     geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)
 
   returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")

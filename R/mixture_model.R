@@ -167,6 +167,8 @@ estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, 
 
   # Fit mu(a)
   model$info <- gam(log_antibody ~ s(age, bs = "ps", sp=83), family = gaussian())
+  model$mu_s <- mu_s
+  model$mu_i <- mu_i
 
   # making sure age range is enough for a smooth estimation
   threshold <- 20

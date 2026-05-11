@@ -558,6 +558,62 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
   return(list(susceptible= susceptible, infected=infected))
 }
 
+#' Compute confidence interval for the prevalence estimate from mixture model
+#'
+#' CI for prevalence is the transform CI for mu(a) estimator, and not accounting for
+#' the uncertainty in mu_I and mu_S estimates
+#'
+#' @param x serosv mixture_model object
+#' @param ci confidence interval
+#' @param ... arbitrary arguments
+#' @importFrom stats qnorm
+#' @importFrom dplyr mutate
+#'
+#' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
+compute_ci.estimate_from_mixture <- function(x, ci=.95, ...){
+  # resolve no visible binding issue with CRAN check
+  fit <- se.fit <- NULL
+
+  # set up
+  p <- (1 - ci) / 2
+
+  link_inv <- x$info$family$linkinv
+  dataset <- x$info$model[,1:2]
+  n <- nrow(dataset) - length(x$info$coefficients)
+  ages <- sort(unique(x$df$age))
+  mu_s <- x$mu_s
+  mu_i <- x$mu_i
+
+  # estimate the CI of mu(a)
+  mu_a <- predict.gam(x$info, data.frame(age = ages), se.fit = TRUE)  %>%
+    as.data.frame()  %>%
+    select(fit, se.fit) %>%
+    mutate(x = ages)  %>%
+    mutate(ymin = link_inv(fit + qt(    p, n) * se.fit),
+           ymax = link_inv(fit + qt(1 - p, n) * se.fit),
+           y = link_inv(fit))  %>%
+    select(- se.fit)
+
+  # transform mu(a) estimate to get CI for prevalence
+  out.DF <- mu_a %>%
+    mutate(
+      ymin = (ymin - mu_s)/(mu_i - mu_s),
+      ymax = (ymax - mu_s)/(mu_i - mu_s),
+      y = (y - mu_s)/(mu_i - mu_s)
+    )
+
+  # if monotonized, apply pava to estimates
+  if(x$monotonize){
+    out.DF <- out.DF %>%
+      mutate(
+        ymin = pava(lwr)$pai2,
+        ymax = pava(upr)$pai2,
+        y = pava(fit)$pai2
+      )
+  }
+
+  out.DF
+}
 
 
 
