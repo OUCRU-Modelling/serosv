@@ -358,13 +358,19 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
   crit<- crit(x$info,cov = ci)$crit.val
-  mod1 <- predict(x$info, data.frame(a = ages),se.fit = TRUE)
+  mod1 <- predict(x$info, data.frame(a = ages),
+                  se.fit = TRUE, band="local",
+                  what="coef")
+
+  # get the fit in predictor scale (before inverse link) to work with SE
+  pred_raw <- log(mod1$fit/(1-mod1$fit))
 
   out.DF <- data.frame(
     x = ages,
     y = mod1$fit,
-    ymin = mod1$fit - crit * (mod1$se.fit / 100),
-    ymax = mod1$fit + crit * (mod1$se.fit / 100)
+    # quantify CI
+    ymin = x$info$trans(pred_raw - crit * mod1$se.fit),
+    ymax = x$info$trans(pred_raw + crit * mod1$se.fit)
   )
 
   foi_x <- sort(unique(ages))
@@ -372,7 +378,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 
   out.FOI <- data.frame(
     x = foi_x,
-    y = est_foi(ages, out.DF$y),
+    y = est_foi(ages, out.DF$y)
     # TODO: check the validity here
     # ymin = est_foi(ages, out.DF$ymin),
     # ymax = est_foi(ages, out.DF$ymax)
