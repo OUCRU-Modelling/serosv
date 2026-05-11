@@ -2,23 +2,65 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
   UseMethod("compute_ci")
 }
 
+# ======= Quantify CI helper functions =======
+# TODO: General function for parametric bootstrapping
+#' @param foi_func a function that takes coefficents, newdat, and return estimated FOI
+#' @param newdat new age-range to generate FOI
+#' @param coef estimated coefficients
+#' @param vcov variance-covariance matrix of coefficients
+#'
+#' @importFrom mvtnorm rmvnorm
+#' @importFrom stats quantile setNames
+#' @importFrom purrr map_dfc
+parametric_bootstrapping <- function(foi_func,
+                                     newdat,
+                                     coef, vcov,
+                                     nb=9999, alpha=.025){
+  rowsplit <- function(df) split(df, 1:nrow(df))
+
+  # Sample parameters value
+  sampling_out <- rmvnorm(
+    nb,
+    mean = coef,
+    sigma = vcov
+  ) %>%
+    as.data.frame() %>%
+    rowsplit() %>%
+    map(as.numeric)
+
+  # Get the bounds for FOI
+  sampling_out %>%
+    map_dfc(~foi_func(newdat, .x)) %>%
+    apply(1, quantile, c(alpha, 1 - alpha)) %>%
+    t() %>% as.data.frame() %>%
+    cbind(foi_func(newdat, coef)) %>%
+    setNames(c("ymin", "ymax","y")) %>%
+    cbind(newdat)
+}
+
+# TODO: General function for parametric delta method
+
+# TODO: General function for nonparametric bootstrapping
+
 #' Compute confidence interval for a model of serosv
 #'
 #' @param x serosv models
 #' @param ci confidence interval
 #' @param le number of data for computing confidence interval
+#' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
 #'
-#' @importFrom stats qt predict.glm
+#' @importFrom stats qt predict.glm coef vcov
 #' @import dplyr
 #'
 #' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #'
 #' @export
-compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
+compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
+  # Set up
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- x$info$data
@@ -26,6 +68,7 @@ compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
   age_range <- range(dataset$age)
   ages <- seq(age_range[1], age_range[2], le = le)
 
+  # Quantify CI of seroprevalence estimate
   mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- mod1 %>% as_tibble() %>%  select(fit, se.fit) %>%
     mutate(age = ages ) %>%
@@ -33,21 +76,30 @@ compute_ci.default <- function(x, ci = 0.95, le = 100, ...){
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
-
   out.DF <- data.frame(x = n1$age, y = 1- n1$fit, ymin= 1-  n1$lwr, ymax=1- n1$upr)
 
-  foi_x <- sort(unique(ages))
-  foi_x <- foi_x[c(-1, -length(foi_x) )]
-
-  out.FOI <- data.frame(
-    x = foi_x,
-    y = est_foi(ages, out.DF$y),
-    ymin = est_foi(ages, out.DF$ymin),
-    ymax = est_foi(ages, out.DF$ymax)
-  )
+  # Quantify CI of FoI if specified
+  out.FOI <- if(foi_ci){
+    parametric_bootstrapping(
+      # make sure foi_func match the expected function signature
+      foi_func = \(newdat, coef){
+        x$foi_mod(newdat$x, coef)
+      },
+      newdat = data.frame(x = ages),
+      coef = coef(x$info), vcov = vcov(x$info),
+      alpha = p
+    )
+  }else{
+    data.frame(
+      x = ages,
+      y = x$foi_mod(ages, x$info$coefficients)
+    )
+  }
 
   list(out.DF, out.FOI)
 }
+
+
 
 # ======= Parametric model ===========
 #' Compute confidence interval for fractional polynomial model
@@ -64,6 +116,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
+  # Set up
   p <- (1 - ci) / 2
   link_inv <- x$info$family$linkinv
   dataset <- data.frame(x$df)
@@ -71,6 +124,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
   age_range <- range(dataset$age)
   ages <- seq(age_range[1], age_range[2], le = le)
 
+  # Quantify CI of seroprevalence estimation
   mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- data.frame(mod1)[,-3] %>%
     mutate(age = ages) %>%
@@ -81,6 +135,8 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
     select(-se.fit)
   out.DF <- data.frame(x = n1$age, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
+
+  # Quantify CI of FOI if specified
 
   foi_x <- sort(unique(ages))
   foi_x <- foi_x[c(-1, -length(foi_x) )]
@@ -141,6 +197,13 @@ compute_ci.weibull_model <- function(x, ci = 0.95, ...){
   list(out.DF, out.FOI)
 }
 
+#' Compute confidence interval for Farrington model
+#'
+#' @param x serosv models
+#' @param ci confidence interval
+#' @param nb number of samples
+#' @param ... arbitrary argument
+#'
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom purrr map_dfc
 #' @importFrom stats setNames vcov coef quantile formula
@@ -153,7 +216,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
   alpha <- (1-ci)/2
 
   # sample parameter values
-  boostrap_out <-  rmvnorm(
+  sampling_out <-  rmvnorm(
     nb,
     mean = mod@coef,
     sigma = mod@vcov
@@ -164,7 +227,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
     map(~ c(.x, data.frame(age = age)))
 
   # ----- Estimate CI for seroprevalence
-  out.DF <- boostrap_out %>%
+  out.DF <- sampling_out %>%
     map_dfc(~do.call(x$sp_mod, .x)) %>%
     apply(1, quantile, c(alpha, 1 - alpha)) %>%
     t() %>% as.data.frame() %>%
@@ -181,9 +244,9 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999,...){
     )
 
   # ----- Estimate CI for FOI
-  out.FOI <- boostrap_out %>%
+  out.FOI <- sampling_out %>%
     map_dfc(~do.call(x$foi_mod, .x)) %>%
-    apply(1, quantile, c(.05, 1 - .05)) %>%
+    apply(1, quantile, c(alpha, 1 - alpha)) %>%
     t() %>% as.data.frame() %>%
     setNames(c("ymin", "ymax")) %>%
     cbind(
@@ -283,9 +346,26 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
   ages <- x$df$age
   crit<- crit(x$info,cov = ci)$crit.val
   mod1 <- predict(x$info, data.frame(a = ages),se.fit = TRUE)
-  out.DF <- data.frame(x = ages, y = mod1$fit,ymin= mod1$fit-crit*(mod1$se.fit/100),
-                       ymax= mod1$fit+crit*(mod1$se.fit/100))
-  out.DF
+
+  out.DF <- data.frame(
+    x = ages,
+    y = mod1$fit,
+    ymin = mod1$fit - crit * (mod1$se.fit / 100),
+    ymax = mod1$fit + crit * (mod1$se.fit / 100)
+  )
+
+  foi_x <- sort(unique(ages))
+  foi_x <- foi_x[c(-1, -length(foi_x) )]
+
+  out.FOI <- data.frame(
+    x = foi_x,
+    y = est_foi(ages, out.DF$y),
+    # TODO: check the validity here
+    # ymin = est_foi(ages, out.DF$ymin),
+    # ymax = est_foi(ages, out.DF$ymax)
+  )
+
+  list(out.DF, out.FOI)
 }
 
 # ========== Semi-parametric ==========

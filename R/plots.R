@@ -9,7 +9,7 @@
 #'
 #' @return list of updated aesthetic values
 #' @export
-set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed", xlabel = "Age"){
+set_plot_style <- function(sero = "blueviolet", sero_ci = "royalblue1", foi = "#fc0328", foi_ci="#fc0328", sero_line = "solid", foi_line = "dashed", xlabel = "Age"){
     list(
       scale_colour_manual(
         values = c("sero" = sero, "foi" = foi)
@@ -18,7 +18,7 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
         values = c("sero" = sero_line, "foi" = foi_line)
       ),
       scale_fill_manual(
-        values = c("ci" =ci)
+        values = c("sero CI" = sero_ci, "foi CI"=foi_ci)
       ),
       labs(x=xlabel, linetype = "Line", colour = "Line", fill="Fill color")
     )
@@ -62,7 +62,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
   if (is(sero, "data.frame")){
     if("ymax" %in% colnames(sero)){
       plot <- plot + geom_smooth(aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
-                                     fill = "ci"), data=sero,
+                                     fill = "sero CI"), data=sero,
                                  stat="identity",lwd=0.5)
     }else{
       # --- Handle cases where CI for seroprevalence is not computable & length of age for foi differs from provided age vector
@@ -90,7 +90,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
           ymax = ymax/scale_foi,
           col = "foi",
           linetype = "foi",
-          fill = "ci"
+          fill = "foi CI"
         ),
         data = foi,
         stat = "identity",
@@ -149,7 +149,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #'
 #' @return ggplot object
 #' @export
-plot.polynomial_model <- function(x, cex=20, ...) {
+plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
   # out.DF <- compute_ci(x)
   #
   # if(x$datatype == "linelisting"){
@@ -159,7 +159,7 @@ plot.polynomial_model <- function(x, cex=20, ...) {
   #   foi <- as.numeric(x$foi)
   # }
 
-  out_ci <- compute_ci.default(x)
+  out_ci <- compute_ci.default(x, foi_ci=foi_ci)
 
   to_plot <- plot_data(x)
 
@@ -274,18 +274,25 @@ plot.fp_model <- function(x, cex=20, ...) {
 #' @return ggplot object
 #' @export
 plot.lp_model <- function(x, cex=20, ...) {
-  out.DF <- compute_ci.lp_model(x)
+  out_ci <- compute_ci.lp_model(x)
   to_plot <- plot_data(x)
 
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI
-    foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
-  }else if (x$datatype == "aggregated"){
-    foi <- x$foi
-  }
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI
+  #   foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- x$foi
+  # }
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = foi, cex=cex)
+    plot_util(
+      age = to_plot$age,
+      pos = to_plot$pos,
+      tot = to_plot$tot,
+      sero = out_ci[[1]],
+      foi = out_ci[[2]],
+      cex = cex
+    )
   })
 }
 
