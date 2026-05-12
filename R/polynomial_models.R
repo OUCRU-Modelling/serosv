@@ -129,7 +129,7 @@ polynomial_model <- function(data, k, link = "log",
   X <- X(age, k)
   model$sp <- 1 - model$info$fitted.values
   model$foi <- X%*%model$info$coefficients
-  model$df <- list(age=age, pos=pos, tot= pos + neg)
+  model$df <- data.frame(age=age, pos=pos, tot= pos + neg)
   # function to generate FoI given age and coefs
   model$foi_mod <- function(age, coefs){
     age_mat <- X(age, k)

@@ -97,7 +97,7 @@ farrington_model <- function(data, start, fixed=list(),
   }
   model$sp <- seroprev_mod(age, alpha, beta, gamma)
   model$foi <- model$foi_mod(age, alpha, beta, gamma)
-  model$df <- list(age=age, pos=pos, tot=tot)
+  model$df <- data.frame(age=age, pos=pos, tot=tot)
 
   class(model) <- "farrington_model"
   model

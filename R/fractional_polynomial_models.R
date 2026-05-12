@@ -213,7 +213,7 @@ fp_model <- function(data,p,monotonic=FALSE,link="logit",
     t=age,
     sp=model$info$fitted.values
   )
-  model$df <- list(age=age, pos=pos, tot=tot)
+  model$df <- data.frame(age=age, pos=pos, tot=tot)
 
   class(model) <- "fp_model"
   model

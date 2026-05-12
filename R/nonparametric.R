@@ -125,7 +125,7 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1)
   model$sp  <- fitted(model$info)
   model$foi <- fitted(model$eta)*fitted(model$info) # λ(a)=η′(a)π(a)
-  model$df  <- list(age=age, pos=pos, tot=tot)
+  model$df  <- data.frame(age=age, pos=pos, tot=tot)
 
   class(model) <- "lp_model"
   model
