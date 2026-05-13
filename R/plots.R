@@ -239,6 +239,7 @@ plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @param x the fractional polynomial model object.
 #' @param cex adjust size of the datapoints.
+#' @param foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -246,10 +247,10 @@ plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.fp_model <- function(x, cex=20, ...) {
+plot.fp_model <- function(x, cex=20, foi_ci=FALSE,...) {
   # out.DF <- compute_ci.fp_model(x)
 
-  out_ci <- compute_ci.fp_model(x)
+  out_ci <- compute_ci.fp_model(x, foi_ci=foi_ci, ...)
   to_plot <- plot_data(x)
 
   # with(x$df, {

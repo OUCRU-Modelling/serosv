@@ -159,12 +159,14 @@ find_best_fp_powers <- function(data,
 #'
 #' @importFrom stats predict as.formula
 #'
-#' @return a list of class fp_model with 5 items
+#' @return a list of class fp_model with 7 items
 #'   \item{datatype}{type of data used for fitting model (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
 #'   \item{info}{a fitted glm model}
+#'   \item{p}{powers used for the model}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{pars}{other model configurations}
 #' @seealso
 #' [stats::glm()] for more information on glm object
 #'
@@ -214,6 +216,10 @@ fp_model <- function(data,p,monotonic=FALSE,link="logit",
     sp=model$info$fitted.values
   )
   model$df <- data.frame(age=age, pos=pos, tot=tot)
+  model$pars <- list(
+    monotonic = monotonic,
+    link = link
+  )
 
   class(model) <- "fp_model"
   model

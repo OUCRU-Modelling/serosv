@@ -54,6 +54,7 @@ parametric_bootstrapping <- function(foi_func,
 nonparametric_bootstrapping <- function(mod, refit_func,
                                         newdat,
                                         nb=1000, ci=.95){
+  message("Running nonparametric bootstrap for FoI confidence intervals, this may take a some time")
   dat <- mod$df
 
   # dat is the data returned by ran.gen (i.e., resampled data)
@@ -73,7 +74,7 @@ nonparametric_bootstrapping <- function(mod, refit_func,
     # check fitted datatype
     if(mod$datatype == "aggregated"){
       # aggregated -> resample success count
-      resampled_dat$tot <- rbinom(nrow(dat),
+      resampled_dat$pos <- rbinom(nrow(dat),
                                  size=resampled_dat$tot, prob=resampled_dat$pos/resampled_dat$tot)
     }else{
       # linelisting -> resample rows
@@ -190,13 +191,22 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param foi_ci whether to compute CI for FoI
 #' @param le number of data for computing confidence interval
 #' @param ... arbitrary argument
 #'
 #' @import dplyr
-#' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+#'       \code{ymax} (lower and upper confidence interval bounds)
+#'
 #' @export
-compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
+compute_ci.fp_model <- function(x, ci = 0.95, le = 100, foi_ci=FALSE, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -221,16 +231,35 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
                        ymin= n1$lwr, ymax= n1$upr)
 
   # Quantify CI of FOI if specified
-
   foi_x <- sort(unique(ages))
   foi_x <- foi_x[c(-1, -length(foi_x) )]
 
   out.FOI <- data.frame(
     x = foi_x,
-    y = est_foi(ages, out.DF$y),
-    ymin = est_foi(ages, out.DF$ymin),
-    ymax = est_foi(ages, out.DF$ymax)
+    y = est_foi(ages, out.DF$y)
   )
+
+  out.FOI <- if(foi_ci){
+    bootstrap_out <- nonparametric_bootstrapping(
+      mod = x, newdat = data.frame(age = ages),
+      refit_func = \(df){
+        do.call(
+          fp_model,
+          c(
+            list(
+              data = df,
+              p = x$p
+            ),
+            x$pars
+          )
+        )
+      },
+      ci=ci, ...
+    )
+    cbind(out.FOI, bootstrap_out)
+  }else{
+    out.FOI
+  }
 
   list(out.DF, out.FOI)
 }
@@ -464,7 +493,6 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 }
 
 # =========== Nonparametric =============
-
 #' Compute confidence interval for local polynomial model
 #'
 #' @param x serosv models
@@ -569,8 +597,6 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
   out.FOI <- data.frame(x = foi_x, y = est_foi(ages, mod$fit))
 
   out.FOI <- if(foi_ci){
-    message("Running nonparametric bootstrap for FoI confidence intervals, this may take a some time")
-
     bootstrap_res <- nonparametric_bootstrapping(
       mod = x, newdat = data.frame(age = ages),
       refit_func = \(df){
