@@ -8,6 +8,8 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @param newdat new age-range to generate FOI
 #' @param coef estimated coefficients
 #' @param vcov variance-covariance matrix of coefficients
+#' @param nb number of bootstrap iterations
+#' @param alpha significance level
 #'
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom stats quantile setNames
@@ -40,12 +42,81 @@ parametric_bootstrapping <- function(foi_func,
 
 # TODO: General function for parametric delta method
 
-# TODO: General function for nonparametric bootstrapping
+#' @param mod fitted serosv model
+#' @param refit_func function to refit the model
+#' @param newdat new age-range for estimating FoI
+#' @param nb number of bootstrap iterations
+#' @param ci confidence level for the interval
+#'
+#' @importFrom boot boot boot.ci
+#' @importFrom stats setNames
+#' @importFrom map map_dfr
+nonparametric_bootstrapping <- function(mod, refit_func,
+                                        newdat,
+                                        nb=1000, ci=.95){
+  dat <- mod$df
+
+  # dat is the data returned by ran.gen (i.e., resampled data)
+  stat_func <- function(resampled_dat, indices=NULL,refit_func, newdat){
+    # refit model
+    refit_mod <- refit_func(resampled_dat)
+
+    # return foi estim over the age range we're interested in
+    sp_pred <- predict(refit_mod, newdat)
+    foi_pred <- est_foi(newdat[[1]], sp_pred)
+
+    foi_pred
+  }
+
+  resample_func <- function(dat, mod){
+    resampled_dat <- dat
+    # check fitted datatype
+    if(mod$datatype == "aggregated"){
+      # aggregated -> resample success count
+      resampled_dat$tot <- rbinom(nrow(dat),
+                                 size=resampled_dat$tot, prob=resampled_dat$pos/resampled_dat$tot)
+    }else{
+      # linelisting -> resample rows
+      indices <- sample(1:nrow(dat), nrow(dat), replace = TRUE)
+      resampled_dat <- resampled_dat[indices, ]
+    }
+
+    resampled_dat
+  }
+
+  boot_out <- boot::boot(
+    dat, statistic = stat_func, R = nb,
+    # specify custom ran.gen function to implement unsupported nonparametric
+    # bootstrapping scheme
+    sim = "parametric", ran.gen = resample_func,
+    parallel = "multicore", ncpus = parallel::detectCores(),
+    # argument for resample_func
+    mle = mod,
+    # arguments for stat_func
+    refit_func = refit_func,
+    newdat = newdat
+  )
+
+  setNames(
+    map_dfr(
+      1:ncol(boot_out$t),
+      \(i) {
+        ci_out <- boot::boot.ci(boot_out, type = "perc", index = i, conf=ci)
+        as.data.frame(ci_out$percent)[,4:5]
+      }
+    ),
+    c("ymin", "ymax")
+  ) |>
+    bind_cols(
+      # adjust length after numerical differentiation (for FoI)
+      newdat[c(-1, -nrow(newdat)), ,drop=FALSE]
+    )
+}
 
 #' Compute confidence interval for a model of serosv
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param le number of data for computing confidence interval
 #' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
@@ -105,7 +176,7 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
 #' Compute confidence interval for fractional polynomial model
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param le number of data for computing confidence interval
 #' @param ... arbitrary argument
 #'
@@ -154,7 +225,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #' Compute confidence interval for Weibull model
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
 #'
@@ -208,7 +279,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
 #' Compute confidence interval for Farrington model
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param nb number of samples for parametric bootstrapping
 #' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
@@ -351,7 +422,7 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 #' Compute confidence interval for local polynomial model
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param ... arbitrary arguments
 #' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
@@ -391,7 +462,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 #' Compute confidence interval for penalized_spline_model
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
@@ -446,7 +517,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
 #' Compute confidence interval for time age model
 #'
 #' @param x serosv models
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param le number of data for computing confidence interval
 #' @param ... arbitrary argument
 #'
@@ -536,7 +607,7 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
 #' Compute confidence interval for mixture model
 #'
 #' @param x serosv mixture_model object
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param ... arbitrary arguments
 #' @importFrom stats qnorm
 #'
@@ -564,7 +635,7 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 #' the uncertainty in mu_I and mu_S estimates
 #'
 #' @param x serosv mixture_model object
-#' @param ci confidence interval
+#' @param ci confidence level for the interval
 #' @param ... arbitrary arguments
 #' @importFrom stats qnorm
 #' @importFrom dplyr mutate
