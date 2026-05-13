@@ -115,6 +115,9 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 
 #' Compute confidence interval for a model of serosv
 #'
+#' Computes CI for Seroprevalence from model standard errors, and (optionally)
+#' for Force of Infection via parametric bootstrap.
+#'
 #' @param x serosv models
 #' @param ci confidence level for the interval
 #' @param le number of data for computing confidence interval
@@ -124,7 +127,14 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 #' @importFrom stats qt predict.glm coef vcov
 #' @import dplyr
 #'
-#' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+#'       \code{ymax} (lower and upper confidence interval bounds)
 #'
 #' @export
 compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
@@ -175,6 +185,9 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
 # ======= Parametric model ===========
 #' Compute confidence interval for fractional polynomial model
 #'
+#' Computes CI for Seroprevalence from model standard errors, and (optionally)
+#' for Force of Infection via nonparametric bootstrap.
+#'
 #' @param x serosv models
 #' @param ci confidence level for the interval
 #' @param le number of data for computing confidence interval
@@ -224,6 +237,9 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 
 #' Compute confidence interval for Weibull model
 #'
+#' Computes CI for Seroprevalence from model standard errors, and (optionally)
+#' for Force of Infection via parametric bootstrap.
+#'
 #' @param x serosv models
 #' @param ci confidence level for the interval
 #' @param foi_ci whether to compute CI for FoI
@@ -231,7 +247,14 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, ...){
 #'
 #' @importFrom stats vcov coef
 #' @import dplyr
-#' @return 2 confidence interval dataframes (for seroprevalence and FOI), each data.frame has 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+#'       \code{ymax} (lower and upper confidence interval bounds)
 #' @export
 compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
   # resolve no visible binding issue with CRAN check
@@ -278,6 +301,9 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
 
 #' Compute confidence interval for Farrington model
 #'
+#' Computes CI for Seroprevalence and (optionally)
+#' for Force of Infection via parametric bootstrap.
+#'
 #' @param x serosv models
 #' @param ci confidence level for the interval
 #' @param nb number of samples for parametric bootstrapping
@@ -287,6 +313,17 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom purrr map_dfc
 #' @importFrom stats setNames vcov coef quantile formula
+#'
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+#'       \code{ymax} (lower and upper confidence interval bounds)
+#'
+#' @export
 compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
   rowsplit <- function(df) split(df, 1:nrow(df))
 
@@ -349,12 +386,21 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
 
 #' Compute 95\% credible interval for hierarchical Bayesian model
 #'
+#' Return CrI for Seroprevalence and Force of Infection via parameters' posterior distributions.
+#'
 #' @param x serosv models
 #' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
-#' @return list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper credible interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), \code{ymin} and
+#'       \code{ymax} (lower and upper credible interval bounds)
 #' @export
 compute_ci.hierarchical_bayesian_model <- function(x, ...){
   out_x <- x$df$age
@@ -640,7 +686,10 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 #' @importFrom stats qnorm
 #' @importFrom dplyr mutate
 #'
-#' @return list of confidence interval for susceptible and infected. Each confidence interval is a list with 2 items for lower and upper bound of the interval.
+#' @return a data frames of seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#' @export
 compute_ci.estimate_from_mixture <- function(x, ci=.95, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
