@@ -507,15 +507,27 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
 # ========== Semi-parametric ==========
 #' Compute confidence interval for penalized_spline_model
 #'
+#' Computes CI for Seroprevalence from model standard errors, and (optionally)
+#' for Force of Infection via nonparametric bootstrap.
+#'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param foi_ci whether to compute CI for FoI (default to FALSE)
 #' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
 #'
-#' @return list of confidence interval for seroprevalence and foi Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+#'       \code{ymax} (lower and upper confidence interval bounds)
+#'
 #' @export
-compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
+compute_ci.penalized_spline_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -525,20 +537,20 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
   # handle different output for different frameworks
   if(x$framework == "pl"){
     link_inv <- x$info$family$linkinv
-    dataset <- x$info$model[,1:2]
+    dataset <- x$info$model
     n <- nrow(dataset) - length(x$info$coefficients)
     gam_obj <- x$info
   }else{
     link_inv <- x$info$gam$family$linkinv
-    dataset <- x$info$gam$model[,1:2]
+    dataset <- x$info$gam$model
     n <- nrow(dataset) - length(x$info$gam$coefficients)
     gam_obj <- x$info$gam
   }
 
-  ages <- dataset[2]
+  ages <- unique(x$df$age)
   # print(head(ages))
 
-  mod <- predict.gam(gam_obj, data.frame(a = ages), se.fit = TRUE)  %>%
+  mod <- predict.gam(gam_obj, data.frame(age = ages), se.fit = TRUE)  %>%
     as_tibble()  %>%
     select(fit, se.fit) %>%
     mutate(age = ages)  %>%
@@ -547,15 +559,39 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, ...){
            fit = m * link_inv(fit))  %>%
     select(- se.fit)
 
-  out.DF <- data.frame(x = dataset[[2]], y = mod$fit,
+  out.DF <- data.frame(x = ages, y = mod$fit,
                        ymin= mod$lwr, ymax = mod$upr)
-  foi_x <- sort(unique(ages[[1]]))
+
+  # print(ages)
+
+  foi_x <- sort(ages)
   foi_x <- foi_x[c(-1, -length(foi_x) )]
-  out.FOI <- data.frame(x = foi_x,
-                        y = est_foi(ages[[1]], mod$fit),
-                        ymin= est_foi(ages[[1]],mod$lwr),
-                        ymax = est_foi(ages[[1]],mod$upr)
-              )
+  out.FOI <- data.frame(x = foi_x, y = est_foi(ages, mod$fit))
+
+  out.FOI <- if(foi_ci){
+    message("Running nonparametric bootstrap for FoI confidence intervals, this may take a some time")
+
+    bootstrap_res <- nonparametric_bootstrapping(
+      mod = x, newdat = data.frame(age = ages),
+      refit_func = \(df){
+        do.call(
+          penalized_spline_model,
+          c(
+            list(
+              data = df,
+              framework = x$framework
+            ),
+            x$pars
+          )
+        )
+      },
+      ci=ci, ...
+    )
+
+    cbind(out.FOI, bootstrap_res)
+  }else{
+    out.FOI
+  }
 
   return(list(out.DF, out.FOI))
 }

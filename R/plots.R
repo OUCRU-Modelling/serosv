@@ -325,6 +325,7 @@ plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
 #'
 #' @param x the penalized_spline_model object
 #' @param cex adjust size of the datapoints.
+#' @param foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -332,8 +333,8 @@ plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
 #'
 #' @return ggplot object
 #' @export
-plot.penalized_spline_model <- function(x, cex=20, ...){
-  ci <- compute_ci.penalized_spline_model(x)
+plot.penalized_spline_model <- function(x, cex=20, foi_ci=FALSE, ...){
+  ci <- compute_ci.penalized_spline_model(x, foi_ci=foi_ci, ...)
 
   out.DF <- ci[[1]]
   out.FOI <- ci[[2]]
