@@ -83,7 +83,7 @@
 #' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
 #' columns for `age`, `status` (for linelisting data)
 #' @param s smoothing basis to use
-#' @param sp smoothing parameter
+#' @param sm_p smoothing parameter
 #' @param link link function to use
 #' @param framework which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)
 #' @param age_col name of the `age` column (default age_col="age").
@@ -101,6 +101,7 @@
 #'   \item{info}{fitted "gam" model when framework is pl or "gamm" model when framework is glmm}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{pars}{list of other model specifications for model fit}
 #'
 #' @seealso [mgcv::gam()], [mgcv::gamm()] for more information the fitted gam and gamm model
 #'
@@ -114,7 +115,7 @@
 #' plot(model)
 penalized_spline_model <- function(data,
                                    age_col="age",pos_col="pos", tot_col="tot", status_col="status",
-                                   s = "bs", link = "logit", framework = "pl", sp = NULL){
+                                   s = "bs", link = "logit", framework = "pl", sm_p = NULL){
   model <- list()
 
   data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
@@ -128,17 +129,17 @@ penalized_spline_model <- function(data,
 
   if (framework == "pl"){
     model$info <- if(data$type == "aggregated"){
-        mgcv::gam(cbind(pos, neg) ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+        mgcv::gam(cbind(pos, neg) ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
       }else{
-        mgcv::gam(pos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+        mgcv::gam(pos ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
       }
 
     model$sp <- model$info$fitted.values
   }else if(framework == "glmm"){
     model$info <- if(data$type == "aggregated"){
-        mgcv::gamm(cbind(pos, neg) ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+        mgcv::gamm(cbind(pos, neg) ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
       }else{
-        mgcv::gamm(pos ~ s(age, bs = s, sp=sp), family = binomial(link = link))
+        mgcv::gamm(pos ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
       }
 
     model$sp <- model$info$gam$fitted.values
@@ -150,6 +151,12 @@ penalized_spline_model <- function(data,
   model$df <- data.frame(age=age, pos = pos, tot = tot)
   model$foi <- est_foi(age, model$sp)
   model$framework <- framework
+  # other model specifications
+  model$pars <- list(
+    s = s,
+    link = link,
+    sm_p = sm_p
+  )
 
   class(model) <- "penalized_spline_model"
   model
