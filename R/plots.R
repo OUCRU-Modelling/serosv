@@ -270,6 +270,7 @@ plot.fp_model <- function(x, cex=20, foi_ci=FALSE,...) {
 #'
 #' @param x the local polynomial model object.
 #' @param cex adjust size of the datapoints.
+#' @param foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -277,8 +278,8 @@ plot.fp_model <- function(x, cex=20, foi_ci=FALSE,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.lp_model <- function(x, cex=20, ...) {
-  out_ci <- compute_ci.lp_model(x)
+plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ...) {
+  out_ci <- compute_ci.lp_model(x, foi_ci=foi_ci, ...)
   to_plot <- plot_data(x)
 
   # if(x$datatype == "linelisting"){

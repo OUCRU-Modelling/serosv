@@ -3,7 +3,6 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 }
 
 # ======= Quantify CI helper functions =======
-# TODO: General function for parametric bootstrapping
 #' @param foi_func a function that takes coefficents, newdat, and return estimated FOI
 #' @param newdat new age-range to generate FOI
 #' @param coef estimated coefficients
@@ -53,8 +52,8 @@ parametric_bootstrapping <- function(foi_func,
 #' @importFrom map map_dfr
 nonparametric_bootstrapping <- function(mod, refit_func,
                                         newdat,
-                                        nb=1000, ci=.95){
-  message("Running nonparametric bootstrap for FoI confidence intervals, this may take a some time")
+                                        nb=200, ci=.95){
+  message("Running nonparametric bootstrap for FoI confidence intervals, this may take a while")
   dat <- mod$df
 
   # dat is the data returned by ran.gen (i.e., resampled data)
@@ -495,12 +494,25 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 # =========== Nonparametric =============
 #' Compute confidence interval for local polynomial model
 #'
+#' Computes CI for Seroprevalence from model standard errors, and (optionally)
+#' for Force of Infection via nonparametric bootstrap.
+#'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param foi_ci whether to compute CI for FoI (default to FALSE)
 #' @param ... arbitrary arguments
-#' @return confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+#'
+#' @return a list of 2 data frames:
+#'   \itemize{
+#'     \item seroprevalence estimates with columns: \code{x} (age),
+#'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+#'       (lower and upper confidence interval bounds)
+#'     \item FoI estimates with columns: \code{x} (age), \code{y}
+#'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+#'       \code{ymax} (lower and upper confidence interval bounds)
+#'
 #' @export
-compute_ci.lp_model <- function(x,ci = 0.95, ...){
+compute_ci.lp_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
   ages <- x$df$age
   crit<- crit(x$info,cov = ci)$crit.val
   mod1 <- predict(x$info, data.frame(a = ages),
@@ -524,10 +536,27 @@ compute_ci.lp_model <- function(x,ci = 0.95, ...){
   out.FOI <- data.frame(
     x = foi_x,
     y = est_foi(ages, out.DF$y)
-    # TODO: check the validity here
-    # ymin = est_foi(ages, out.DF$ymin),
-    # ymax = est_foi(ages, out.DF$ymax)
   )
+
+  out.FOI <- if(foi_ci){
+    bootstrap_res <- nonparametric_bootstrapping(
+      mod = x, newdat = data.frame(age = ages),
+      refit_func = \(df){
+        do.call(
+          lp_model,
+          list(
+            data = df,
+            nn = x$nn, h = x$h, deg = x$deg, kern = x$kern
+          )
+        )
+      },
+      ci=ci, ...
+    )
+
+    cbind(out.FOI, bootstrap_res)
+  }else{
+    out.FOI
+  }
 
   list(out.DF, out.FOI)
 }

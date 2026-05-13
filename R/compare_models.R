@@ -123,7 +123,7 @@ cv <- function(dat, mod_func, k=4){
     out <- mod_func(fit_dat)
     curr_metric$type <- class(out)
     # generate prediction
-    pred <- predict(out, data.frame(age=test_dat[,1]), type="response")
+    pred <- predict(out, data.frame(age=test_dat[,1]))
 
     if(out$datatype == "aggregated"){
       # if data is aggregated
