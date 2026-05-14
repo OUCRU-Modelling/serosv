@@ -12,8 +12,8 @@
 \item{...}{arbitrary arguments}
 }
 \value{
-list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+
 }
 \description{
-Compute 95\% credible interval for hierarchical Bayesian model
+Return CrI for Seroprevalence and Force of Infection via parameters' posterior distributions.
 }

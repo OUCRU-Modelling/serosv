@@ -36,6 +36,7 @@ a list of class polynomial_model with 5 items
   \item{info}{fitted "glm" object}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{foi_mod}{function to compute FoI given a vector of age and estimated parameters}
 }
 \description{
 Fit age-stratified seroprevalence data to serocatalytic models formulated as polynomials.

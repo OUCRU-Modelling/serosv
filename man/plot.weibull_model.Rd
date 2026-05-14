@@ -4,10 +4,14 @@
 \alias{plot.weibull_model}
 \title{plot() overloading for Weibull model}
 \usage{
-\method{plot}{weibull_model}(x, ...)
+\method{plot}{weibull_model}(x, cex = 20, foi_ci = TRUE, ...)
 }
 \arguments{
 \item{x}{the Weibull model object.}
+
+\item{cex}{adjust size of the datapoints}
+
+\item{foi_ci}{whether to plot the CI of the Force of Infection}
 
 \item{...}{arbitrary params.}
 }

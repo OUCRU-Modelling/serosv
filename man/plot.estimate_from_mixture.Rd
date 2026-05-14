@@ -4,12 +4,14 @@
 \alias{plot.estimate_from_mixture}
 \title{plot() overloading for result of estimate_from_mixture}
 \usage{
-\method{plot}{estimate_from_mixture}(x, ...)
+\method{plot}{estimate_from_mixture}(x, cex = 20, ...)
 }
 \arguments{
 \item{x}{the mixture_model}
 
-\item{...}{arbitrary params.}
+\item{cex}{adjust size of the datapoints}
+
+\item{...}{arbitrary params}
 }
 \value{
 ggplot object

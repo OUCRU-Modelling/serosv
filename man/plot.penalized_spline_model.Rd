@@ -4,10 +4,14 @@
 \alias{plot.penalized_spline_model}
 \title{plot() overloading for penalized spline}
 \usage{
-\method{plot}{penalized_spline_model}(x, ...)
+\method{plot}{penalized_spline_model}(x, cex = 20, foi_ci = FALSE, ...)
 }
 \arguments{
 \item{x}{the penalized_spline_model object}
+
+\item{cex}{adjust size of the datapoints.}
+
+\item{foi_ci}{whether to plot the CI of the Force of Infection}
 
 \item{...}{arbitrary params.}
 }

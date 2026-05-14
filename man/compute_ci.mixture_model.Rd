@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{serosv mixture_model object}
 
-\item{ci}{confidence interval}
+\item{ci}{confidence level for the interval}
 
 \item{...}{arbitrary arguments}
 }

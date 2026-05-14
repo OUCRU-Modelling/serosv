@@ -4,10 +4,14 @@
 \alias{plot.lp_model}
 \title{plot() overloading for local polynomial model}
 \usage{
-\method{plot}{lp_model}(x, ...)
+\method{plot}{lp_model}(x, cex = 20, foi_ci = FALSE, ...)
 }
 \arguments{
 \item{x}{the local polynomial model object.}
+
+\item{cex}{adjust size of the datapoints.}
+
+\item{foi_ci}{whether to plot the CI of the Force of Infection}
 
 \item{...}{arbitrary params.}
 }

@@ -151,14 +151,6 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #' @return ggplot object
 #' @export
 plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
-  # out.DF <- compute_ci(x)
-  #
-  # if(x$datatype == "linelisting"){
-  #   # use pre-aggregated age for FOI
-  #   foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
-  # }else if (x$datatype == "aggregated"){
-  #   foi <- as.numeric(x$foi)
-  # }
 
   out_ci <- compute_ci.default(x, foi_ci=foi_ci)
 

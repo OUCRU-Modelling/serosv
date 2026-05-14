@@ -4,19 +4,20 @@
 \alias{plot.age_time_model}
 \title{Plot output for age_time_model}
 \usage{
-\method{plot}{age_time_model}(x, ...)
+\method{plot}{age_time_model}(x, cex = 10, le = 100, facet = TRUE, ...)
 }
 \arguments{
-\item{x}{- a `age_time_model` object}
+\item{x}{a `age_time_model` object}
 
-\item{...}{arbitrary params.
-Supported options include:
-  \itemize{
-    \item \code{facet}: Whether to facet the plot by group.
-    \item \code{modtype}: Which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}.
-    \item \code{le}: Number of bins used to generate the x-axis; higher values produce smoother curves.
-    \item \code{cex}: Adjusts the size of data points (only when \code{facet = TRUE}).
-  }}
+\item{cex}{adjust size of the datapoints (only when \code{facet = TRUE})}
+
+\item{le}{number of bins used to generate the x-axis; higher values produce smoother curves}
+
+\item{facet}{whether to facet the plot by group}
+
+\item{...}{arbitrary params}
+
+\item{modtype}{specify which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}}
 }
 \value{
 ggplot object

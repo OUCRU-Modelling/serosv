@@ -4,12 +4,16 @@
 \alias{plot.farrington_model}
 \title{plot() overloading for Farrington model}
 \usage{
-\method{plot}{farrington_model}(x, ...)
+\method{plot}{farrington_model}(x, cex = 20, foi_ci = TRUE, ...)
 }
 \arguments{
-\item{x}{the Farrington model object.}
+\item{x}{the Farrington model object}
 
-\item{...}{arbitrary params.}
+\item{cex}{adjust size of the datapoints}
+
+\item{foi_ci}{whether to plot the CI of the Force of Infection}
+
+\item{...}{arbitrary params}
 }
 \value{
 ggplot object

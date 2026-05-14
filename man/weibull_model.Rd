@@ -29,8 +29,9 @@ list of class weibull_model with the following items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
   \item{info}{fitted "glm" object}
-  \item{sp}{seroprevalence}
-  \item{foi}{force of infection}
+  \item{sp}{estimated seroprevalence}
+  \item{foi}{estimated force of infection}
+  \item{foi_mod}{function to generate FoI given age, and parameter values}
 }
 \description{
 Model seroprevalence as a function of duration since vaccination using the Weibull

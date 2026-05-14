@@ -4,10 +4,12 @@
 \alias{plot.hierarchical_bayesian_model}
 \title{plot() overloading for hierarchical_bayesian_model}
 \usage{
-\method{plot}{hierarchical_bayesian_model}(x, ...)
+\method{plot}{hierarchical_bayesian_model}(x, cex = 20, ...)
 }
 \arguments{
 \item{x}{hierarchical_bayesian_model object created by serosv.}
+
+\item{cex}{adjust size of the datapoints.}
 
 \item{...}{arbitrary params.}
 }

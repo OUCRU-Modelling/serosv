@@ -41,12 +41,14 @@ fp_model(
 \item{status_col}{name of the `status` column (default status_col="status").}
 }
 \value{
-a list of class fp_model with 5 items
+a list of class fp_model with 7 items
   \item{datatype}{type of data used for fitting model (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
   \item{info}{a fitted glm model}
+  \item{p}{powers used for the model}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{pars}{other model configurations}
 }
 \description{
 Fractional polynomial model is a generalization of polynomial models

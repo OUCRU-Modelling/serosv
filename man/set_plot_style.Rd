@@ -6,8 +6,9 @@
 \usage{
 set_plot_style(
   sero = "blueviolet",
-  ci = "royalblue1",
+  sero_ci = "royalblue1",
   foi = "#fc0328",
+  foi_ci = "#fc0328",
   sero_line = "solid",
   foi_line = "dashed",
   xlabel = "Age"
@@ -16,8 +17,6 @@ set_plot_style(
 \arguments{
 \item{sero}{color for seroprevalence line}
 
-\item{ci}{color for confidence interval}
-
 \item{foi}{color for force of infection line}
 
 \item{sero_line}{linetype for seroprevalence line}
@@ -25,6 +24,8 @@ set_plot_style(
 \item{foi_line}{linetype for force of infection line}
 
 \item{xlabel}{x label}
+
+\item{ci}{color for confidence interval}
 }
 \value{
 list of updated aesthetic values

@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{serosv models}
 
-\item{ci}{confidence interval}
+\item{ci}{confidence level for the interval}
 
 \item{le}{number of data for computing confidence interval}
 

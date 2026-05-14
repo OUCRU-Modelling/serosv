@@ -3,6 +3,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 }
 
 # ======= Quantify CI helper functions =======
+#' Parametric bootstrapping for serosv model
 #' @param foi_func a function that takes coefficents, newdat, and return estimated FOI
 #' @param newdat new age-range to generate FOI
 #' @param coef estimated coefficients
@@ -39,8 +40,9 @@ parametric_bootstrapping <- function(foi_func,
     cbind(newdat)
 }
 
-# TODO: General function for parametric delta method
+# TODO: Helper function for parametric delta method
 
+#' Nonparametric bootstrapping for serosv model
 #' @param mod fitted serosv model
 #' @param refit_func function to refit the model
 #' @param newdat new age-range for estimating FoI
@@ -49,7 +51,7 @@ parametric_bootstrapping <- function(foi_func,
 #'
 #' @importFrom boot boot boot.ci
 #' @importFrom stats setNames
-#' @importFrom map map_dfr
+#' @importFrom purrr map_dfr
 nonparametric_bootstrapping <- function(mod, refit_func,
                                         newdat,
                                         nb=200, ci=.95){
@@ -113,6 +115,7 @@ nonparametric_bootstrapping <- function(mod, refit_func,
     )
 }
 
+# ========= Default compute_ci function =========
 #' Compute confidence interval for a model of serosv
 #'
 #' Computes CI for Seroprevalence from model standard errors, and (optionally)
@@ -120,7 +123,7 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
-#' @param le number of data for computing confidence interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
 #'
@@ -135,9 +138,9 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
 #'       \code{ymax} (lower and upper confidence interval bounds)
-#'
+#'  }
 #' @export
-compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
+compute_ci.default <- function(x, ci = 0.95, le = 100, foi_ci=TRUE, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -148,6 +151,12 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
   n <- nrow(dataset) - length(x$info$coefficients)
   age_range <- range(dataset$age)
   ages <- seq(age_range[1], age_range[2], le = le)
+
+  ages <- if(is.null(le)){
+    sort(unique(dataset$age))
+  } else{
+    seq(age_range[1], age_range[2], le = le)
+  }
 
   # Quantify CI of seroprevalence estimate
   mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
@@ -180,8 +189,6 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
   list(out.DF, out.FOI)
 }
 
-
-
 # ======= Parametric model ===========
 #' Compute confidence interval for fractional polynomial model
 #'
@@ -190,8 +197,8 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param foi_ci whether to compute CI for FoI
-#' @param le number of data for computing confidence interval
 #' @param ... arbitrary argument
 #'
 #' @import dplyr
@@ -203,7 +210,7 @@ compute_ci.default <- function(x, foi_ci=TRUE, ci = 0.95, le = 100, ...){
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
 #'       \code{ymax} (lower and upper confidence interval bounds)
-#'
+#'  }
 #' @export
 compute_ci.fp_model <- function(x, ci = 0.95, le = 100, foi_ci=FALSE, ...){
   # resolve no visible binding issue with CRAN check
@@ -215,7 +222,11 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, foi_ci=FALSE, ...){
   dataset <- data.frame(x$df)
   n <- nrow(dataset) - length(x$info$coefficients)
   age_range <- range(dataset$age)
-  ages <- seq(age_range[1], age_range[2], le = le)
+  ages <- if(is.null(le)){
+    sort(unique(dataset$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
 
   # Quantify CI of seroprevalence estimation
   mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
@@ -270,6 +281,7 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, foi_ci=FALSE, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param foi_ci whether to compute CI for FoI
 #' @param ... arbitrary argument
 #'
@@ -283,8 +295,9 @@ compute_ci.fp_model <- function(x, ci = 0.95, le = 100, foi_ci=FALSE, ...){
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
 #'       \code{ymax} (lower and upper confidence interval bounds)
+#'  }
 #' @export
-compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
+compute_ci.weibull_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -293,17 +306,24 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
   link_inv <- x$info$family$linkinv
   dataset <- data.frame(x$df)
   n <- nrow(dataset) - length(x$info$coefficients)
+  age_range <- range(dataset$age)
+  ages <- if(is.null(le)){
+    sort(unique(dataset$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
 
-  mod1 <- predict.glm(x$info,data.frame(t = dataset$age), se.fit = TRUE)
+
+  mod1 <- predict.glm(x$info,data.frame(t = ages), se.fit = TRUE)
   n1 <- mod1 %>% as_tibble() %>%
     select(fit, se.fit) %>%
-    mutate(t = dataset$age) %>%
+    mutate(t = ages) %>%
     mutate(lwr = link_inv(fit + qt(    p, n) * se.fit),
            upr = link_inv(fit + qt(1 - p, n) * se.fit),
            fit = link_inv(fit)) %>%
     select(-se.fit)
 
-  out.DF <- data.frame(x = dataset$age, y = n1$fit,
+  out.DF <- data.frame(x = ages, y = n1$fit,
                        ymin= n1$lwr, ymax= n1$upr)
 
   # estimate FOI CI if specified
@@ -313,7 +333,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
       foi_func = \(newdat, coef){
         x$foi_mod(newdat$x, coef[1], coef[2])
       },
-      newdat = data.frame(x = dataset$age),
+      newdat = data.frame(x = ages),
       coef = coef(x$info), vcov = vcov(x$info),
       alpha = p
     )
@@ -334,8 +354,9 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
-#' @param nb number of samples for parametric bootstrapping
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param foi_ci whether to compute CI for FoI
+#' @param nb number of samples for parametric bootstrapping
 #' @param ... arbitrary argument
 #'
 #' @importFrom mvtnorm rmvnorm
@@ -350,13 +371,19 @@ compute_ci.weibull_model <- function(x, ci = 0.95, foi_ci=TRUE, ...){
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
 #'       \code{ymax} (lower and upper confidence interval bounds)
-#'
+#'  }
 #' @export
-compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
+compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=9999, ...){
   rowsplit <- function(df) split(df, 1:nrow(df))
 
   mod <- x$info
-  age <- unique(x$df$age)
+  age_range <- range(x$df$age)
+
+  ages <- if(is.null(le)){
+    sort(unique(x$df$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
 
   alpha <- (1-ci)/2
 
@@ -369,7 +396,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
     as.data.frame() %>%
     rowsplit() %>%
     map(as.list) %>%
-    map(~ c(.x, data.frame(age = age)))
+    map(~ c(.x, data.frame(age = ages)))
 
   # ----- Estimate CI for seroprevalence
   out.DF <- sampling_out %>%
@@ -379,10 +406,10 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
     setNames(c("ymin", "ymax")) %>%
     cbind(
       data.frame(
-        x = age,
+        x = ages,
         # use the estimated parameter to compute estimated seroprev
         y = do.call(x$sp_mod, c(
-          list(age=age),
+          list(age=ages),
           mod@coef
         ))
       )
@@ -390,10 +417,10 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
 
   # ----- Estimate CI for FOI
   out.FOI <- data.frame(
-    x = age,
+    x = ages,
     # use the estimated parameter to compute estimated FOI
     y = do.call(x$foi_mod, c(
-      list(age=age),
+      list(age=ages),
       mod@coef
     ))
   )
@@ -429,6 +456,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, nb=9999, foi_ci=TRUE,...){
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), \code{ymin} and
 #'       \code{ymax} (lower and upper credible interval bounds)
+#'  }
 #' @export
 compute_ci.hierarchical_bayesian_model <- function(x, ...){
   out_x <- x$df$age
@@ -499,6 +527,7 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param foi_ci whether to compute CI for FoI (default to FALSE)
 #' @param ... arbitrary arguments
 #'
@@ -510,10 +539,16 @@ compute_ci.hierarchical_bayesian_model <- function(x, ...){
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
 #'       \code{ymax} (lower and upper confidence interval bounds)
-#'
+#'  }
 #' @export
-compute_ci.lp_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
-  ages <- x$df$age
+compute_ci.lp_model <- function(x,ci = 0.95,le=100, foi_ci=FALSE, ...){
+  age_range <- range(x$df$age)
+  ages <- if(is.null(le)){
+    sort(unique(x$df$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
+
   crit<- crit(x$info,cov = ci)$crit.val
   mod1 <- predict(x$info, data.frame(a = ages),
                   se.fit = TRUE, band="local",
@@ -569,6 +604,7 @@ compute_ci.lp_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param foi_ci whether to compute CI for FoI (default to FALSE)
 #' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
@@ -582,9 +618,9 @@ compute_ci.lp_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
 #'     \item FoI estimates with columns: \code{x} (age), \code{y}
 #'       (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
 #'       \code{ymax} (lower and upper confidence interval bounds)
-#'
+#'  }
 #' @export
-compute_ci.penalized_spline_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
+compute_ci.penalized_spline_model <- function(x,ci = 0.95, le=100, foi_ci=FALSE, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -604,8 +640,12 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, foi_ci=FALSE, ...){
     gam_obj <- x$info$gam
   }
 
-  ages <- unique(x$df$age)
-  # print(head(ages))
+  age_range <- range(x$df$age)
+  ages <- if(is.null(le)){
+    sort(unique(x$df$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
 
   mod <- predict.gam(gam_obj, data.frame(age = ages), se.fit = TRUE)  %>%
     as_tibble()  %>%
@@ -773,6 +813,7 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 #'
 #' @param x serosv mixture_model object
 #' @param ci confidence level for the interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param ... arbitrary arguments
 #' @importFrom stats qnorm
 #' @importFrom dplyr mutate
@@ -781,7 +822,7 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 #'       \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
 #'       (lower and upper confidence interval bounds)
 #' @export
-compute_ci.estimate_from_mixture <- function(x, ci=.95, ...){
+compute_ci.estimate_from_mixture <- function(x, ci=.95, le=100, ...){
   # resolve no visible binding issue with CRAN check
   fit <- se.fit <- NULL
 
@@ -791,7 +832,13 @@ compute_ci.estimate_from_mixture <- function(x, ci=.95, ...){
   link_inv <- x$info$family$linkinv
   dataset <- x$info$model[,1:2]
   n <- nrow(dataset) - length(x$info$coefficients)
-  ages <- sort(unique(x$df$age))
+  age_range <- range(x$df$age)
+  ages <- if(is.null(le)){
+    sort(unique(x$df$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
+
   mu_s <- x$mu_s
   mu_i <- x$mu_i
 

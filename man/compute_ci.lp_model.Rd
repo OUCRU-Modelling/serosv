@@ -4,18 +4,23 @@
 \alias{compute_ci.lp_model}
 \title{Compute confidence interval for local polynomial model}
 \usage{
-\method{compute_ci}{lp_model}(x, ci = 0.95, ...)
+\method{compute_ci}{lp_model}(x, ci = 0.95, le = 100, foi_ci = FALSE, ...)
 }
 \arguments{
 \item{x}{serosv models}
 
-\item{ci}{confidence interval}
+\item{ci}{confidence level for the interval}
+
+\item{le}{length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL}
+
+\item{foi_ci}{whether to compute CI for FoI (default to FALSE)}
 
 \item{...}{arbitrary arguments}
 }
 \value{
-confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+
 }
 \description{
-Compute confidence interval for local polynomial model
+Computes CI for Seroprevalence from model standard errors, and (optionally)
+for Force of Infection via nonparametric bootstrap.
 }

@@ -13,7 +13,7 @@ penalized_spline_model(
   s = "bs",
   link = "logit",
   framework = "pl",
-  sp = NULL
+  sm_p = NULL
 )
 }
 \arguments{
@@ -34,7 +34,7 @@ columns for `age`, `status` (for linelisting data)}
 
 \item{framework}{which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)}
 
-\item{sp}{smoothing parameter}
+\item{sm_p}{smoothing parameter}
 }
 \value{
 a list of class penalized_spline_model with 6 attributes
@@ -44,6 +44,7 @@ a list of class penalized_spline_model with 6 attributes
   \item{info}{fitted "gam" model when framework is pl or "gamm" model when framework is glmm}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{pars}{list of other model specifications for model fit}
 }
 \description{
 Fit age-specific seroprevalence to a semi-parametric model where
