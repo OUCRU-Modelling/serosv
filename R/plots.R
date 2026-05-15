@@ -151,8 +151,16 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #' @return ggplot object
 #' @export
 plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
+  # out.DF <- compute_ci(x)
+  #
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI
+  #   foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- as.numeric(x$foi)
+  # }
 
-  out_ci <- compute_ci.default(x, foi_ci=foi_ci)
+  out_ci <- compute_ci.default(x, foi_ci=foi_ci, ...)
 
   to_plot <- plot_data(x)
 
@@ -182,7 +190,7 @@ plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ...) {
   to_plot <- plot_data(x)
 
-  ci_out <- compute_ci.farrington_model(x, foi_ci = foi_ci)
+  ci_out <- compute_ci.farrington_model(x, foi_ci = foi_ci, ...)
 
   with(x$df, {
     plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = ci_out[[1]], foi = ci_out[[2]], cex = cex)
@@ -206,7 +214,7 @@ plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
 
-  out_ci <- compute_ci.weibull_model(x, foi_ci = foi_ci)
+  out_ci <- compute_ci.weibull_model(x, foi_ci = foi_ci, ...)
 
   to_plot <- plot_data(x)
 
@@ -306,7 +314,7 @@ plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ...) {
 #' @return ggplot object
 #' @export
 plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
-  out_ci <- compute_ci.hierarchical_bayesian_model(x)
+  out_ci <- compute_ci.hierarchical_bayesian_model(x, ...)
 
   with(x$df, {
     plot_util(age = age, pos = pos, tot = tot, sero = out_ci[[1]], foi = out_ci[[2]], cex=cex)
@@ -434,7 +442,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
                  shape = 1, show.legend = FALSE)
   }
 
-  ci <- compute_ci.estimate_from_mixture(x)
+  ci <- compute_ci.estimate_from_mixture(x, ...)
 
   # resolve no visible binding note
   foi <- foi_x <- NULL

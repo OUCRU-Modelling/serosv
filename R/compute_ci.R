@@ -177,7 +177,8 @@ compute_ci.default <- function(x, ci = 0.95, le = 100, foi_ci=TRUE, ...){
       },
       newdat = data.frame(x = ages),
       coef = coef(x$info), vcov = vcov(x$info),
-      alpha = p
+      alpha = p,
+      ...
     )
   }else{
     data.frame(
@@ -335,7 +336,8 @@ compute_ci.weibull_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, ...){
       },
       newdat = data.frame(x = ages),
       coef = coef(x$info), vcov = vcov(x$info),
-      alpha = p
+      alpha = p,
+      ...
     )
   }else{
     data.frame(
@@ -550,7 +552,7 @@ compute_ci.lp_model <- function(x,ci = 0.95,le=100, foi_ci=FALSE, ...){
   }
 
   crit<- crit(x$info,cov = ci)$crit.val
-  mod1 <- predict(x$info, data.frame(a = ages),
+  mod1 <- predict(x$info, data.frame(age = ages),
                   se.fit = TRUE, band="local",
                   what="coef")
 
