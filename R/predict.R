@@ -15,7 +15,8 @@
 #' [stats::predict.glm()] for more information on the predict function
 #' @export
 predict.polynomial_model <- function(object, newdata=NULL, ...){
-  predict.glm(object$info, newdata, ...)
+  # return seroprevalence
+  1 - predict.glm(object$info, newdata, type="response", ...)
 }
 
 #' Prediction for serosv fractional polynomial model
@@ -30,8 +31,8 @@ predict.polynomial_model <- function(object, newdata=NULL, ...){
 #' [stats::predict.glm()] for more information on the predict function
 #' @export
 predict.fp_model <- function(object, newdata=NULL, ...){
-
-  predict.glm(object$info,newdata=newdata, ...)
+  # return seroprevalence
+  predict.glm(object$info,newdata=newdata, type="response", ...)
 }
 
 #' Prediction for serosv Weibull model
@@ -46,7 +47,7 @@ predict.fp_model <- function(object, newdata=NULL, ...){
 #' [stats::predict.glm()] for more information on the predict function
 #' @export
 predict.weibull_model <- function(object, newdata=NULL, ...){
-  predict.glm(object$info,data.frame("log(t)" = newdata$`log(t)`), ...)
+  predict.glm(object$info,data.frame("age" = newdata$age),type="response", ...)
 }
 
 
@@ -59,7 +60,7 @@ predict.weibull_model <- function(object, newdata=NULL, ...){
 #' @return prediction output
 #' @export
 predict.lp_model <- function(object, newdata=NULL,...){
-  predict(object$info, data.frame(age = newdata[[1]]), ...)
+  predict(object$info, data.frame(age = newdata$age), type="response", ...)
 }
 
 
@@ -83,7 +84,7 @@ predict.penalized_spline_model <- function(object, newdata=NULL,...){
     gam_obj <- object$info$gam
   }
 
-  predict.gam(gam_obj, newdata, ...)
+  predict.gam(gam_obj, newdata, type="response", ...)
 }
 
 #' Prediction for serosv Farrington model
@@ -99,10 +100,11 @@ predict.farrington_model <- function(object, newdata=NULL,...){
   beta  <- object$info@coef[2]
   gamma <- object$info@coef[3]
 
-  1-exp(
-    (alpha/beta)*newdata[[1]]*exp(-beta*newdata[[1]])
-    +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*newdata[[1]])-1)
-    -gamma*newdata[[1]])
+  # 1-exp(
+  #   (alpha/beta)*newdata[[1]]*exp(-beta*newdata[[1]])
+  #   +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*newdata[[1]])-1)
+  #   -gamma*newdata[[1]])
+  object$sp_mod(newdata[[1]], alpha, beta, gamma)
 }
 
 #' Predict from an hierarchical bayesian model
