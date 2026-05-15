@@ -1,18 +1,19 @@
 #' The Weibull model.
 #'
-#' @description Model seroprevalence as a function of duration since vaccination using the Weibull
-#' model, where the force of infection is assumed to vary monotonically with duration.
+#' @description Model seroprevalence as a function of age using the Weibull
+#' model, where the force of infection is assumed to vary monotonically with age.
 #'
 #' @details
 #' For a Weibull model, the prevalence is given by
 #' \deqn{
-#'  \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}}
+#'  \pi (a) = 1 - e^{ - \beta_0 a ^ {\beta_1}}
 #' }
-#' Where \eqn{d} is exposure time (difference between age of vaccination and age at test)
+#' Where \eqn{a} is the age, which may refer to biological age or a
+#' time scale of interest (e.g., time since vaccination).
 #'
 #' Which implies the force of infection to be the monotonic function
 #' \deqn{
-#'  \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1}
+#'  \lambda(a) = \beta_0 \beta_1 a^{\beta_1 - 1}
 #' }
 #'
 #' Refer to section 6.1.2. of the the book by Hens et al. (2012) for further details.
@@ -24,9 +25,9 @@
 #' tatistics for Biology and Health. Springer New York.
 #' \doi{https://doi.org/10.1007/978-1-4614-4072-7}.
 #'
-#' @param data the input data frame, must either have columns for `t`, `pos`, `tot` (for aggregated data) OR
-#'  `t`, `status` (for linelisting data)
-#' @param t_lab name of the `t` column (default t_lab="t").
+#' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+#'  `age`, `status` (for linelisting data)
+#' @param age_col name of the `age` column (default age_col="age").
 #' @param pos_col name of the `pos` column (default pos_col="pos").
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
@@ -35,9 +36,7 @@
 #'
 #' @examples
 #' df <- hcv_be_2006[order(hcv_be_2006$dur), ]
-#' df$t <- df$dur
-#' df$status <- df$seropositive
-#' model <- weibull_model(df, t_lab="dur", status_col="seropositive")
+#' model <- weibull_model(df, age_col="dur", status_col="seropositive")
 #' plot(model)
 #'
 #' @return list of class weibull_model with the following items
@@ -52,20 +51,20 @@
 #'
 #' @export
 weibull_model <- function(data,
-                          t_lab="t",pos_col="pos", tot_col="tot", status_col="status")
+                          age_col="age",pos_col="pos", tot_col="tot", status_col="status")
 {
   model <- list()
 
   # check input whether it is line-listing or aggregated data
-  data <- check_input(data, stratum_col = t_lab, pos_col=pos_col, tot_col=tot_col, status_col=status_col)
-  t <- data$age
+  data <- check_input(data, stratum_col = age_col, pos_col=pos_col, tot_col=tot_col, status_col=status_col)
+  age <- data$age
   pos <- data$pos
   tot <- data$tot
   model$datatype <- data$type
 
   spos <- pos/tot
   model$info <- glm(
-    spos~log(t),
+    spos~log(age),
     family=binomial(link="cloglog")
     )
   b0 <- coef(model$info)[1]
@@ -73,8 +72,8 @@ weibull_model <- function(data,
 
   model$sp <- model$info$fitted.values
   model$foi_mod <- function(age, b0, b1){ exp(b0)*b1*exp(log(age))^(b1-1) }
-  model$foi <- model$foi_mod(t, b0, b1)
-  model$df <- data.frame(age=t, pos=pos, tot=tot)
+  model$foi <- model$foi_mod(age, b0, b1)
+  model$df <- data.frame(age=age, pos=pos, tot=tot)
 
   class(model) <- "weibull_model"
   model
