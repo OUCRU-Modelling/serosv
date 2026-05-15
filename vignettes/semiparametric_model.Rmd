@@ -136,7 +136,7 @@ pl
 ```
 
 ```{r, fig.width=7, fig.height=4}
-plot(pl)
+plot(pl, foi_ci=FALSE)
 ```
 
 ------------------------------------------------------------------------
@@ -173,5 +173,5 @@ glmm
 ```
 
 ```{r, fig.width=7, fig.height=4}
-plot(glmm)
+plot(glmm, foi_ci=TRUE)
 ```

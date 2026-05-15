@@ -315,7 +315,7 @@ compute_ci.weibull_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, ...){
   }
 
 
-  mod1 <- predict.glm(x$info,data.frame(t = ages), se.fit = TRUE)
+  mod1 <- predict.glm(x$info,data.frame(age = ages), se.fit = TRUE)
   n1 <- mod1 %>% as_tibble() %>%
     select(fit, se.fit) %>%
     mutate(t = ages) %>%
