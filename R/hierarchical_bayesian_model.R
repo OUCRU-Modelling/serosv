@@ -120,14 +120,14 @@ hierarchical_bayesian_model <- function(data,
     stop('Model is not defined. Please choose "far3", "far2" or "log_logistic"')
   }
 
-  model$info <- summary(fit)$summary
+  model$info <- fit
 
   theta <- list()
 
   if (type == "far3"){
-    alpha1 <- model$info["alpha1",c("mean")]
-    alpha2 <- model$info["alpha2",c("mean")]
-    alpha3 <- model$info["alpha3",c("mean")]
+    alpha1 <- summary(model$info)$summary["alpha1",c("mean")]
+    alpha2 <- summary(model$info)$summary["alpha2",c("mean")]
+    alpha3 <- summary(model$info)$summary["alpha3",c("mean")]
 
     theta$sp_func <- \(age, alpha1, alpha2, alpha3){
       1 - exp((alpha1/alpha2)*age*exp(-alpha2*age)+
@@ -145,8 +145,8 @@ hierarchical_bayesian_model <- function(data,
   }
 
   if (type == "far2"){
-    alpha1 <- model$info["alpha1",c("mean")]
-    alpha2 <- model$info["alpha2",c("mean")]
+    alpha1 <- summary(model$info)$summary["alpha1",c("mean")]
+    alpha2 <- summary(model$info)$summary["alpha2",c("mean")]
 
     theta$sp_func <- \(age, alpha1, alpha2){
       1-exp((alpha1 / alpha2) * age * exp(-alpha2 * age) +
@@ -162,8 +162,8 @@ hierarchical_bayesian_model <- function(data,
   }
 
   if (type == "log_logistic"){
-    alpha1 <- model$info["alpha1",c("mean")]
-    alpha2 <- model$info["alpha2",c("mean")]
+    alpha1 <- summary(model$info)$summary["alpha1",c("mean")]
+    alpha2 <- summary(model$info)$summary["alpha2",c("mean")]
 
     theta$sp_func <- \(age, alpha1, alpha2){
       inv.logit(alpha2+alpha1*log(age))
