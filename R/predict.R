@@ -121,17 +121,17 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
   out.DF <- NULL
 
   if (object$type == "far3"){
-    alpha1 <- object$info["alpha1", "50%"]
-    alpha2 <- object$info["alpha2", "50%"]
-    alpha3 <- object$info["alpha3", "50%"]
+    alpha1 <- summary(object$info)$summary["alpha1", "50%"]
+    alpha2 <- summary(object$info)$summary["alpha2", "50%"]
+    alpha3 <- summary(object$info)$summary["alpha3", "50%"]
 
     out.DF <- data.frame(
       x = out_x,
       y = object$sp_func(out_x, alpha1, alpha2, alpha3),
     )
   }else if(object$type == "far2"){
-    alpha1 <- object$info["alpha1", "50%"]
-    alpha2 <- object$info["alpha2", "50%"]
+    alpha1 <- summary(object$info)$summary["alpha1", "50%"]
+    alpha2 <- summary(object$info)$summary["alpha2", "50%"]
 
     out.DF <- data.frame(
       x = out_x,
@@ -139,8 +139,8 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
     )
 
   }else if(object$type == "log_logistic"){
-    alpha1 <- object$info["alpha1", "50%"]
-    alpha2 <- object$info["alpha2", "50%"]
+    alpha1 <- summary(object$info)$summary["alpha1", "50%"]
+    alpha2 <- summary(object$info)$summary["alpha2", "50%"]
 
     out.DF <- data.frame(
       x = out_x,

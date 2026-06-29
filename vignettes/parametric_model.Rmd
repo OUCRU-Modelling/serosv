@@ -293,7 +293,7 @@ model <- hierarchical_bayesian_model(df, type="far3")
 
 ```{r}
 model
-plot(model, foi_ci=TRUE)
+plot(model)
 ```
 
 ## Log-logistic
