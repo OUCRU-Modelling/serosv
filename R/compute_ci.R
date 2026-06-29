@@ -446,9 +446,11 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
 #' Return CrI for Seroprevalence and Force of Infection via parameters' posterior distributions.
 #'
 #' @param x serosv models
+#' @param ci confidence level for the interval
 #' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr
+#' @importFrom purrr map map_dbl map2
 #'
 #' @return a list of 2 data frames:
 #'   \itemize{
@@ -460,60 +462,149 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
 #'       \code{ymax} (lower and upper credible interval bounds)
 #'  }
 #' @export
-compute_ci.hierarchical_bayesian_model <- function(x, ...){
-  out_x <- x$df$age
+compute_ci.hierarchical_bayesian_model <- function(x, ci=0.95,le=100, ...){
+  # set up
+  age_range <- range(x$df$age)
+  out_x <- if(is.null(le)){
+    sort(unique(x$df$age))
+  }else{
+    seq(age_range[1], age_range[2], le = le)
+  }
   out.DF <- NULL
   out.FOI <- NULL
 
+  alpha <- (1-ci)/2
+
+  # get the samples for the posterior
+  posterior_samples <- as.data.frame(x$info)
+  # get the model for sero,foi
+  sp_func <- x$sp_func
+  foi_func <- x$foi_func
+
+  # compute sero, foi and get the quantile
   if (x$type == "far3"){
-    alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
-    alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
-    alpha3 <- x$info["alpha3",c("2.5%","50%", "97.5%")]
-
     out.DF <- data.frame(
-      x = out_x,
-      ymin = x$sp_func(out_x, alpha1[1], alpha2[1], alpha3[1]),
-      y = x$sp_func(out_x, alpha1[2], alpha2[2], alpha3[2]),
-      ymax = x$sp_func(out_x, alpha1[3], alpha2[3], alpha3[3])
-    )
+        x = out_x
+      ) |>
+      mutate(
+        sero_estimates = map(x, \(curr_age){
+          sp_func(curr_age,
+                        posterior_samples$alpha1,
+                        posterior_samples$alpha2,
+                        posterior_samples$alpha3)
+        }),
+        y = map_dbl(sero_estimates, \(.){
+          quantile(.,.5)
+        }),
+        ymin = map_dbl(sero_estimates, \(.){
+          quantile(.,alpha)
+        }),
+        ymax = map_dbl(sero_estimates, \(.){
+          quantile(.,1-alpha)
+        })
+      )
     out.FOI <- data.frame(
-      x = out_x,
-      ymin = x$foi_func(out_x, alpha1[1], alpha2[1], alpha3[1]),
-      y = x$foi_func(out_x, alpha1[2], alpha2[2], alpha3[2]),
-      ymax = x$foi_func(out_x, alpha1[3], alpha2[3], alpha3[3])
-    )
+          x = out_x
+        ) |>
+      mutate(
+        foi_estimates = map(x, \(curr_age){
+          foi_func(curr_age,
+                    posterior_samples$alpha1,
+                    posterior_samples$alpha2,
+                    posterior_samples$alpha3)
+        }),
+        y = map_dbl(foi_estimates, \(.){
+          quantile(.,.5)
+        }),
+        ymin = map_dbl(foi_estimates, \(.){
+          quantile(.,alpha)
+        }),
+        ymax = map_dbl(foi_estimates, \(.){
+          quantile(.,1-alpha)
+        })
+      )
   }else if(x$type == "far2"){
-    alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
-    alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
-
     out.DF <- data.frame(
-      x = out_x,
-      ymin = x$sp_func(out_x, alpha1[1], alpha2[1]),
-      y = x$sp_func(out_x, alpha1[2], alpha2[2]),
-      ymax = x$sp_func(out_x, alpha1[3], alpha2[3])
-    )
+      x = out_x
+    ) |>
+      mutate(
+        sero_estimates = map(x, \(curr_age){
+          sp_func(curr_age,
+                    posterior_samples$alpha1,
+                    posterior_samples$alpha2)
+        }),
+        y = map_dbl(sero_estimates, \(.){
+          quantile(.,.5)
+        }),
+        ymin = map_dbl(sero_estimates, \(.){
+          quantile(.,alpha)
+        }),
+        ymax = map_dbl(sero_estimates, \(.){
+          quantile(.,1-alpha)
+        })
+      )
     out.FOI <- data.frame(
-      x = out_x,
-      ymin = x$foi_func(out_x, alpha1[1], alpha2[1]),
-      y = x$foi_func(out_x, alpha1[2], alpha2[2]),
-      ymax = x$foi_func(out_x, alpha1[3], alpha2[3])
-    )
+      x = out_x
+    ) |>
+      mutate(
+        foi_estimates = map(x, \(curr_age){
+          foi_func(curr_age,
+                     posterior_samples$alpha1,
+                     posterior_samples$alpha2)
+        }),
+        y = map_dbl(foi_estimates, \(.){
+          quantile(.,.5)
+        }),
+        ymin = map_dbl(foi_estimates, \(.){
+          quantile(.,alpha)
+        }),
+        ymax = map_dbl(foi_estimates, \(.){
+          quantile(.,1-alpha)
+        })
+      )
   }else if(x$type == "log_logistic"){
-    alpha1 <- x$info["alpha1",c("2.5%","50%", "97.5%")]
-    alpha2 <- x$info["alpha2",c("2.5%","50%", "97.5%")]
+    sp_foi_estims <- data.frame(
+      x = out_x
+    ) |>
+      mutate(
+        sero_estimates = map(x, \(curr_age){
+          sp_func(curr_age,
+                    posterior_samples$alpha1,
+                    posterior_samples$alpha2,
+                    posterior_samples$alpha3)
+        }),
+        foi_estimates = map2(x, sero_estimates, \(curr_age, sero){
+          foi_func(curr_age, sero,
+                     posterior_samples$alpha1, posterior_samples$alpha2)
+        })
+      )
 
-    out.DF <- data.frame(
-      x = out_x,
-      ymin = x$sp_func(out_x, alpha1[1], alpha2[1]),
-      y = x$sp_func(out_x, alpha1[2], alpha2[2]),
-      ymax = x$sp_func(out_x, alpha1[3], alpha2[3])
-    )
-    out.FOI <- data.frame(
-      x = out_x,
-      ymin = x$foi_func(out_x, out.DF$ymin, alpha1[1], alpha2[1]),
-      y = x$foi_func(out_x, out.DF$y, alpha1[2], alpha2[2]),
-      ymax = x$foi_func(out_x, out.DF$ymax, alpha1[3], alpha2[3])
-    )
+    out.DF <- sp_foi_estims |>
+      select(x, sero_estimates) |>
+      mutate(
+        y = map_dbl(sero_estimates, \(.){
+          quantile(.,.5)
+        }),
+        ymin = map_dbl(sero_estimates, \(.){
+          quantile(.,alpha)
+        }),
+        ymax = map_dbl(sero_estimates, \(.){
+          quantile(.,1-alpha)
+        })
+      )
+    out.FOI <- sp_foi_estims |>
+      select(x, foi_estimates) |>
+      mutate(
+        y = map_dbl(foi_estimates, \(.){
+          quantile(.,.5)
+        }),
+        ymin = map_dbl(foi_estimates, \(.){
+          quantile(.,alpha)
+        }),
+        ymax = map_dbl(foi_estimates, \(.){
+          quantile(.,1-alpha)
+        })
+      )
   }else{
     warning('Expect model type to be one of the following: "far3", "far2", "log_logistic"')
   }

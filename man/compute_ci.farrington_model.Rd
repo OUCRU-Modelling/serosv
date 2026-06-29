@@ -20,7 +20,15 @@
 \item{...}{arbitrary argument}
 }
 \value{
-
+a list of 2 data frames:
+  \itemize{
+    \item seroprevalence estimates with columns: \code{x} (age),
+      \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+      (lower and upper confidence interval bounds)
+    \item FoI estimates with columns: \code{x} (age), \code{y}
+      (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+      \code{ymax} (lower and upper confidence interval bounds)
+ }
 }
 \description{
 Computes CI for Seroprevalence and (optionally)

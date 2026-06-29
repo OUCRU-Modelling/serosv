@@ -12,7 +12,15 @@
 \item{...}{arbitrary arguments}
 }
 \value{
-
+a list of 2 data frames:
+  \itemize{
+    \item seroprevalence estimates with columns: \code{x} (age),
+      \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+      (lower and upper credible interval bounds)
+    \item FoI estimates with columns: \code{x} (age), \code{y}
+      (fitted FoI), \code{ymin} and
+      \code{ymax} (lower and upper credible interval bounds)
+ }
 }
 \description{
 Return CrI for Seroprevalence and Force of Infection via parameters' posterior distributions.
