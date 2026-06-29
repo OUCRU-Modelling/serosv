@@ -58,7 +58,7 @@ $$
 \eta = \textbf{X}\beta + \textbf{Zu}
 $$
 
-Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $\textbf{u} = [u_1 u_2 ... u_k]^T$ are the regression with corresponding design matrices
+Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $\textbf{u} = [u_1 u_2 ... u_k]^T$ are the regression coefficients with corresponding design matrices
 
 $$
 \textbf{X} = \begin{bmatrix}

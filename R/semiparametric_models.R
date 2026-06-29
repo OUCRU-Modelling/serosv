@@ -33,7 +33,7 @@
 #' \deqn{\eta = \textbf{X}\beta + \textbf{Zu}}{}
 #'
 #' Where \eqn{\eta = [\eta(a_i) \cdots \eta(a_N) ]^T}{}, \eqn{\beta = [\beta_0 \beta_1 \cdots \beta_p]^T}{},
-#' and \eqn{\textbf{u} = [u_1 u_2 \cdots u_k]^T}{} are the regression with corresponding design matrices
+#' and \eqn{\textbf{u} = [u_1 u_2 \cdots u_k]^T}{} are the regression coefficients with corresponding design matrices
 #'
 #' \deqn{
 #' \textbf{X} = \begin{bmatrix}
