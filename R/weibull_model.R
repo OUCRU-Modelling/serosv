@@ -27,10 +27,11 @@
 #'
 #' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
 #'  `age`, `status` (for linelisting data)
-#' @param age_col name of the `age` column (default age_col="age").
-#' @param pos_col name of the `pos` column (default pos_col="pos").
-#' @param tot_col name of the `tot` column (default tot_col="tot").
-#' @param status_col name of the `status` column (default status_col="status").
+#' @param age_col name of the `age` column (default age_col="age")
+#' @param pos_col name of the `pos` column (default pos_col="pos")
+#' @param tot_col name of the `tot` column (default tot_col="tot")
+#' @param status_col name of the `status` column (default status_col="status")
+#' @param ... additional arguments to be passed to `glm()` function that fits the model
 #'
 #' @importFrom stats coef
 #'
@@ -51,7 +52,8 @@
 #'
 #' @export
 weibull_model <- function(data,
-                          age_col="age",pos_col="pos", tot_col="tot", status_col="status")
+                          age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                          ...)
 {
   model <- list()
 
@@ -65,8 +67,9 @@ weibull_model <- function(data,
   spos <- pos/tot
   model$info <- glm(
     spos~log(age),
-    family=binomial(link="cloglog")
-    )
+    family=binomial(link="cloglog"),
+    ...
+  )
   b0 <- coef(model$info)[1]
   b1 <- coef(model$info)[2]
 
