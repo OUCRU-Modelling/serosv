@@ -29,7 +29,8 @@
 age_time_model <- function(data,
                            age_col="age", status_col="status", pos_col="pos", tot_col="tot",
                            time_col="date", grouping_col="group",
-                           age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
+                           age_correct=F, le=512, ci = 0.95, monotonize_method = "pava",
+                           ...){
   # work around to resolve no visible binding note NOTE during check()
   x <- label <- family <- fit <- se.fit <- mod <-  ymin <- ymax <- y <- mean_time <- prevalence <- sim_data <- NULL
   age <- ys <- shift_no <- cohort <- col_time <- monotonized_mod <- df <- info <- sp <- monotonized_info <- monotonized_sp <- NULL

@@ -40,7 +40,7 @@ formulate <- function(p) {
 #' @import dplyr tidyr
 #' @importFrom purrr pmap_dfr
 find_best_fp_powers <- function(data,
-                                p, mc, degree, link="logit"){
+                                p, mc, degree, link="logit", ...){
   age <- data$age
   pos <- data$pos
   tot <- data$tot
@@ -61,12 +61,14 @@ find_best_fp_powers <- function(data,
 
     # fit model with all the combinations of p and degree
     mods <- p_combis %>%
-      pmap_dfr(\(...){
-        curr_p <- as.numeric(c(...))
+      split(seq_len(nrow(.))) %>% # split into rows
+      map_dfr(\(combis){
+        curr_p <- as.numeric(c(combis))
 
         curr_mod <- glm(
           as.formula(formulate(curr_p)),
-          family=binomial(link=link)
+          family=binomial(link=link),
+          ...
         )
 
         # only accept the parameters if the model converged
@@ -156,6 +158,7 @@ find_best_fp_powers <- function(data,
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
 #' @param monotonic whether the returned model should be monotonic (if a search is specified)
+#' @param ... additional arguments to be passed to `glm()` function that fits the model
 #'
 #' @importFrom stats predict as.formula
 #'
@@ -181,7 +184,8 @@ find_best_fp_powers <- function(data,
 #'
 #' @export
 fp_model <- function(data,p,monotonic=FALSE,link="logit",
-                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                     ...) {
   model <- list()
 
   data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
@@ -194,13 +198,15 @@ fp_model <- function(data,p,monotonic=FALSE,link="logit",
   if(is.numeric(p)){
     model$info <- glm(
       as.formula(formulate(p)),
-      family=binomial(link=link)
+      family=binomial(link=link),
+      ...
     )
     model$p <- p
   }else if(is.list(p) && all(c("p_range", "degree") %in% names(p))){
     out <- find_best_fp_powers(
       data = data.frame(age=age, pos=pos, tot=tot),
-      p = p$p_range, degree = p$degree, mc = monotonic, link = link
+      p = p$p_range, degree = p$degree, mc = monotonic, link = link,
+      ...
     )
     model$p <- out$p
     model$info <- out$model

@@ -38,6 +38,7 @@
 #' @param pos_col name of the `pos` column (default pos_col="pos").
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
+#' @param ... additional arguments to be passed to `mle()` function that fits the model
 #'
 #' @return a list of class farrington_model with 5 items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
@@ -59,7 +60,8 @@
 #'
 #' @export
 farrington_model <- function(data, start, fixed=list(),
-                             age_col="age",pos_col="pos", tot_col="tot", status_col="status")
+                             age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                             ...)
 {
   model <- list()
 

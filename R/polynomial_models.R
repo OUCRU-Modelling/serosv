@@ -55,12 +55,13 @@ X <- function(t, degree) {
 #' 25–38. \doi{https://doi.org/10.1080/01621459.1934.10502684}.
 #'
 #' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
-#' @param k  degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model).
-#' @param link link function (default link="log").
-#' @param age_col name of the `age` column (default age_col="age").
-#' @param pos_col name of the `pos` column (default pos_col="pos").
-#' @param tot_col name of the `tot` column (default tot_col="tot").
-#' @param status_col name of the `status` column (default status_col="status").
+#' @param k  degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model)
+#' @param link link function (default link="log")
+#' @param age_col name of the `age` column (default age_col="age")
+#' @param pos_col name of the `pos` column (default pos_col="pos")
+#' @param tot_col name of the `tot` column (default tot_col="tot")
+#' @param status_col name of the `status` column (default status_col="status")
+#' @param ... additional arguments to be passed to `glm()` function that fits the model
 #'
 #' @examples
 #' data <- parvob19_fi_1997_1998[order(parvob19_fi_1997_1998$age), ]
@@ -84,7 +85,8 @@ X <- function(t, degree) {
 #'
 #' @export
 polynomial_model <- function(data, k, link = "log",
-                             age_col="age",pos_col="pos", tot_col="tot", status_col="status"){
+                             age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                             ...){
   model <- list()
   data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
   model$datatype <- data$type
@@ -107,7 +109,17 @@ polynomial_model <- function(data, k, link = "log",
       }
     }
 
-    glm(Age(k), family=binomial(link=link),df)
+
+    tryCatch(
+      mod <- glm(Age(k), family=binomial(link=link),df, ...),
+      warning = function(w){
+        warning(sprintf("glm warning for degree k=%d: %s", k, conditionMessage(w)), call. = FALSE)
+        suppressWarnings(glm(Age(k), family = binomial(link = link), data = df))
+      },
+      error = function(e){
+        warning(sprintf("glm failed for degree k=%d: %s", k, conditionMessage(e)), call. = FALSE)
+      }
+    )
   }
 
   # If a vector of values for k is provided -> select best value
@@ -145,18 +157,31 @@ polynomial_model <- function(data, k, link = "log",
 # par_range - list of parameters and its possible values
 # model_fn - function to fit and return a model, must takes 2 arguments: par, df
 #' @import tidyr
-#' @importFrom purrr pmap
+#' @importFrom purrr pmap keep
 #' @importFrom stats anova
 nested_mod_selection <- function(par_range, model_fn, dat, method="LRT"){
   # work around to resolve no visible binding note NOTE during check()
   `Pr(>Chi)` <- Deviance <- idx <- NULL
+
+  # conditions for model to be usable
+  is_usable_model <- function(mod){
+    if (is.null(mod)) return(FALSE)
+    if (!mod$converged) return(FALSE)
+    dev <- tryCatch(deviance(mod), error = function(e) NA)
+    if (is.na(dev) || is.infinite(dev)) return(FALSE)
+    TRUE
+  }
 
   # generate all combinations of parameters values
   par_combs <- tidyr::crossing(!!!par_range)
 
   # fit the model using specified parameter values
   mods_out <- par_combs %>%
-    purrr::pmap(\(...){model_fn(..., df=dat)})
+    purrr::pmap(\(...){
+      model_fn(..., df=dat)
+    })
+
+  mods_out <- purrr::keep(mods_out, is_usable_model)
   # perform LRT
   lrt_out <- do.call(
     anova,

@@ -58,6 +58,7 @@
 #' @param pos_col name of the `pos` column (default pos_col="pos").
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
+#' @param ... additional arguments to be passed to `locfit()` function that fits the model
 #'
 #' @examples
 #' df <- mumps_uk_1986_1987
@@ -82,7 +83,8 @@
 #'
 #' @export
 lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
-                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                     ...) {
   if (all(nn==0) & all(h==0))  {
     # default nn from lp()
     nn <- 0.7
@@ -107,7 +109,8 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
       nn = nn,
       h = h,
       family="binomial",
-      kern=kern
+      kern=kern,
+      ...
     )
 
     nn <- best_param$nn
@@ -117,12 +120,12 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   # print(paste0("nn: ", nn))
   # print(paste0("h: ", h))
 
-  model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern)
+  model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, ...)
   model$nn <- nn
   model$h <- h
   model$deg <- deg
   model$kern <- kern
-  model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1)
+  model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1, ...)
   model$sp  <- fitted(model$info)
   model$foi <- fitted(model$eta)*fitted(model$info) # λ(a)=η′(a)π(a)
   model$df  <- data.frame(age=age, pos=pos, tot=tot)
@@ -136,7 +139,7 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
 # h - range of values for constant bandwidth
 # if both nn and h are given, select either best nn or h, whichever gives the lowest GCV
 #' @import tidyr dplyr locfit
-best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial"){
+best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial", ...){
   # helper function to get df and GCV
   summary.gcvplot <- function(object, ...){
     z <- cbind(object$df, object$values)
@@ -162,7 +165,8 @@ best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial"
       kern = kern,
       family = family,
       alpha = alpha,
-      data=data
+      data=data,
+      ...
     )
 
     gcv_out <- cbind(par_vals, gcv_out$values)
