@@ -82,16 +82,16 @@ farrington_model <- function(data, start, fixed=list(),
 
   farrington <- function(alpha,beta,gamma) {
     p <- seroprev_mod(age, alpha, beta, gamma)
-    # ll=pos*log(p)+(tot-pos)*log(1-p)
-    # compute loglikelihood with dbinom instead
+    p <- pmin(pmax(p, 1e-4), 1 - 1e-4)   # keep strictly inside (0,1)
+    # compute loglikelihood with dbinom
     ll <- dbinom(pos, size = tot, prob = p, log = TRUE)
-    return(-sum(ll))
+    return(-sum(ll, na.rm = TRUE))
   }
 
-  model$info <- mle(farrington, fixed=fixed, start=start)
-  alpha <- model$info@coef[1]
-  beta  <- model$info@coef[2]
-  gamma <- model$info@coef[3]
+  model$info <- mle(farrington, fixed=fixed, start=start, ...)
+  alpha <- model$info@fullcoef[1]
+  beta  <- model$info@fullcoef[2]
+  gamma <- model$info@fullcoef[3]
   # functions to estimate seroprev and foi given age and parameters
   model$sp_mod <- seroprev_mod
   model$foi_mod <- function(age, alpha, beta, gamma){

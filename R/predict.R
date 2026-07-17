@@ -96,9 +96,9 @@ predict.penalized_spline_model <- function(object, newdata=NULL,...){
 #' @return prediction output
 #' @export
 predict.farrington_model <- function(object, newdata=NULL,...){
-  alpha <- object$info@coef[1]
-  beta  <- object$info@coef[2]
-  gamma <- object$info@coef[3]
+  alpha <- object$info@fullcoef[1]
+  beta  <- object$info@fullcoef[2]
+  gamma <- object$info@fullcoef[3]
 
   # 1-exp(
   #   (alpha/beta)*newdata[[1]]*exp(-beta*newdata[[1]])

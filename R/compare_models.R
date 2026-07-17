@@ -110,7 +110,7 @@ cv <- function(dat, mod_func, k=4){
   type <- NULL
 
   # assign each row of data to each fold
-  idx_fold <- sort(rep(1:k, length.out=nrow(dat)))
+  idx_fold <- sample(rep(1:k, length.out=nrow(dat)))
 
   metrics <- lapply(1:k, \(fold){
     curr_metric <- list()
