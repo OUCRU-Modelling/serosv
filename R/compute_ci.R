@@ -14,6 +14,7 @@ compute_ci <- function(x, ci = 0.95, le = 100, ...){
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom stats quantile setNames
 #' @importFrom purrr map_dfc
+#' @keywords internal
 parametric_bootstrapping <- function(foi_func,
                                      newdat,
                                      coef, vcov,
@@ -52,6 +53,7 @@ parametric_bootstrapping <- function(foi_func,
 #' @importFrom boot boot boot.ci
 #' @importFrom stats setNames
 #' @importFrom purrr map_dfr
+#' @keywords internal
 nonparametric_bootstrapping <- function(mod, refit_func,
                                         newdat,
                                         nb=200, ci=.95){
@@ -376,18 +378,21 @@ compute_ci.weibull_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, ...){
 #'  }
 #' @export
 compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=9999, ...){
+  # set up
   rowsplit <- function(df) split(df, 1:nrow(df))
-
   mod <- x$info
   age_range <- range(x$df$age)
-
   ages <- if(is.null(le)){
     sort(unique(x$df$age))
   }else{
     seq(age_range[1], age_range[2], le = le)
   }
-
   alpha <- (1-ci)/2
+
+  # handle cases where some parameters are fixed
+  fixed_pars <- setdiff(names(mod@fullcoef), names(mod@coef))
+  fixed_vals  <- as.list(mod@fullcoef[fixed_pars])
+
 
   # CIs for seroprevalence and FoI are quantified using parametric bootstrapping
   sampling_out <-  rmvnorm(
@@ -398,7 +403,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
     as.data.frame() %>%
     rowsplit() %>%
     map(as.list) %>%
-    map(~ c(.x, data.frame(age = ages)))
+    map(~ c(.x, fixed_vals, data.frame(age = ages)))
 
   # ----- Estimate CI for seroprevalence
   out.DF <- sampling_out %>%
@@ -412,7 +417,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
         # use the estimated parameter to compute estimated seroprev
         y = do.call(x$sp_mod, c(
           list(age=ages),
-          mod@coef
+          mod@fullcoef
         ))
       )
     )
@@ -423,7 +428,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
     # use the estimated parameter to compute estimated FOI
     y = do.call(x$foi_mod, c(
       list(age=ages),
-      mod@coef
+      mod@fullcoef
     ))
   )
   # compute CI if specified
@@ -570,8 +575,7 @@ compute_ci.hierarchical_bayesian_model <- function(x, ci=0.95,le=100, ...){
         sero_estimates = map(x, \(curr_age){
           sp_func(curr_age,
                     posterior_samples$alpha1,
-                    posterior_samples$alpha2,
-                    posterior_samples$alpha3)
+                    posterior_samples$alpha2)
         }),
         foi_estimates = map2(x, sero_estimates, \(curr_age, sero){
           foi_func(curr_age, sero,

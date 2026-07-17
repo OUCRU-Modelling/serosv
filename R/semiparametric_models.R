@@ -90,6 +90,7 @@
 #' @param pos_col name of the `pos` column (default pos_col="pos").
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
+#' @param ... additional arguments to be passed to `gam()` or `gamm()` function that fits the model.
 #'
 #' @importFrom mgcv gam gamm
 #' @importFrom stats binomial
@@ -115,7 +116,8 @@
 #' plot(model)
 penalized_spline_model <- function(data,
                                    age_col="age",pos_col="pos", tot_col="tot", status_col="status",
-                                   s = "bs", link = "logit", framework = "pl", sm_p = NULL){
+                                   s = "bs", link = "logit", framework = "pl", sm_p = NULL,
+                                   ...){
   model <- list()
 
   data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
@@ -129,17 +131,17 @@ penalized_spline_model <- function(data,
 
   if (framework == "pl"){
     model$info <- if(data$type == "aggregated"){
-        mgcv::gam(cbind(pos, neg) ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
+        mgcv::gam(cbind(pos, neg) ~ s(age, bs = s, sp=sm_p), family = binomial(link = link), ...)
       }else{
-        mgcv::gam(pos ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
+        mgcv::gam(pos ~ s(age, bs = s, sp=sm_p), family = binomial(link = link), ...)
       }
 
     model$sp <- model$info$fitted.values
   }else if(framework == "glmm"){
     model$info <- if(data$type == "aggregated"){
-        mgcv::gamm(cbind(pos, neg) ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
+        mgcv::gamm(cbind(pos, neg) ~ s(age, bs = s, sp=sm_p), family = binomial(link = link), ...)
       }else{
-        mgcv::gamm(pos ~ s(age, bs = s, sp=sm_p), family = binomial(link = link))
+        mgcv::gamm(pos ~ s(age, bs = s, sp=sm_p), family = binomial(link = link), ...)
       }
 
     model$sp <- model$info$gam$fitted.values
