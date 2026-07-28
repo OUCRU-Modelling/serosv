@@ -11,32 +11,36 @@ polynomial_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
 \item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)}
 
-\item{k}{degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model).}
+\item{k}{degree of the polynomial. (k=1 for Muench model, k=2 for Griffith model, k=3 for Grenfell model)}
 
-\item{link}{link function (default link="log").}
+\item{link}{link function (default link="log")}
 
-\item{age_col}{name of the `age` column (default age_col="age").}
+\item{age_col}{name of the `age` column (default age_col="age")}
 
-\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+\item{pos_col}{name of the `pos` column (default pos_col="pos")}
 
-\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+\item{tot_col}{name of the `tot` column (default tot_col="tot")}
 
-\item{status_col}{name of the `status` column (default status_col="status").}
+\item{status_col}{name of the `status` column (default status_col="status")}
+
+\item{...}{additional arguments to be passed to `glm()` function that fits the model}
 }
 \value{
-a list of class polynomial_model with 5 items
+a list of class polynomial_model with the following items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
   \item{info}{fitted "glm" object}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
   \item{foi_mod}{function to compute FoI given a vector of age and estimated parameters}
+  \item{k}{degree of the fitted model}
 }
 \description{
 Fit age-stratified seroprevalence data to serocatalytic models formulated as polynomials.

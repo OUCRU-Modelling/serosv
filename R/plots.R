@@ -1,7 +1,8 @@
 #' Helper to adjust styling of a plot
 #'
 #' @param sero color for seroprevalence line
-#' @param ci color for confidence interval
+#' @param sero_ci color for confidence intervals of seroprevalence
+#' @param foi_ci color for confidence intervals of FoI
 #' @param foi color for force of infection line
 #' @param sero_line linetype for seroprevalence line
 #' @param foi_line linetype for force of infection line
@@ -435,7 +436,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
       )
     )
     # resolve no visible binding note
-    age <- pos <- tot <- NULL
+    pos <- tot <- NULL
 
     returned_plot <-  returned_plot +
       geom_point(aes( x = age, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
@@ -451,9 +452,14 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
       aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
                 fill = "sero CI"),
       data=ci, stat="identity",lwd=0.5) +
-    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)
+    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi) +
+    coord_cartesian(xlim=c(0,max(age)), ylim=c(0, 1)) +
+    scale_y_continuous(
+      name = "Seroprevalence",
+      sec.axis = sec_axis(~.*1, name = " Force of infection") # apply no scaling for now
+    )
 
-  returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")
+  returned_plot + set_plot_style() + labs(x = "Age")
 }
 
 # ------- Plot age time varying seroprevalence ----------

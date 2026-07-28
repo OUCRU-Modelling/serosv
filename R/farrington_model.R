@@ -46,6 +46,8 @@
 #'   \item{info}{fitted "mle" object}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{sp_mod}{model for seroprevalence as a function}
+#'   \item{foi_mod}{model for FoI as a function}
 #' @seealso [stats4::mle()] for more information on the fitted mle object
 #'
 #' @examples

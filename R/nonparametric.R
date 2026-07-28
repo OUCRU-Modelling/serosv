@@ -72,13 +72,17 @@
 #' @importFrom graphics par
 #' @importFrom stats fitted
 #'
-#' @return a list of class lp_model with 6 items
+#' @return a list of class lp_model with the following items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
-#'   \item{pi}{fitted locfit object for pi}
-#'   \item{eta}{fitted locfit object for eta}
+#'   \item{info}{fitted locfit object for prevalence}
+#'   \item{eta}{fitted locfit object to estimate the derivative for predictor eta, used for FoI computation}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{nn}{nearest neighbor parameter used by the fitted model}
+#'   \item{h}{constant bandwidth parameter used by the fitted model}
+#'   \item{deg}{degree of the local polynomial}
+#'   \item{kern}{kernel used by the fitted model}
 #' @seealso [locfit::locfit()] for more information on the fitted locfit object
 #'
 #' @export
@@ -127,6 +131,10 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   model$kern <- kern
   model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1, ...)
   model$sp  <- fitted(model$info)
+  # note that:
+  # fitted(model$eta) would return derivative on predictor scale
+  # fitted(model$eta) would return response scale
+  # the formulation λ(a)=η′(a)π(a) is for logit link case
   model$foi <- fitted(model$eta)*fitted(model$info) # λ(a)=η′(a)π(a)
   model$df  <- data.frame(age=age, pos=pos, tot=tot)
 

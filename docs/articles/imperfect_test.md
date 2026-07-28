@@ -2,8 +2,17 @@
 
 ``` r
 library(serosv)
-#> Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when
-#> loading 'serosv'
+library(tidyverse)
+#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+#> ✔ dplyr     1.2.1     ✔ readr     2.2.0
+#> ✔ forcats   1.0.1     ✔ stringr   1.6.0
+#> ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+#> ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+#> ✔ purrr     1.2.2     
+#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
+#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 ```
 
 ## Imperfect test
@@ -85,9 +94,9 @@ output <- correct_prevalence(data, warmup = 1000, iter = 4000, init_se=0.9, init
 #> Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)
 #> Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 2.057 seconds (Warm-up)
-#> Chain 1:                4.107 seconds (Sampling)
-#> Chain 1:                6.164 seconds (Total)
+#> Chain 1:  Elapsed Time: 2.034 seconds (Warm-up)
+#> Chain 1:                4.043 seconds (Sampling)
+#> Chain 1:                6.077 seconds (Total)
 #> Chain 1:
 
 # check fitted value 
@@ -153,13 +162,11 @@ Bayesian approach
 ``` r
 suppressWarnings(
   corrected_data <- farrington_model(
-  output$corrected_se,
+  output$corrected_se |> mutate(pos = round(pos)),
   start=list(alpha=0.07,beta=0.1,gamma=0.03))
 )
 
 plot(corrected_data)
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's fill values.
 ```
 
 ![](imperfect_test_files/figure-html/unnamed-chunk-5-1.png)
@@ -169,13 +176,13 @@ Frequentist approach
 ``` r
 suppressWarnings(
   corrected_data <- farrington_model(
-  freq_output$corrected_se,
+  freq_output$corrected_se |> mutate(pos = round(pos)) ,
   start=list(alpha=0.07,beta=0.1,gamma=0.03))
 )
 
 plot(corrected_data)
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's fill values.
+#> Warning in rmvnorm(nb, mean = mod@coef, sigma = mod@vcov): sigma is numerically
+#> not positive semidefinite
 ```
 
 ![](imperfect_test_files/figure-html/unnamed-chunk-6-1.png)
@@ -189,8 +196,6 @@ suppressWarnings(
   start=list(alpha=0.07,beta=0.1,gamma=0.03))
 )
 plot(original_data)
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's fill values.
 ```
 
 ![](imperfect_test_files/figure-html/unnamed-chunk-7-1.png)

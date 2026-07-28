@@ -75,13 +75,14 @@ X <- function(t, degree) {
 #'     k = 1)
 #' plot(model)
 #'
-#' @return a list of class polynomial_model with 5 items
+#' @return a list of class polynomial_model with the following items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
 #'   \item{info}{fitted "glm" object}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
 #'   \item{foi_mod}{function to compute FoI given a vector of age and estimated parameters}
+#'   \item{k}{degree of the fitted model}
 #'
 #' @export
 polynomial_model <- function(data, k, link = "log",

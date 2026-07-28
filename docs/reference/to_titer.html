@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Convert assay readings to titers — to_titer"><meta name="description" content="to_titer() converts raw assay readings (e.g., OD, fluorescence intensity) to titer by
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Convert assay readings to titers — to_titer"><meta name="description" content="to_titer() converts raw assay readings (e.g., OD, fluorescence intensity) to titer by
 fitting a calibrating model"><meta property="og:description" content="to_titer() converts raw assay readings (e.g., OD, fluorescence intensity) to titer by
 fitting a calibrating model"><meta property="og:image" content="https://oucru-modelling.github.io/serosv/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -15,7 +15,7 @@ fitting a calibrating model"><meta property="og:image" content="https://oucru-mo
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,7 @@ fitting a calibrating model</p>
 <span>  model <span class="op">=</span> <span class="st">"4PL"</span>,</span>
 <span>  positive_threshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  ref_conc <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  negative_control <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -93,6 +94,10 @@ fitting a calibrating model</p>
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>confidence interval for the titer estimates (default is .95 i.e., 95% CI)</p></dd>
+
+
+<dt id="arg-ref-conc">ref_conc<a class="anchor" aria-label="anchor" href="#arg-ref-conc"></a></dt>
+<dd><p>reference concentration of the antitoxin (i.e. concentration of antitoxin before dilution)</p></dd>
 
 
 <dt id="arg-negative-control">negative_control<a class="anchor" aria-label="anchor" href="#arg-negative-control"></a></dt>
@@ -134,7 +139,7 @@ fitting a calibrating model</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

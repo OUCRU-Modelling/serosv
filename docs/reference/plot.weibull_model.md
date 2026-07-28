@@ -6,7 +6,7 @@ plot() overloading for Weibull model
 
 ``` r
 # S3 method for class 'weibull_model'
-plot(x, ...)
+plot(x, cex = 20, foi_ci = TRUE, ...)
 ```
 
 ## Arguments
@@ -14,6 +14,14 @@ plot(x, ...)
 - x:
 
   the Weibull model object.
+
+- cex:
+
+  adjust size of the datapoints
+
+- foi_ci:
+
+  whether to plot the CI of the Force of Infection
 
 - ...:
 

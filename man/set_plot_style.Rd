@@ -17,15 +17,17 @@ set_plot_style(
 \arguments{
 \item{sero}{color for seroprevalence line}
 
+\item{sero_ci}{color for confidence intervals of seroprevalence}
+
 \item{foi}{color for force of infection line}
+
+\item{foi_ci}{color for confidence intervals of FoI}
 
 \item{sero_line}{linetype for seroprevalence line}
 
 \item{foi_line}{linetype for force of infection line}
 
 \item{xlabel}{x label}
-
-\item{ci}{color for confidence interval}
 }
 \value{
 list of updated aesthetic values

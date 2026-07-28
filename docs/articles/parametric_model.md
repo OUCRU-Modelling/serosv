@@ -75,7 +75,7 @@ summary(muench$info)
 #> AIC: 1368.9
 #> 
 #> Number of Fisher Scoring iterations: 6
-plot(muench) 
+plot(muench, foi_ci=FALSE) # specify whether to plot CI of FOI via foi_ci
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-3-1.png)
@@ -87,7 +87,7 @@ determined by Loglikelihood Ratio test (LRT)
 ``` r
 # Provide a range of values for k
 best_param <- polynomial_model(data, k = 1:5, status_col = "seropositive")
-plot(best_param)
+plot(best_param, foi_ci = TRUE)
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-4-1.png)
@@ -160,7 +160,8 @@ model
 #> Degrees of Freedom: 85 Total (i.e. Null);  83 Residual
 #> Null Deviance:       1320 
 #> Residual Deviance: 85.81     AIC: 365.4
-plot(model)
+plot(model, foi_ci=TRUE)
+#> Running nonparametric bootstrap for FoI confidence intervals, this may take a while
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-5-1.png)
@@ -179,7 +180,8 @@ model <- fp_model(hav,
                   ), 
                   monotonic=FALSE,
                   link="cloglog")
-plot(model)
+plot(model, foi_ci=TRUE)
+#> Running nonparametric bootstrap for FoI confidence intervals, this may take a while
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-6-1.png)
@@ -216,7 +218,8 @@ model <- fp_model(hav,
                   ), 
                   monotonic=TRUE,
                   link="cloglog")
-plot(model)
+plot(model, foi_ci=TRUE)
+#> Running nonparametric bootstrap for FoI confidence intervals, this may take a while
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-7-1.png)
@@ -290,7 +293,7 @@ farrington_md
 #> Coefficients:
 #>      alpha       beta      gamma 
 #> 0.07034904 0.20243950 0.03665599
-plot(farrington_md)
+plot(farrington_md, foi_ci=TRUE)
 ```
 
 ![](parametric_model_files/figure-html/unnamed-chunk-8-1.png)
@@ -301,20 +304,20 @@ plot(farrington_md)
 
 For a Weibull model, the prevalence is given by
 
-\\ \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}} \\
+\\ \pi (a) = 1 - e^{ - \beta_0 a ^ {\beta_1}} \\
 
-Where \\d\\ is exposure time (difference between age of injection and
-age at test)
+Where \\a\\ is the age, which may refer to biological age or a time
+scale of interest (e.g., time since vaccination).
 
 The model was reformulated as a GLM model with log - log link and linear
-predictor using log(d)
+predictor using \\log(a)\\
 
-\\\eta(d) = log(\beta_0) + \beta_1 log(d)\\
+\\\eta(a) = log(\beta_0) + \beta_1 log(a)\\
 
 Thus implies that the force of infection is a monotone function of the
-exposure time as followed
+age as followed
 
-\\ \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1} \\
+\\ \lambda(a) = \beta_0 \beta_1 a^{\beta_1 - 1} \\
 
 Refer to `Chapter 6.1.2` of the book by Hens et al.
 ([2012](#ref-Hens2012)) for a more detailed explanation of the methods.
@@ -328,17 +331,17 @@ to fit a Weibull model.
 ``` r
 hcv <- hcv_be_2006[order(hcv_be_2006$dur), ]
 
-wb_md <- hcv %>% weibull_model(t_lab = "dur", status_col="seropositive")
+wb_md <- hcv %>% weibull_model(age_col = "dur", status_col="seropositive")
 wb_md
 #> Weibull model 
 #> 
 #> Input type:  linelisting 
 #> b0=-0.276, b1=0.3807 
 #> 
-#> Call:  glm(formula = spos ~ log(t), family = binomial(link = "cloglog"))
+#> Call:  glm(formula = spos ~ log(age), family = binomial(link = "cloglog"))
 #> 
 #> Coefficients:
-#> (Intercept)       log(t)  
+#> (Intercept)     log(age)  
 #>     -0.2760       0.3807  
 #> 
 #> Degrees of Freedom: 420 Total (i.e. Null);  419 Residual
@@ -431,9 +434,15 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Rejecting initial value:
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
+#> Chain 1: Rejecting initial value:
+#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+#> Chain 1:   Stan can't start sampling from this initial value.
+#> Chain 1: Rejecting initial value:
+#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
+#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000165 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.65 seconds.
+#> Chain 1: Gradient evaluation took 0.000114 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.14 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -450,9 +459,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 17.494 seconds (Warm-up)
-#> Chain 1:                100.35 seconds (Sampling)
-#> Chain 1:                117.844 seconds (Total)
+#> Chain 1:  Elapsed Time: 16.021 seconds (Warm-up)
+#> Chain 1:                5.657 seconds (Sampling)
+#> Chain 1:                21.678 seconds (Total)
 #> Chain 1:
 ```
 
@@ -464,9 +473,9 @@ model
 #> Model:  Farrington model with 3 parameters 
 #> 
 #> Fitted parameters:
-#>  alpha1 = 0.1397 (95% CrI [0.129, 0.1521], sd = 0.005927)
-#>  alpha2 = 0.199 (95% CrI [0.1848, 0.2181], sd = 0.008454)
-#>  alpha3 = 0.009017 (95% CrI [0.000252, 0.02798], sd = 0.007503)
+#>  alpha1 = 0.1401 (95% CrI [0.1298, 0.1491], sd = 0.004496)
+#>  alpha2 = 0.204 (95% CrI [0.186, 0.2139], sd = 0.009942)
+#>  alpha3 = 0.01322 (95% CrI [0.0003391, 0.02911], sd = 0.008794)
 plot(model)
 ```
 
@@ -518,8 +527,8 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> 
 #> SAMPLING FOR MODEL 'log_logistic' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 6.5e-05 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.65 seconds.
+#> Chain 1: Gradient evaluation took 5.1e-05 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.51 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -536,9 +545,9 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 4.337 seconds (Warm-up)
-#> Chain 1:                6.096 seconds (Sampling)
-#> Chain 1:                10.433 seconds (Total)
+#> Chain 1:  Elapsed Time: 4.47 seconds (Warm-up)
+#> Chain 1:                2.443 seconds (Sampling)
+#> Chain 1:                6.913 seconds (Total)
 #> Chain 1:
 ```
 
@@ -550,8 +559,8 @@ model
 #> Model:  Log-logistic model 
 #> 
 #> Fitted parameters:
-#>  alpha1 = 1.642 (95% CrI [1.539, 1.749], sd = 0.05377)
-#>  alpha2 = -2.958 (95% CrI [-3.223, -2.722], sd = 0.1275)
+#>  alpha1 = 1.633 (95% CrI [1.551, 1.743], sd = 0.0475)
+#>  alpha2 = -2.944 (95% CrI [-3.198, -2.753], sd = 0.1082)
 plot(model)
 ```
 

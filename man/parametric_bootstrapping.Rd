@@ -29,3 +29,4 @@ parametric_bootstrapping(
 \description{
 Parametric bootstrapping for serosv model
 }
+\keyword{internal}

@@ -30,6 +30,8 @@ The function takes the following arguments:
 
 -   `method` the method to generate comparison metrics. It can be the name of one of the built-in methods, or a user-defined function.
 
+-   `method_args` the list of additional arguments for method function.
+
 -   `…` functions that take a data and return a fitted `serosv` model.
 
 It will then return a `data.frame` with the following columns
@@ -46,7 +48,7 @@ It will then return a `data.frame` with the following columns
 
 -   `"AIC/BIC"` which returns fitted model's AIC, BIC and Log-likelihood (where applicable)
 
--   `"CV"` which split the data into "train" and "test" set then return logloss and AUC from model's prediction on the test set
+-   `"CV"` which split the data into "train" and "test" set then return logloss and AUC from model's prediction on the test set. Number of folds can be configured via `k` argument (see **Sample usage** below).
 
 **Sample usage**
 
@@ -57,7 +59,9 @@ aic_bic_out <- compare_models(
   method = "AIC/BIC",
   griffith = ~polynomial_model(.x, k=2),
   penalized_spline = penalized_spline_model,
-  farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+  farrington = ~farrington_model(.x, 
+                                 start=list(beta=0.12,gamma=0.05),
+                                 fixed=list(alpha=0.1)),
   local_polynomial = lp_model # expect to not return any values
   ) %>% suppressWarnings()
 
@@ -67,8 +71,13 @@ cv_out <- compare_models(
     method = "CV",
     griffith = ~polynomial_model(.x, k=2),
     penalized_spline = penalized_spline_model,
-    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
-    local_polynomial = lp_model 
+    farrington = ~farrington_model(.x, 
+                                   start=list(beta=0.12,gamma=0.05),
+                                   fixed=list(alpha=0.1)),
+    local_polynomial = lp_model,
+    method_args = list(
+      k = 4 # adjust the fold k for the CV function
+    )
   ) %>% suppressWarnings()
 
 aic_bic_out
@@ -84,7 +93,9 @@ aic_bic_out <- compare_models(
   method = "AIC/BIC",
   griffith = ~polynomial_model(.x, k=2),
   penalized_spline = penalized_spline_model,
-  farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
+  farrington = ~farrington_model(.x, 
+                                 start=list(beta=0.1,gamma=0.03),
+                                 fixed=list(alpha=0.07)),
   local_polynomial = lp_model # expect to not return any values
   ) %>% suppressWarnings()
 
@@ -94,8 +105,13 @@ cv_out <- compare_models(
     method = "CV",
     griffith = ~polynomial_model(.x, k=2),
     penalized_spline = penalized_spline_model,
-    farrington = ~farrington_model(.x, start=list(alpha=0.07,beta=0.1,gamma=0.03)),
-    local_polynomial = lp_model 
+    farrington = ~farrington_model(.x, 
+                                 start=list(beta=0.1,gamma=0.03),
+                                 fixed=list(alpha=0.07)),
+    local_polynomial = lp_model,
+    method_args = list(
+      k = 4 # adjust the fold k for the CV function
+    )
   ) %>% suppressWarnings()
 
 aic_bic_out
@@ -110,7 +126,7 @@ This function must accepts 2 parameters:
 
 -   `dat` the input data
 
--   `model_func` a function that takes an input data and returns a `serosv` model
+-   `mod_func` a function that takes an input data and returns a `serosv` model
 
 And it must returns a data frame with 1 row where each column represents one metric.
 
@@ -119,12 +135,12 @@ And it must returns a data frame with 1 row where each column represents one met
 The following implements holdout validation and returns MAE:
 
 ```{r}
-generate_mae <- function(dat, model_func){
+generate_mae <- function(dat, mod_func){
   n_train <- round(nrow(dat)*0.8)
   train <- dat[1:n_train,]
   test <- dat[n_train:nrow(dat),]
   
-  fit <- model_func(dat)
+  fit <- mod_func(dat)
   pred <- predict(fit, test[, 1, drop=FALSE])
   
   # handle error differently depending on datatype

@@ -20,3 +20,4 @@ nonparametric_bootstrapping(mod, refit_func, newdat, nb = 200, ci = 0.95)
 \description{
 Nonparametric bootstrapping for serosv model
 }
+\keyword{internal}

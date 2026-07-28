@@ -15,7 +15,8 @@ fp_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 ```
 
@@ -63,9 +64,14 @@ fp_model(
 
   name of the \`status\` column (default status_col="status").
 
+- ...:
+
+  additional arguments to be passed to \`glm()\` function that fits the
+  model
+
 ## Value
 
-a list of class fp_model with 5 items
+a list of class fp_model with 7 items
 
 - datatype:
 
@@ -79,6 +85,10 @@ a list of class fp_model with 5 items
 
   a fitted glm model
 
+- p:
+
+  powers used for the model
+
 - sp:
 
   seroprevalence
@@ -86,6 +96,10 @@ a list of class fp_model with 5 items
 - foi:
 
   force of infection
+
+- pars:
+
+  other model configurations
 
 ## Details
 

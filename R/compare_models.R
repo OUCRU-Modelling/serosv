@@ -2,6 +2,7 @@
 #'
 #' @param data input data to fit into the models
 #' @param method method to compare models. Can be one of the built-in methods or a function to compute the returned metrics (see Details).
+#' @param method_args additional arguments to be passed to the method function.
 #' @param ... models to be compared. Must be models created by serosv. If models' names are not provided, indices will be used instead for the `model` column in the returned data.frame.
 #'
 #'
@@ -9,6 +10,8 @@
 #' a data.frame with the following columns
 #'   \item{label}{name or index of the model}
 #'   \item{type}{model type of the given model (a serosv model name)}
+#'   \item{mod_out}{the fitted models}
+#'   \item{plots}{the plots for each of the fitted model}
 #'   \item{metrics columns}{the columns for metrics of comparison, the number of which depends on the function that generate these metrics}
 #'
 #' @details
@@ -40,7 +43,7 @@
 #' # view the model fitted with the whole dataset
 #' comparison_table$plots
 #' @export
-compare_models <- function(data, method="AIC/BIC",...){
+compare_models <- function(data, method="AIC/BIC", method_args=list(), ...){
   list(...) %>%
     imap_dfr(~ {
       # return error if input contains non-serosv models
@@ -63,7 +66,14 @@ compare_models <- function(data, method="AIC/BIC",...){
       assert_that(is.function(metric_func),
                   msg = "Function to compute the metrics must be provided")
 
-      out <- metric_func(data, as_mapper(.x))
+      # out <- metric_func(data, as_mapper(.x))
+      out <- do.call(
+        metric_func,
+        c(
+          list(dat = data, mod_func = as_mapper(.x)),
+          method_args
+        )
+      )
 
       assert_that("data.frame" %in% class(out),
                   msg = "Function to compute the metrics must return a data.frame")

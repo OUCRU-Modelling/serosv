@@ -11,7 +11,8 @@ farrington_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ Parameter values to keep fixed during optimization.}
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
+
+\item{...}{additional arguments to be passed to `mle()` function that fits the model}
 }
 \value{
 a list of class farrington_model with 5 items
@@ -38,6 +41,8 @@ a list of class farrington_model with 5 items
   \item{info}{fitted "mle" object}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{sp_mod}{model for seroprevalence as a function}
+  \item{foi_mod}{model for FoI as a function}
 }
 \description{
 Fit age-stratified seroprevalence data using the Farrington (1990) model, which assumes the

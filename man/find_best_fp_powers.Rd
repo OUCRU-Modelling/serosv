@@ -4,7 +4,7 @@
 \alias{find_best_fp_powers}
 \title{Returns the powers of the fractional polynomial model which has the lowest deviance score.}
 \usage{
-find_best_fp_powers(data, p, mc, degree, link = "logit")
+find_best_fp_powers(data, p, mc, degree, link = "logit", ...)
 }
 \arguments{
 \item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR

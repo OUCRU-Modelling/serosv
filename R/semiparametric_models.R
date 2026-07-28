@@ -69,7 +69,7 @@
 #'
 #' Under the \bold{mixed model} framework,
 #' the model instead treats the coefficients \eqn{\textbf{u}}{} in the likelihood formulation
-#' as random effects with \eqn{\textbf{u} \sim N(\textbf{0}, \boldsymbol{\sigma}^2_u \textbf{I})}{}
+#' as random effects with \eqn{\textbf{u} \sim N(\textbf{0}, \mathbf{\sigma}^2_u \textbf{I})}{}
 #'
 #' Refer to section 8.1 and 8.2 of the the book by Hens et al. (2012) for further details.
 #'

@@ -9,20 +9,23 @@ weibull_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
 \item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
 `age`, `status` (for linelisting data)}
 
-\item{age_col}{name of the `age` column (default age_col="age").}
+\item{age_col}{name of the `age` column (default age_col="age")}
 
-\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+\item{pos_col}{name of the `pos` column (default pos_col="pos")}
 
-\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+\item{tot_col}{name of the `tot` column (default tot_col="tot")}
 
-\item{status_col}{name of the `status` column (default status_col="status").}
+\item{status_col}{name of the `status` column (default status_col="status")}
+
+\item{...}{additional arguments to be passed to `glm()` function that fits the model}
 }
 \value{
 list of class weibull_model with the following items

@@ -4,10 +4,12 @@
 \alias{compute_ci.hierarchical_bayesian_model}
 \title{Compute 95\% credible interval for hierarchical Bayesian model}
 \usage{
-\method{compute_ci}{hierarchical_bayesian_model}(x, ...)
+\method{compute_ci}{hierarchical_bayesian_model}(x, ci = 0.95, le = 100, ...)
 }
 \arguments{
 \item{x}{serosv models}
+
+\item{ci}{confidence level for the interval}
 
 \item{...}{arbitrary arguments}
 }

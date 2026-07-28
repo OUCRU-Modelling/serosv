@@ -12,7 +12,8 @@ fp_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
@@ -39,6 +40,8 @@ fp_model(
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
+
+\item{...}{additional arguments to be passed to `glm()` function that fits the model}
 }
 \value{
 a list of class fp_model with 7 items

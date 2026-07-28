@@ -961,9 +961,9 @@ compute_ci.estimate_from_mixture <- function(x, ci=.95, le=100, ...){
   if(x$monotonize){
     out.DF <- out.DF %>%
       mutate(
-        ymin = pava(lwr)$pai2,
-        ymax = pava(upr)$pai2,
-        y = pava(fit)$pai2
+        ymin = pava(ymin)$pai2,
+        ymax = pava(ymax)$pai2,
+        y = pava(y)$pai2
       )
   }
 

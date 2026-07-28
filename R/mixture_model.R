@@ -140,7 +140,7 @@ mixture_model <- function (antibody_level, breaks=40, pi=c(0.2, 0.8), mu=c(2,6),
 #' @export
 estimate_from_mixture <- function(age, antibody_level,
                                   threshold_status = NULL, mixture_model,
-                                  s="ps", sp=83, monotonize=TRUE,
+                                  s="ps", sp=83, monotonize=FALSE,
                                   ...){
   # Helper funciton to compute derivative of mu(a) aka. mu'(a)
   differentiate_mu<-function(x,mu)
@@ -201,7 +201,7 @@ estimate_from_mixture <- function(age, antibody_level,
   model$foi <- compute_dermu$dermu/(mu_i - compute_dermu$mu)
   model$foi <- data.frame(
     foi_x = compute_dermu$grid,
-    foi = model$foi/2 #not sure y the /2, but it works
+    foi = model$foi
   )
 
   # save fitted df

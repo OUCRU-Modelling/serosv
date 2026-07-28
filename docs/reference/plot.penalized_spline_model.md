@@ -6,7 +6,7 @@ plot() overloading for penalized spline
 
 ``` r
 # S3 method for class 'penalized_spline_model'
-plot(x, ...)
+plot(x, cex = 20, foi_ci = FALSE, ...)
 ```
 
 ## Arguments
@@ -14,6 +14,14 @@ plot(x, ...)
 - x:
 
   the penalized_spline_model object
+
+- cex:
+
+  adjust size of the datapoints.
+
+- foi_ci:
+
+  whether to plot the CI of the Force of Infection
 
 - ...:
 

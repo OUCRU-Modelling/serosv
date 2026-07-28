@@ -17,7 +17,7 @@ compute_ci(x, ci = 0.95, ...)
 
 - ci:
 
-  confidence interval
+  confidence level for the interval
 
 - ...:
 

@@ -12,6 +12,7 @@
 #'   }
 #' @param positive_threshold if not NULL, processed_data will have the serostatus labeled
 #' @param ci confidence interval for the titer estimates (default is .95 i.e., 95\% CI)
+#' @param ref_conc reference concentration of the antitoxin (i.e. concentration of antitoxin before dilution)
 #' @param negative_control if TRUE, output tibble will include the result for negative controls
 #'
 #' @importFrom magrittr %>%
@@ -29,6 +30,7 @@
 #'   \item{negative_control}{list of `tibble`s containing negative control check results (if `negative_control=TRUE`)}
 #' @export
 to_titer <- function(df, model="4PL", positive_threshold=NULL, ci = .95,
+                     ref_conc = 10,
                      negative_control=TRUE){
   # Expected format for df
   # have columns: sample_id (which can be id of sample or label as antitoxin), result, dilution_factors, negative control
@@ -55,7 +57,7 @@ to_titer <- function(df, model="4PL", positive_threshold=NULL, ci = .95,
     mutate(
       # For each data from each plate, do the following
       # 1: retrieve the anti-toxins data from all plates
-      antitoxin_df = map(data, get_antitoxins),
+      antitoxin_df = map(data, \(df){get_antitoxins(df, ref_conc=ref_conc)}),
       # 2: generate the standard curve with CI in the form of a dataframe
       standard_curve_df = map(antitoxin_df, \(df, mod) standard_curve_data(df, mod, quantify_ci=quantify_ci_func, level=ci), mod),
       # 3: convert the standard curve dataframe into a standard curve function

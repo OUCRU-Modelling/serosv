@@ -14,7 +14,8 @@ farrington_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 ```
 
@@ -51,6 +52,11 @@ farrington_model(
 
   name of the \`status\` column (default status_col="status").
 
+- ...:
+
+  additional arguments to be passed to \`mle()\` function that fits the
+  model
+
 ## Value
 
 a list of class farrington_model with 5 items
@@ -74,6 +80,14 @@ a list of class farrington_model with 5 items
 - foi:
 
   force of infection
+
+- sp_mod:
+
+  model for seroprevalence as a function
+
+- foi_mod:
+
+  model for FoI as a function
 
 ## Details
 
@@ -112,59 +126,6 @@ model <- farrington_model(
   df,
   start=list(alpha=0.07,beta=0.1,gamma=0.03)
   )
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
-#> Warning: NaNs produced
 plot(model)
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's fill values.
 
 ```

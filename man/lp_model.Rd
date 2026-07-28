@@ -13,7 +13,8 @@ lp_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
@@ -38,15 +39,21 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
+
+\item{...}{additional arguments to be passed to `locfit()` function that fits the model}
 }
 \value{
-a list of class lp_model with 6 items
+a list of class lp_model with the following items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
-  \item{pi}{fitted locfit object for pi}
-  \item{eta}{fitted locfit object for eta}
+  \item{info}{fitted locfit object for prevalence}
+  \item{eta}{fitted locfit object to estimate the derivative for predictor eta, used for FoI computation}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{nn}{nearest neighbor parameter used by the fitted model}
+  \item{h}{constant bandwidth parameter used by the fitted model}
+  \item{deg}{degree of the local polynomial}
+  \item{kern}{kernel used by the fitted model}
 }
 \description{
 Fit the age-specific seroprevalence to a local polynomial model,

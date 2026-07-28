@@ -13,7 +13,8 @@ penalized_spline_model(
   s = "bs",
   link = "logit",
   framework = "pl",
-  sm_p = NULL
+  sm_p = NULL,
+  ...
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ columns for `age`, `status` (for linelisting data)}
 \item{framework}{which approach to fit the model ("pl" for penalized likelihood framework, "glmm" for generalized linear mixed model framework)}
 
 \item{sm_p}{smoothing parameter}
+
+\item{...}{additional arguments to be passed to `gam()` or `gamm()` function that fits the model.}
 }
 \value{
 a list of class penalized_spline_model with 6 attributes
@@ -116,7 +119,7 @@ Where:
 
 Under the \bold{mixed model} framework,
 the model instead treats the coefficients \eqn{\textbf{u}}{} in the likelihood formulation
-as random effects with \eqn{\textbf{u} \sim N(\textbf{0}, \boldsymbol{\sigma}^2_u \textbf{I})}{}
+as random effects with \eqn{\textbf{u} \sim N(\textbf{0}, \mathbf{\sigma}^2_u \textbf{I})}{}
 
 Refer to section 8.1 and 8.2 of the the book by Hens et al. (2012) for further details.
 }

@@ -19,18 +19,19 @@
 #' @importFrom mgcv gam predict.gam betar
 #' @importFrom purrr map map_dbl map2
 #'
-#' @return a list of class time_age_model with 4 items
+#' @return a list of class time_age_model with the following items
 #'   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
 #' data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
 #'   \item{grouping_col}{name of the column for grouping}
 #'   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
+#'   \item{monotonize_method}{method for monotonization over time (either "scam" or "pava")}
 #'   \item{datatype}{whether the input data is aggregated or line-listing data}
+#'   \item{ci}{condifence level for the confidence interval computation}
 #' @export
 age_time_model <- function(data,
                            age_col="age", status_col="status", pos_col="pos", tot_col="tot",
                            time_col="date", grouping_col="group",
-                           age_correct=F, le=512, ci = 0.95, monotonize_method = "pava",
-                           ...){
+                           age_correct=F, le=512, ci = 0.95, monotonize_method = "pava"){
   # work around to resolve no visible binding note NOTE during check()
   x <- label <- family <- fit <- se.fit <- mod <-  ymin <- ymax <- y <- mean_time <- prevalence <- sim_data <- NULL
   age <- ys <- shift_no <- cohort <- col_time <- monotonized_mod <- df <- info <- sp <- monotonized_info <- monotonized_sp <- NULL

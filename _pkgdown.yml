@@ -86,11 +86,13 @@ reference:
   - compute_ci.default
   - compute_ci.fp_model
   - compute_ci.lp_model
+  - compute_ci.farrington_model
   - compute_ci.weibull_model
   - compute_ci.penalized_spline_model
   - compute_ci.mixture_model
   - compute_ci.age_time_model
   - compute_ci.hierarchical_bayesian_model
+  - compute_ci.estimate_from_mixture
   - predict.age_time_model
   - predict.farrington_model
   - predict.fp_model
