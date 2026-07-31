@@ -19,3 +19,27 @@ test_that("weibull_model returns same result as in the book", {
   expect_no_error(compute_ci.weibull_model(model))
   expect_no_error(plot(model))
 })
+
+test_that("test utility functions for weibull_model", {
+  df <- hcv_be_2006[order(hcv_be_2006$dur), ]
+
+  model <- weibull_model(df,
+                         age_col="dur",
+                         status_col="seropositive")
+
+  # test plot function
+  expect_no_error(plot(model, foi_ci=TRUE))
+
+  # test print function
+  expect_no_error(
+    capture.output(print(model))
+  )
+
+  # test predict function
+  expect_equal(
+    predict(model, newdata = data.frame(
+      age = model$df$age
+    )),
+    model$sp
+  )
+})

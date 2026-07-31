@@ -68,10 +68,7 @@ test_that("test aic_bic function behavior", {
 
   # try metrics w/ different model
   metric_1 <- aic_bic(dat, \(dat) polynomial_model(dat, k=3))
-  metric_2 <- aic_bic(dat, \(dat) farrington_model(
-    dat,
-    start = list(alpha=0.03, beta=0.2, gamma=0.015)
-  ))
+  metric_2 <- aic_bic(dat, lp_model)
 
   # check returned metrics
   expect_true(all(c("AIC", "BIC", "logLik") %in% names(metric_1)))
@@ -86,7 +83,10 @@ test_that("test aic_bic function behavior", {
     !is.na(metric_1)
   ))
 
-  # AIC/BIC expected to not available for Farrington
+  # AIC/BIC expected to not available for local polynomial
+  expect_true(all(
+    is.na(metric_2[, c("AIC", "BIC", "logLik")])
+  ))
 })
 
 test_that("test cv function behavior", {
