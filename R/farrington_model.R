@@ -91,6 +91,8 @@ farrington_model <- function(data, start, fixed=list(),
   }
 
   model$info <- mle(farrington, fixed=fixed, start=start, ...)
+  # update nobs for BIC computation downstream
+  model$info@nobs <- as.integer(sum(tot, na.rm=TRUE))
   alpha <- model$info@fullcoef[1]
   beta  <- model$info@fullcoef[2]
   gamma <- model$info@fullcoef[3]

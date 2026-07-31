@@ -393,6 +393,14 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
   fixed_pars <- setdiff(names(mod@fullcoef), names(mod@coef))
   fixed_vals  <- as.list(mod@fullcoef[fixed_pars])
 
+  safe_quantile <- function(x, probs) {
+    excluded_values <- is.na(x) | is.nan(x) | is.infinite(x)
+
+    if(sum(excluded_values) > length(x)/2) warning(paste0(
+      sum(excluded_values), " out of ", length(x), " samples are NAs/NaNs/Inf, this might affect quantile estimates"
+    ))
+    quantile(x[!excluded_values], probs, na.rm = TRUE)
+  }
 
   # CIs for seroprevalence and FoI are quantified using parametric bootstrapping
   sampling_out <-  rmvnorm(
@@ -408,7 +416,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
   # ----- Estimate CI for seroprevalence
   out.DF <- sampling_out %>%
     map_dfc(~do.call(x$sp_mod, .x)) %>%
-    apply(1, quantile, c(alpha, 1 - alpha)) %>%
+    apply(1, safe_quantile, c(alpha, 1 - alpha)) %>%
     t() %>% as.data.frame() %>%
     setNames(c("ymin", "ymax")) %>%
     cbind(
@@ -435,7 +443,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
   out.FOI <- if(foi_ci){
     sampling_out %>%
       map_dfc(~do.call(x$foi_mod, .x)) %>%
-      apply(1, quantile, c(alpha, 1 - alpha)) %>%
+      apply(1, safe_quantile, c(alpha, 1 - alpha)) %>%
       t() %>% as.data.frame() %>%
       setNames(c("ymin", "ymax")) %>%
       cbind(out.FOI)

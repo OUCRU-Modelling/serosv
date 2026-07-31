@@ -100,8 +100,8 @@ aic_bic <- function(dat, mod_func){
 
   tibble(
     type = class(out),
-    AIC = aic,
-    BIC = bic,
+    AIC = if (!is.null(aic)) as.numeric(aic) else NA,
+    BIC = if (!is.null(bic)) as.numeric(bic) else NA,
     logLik = if (!is.null(ll)) as.numeric(ll) else NA,
     df = if (!is.null(ll) && !is.null(attr(ll, "df"))) attr(ll, "df") else NA,
     mod_out = list(out),
