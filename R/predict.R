@@ -100,12 +100,10 @@ predict.farrington_model <- function(object, newdata=NULL,...){
   beta  <- object$info@fullcoef[2]
   gamma <- object$info@fullcoef[3]
 
-  # 1-exp(
-  #   (alpha/beta)*newdata[[1]]*exp(-beta*newdata[[1]])
-  #   +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*newdata[[1]])-1)
-  #   -gamma*newdata[[1]])
   object$sp_mod(newdata[[1]], alpha, beta, gamma)
 }
+
+
 
 #' Predict from an hierarchical bayesian model
 #'
@@ -117,7 +115,8 @@ predict.farrington_model <- function(object, newdata=NULL,...){
 #' @return list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
-  out_x <- object$df$age
+  # out_x <- object$df$age
+  out_x <- newdata[[1]]
   out.DF <- NULL
 
   if (object$type == "far3"){
@@ -127,7 +126,7 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
 
     out.DF <- data.frame(
       x = out_x,
-      y = object$sp_func(out_x, alpha1, alpha2, alpha3),
+      y = object$sp_func(out_x, alpha1, alpha2, alpha3)
     )
   }else if(object$type == "far2"){
     alpha1 <- summary(object$info)$summary["alpha1", "50%"]
@@ -135,7 +134,7 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
 
     out.DF <- data.frame(
       x = out_x,
-      y = object$sp_func(out_x, alpha1, alpha2),
+      y = object$sp_func(out_x, alpha1, alpha2)
     )
 
   }else if(object$type == "log_logistic"){
@@ -144,7 +143,7 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
 
     out.DF <- data.frame(
       x = out_x,
-      y = object$sp_func(out_x, alpha1, alpha2),
+      y = object$sp_func(out_x, alpha1, alpha2)
     )
   }else{
     warning('Expect model type to be one of the following: "far3", "far2", "log_logistic"')
@@ -200,7 +199,7 @@ predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
       join_by(!!sym(object$grouping_col))
     )
 
-  # --- use the monotonized model for prediction and ci-----
+  ### --- use the monotonized model for prediction and ci-----
   if(modtype == "monotonized"){
     out <- out %>%
       mutate(
@@ -214,7 +213,7 @@ predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
         })
       )
   }else{
-    # --- if user specify non-monotonized then simply compute CI from gam model-----
+    ### --- if user specify non-monotonized then simply compute CI from gam model-----
     out <- out %>%
       mutate(
         sp_df = map2(info, age_df, \(mod, grid){
@@ -236,7 +235,7 @@ predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
       )
   }
 
-  # --- finally, compute FOI -----
+  ### --- finally, compute FOI -----
   out <- out %>%
     mutate(
       foi_df = map2(age_df, sp_df, \(grid, sp){
