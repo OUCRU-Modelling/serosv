@@ -477,7 +477,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
 #'
 #' @return ggplot object
 #' @export
-plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE,...){
+plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotonized", ...){
   # work around to resolve no visible binding note NOTE during check()
   sp_df <- foi_df <- df <- age <- pos <- tot <- y <- ymin <- ymax <- seroprev <- NULL
 
@@ -487,7 +487,6 @@ plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE,...){
   )
 
   # check which type of model user wants to visualize
-  modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
   assert_that(
     modtype == "monotonized" | modtype == "non-monotonized",
     msg = "modtype argument must be eithers 'monotonized' or 'non-monotonized'"

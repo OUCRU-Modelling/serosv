@@ -17,6 +17,8 @@ find_best_fp_powers(data, p, mc, degree, link = "logit", ...)
 \item{degree}{the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.}
 
 \item{link}{the link function. Defaulted to "logit".}
+
+\item{...}{additional arguments to be passed to `glm()` function that fits the model}
 }
 \value{
 list of 3 elements:

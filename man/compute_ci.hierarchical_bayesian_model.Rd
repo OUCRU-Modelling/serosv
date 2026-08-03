@@ -11,6 +11,8 @@
 
 \item{ci}{confidence level for the interval}
 
+\item{le}{length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL}
+
 \item{...}{arbitrary arguments}
 }
 \value{

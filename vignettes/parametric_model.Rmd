@@ -114,7 +114,10 @@ The parameter `p` specifies the powers of each polynomial term (length of `p` is
 hav <- hav_be_1993_1994
 model <- fp_model(hav, p=c(1, 1.5), link="cloglog")
 model
-plot(model, foi_ci=TRUE)
+plot(
+  model, foi_ci=TRUE,
+  ncpus = 2 # limit used cores for vignette building
+)
 ```
 
 The users can also tell the package to perform parameter selection by providing `p` as a named list with 2 elements:
@@ -130,7 +133,10 @@ model <- fp_model(hav,
                   ), 
                   monotonic=FALSE,
                   link="cloglog")
-plot(model, foi_ci=TRUE)
+plot(
+  model, foi_ci=TRUE,
+  ncpus = 2 # limit used cores for vignette building
+  )
 # the best set of powers for this dataset is 1.5 and 1.6
 model
 ```
@@ -146,7 +152,10 @@ model <- fp_model(hav,
                   ), 
                   monotonic=TRUE,
                   link="cloglog")
-plot(model, foi_ci=TRUE)
+plot(
+  model, foi_ci=TRUE,
+  ncpus = 2 # limit used cores for vignette building
+)
 # the best set of powers with the monotonic constraint is 0.5 and 1.1
 model
 ```
@@ -342,3 +351,4 @@ model <- hierarchical_bayesian_model(df, type="log_logistic")
 model
 plot(model)
 ```
+

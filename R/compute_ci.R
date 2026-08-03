@@ -56,7 +56,8 @@ parametric_bootstrapping <- function(foi_func,
 #' @keywords internal
 nonparametric_bootstrapping <- function(mod, refit_func,
                                         newdat,
-                                        nb=200, ci=.95){
+                                        nb=200, ci=.95,
+                                        ncpus = parallel::detectCores()){
   message("Running nonparametric bootstrap for FoI confidence intervals, this may take a while")
   dat <- mod$df
 
@@ -93,7 +94,7 @@ nonparametric_bootstrapping <- function(mod, refit_func,
     # specify custom ran.gen function to implement unsupported nonparametric
     # bootstrapping scheme
     sim = "parametric", ran.gen = resample_func,
-    parallel = "multicore", ncpus = parallel::detectCores(),
+    parallel = "multicore", ncpus = ncpus,
     # argument for resample_func
     mle = mod,
     # arguments for stat_func
@@ -460,6 +461,7 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
 #'
 #' @param x serosv models
 #' @param ci confidence level for the interval
+#' @param le length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL
 #' @param ... arbitrary arguments
 #' @importFrom mgcv predict.gam
 #' @import dplyr

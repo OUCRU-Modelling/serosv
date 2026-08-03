@@ -173,5 +173,8 @@ glmm
 ```
 
 ```{r, fig.width=7, fig.height=4}
-plot(glmm, foi_ci=TRUE)
+plot(
+  glmm, foi_ci = TRUE, 
+  ncpus = 2 # limit used cores for vignette building
+)
 ```

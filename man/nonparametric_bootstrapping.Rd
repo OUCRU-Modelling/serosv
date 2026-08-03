@@ -4,7 +4,14 @@
 \alias{nonparametric_bootstrapping}
 \title{Nonparametric bootstrapping for serosv model}
 \usage{
-nonparametric_bootstrapping(mod, refit_func, newdat, nb = 200, ci = 0.95)
+nonparametric_bootstrapping(
+  mod,
+  refit_func,
+  newdat,
+  nb = 200,
+  ci = 0.95,
+  ncpus = parallel::detectCores()
+)
 }
 \arguments{
 \item{mod}{fitted serosv model}

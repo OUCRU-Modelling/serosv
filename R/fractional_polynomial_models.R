@@ -30,6 +30,7 @@ formulate <- function(p) {
 #' @param mc indicates if the returned model should be monotonic.
 #' @param degree the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
+#' @param ... additional arguments to be passed to `glm()` function that fits the model
 #'
 #' @return list of 3 elements:
 #'   \item{p}{The best power for fp model.}
