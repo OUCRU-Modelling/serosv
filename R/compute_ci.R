@@ -51,7 +51,7 @@ parametric_bootstrapping <- function(foi_func,
 #' @param ci confidence level for the interval
 #'
 #' @importFrom boot boot boot.ci
-#' @importFrom stats setNames
+#' @importFrom stats setNames rbinom
 #' @importFrom purrr map_dfr
 #' @keywords internal
 nonparametric_bootstrapping <- function(mod, refit_func,
@@ -63,14 +63,21 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 
   # dat is the data returned by ran.gen (i.e., resampled data)
   stat_func <- function(resampled_dat, indices=NULL,refit_func, newdat){
-    # refit model
-    refit_mod <- refit_func(resampled_dat)
+    result <- tryCatch({
+      # refit model
+      refit_mod <- refit_func(resampled_dat)
 
-    # return foi estim over the age range we're interested in
-    sp_pred <- predict(refit_mod, newdat)
-    foi_pred <- est_foi(newdat[[1]], sp_pred)
+      # return foi estim over the age range we're interested in
+      sp_pred <- predict(refit_mod, newdat)
+      foi_pred <- est_foi(newdat[[1]], sp_pred)
 
-    foi_pred
+      as.numeric(foi_pred)
+    }, error = \(e){
+      # impute with NA in case of
+      rep(NA, nrow(newdat) - 2)
+    })
+
+    result
   }
 
   resample_func <- function(dat, mod){
@@ -91,8 +98,7 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 
   boot_out <- boot::boot(
     dat, statistic = stat_func, R = nb,
-    # specify custom ran.gen function to implement unsupported nonparametric
-    # bootstrapping scheme
+    # specify custom ran.gen function to implement unsupported nonparametric bootstrapping scheme
     sim = "parametric", ran.gen = resample_func,
     parallel = "multicore", ncpus = ncpus,
     # argument for resample_func
@@ -478,6 +484,9 @@ compute_ci.farrington_model <- function(x, ci = 0.95, le=100, foi_ci=TRUE, nb=99
 #'  }
 #' @export
 compute_ci.hierarchical_bayesian_model <- function(x, ci=0.95,le=100, ...){
+  # work around to resolve no visible binding for global
+  sero_estimates <- foi_estimates <- NULL
+
   # set up
   age_range <- range(x$df$age)
   out_x <- if(is.null(le)){
@@ -931,7 +940,7 @@ compute_ci.mixture_model <- function(x,ci = 0.95, ...){
 #' @export
 compute_ci.estimate_from_mixture <- function(x, ci=.95, le=100, ...){
   # resolve no visible binding issue with CRAN check
-  fit <- se.fit <- NULL
+  y <- ymin <- ymax <- fit <- se.fit <- NULL
 
   # set up
   p <- (1 - ci) / 2

@@ -423,6 +423,9 @@ plot.mixture_model <- function(x, ...){
 #'
 #' @export
 plot.estimate_from_mixture <- function(x, cex=20, ... ){
+  # work around to resolve no visible binding note NOTE during check()
+  foi_estimates <- sero_estimates <- y <- ymax <- ymin <- NULL
+
   age <- x$df$age
 
   returned_plot <- ggplot()

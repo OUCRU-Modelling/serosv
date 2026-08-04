@@ -30,10 +30,10 @@
 #'
 #'
 #' @param data the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)
-#' @param start Named list of vectors or single vector.
-#' Initial values for optimizer.
-#' @param fixed Named list of vectors or single vector.
-#' Parameter values to keep fixed during optimization.
+#' @param start Named list of vectors or single vector. Initial values for optimizer.
+#' @param fixed Named list of vectors or single vector. Parameter values to keep fixed during optimization.
+#' @param lower Named list of vectors or single vector. Lowerbound for parameter values during optimization.
+#' @param upper Named list of vectors or single vector. Upperbound for parameter values during optimization.
 #' @param age_col name of the `age` column (default age_col="age").
 #' @param pos_col name of the `pos` column (default pos_col="pos").
 #' @param tot_col name of the `tot` column (default tot_col="tot").
@@ -62,6 +62,8 @@
 #'
 #' @export
 farrington_model <- function(data, start, fixed=list(),
+                             lower = list(beta = 1e-6, alpha=0, gamma=0), # these specify conditions for FoI >= 0
+                             upper = list(beta = Inf, alpha=Inf, gamma=Inf),
                              age_col="age",pos_col="pos", tot_col="tot", status_col="status",
                              ...)
 {
@@ -69,6 +71,7 @@ farrington_model <- function(data, start, fixed=list(),
 
   # check input whether it is line-listing or aggregated data
   data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
+
   age <- data$age
   pos <- data$pos
   tot <- data$tot
@@ -90,7 +93,7 @@ farrington_model <- function(data, start, fixed=list(),
     return(-sum(ll, na.rm = TRUE))
   }
 
-  model$info <- mle(farrington, fixed=fixed, start=start, ...)
+  model$info <- mle(farrington, fixed=fixed, start=start, lower=lower, upper=upper, ...)
   # update nobs for BIC computation downstream
   model$info@nobs <- as.integer(sum(tot, na.rm=TRUE))
   alpha <- model$info@fullcoef[1]

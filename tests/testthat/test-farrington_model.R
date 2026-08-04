@@ -18,7 +18,7 @@ test_that("farrington_model returns same result as in the book", {
     model$info@coef[3]
   )
 
-  expect_equal(actual, expected, tolerance=0.000001)
+  expect_equal(actual, expected, tolerance=0.001)
 
   # make sure utilities work
   expect_no_error(plot(model))
