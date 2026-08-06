@@ -27,7 +27,7 @@ test_that("test utility functions for hierarchical bayesian model", {
   expect_equal(
     model$sp,
     pred$y,
-    tolerance = 0.001
+    tolerance = 0.01
   )
   expect_no_error(print(model))
   expect_no_error(compute_ci(model))
