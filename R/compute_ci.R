@@ -73,8 +73,9 @@ nonparametric_bootstrapping <- function(mod, refit_func,
 
       as.numeric(foi_pred)
     }, error = \(e){
-      # impute with NA in case of
-      rep(NA, nrow(newdat) - 2)
+      message("failed to refit model: ", e)
+      # impute with NA in case of error
+      rep(NA_real_, nrow(newdat) - 2)
     })
 
     result
