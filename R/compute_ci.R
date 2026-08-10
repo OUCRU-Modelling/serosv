@@ -21,6 +21,10 @@ parametric_bootstrapping <- function(foi_func,
                                      nb=9999, alpha=.025){
   rowsplit <- function(df) split(df, 1:nrow(df))
 
+  safe_quantile <- function(x, probs) {
+    quantile(x, probs, na.rm = TRUE)
+  }
+
   # Sample parameters value
   sampling_out <- rmvnorm(
     nb,
@@ -34,14 +38,12 @@ parametric_bootstrapping <- function(foi_func,
   # Get the bounds for FOI
   sampling_out %>%
     map_dfc(~foi_func(newdat, .x)) %>%
-    apply(1, quantile, c(alpha, 1 - alpha)) %>%
+    apply(1, safe_quantile, c(alpha, 1 - alpha)) %>%
     t() %>% as.data.frame() %>%
     cbind(foi_func(newdat, coef)) %>%
     setNames(c("ymin", "ymax","y")) %>%
     cbind(newdat)
 }
-
-# TODO: Helper function for parametric delta method
 
 #' Nonparametric bootstrapping for serosv model
 #' @param mod fitted serosv model
@@ -813,6 +815,8 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, le=100, foi_ci=FALSE,
 #' @param x serosv models
 #' @param ci confidence level for the interval
 #' @param le number of data for computing confidence interval
+#' @param foi_ci whether to compute CI for FoI (default to FALSE)
+#' @param modtype specify which model type to visualize (either "monotonized" or "non-monotonized")
 #' @param ... arbitrary argument
 #'
 #' @importFrom mgcv predict.gam
@@ -820,12 +824,11 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, le=100, foi_ci=FALSE,
 #'
 #' @return confidence interval dataframe with n_group x 3 cols, the columns are `group`, `sp_df`, `foi_df`
 #' @export
-compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
+compute_ci.age_time_model <- function(x, ci=0.95, le = 100, foi_ci = TRUE, modtype = "monotonized", ...){
   # resolve no visible binding note
   df <- monotonized_info <- monotonized_ci_mod <- age <- info <- fit <- se.fit <- sp_df <- foi_df <- NULL
 
   # check which type of model user wants to visualize
-  modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
   assert_that(
     modtype == "monotonized" | modtype == "non-monotonized",
     msg = "modtype argument must be eithers 'monotonized' or 'non-monotonized'"
@@ -842,55 +845,120 @@ compute_ci.age_time_model <- function(x, ci=0.95, le = 100, ...){
       })
     )
 
-  # --- use the monotonized model for prediction and ci
-  if(modtype == "monotonized"){
-    out <- out %>%
-      mutate(
-        sp_df = pmap(list(monotonized_info, monotonized_ci_mod, age), \(mod, ci_mod, grid){
-          data.frame(
+
+  # if(modtype == "monotonized"){
+  #
+  #   out <- out %>%
+  #     mutate(
+  #       sp_df = map2(monotonized_info, age, \(mod, grid){
+  #         link_inv <- mod$family$linkinv
+  #         dataset <- mod$model[,1:2]
+  #         n <- nrow(dataset) - length(mod$coefficients)
+  #
+  #         predict(mod, data.frame(age = grid), se.fit = TRUE)  %>%
+  #           as_tibble()  %>%
+  #           select(fit, se.fit) %>%
+  #           mutate(
+  #             x = grid,
+  #             ymin = link_inv(fit + qt(    p, n) * se.fit),
+  #             ymax = link_inv(fit + qt(1 - p, n) * se.fit),
+  #             y = link_inv(fit)
+  #           )  %>%
+  #           select(- se.fit)
+  #       })
+  #     )
+  # }else{
+  #   # --- if user specify non-monotonized then simply compute CI from gam model
+  #   out <- out %>%
+  #     mutate(
+  #       sp_df = map2(info, age, \(mod, grid){
+  #         link_inv <- mod$family$linkinv
+  #         dataset <- mod$model[,1:2]
+  #         n <- nrow(dataset) - length(mod$coefficients)
+  #
+  #         predict(mod, data.frame(age = grid), se.fit = TRUE)  %>%
+  #           as_tibble()  %>%
+  #           select(fit, se.fit) %>%
+  #           mutate(
+  #             x = grid,
+  #             ymin = link_inv(fit + qt(    p, n) * se.fit),
+  #             ymax = link_inv(fit + qt(1 - p, n) * se.fit),
+  #             y = link_inv(fit)
+  #           )  %>%
+  #           select(- se.fit)
+  #       })
+  #     )
+  # }
+
+  mod_col <- if (modtype == "monotonized") sym("monotonized_info") else sym("info")
+  if(modtype == "monotonized") warning("CI for the monotonized model does not reflect uncertainty from raw data")
+  out <- out %>%
+    mutate(
+      sp_df = map2(!!mod_col, age, \(mod, grid){
+        link_inv <- mod$family$linkinv
+        dataset <- mod$model[,1:2]
+        n <- nrow(dataset) - length(mod$coefficients)
+
+        predict(mod, data.frame(age = grid), se.fit = TRUE)  %>%
+          as_tibble()  %>%
+          select(fit, se.fit) %>%
+          mutate(
             x = grid,
-            y = predict(mod, list(age = grid), type = "response"),
-            ymin = predict(ci_mod$ymin, list(age = grid), type = "response"),
-            ymax = predict(ci_mod$ymax, list(age = grid), type = "response")
+            ymin = link_inv(fit + qt(    p, n) * se.fit),
+            ymax = link_inv(fit + qt(1 - p, n) * se.fit),
+            y = link_inv(fit)
+          )  %>%
+          select(- se.fit)
+      })
+    )
+
+  # ------- finally, compute FOI
+  if(!foi_ci){
+    out <- out |>
+      mutate(
+        foi_df = map2(age, sp_df, \(grid, sp){
+          foi_x <- sort(unique(grid))
+          foi_x <- foi_x[c(-1, -length(foi_x) )]
+
+          tibble(
+            x = foi_x,
+            y = est_foi(grid, sp$y)
           )
         })
       )
   }else{
-    # --- if user specify non-monotonized then simply compute CI from gam model
-    out <- out %>%
-      mutate(
-        sp_df = map2(info, age, \(mod, grid){
-          link_inv <- mod$family$linkinv
-          dataset <- mod$model[,1:2]
-          n <- nrow(dataset) - length(mod$coefficients)
+    warning("FoI CI is computed via Monte Carlo sampling, this may take a while")
 
-          predict(mod, data.frame(age = grid), se.fit = TRUE)  %>%
-            as_tibble()  %>%
-            select(fit, se.fit) %>%
-            mutate(
-              x = grid,
-              ymin = link_inv(fit + qt(    p, n) * se.fit),
-              ymax = link_inv(fit + qt(1 - p, n) * se.fit),
-              y = link_inv(fit)
-            )  %>%
-            select(- se.fit)
+    out <- out |>
+      mutate(
+        foi_df = map2(age, !!mod_col, \(grid, mod){
+
+          # get the monte carlo samples
+          foi_estims <- parametric_bootstrapping(
+            # make sure foi_func match the expected function signature
+            foi_func = \(newdat, coef){
+              # generate prevalence prediction with current sample of coef
+              lp_mat <- predict(mod, data.frame(age = newdat$x), type="lpmatrix")
+              link_inv <- mod$family$linkinv
+              pred_sp <- link_inv(lp_mat %*% coef)
+
+              # pad start and end of the return vector with NA
+              # this is a work around for parametric_bootstrapping func
+              # which expect foi_func to return a vector of length nrow(newdat)
+              c(NA, est_foi(newdat$x, pred_sp), NA)
+            },
+            newdat = data.frame(x = grid),
+            coef = coef(mod), vcov = vcov(mod),
+            alpha = p,
+            ...
+          )
+
+          foi_estims |> filter(!is.na(y))
         })
       )
   }
 
-  # ------- finally, compute FOI
-  out <- out %>%
-    mutate(
-      foi_df = map2(age, sp_df, \(grid, sp){
-        foi_x <- sort(unique(grid))
-        foi_x <- foi_x[c(-1, -length(foi_x) )]
-
-        tibble(
-          x = foi_x,
-          y = est_foi(grid, sp$y)
-        )
-      })
-    ) %>%
+  out <- out |>
     select(!!sym(x$grouping_col), sp_df, foi_df)
 
   out

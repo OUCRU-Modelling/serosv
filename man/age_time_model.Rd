@@ -14,7 +14,6 @@ age_time_model(
   grouping_col = "group",
   age_correct = F,
   le = 512,
-  ci = 0.95,
   monotonize_method = "pava"
 )
 }
@@ -37,8 +36,6 @@ age_time_model(
 
 \item{le}{number of bins to generate age grid, used when monotonizing data}
 
-\item{ci}{confidence interval for smoothing}
-
 \item{monotonize_method}{either "pava" or "scam"}
 }
 \value{
@@ -49,7 +46,6 @@ data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized
   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
   \item{monotonize_method}{method for monotonization over time (either "scam" or "pava")}
   \item{datatype}{whether the input data is aggregated or line-listing data}
-  \item{ci}{condifence level for the confidence interval computation}
 }
 \description{
 Fit age-stratified seroprevalence across multiple time points. Also try to monotonize age (or birth cohort) - specific seroprevalence.

@@ -4,7 +4,7 @@
 \alias{compute_ci.age_time_model}
 \title{Compute confidence interval for time age model}
 \usage{
-\method{compute_ci}{age_time_model}(x, ci = 0.95, le = 100, ...)
+\method{compute_ci}{age_time_model}(x, ci = 0.95, le = 100, foi_ci = TRUE, modtype = "monotonized", ...)
 }
 \arguments{
 \item{x}{serosv models}
@@ -12,6 +12,10 @@
 \item{ci}{confidence level for the interval}
 
 \item{le}{number of data for computing confidence interval}
+
+\item{foi_ci}{whether to compute CI for FoI (default to FALSE)}
+
+\item{modtype}{specify which model type to visualize (either "monotonized" or "non-monotonized")}
 
 \item{...}{arbitrary argument}
 }

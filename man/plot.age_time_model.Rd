@@ -4,7 +4,15 @@
 \alias{plot.age_time_model}
 \title{Plot output for age_time_model}
 \usage{
-\method{plot}{age_time_model}(x, cex = 10, le = 100, facet = TRUE, modtype = "monotonized", ...)
+\method{plot}{age_time_model}(
+  x,
+  cex = 10,
+  le = 100,
+  facet = TRUE,
+  modtype = "monotonized",
+  foi_ci = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{a `age_time_model` object}
@@ -16,6 +24,8 @@
 \item{facet}{whether to facet the plot by group}
 
 \item{modtype}{specify which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}}
+
+\item{foi_ci}{foi_ci whether to plot the CI of the Force of Infection}
 
 \item{...}{arbitrary params}
 }

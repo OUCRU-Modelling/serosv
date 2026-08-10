@@ -21,7 +21,7 @@ set_plot_style <- function(sero = "blueviolet", sero_ci = "royalblue1", foi = "#
       scale_fill_manual(
         values = c("sero CI" = sero_ci, "foi CI"=foi_ci)
       ),
-      labs(x=xlabel, linetype = "Line", colour = "Line", fill="Fill color")
+      labs(x=xlabel, linetype = "Line", colour = "Color", fill="Fill color")
     )
 }
 
@@ -473,6 +473,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
 #' @param modtype specify which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}
 #' @param le number of bins used to generate the x-axis; higher values produce smoother curves
 #' @param cex adjust size of the datapoints (only when \code{facet = TRUE})
+#' @param foi_ci foi_ci whether to plot the CI of the Force of Infection
 #' @param ... arbitrary params
 #'
 #' @importFrom graphics plot
@@ -480,7 +481,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
 #'
 #' @return ggplot object
 #' @export
-plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotonized", ...){
+plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotonized", foi_ci=FALSE, ...){
   # work around to resolve no visible binding note NOTE during check()
   sp_df <- foi_df <- df <- age <- pos <- tot <- y <- ymin <- ymax <- seroprev <- NULL
 
@@ -496,7 +497,7 @@ plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotoni
   )
 
   # compute the CI for sp
-  out <- compute_ci.age_time_model(x, modtype = modtype, le = le)
+  out <- compute_ci.age_time_model(x, modtype = modtype, le = le, foi_ci=foi_ci, ...)
 
   # get seroprev data and foi data for plotting
   sp_dat <- out %>% select(!!sym(x$grouping_col), sp_df) %>% unnest(sp_df)
@@ -519,13 +520,23 @@ plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotoni
     geom_smooth(aes(
       x = x, y = y, ymin=ymin, ymax=ymax,
       color = if(facet) "sero" else as.factor(!!sym(x$grouping_col)),
-      fill = if(facet) "ci" else as.factor(!!sym(x$grouping_col))
+      fill = if(facet) "sero CI" else as.factor(!!sym(x$grouping_col))
     ), stat = "identity", lwd=0.5, alpha=0.2, data = sp_dat) +
-    geom_line(aes(
-      x = x, y = y, color = if(facet) "foi" else as.factor(!!sym(x$grouping_col))
-    ), linetype = "dashed", data = foi_dat) +
     ylim(c(0, 1)) +
-    if (facet)
+    (
+      if(!foi_ci)
+        geom_line(aes(
+          x = x, y = y, color = if(facet) "foi" else as.factor(!!sym(x$grouping_col))
+        ), linetype = "dashed", data = foi_dat)
+      else
+        geom_smooth(aes(
+          x = x, y = y, ymin=ymin, ymax=ymax,
+          color = if(facet) "foi" else as.factor(!!sym(x$grouping_col)),
+          fill = if(facet) "foi CI" else as.factor(!!sym(x$grouping_col))
+        ), linetype = "dashed", stat = "identity", lwd=0.5, alpha=0.2, data = foi_dat)
+    ) +
+    (
+      if (facet)
       list(
         geom_point(
           aes(x = age, y = seroprev, size = cex*pos/max(tot)), shape = 1,
@@ -536,8 +547,8 @@ plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotoni
         facet_wrap(vars(!!sym(x$grouping_col)))
       ) else
         labs(color = x$grouping_col, fill = x$grouping_col)
+    )
 }
-
 
 #### GCV values ####
 #' Plotting GCV values with respect to different nn-s and h-s parameters.
