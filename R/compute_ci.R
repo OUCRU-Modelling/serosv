@@ -77,6 +77,8 @@ nonparametric_bootstrapping <- function(mod, refit_func,
     }, error = \(e){
       message("failed to refit model: ", e)
       # impute with NA in case of error
+      # set lenght of impute to be nrow - 2 since that would be the
+      # expected length when using est_foi
       rep(NA_real_, nrow(newdat) - 2)
     })
 
