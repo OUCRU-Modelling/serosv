@@ -14,7 +14,6 @@ age_time_model(
   grouping_col = "group",
   age_correct = F,
   le = 512,
-  ci = 0.95,
   monotonize_method = "pava"
 )
 }
@@ -37,16 +36,15 @@ age_time_model(
 
 \item{le}{number of bins to generate age grid, used when monotonizing data}
 
-\item{ci}{confidence interval for smoothing}
-
 \item{monotonize_method}{either "pava" or "scam"}
 }
 \value{
-a list of class time_age_model with 4 items
+a list of class time_age_model with the following items
   \item{out}{a data.frame with dimension n_group x 9, where columns `info`, `sp`, `foi` store output for non-monotonized
 data and `monotonized_info`, `monotonized_sp`,  `monotonized_foi`,  `monotonized_ci_mod` store output for monotonized data}
   \item{grouping_col}{name of the column for grouping}
   \item{age_correct}{a boolean indicating whether the data is monotonized across age or cohort}
+  \item{monotonize_method}{method for monotonization over time (either "scam" or "pava")}
   \item{datatype}{whether the input data is aggregated or line-listing data}
 }
 \description{

@@ -6,18 +6,26 @@ plot() overloading for Farrington model
 
 ``` r
 # S3 method for class 'farrington_model'
-plot(x, ...)
+plot(x, cex = 20, foi_ci = TRUE, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  the Farrington model object.
+  the Farrington model object
+
+- cex:
+
+  adjust size of the datapoints
+
+- foi_ci:
+
+  whether to plot the CI of the Force of Infection
 
 - ...:
 
-  arbitrary params.
+  arbitrary params
 
 ## Value
 

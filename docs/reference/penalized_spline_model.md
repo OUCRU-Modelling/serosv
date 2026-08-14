@@ -17,7 +17,8 @@ penalized_spline_model(
   s = "bs",
   link = "logit",
   framework = "pl",
-  sp = NULL
+  sm_p = NULL,
+  ...
 )
 ```
 
@@ -58,9 +59,14 @@ penalized_spline_model(
   which approach to fit the model ("pl" for penalized likelihood
   framework, "glmm" for generalized linear mixed model framework)
 
-- sp:
+- sm_p:
 
   smoothing parameter
+
+- ...:
+
+  additional arguments to be passed to \`gam()\` or \`gamm()\` function
+  that fits the model.
 
 ## Value
 
@@ -91,21 +97,25 @@ a list of class penalized_spline_model with 6 attributes
 
   force of infection
 
+- pars:
+
+  list of other model specifications for model fit
+
 ## Details
 
 In the semi-parametric model, the predictor is formulated as a penalized
 spline with truncated power basis functions of degree \\p\\ and fixed
-knots \\\kappa_1,..., \kappa_k\\ as followed
+knots \\\kappa_1,\cdots, \kappa_k\\ as followed
 
-\$\$ \eta(a_i) = \beta_0 + \beta_1a_i + ... + \beta_p a_i^p +
+\$\$ \eta(a_i) = \beta_0 + \beta_1a_i + \cdots + \beta_p a_i^p +
 \Sigma\_{k=1}^ku_k(a_i - \kappa_k)^p\_+ \$\$
 
-\- Where: \$\$ (a_i - \kappa_k)^p\_+ = \begin{cases} 0, & a_i \le
-\kappa_k \\ (a_i - \kappa_k)^p, & a_i \> \kappa_k \end{cases} \$\$
+Where: \$\$ (a_i - \kappa_k)^p\_+ = \begin{cases} 0, & a_i \le \kappa_k
+\\ (a_i - \kappa_k)^p, & a_i \> \kappa_k \end{cases} \$\$
 
 FOI can then be derived by
 
-\$\$\hat{\lambda}(a_i) = \[\hat{\beta_1} , 2\hat{\beta_2}a_i, ..., p
+\$\$\hat{\lambda}(a_i) = \[\hat{\beta_1} , 2\hat{\beta_2}a_i, \cdots, p
 \hat{\beta} a_i ^{p-1} + \Sigma^k\_{k=1} p \hat{u}\_k(a_i -
 \kappa_k)^{p-1}\_+\] \delta(\hat{\eta}(a_i)) \$\$
 
@@ -114,17 +124,19 @@ Where \\\delta(.)\\ is determined by the link function used in the model
 In matrix annotation, the mean structure model for \\\eta(a_i)\\ becomes
 \$\$\eta = \textbf{X}\beta + \textbf{Zu}\$\$
 
-Where \\\eta = \[\eta(a_i) ... \eta(a_N) \]^T\\, \\\beta = \[\beta_0
-\beta_1 .... \beta_p\]^T\\, and \\\textbf{u} = \[u_1 u_2 ... u_k\]^T\\
-are the regression with corresponding design matrices \$\$\textbf{X} =
-\begin{bmatrix} 1 & a_1 & a_1^2 & ... & a_1^p \\ 1 & a_2 & a_2^2 & ... &
-a_2^p \\ \vdots & \vdots & \vdots & \dots & \vdots \\ 1 & a_N & a_N^2 &
-... & a_N^p \end{bmatrix}, \textbf{Z} = \begin{bmatrix} (a_1 - \kappa_1
-)\_+^p & (a_1 - \kappa_2 )\_+^p & \dots & (a_1 - \kappa_k)\_+^p \\
-(a_2 - \kappa_1 )\_+^p & (a_2 - \kappa_2 )\_+^p & \dots & (a_2 -
-\kappa_k)\_+^p \\ \vdots & \vdots & \dots & \vdots \\ (a_N - \kappa_1
-)\_+^p & (a_N - \kappa_2 )\_+^p & \dots & (a_N - \kappa_k)\_+^p
-\end{bmatrix} \$\$
+Where \\\eta = \[\eta(a_i) \cdots \eta(a_N) \]^T\\, \\\beta = \[\beta_0
+\beta_1 \cdots \beta_p\]^T\\, and \\\textbf{u} = \[u_1 u_2 \cdots
+u_k\]^T\\ are the regression coefficients with corresponding design
+matrices
+
+\$\$ \textbf{X} = \begin{bmatrix} 1 & a_1 & a_1^2 & \cdots & a_1^p \\ 1
+& a_2 & a_2^2 & \cdots & a_2^p \\ \vdots & \vdots & \vdots & \dots &
+\vdots \\ 1 & a_N & a_N^2 & \cdots & a_N^p \end{bmatrix}, \textbf{Z} =
+\begin{bmatrix} (a_1 - \kappa_1 )\_+^p & (a_1 - \kappa_2 )\_+^p & \dots
+& (a_1 - \kappa_k)\_+^p \\ (a_2 - \kappa_1 )\_+^p & (a_2 - \kappa_2
+)\_+^p & \dots & (a_2 - \kappa_k)\_+^p \\ \vdots & \vdots & \dots &
+\vdots \\ (a_N - \kappa_1 )\_+^p & (a_N - \kappa_2 )\_+^p & \dots &
+(a_N - \kappa_k)\_+^p \end{bmatrix} \$\$
 
 Under **penalized likelihood framework**, the model is fitted by
 maximizing the following likelihood
@@ -136,21 +148,20 @@ maximizing the following likelihood
 
 Where:
 
-\- \\X\beta + Zu\\ is the predictor
+- \\X\beta + Zu\\ is the predictor
 
-\- \\D\\ is a known semi-definite penalty matrix \[@Wahba1978\],
-\[@Green1993\]
+- \\D\\ is a known semi-definite penalty matrix
 
-\- \\y\\ is the response vector
+- \\y\\ is the response vector
 
-\- \\\textbf{1}\\ the unit vector, \\c(.)\\ is determined by the link
-function used
+- \\\mathbf{1}\\ the unit vector, \\c(.)\\ is determined by the link
+  function used
 
-\- \\\lambda\\ is the smoothing parameter (larger values –\> smoother
-curves)
+- \\\lambda\\ is the smoothing parameter (larger values -\> smoother
+  curves)
 
-\- \\\phi\\ is the overdispersion parameter and equals 1 if there is no
-overdispersion
+- \\\phi\\ is the overdispersion parameter and equals 1 if there is no
+  overdispersion
 
 Under the **mixed model** framework, the model instead treats the
 coefficients \\\textbf{u}\\ in the likelihood formulation as random
@@ -192,7 +203,7 @@ model$info$gam
 #> Link function: logit 
 #> 
 #> Formula:
-#> spos ~ s(age, bs = s, sp = sp)
+#> pos ~ s(age, bs = s, sp = sm_p)
 #> 
 #> Estimated degrees of freedom:
 #> 5.8  total = 6.8 

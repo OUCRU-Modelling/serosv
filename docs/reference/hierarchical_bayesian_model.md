@@ -62,7 +62,7 @@ hierarchical_bayesian_model(
 
 ## Value
 
-a list of class hierarchical_bayesian_model with 6 items
+a list of class hierarchical_bayesian_model with the following items
 
 - datatype:
 
@@ -74,11 +74,11 @@ a list of class hierarchical_bayesian_model with 6 items
 
 - type:
 
-  type of bayesian model far2, far3 or log_logistic
+  type of bayesian model "far2", "far3" or "log_logistic"
 
 - info:
 
-  parameters for the fitted model
+  a stanfit object for the fitted result
 
 - sp:
 
@@ -92,7 +92,7 @@ a list of class hierarchical_bayesian_model with 6 items
 
   function to compute seroprevalence given age and model parameters
 
-- foi:
+- foi_func:
 
   function to compute force of infection given age and model parameters
 
@@ -173,15 +173,9 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Rejecting initial value:
 #> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
 #> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
-#> Chain 1: Rejecting initial value:
-#> Chain 1:   Log probability evaluates to log(0), i.e. negative infinity.
-#> Chain 1:   Stan can't start sampling from this initial value.
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.00013 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.3 seconds.
+#> Chain 1: Gradient evaluation took 0.000111 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.11 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -198,15 +192,13 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Chain 1: Iteration: 4500 / 5000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 5000 / 5000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 15.235 seconds (Warm-up)
-#> Chain 1:                139.842 seconds (Sampling)
-#> Chain 1:                155.077 seconds (Total)
+#> Chain 1:  Elapsed Time: 17.621 seconds (Warm-up)
+#> Chain 1:                10.803 seconds (Sampling)
+#> Chain 1:                28.424 seconds (Total)
 #> Chain 1: 
-#> Warning: There were 324 divergent transitions after warmup. See
+#> Warning: There were 790 divergent transitions after warmup. See
 #> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 #> to find out why this is a problem and how to eliminate them.
-#> Warning: There were 143 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-#> https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
 #> Warning: Examine the pairs() plot to diagnose sampling problems
 #> Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 #> Running the chains for more iterations may help. See
@@ -215,48 +207,43 @@ model <- hierarchical_bayesian_model(df, type="far3")
 #> Running the chains for more iterations may help. See
 #> https://mc-stan.org/misc/warnings.html#tail-ess
 model$info
-#>                       mean      se_mean           sd          2.5%
-#> alpha1        1.394994e-01 2.208144e-04 5.686602e-03  1.290184e-01
-#> alpha2        1.984613e-01 3.072933e-04 7.829686e-03  1.844645e-01
-#> alpha3        8.289398e-03 2.217734e-04 6.839120e-03  3.133171e-04
-#> tau_alpha1    6.381566e+00 1.529942e+00 1.636028e+01  6.597716e-06
-#> tau_alpha2    1.371545e+01 8.454139e+00 4.030987e+01  5.871040e-06
-#> tau_alpha3    5.780803e+00 1.085321e+00 1.356397e+01  7.111779e-06
-#> mu_alpha1     8.127640e-01 1.294292e+00 2.957688e+01 -7.133897e+01
-#> mu_alpha2     3.575058e+00 1.799463e+00 3.726214e+01 -7.253911e+01
-#> mu_alpha3     3.883757e+00 1.307763e+00 3.405219e+01 -6.454653e+01
-#> sigma_alpha1  6.352800e+01 1.682171e+01 7.004084e+02  1.213045e-01
-#> sigma_alpha2  7.855927e+01 1.684436e+01 6.470535e+02  7.736001e-02
-#> sigma_alpha3  1.873854e+02 1.323037e+02 3.877173e+03  1.431469e-01
-#> lp__         -2.532504e+03 3.710684e-01 4.655392e+00 -2.542452e+03
-#>                        25%           50%           75%         97.5%      n_eff
-#> alpha1        1.357106e-01  1.390419e-01  1.430492e-01  1.511064e-01  663.20993
-#> alpha2        1.931963e-01  1.983732e-01  2.027147e-01  2.165249e-01  649.20593
-#> alpha3        2.841082e-03  6.688870e-03  1.163816e-02  2.583495e-02  951.00250
-#> tau_alpha1    1.733407e-03  9.495067e-02  2.687740e+00  6.795883e+01  114.34889
-#> tau_alpha2    1.342653e-03  6.464717e-02  2.511530e+00  1.670964e+02   22.73443
-#> tau_alpha3    1.111049e-03  5.337217e-02  2.822276e+00  4.880180e+01  156.19150
-#> mu_alpha1    -1.276472e+00  1.729980e-01  2.532245e+00  5.703259e+01  522.20403
-#> mu_alpha2    -1.528020e+00  2.032933e-01  2.920524e+00  1.045006e+02  428.79515
-#> mu_alpha3    -1.524451e+00  3.939297e-02  3.640311e+00  9.311625e+01  678.00364
-#> sigma_alpha1  6.099697e-01  3.245271e+00  2.401891e+01  3.893194e+02 1733.65511
-#> sigma_alpha2  6.310022e-01  3.933036e+00  2.729092e+01  4.127492e+02 1475.60823
-#> sigma_alpha3  5.952566e-01  4.328557e+00  3.000085e+01  3.749841e+02  858.78884
-#> lp__         -2.535634e+03 -2.532144e+03 -2.528948e+03 -2.524553e+03  157.39993
-#>                   Rhat
-#> alpha1       1.0002098
-#> alpha2       0.9998023
-#> alpha3       0.9997596
-#> tau_alpha1   1.0003182
-#> tau_alpha2   1.0444726
-#> tau_alpha3   1.0101265
-#> mu_alpha1    1.0073358
-#> mu_alpha2    1.0048162
-#> mu_alpha3    1.0031755
-#> sigma_alpha1 0.9997210
-#> sigma_alpha2 1.0000959
-#> sigma_alpha3 1.0009114
-#> lp__         0.9998177
+#> Inference for Stan model: fra_3.
+#> 1 chains, each with iter=5000; warmup=1500; thin=1; 
+#> post-warmup draws per chain=3500, total post-warmup draws=3500.
+#> 
+#>                  mean se_mean      sd     2.5%      25%      50%      75%
+#> alpha1           0.14    0.00    0.01     0.13     0.13     0.14     0.14
+#> alpha2           0.20    0.00    0.01     0.18     0.19     0.20     0.20
+#> alpha3           0.01    0.00    0.01     0.00     0.00     0.01     0.01
+#> tau_alpha1       0.06    0.01    0.14     0.00     0.00     0.00     0.03
+#> tau_alpha2       0.57    0.18    1.16     0.00     0.00     0.04     0.48
+#> tau_alpha3       0.16    0.05    0.37     0.00     0.00     0.01     0.10
+#> mu_alpha1        0.60    2.16   44.78   -96.97   -11.21     0.07    12.31
+#> mu_alpha2       -0.23    1.75   28.44   -60.60    -2.53     0.28     3.26
+#> mu_alpha3        4.83    3.07   45.34   -94.43    -4.41     0.46    12.48
+#> sigma_alpha1    96.57   17.94  345.42     1.34     5.42    18.80    58.05
+#> sigma_alpha2    53.34   10.72  383.00     0.49     1.44     5.24    24.32
+#> sigma_alpha3   136.93   49.26 1201.90     0.90     3.19    14.13    51.62
+#> lp__         -2535.56    0.29    3.56 -2542.88 -2538.01 -2535.34 -2532.97
+#>                 97.5% n_eff Rhat
+#> alpha1           0.15    43 1.04
+#> alpha2           0.22    41 1.02
+#> alpha3           0.02   245 1.00
+#> tau_alpha1       0.56   197 1.00
+#> tau_alpha2       4.23    42 1.00
+#> tau_alpha3       1.23    47 1.00
+#> mu_alpha1      109.84   431 1.02
+#> mu_alpha2       57.56   263 1.00
+#> mu_alpha3      107.19   218 1.00
+#> sigma_alpha1   676.53   371 1.00
+#> sigma_alpha2   324.42  1276 1.00
+#> sigma_alpha3   791.76   595 1.00
+#> lp__         -2529.63   149 1.01
+#> 
+#> Samples were drawn using NUTS(diag_e) at Tue Jul 28 14:55:01 2026.
+#> For each parameter, n_eff is a crude measure of effective sample size,
+#> and Rhat is the potential scale reduction factor on split chains (at 
+#> convergence, Rhat=1).
 plot(model)
 
 # }

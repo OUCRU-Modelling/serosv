@@ -53,7 +53,6 @@ To fit the antibody data, use `mixture_model` function
 
 ``` r
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
-df <- df[order(df$age),]
 data <- df$VZVmIUml
 model <- mixture_model(antibody_level = data)
 print(model)
@@ -85,15 +84,13 @@ est_mixture
 #> Link function: identity 
 #> 
 #> Formula:
-#> log_antibody ~ s(age, bs = "ps", sp = 83)
+#> log_antibody ~ s(age, bs = s, sp = sp)
 #> 
 #> Estimated degrees of freedom:
 #> 5.13  total = 6.13 
 #> 
 #> GCV score: 2.056333
 plot(est_mixture)
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's fill values.
 ```
 
 ![](model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png)

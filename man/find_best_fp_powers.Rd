@@ -4,7 +4,7 @@
 \alias{find_best_fp_powers}
 \title{Returns the powers of the fractional polynomial model which has the lowest deviance score.}
 \usage{
-find_best_fp_powers(data, p, mc, degree, link = "logit")
+find_best_fp_powers(data, p, mc, degree, link = "logit", ...)
 }
 \arguments{
 \item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
@@ -17,6 +17,8 @@ find_best_fp_powers(data, p, mc, degree, link = "logit")
 \item{degree}{the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.}
 
 \item{link}{the link function. Defaulted to "logit".}
+
+\item{...}{additional arguments to be passed to `glm()` function that fits the model}
 }
 \value{
 list of 3 elements:

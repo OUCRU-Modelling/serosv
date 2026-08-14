@@ -6,7 +6,7 @@ plot() overloading for result of estimate_from_mixture
 
 ``` r
 # S3 method for class 'estimate_from_mixture'
-plot(x, ...)
+plot(x, cex = 20, ...)
 ```
 
 ## Arguments
@@ -15,9 +15,13 @@ plot(x, ...)
 
   the mixture_model
 
+- cex:
+
+  adjust size of the datapoints
+
 - ...:
 
-  arbitrary params.
+  arbitrary params
 
 ## Value
 

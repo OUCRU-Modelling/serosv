@@ -31,3 +31,24 @@ test_that("estimate_from_mixture runs without error", {
     estimate_from_mixture(df$age[order(df$age)], data, mixture_model = model)
   )
 })
+
+test_that("test utility functions for estimate_from_mixture", {
+  df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
+  data <- df$VZVmIUml[order(df$age)]
+  mixture_mod <- mixture_model(data)
+
+  model <- estimate_from_mixture(df$age[order(df$age)], data, mixture_model = mixture_mod)
+
+  # test plot function
+  expect_no_error(plot(mixture_mod))
+  expect_no_error(plot(model, foi_ci=TRUE))
+
+  # test print function
+  expect_no_error(
+    capture.output(print(mixture_mod))
+  )
+  expect_no_error(
+    capture.output(print(model))
+  )
+})
+

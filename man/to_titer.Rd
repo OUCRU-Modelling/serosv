@@ -9,6 +9,7 @@ to_titer(
   model = "4PL",
   positive_threshold = NULL,
   ci = 0.95,
+  ref_conc = 10,
   negative_control = TRUE
 )
 }
@@ -25,6 +26,8 @@ to_titer(
 \item{positive_threshold}{if not NULL, processed_data will have the serostatus labeled}
 
 \item{ci}{confidence interval for the titer estimates (default is .95 i.e., 95\% CI)}
+
+\item{ref_conc}{reference concentration of the antitoxin (i.e. concentration of antitoxin before dilution)}
 
 \item{negative_control}{if TRUE, output tibble will include the result for negative controls}
 }

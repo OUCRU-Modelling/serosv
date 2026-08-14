@@ -6,55 +6,58 @@
 \usage{
 weibull_model(
   data,
-  t_lab = "t",
+  age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
-\item{data}{the input data frame, must either have columns for `t`, `pos`, `tot` (for aggregated data) OR
-`t`, `status` (for linelisting data)}
+\item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR
+`age`, `status` (for linelisting data)}
 
-\item{t_lab}{name of the `t` column (default t_lab="t").}
+\item{age_col}{name of the `age` column (default age_col="age")}
 
-\item{pos_col}{name of the `pos` column (default pos_col="pos").}
+\item{pos_col}{name of the `pos` column (default pos_col="pos")}
 
-\item{tot_col}{name of the `tot` column (default tot_col="tot").}
+\item{tot_col}{name of the `tot` column (default tot_col="tot")}
 
-\item{status_col}{name of the `status` column (default status_col="status").}
+\item{status_col}{name of the `status` column (default status_col="status")}
+
+\item{...}{additional arguments to be passed to `glm()` function that fits the model}
 }
 \value{
 list of class weibull_model with the following items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
   \item{info}{fitted "glm" object}
-  \item{sp}{seroprevalence}
-  \item{foi}{force of infection}
+  \item{sp}{estimated seroprevalence}
+  \item{foi}{estimated force of infection}
+  \item{foi_mod}{function to generate FoI given age, and parameter values}
 }
 \description{
-Model seroprevalence as a function of duration since vaccination using the Weibull
-model, where the force of infection is assumed to vary monotonically with duration.
+Model seroprevalence as a function of age using the Weibull
+model, where the force of infection is assumed to vary monotonically with age.
 }
 \details{
 For a Weibull model, the prevalence is given by
 \deqn{
- \pi (d) = 1 - e^{ - \beta_0 d ^ {\beta_1}}
+ \pi (a) = 1 - e^{ - \beta_0 a ^ {\beta_1}}
 }
-Where \eqn{d} is exposure time (difference between age of vaccination and age at test)
+Where \eqn{a} is the age, which may refer to biological age or a
+time scale of interest (e.g., time since vaccination).
 
 Which implies the force of infection to be the monotonic function
 \deqn{
- \lambda(d) = \beta_0 \beta_1 d^{\beta_1 - 1}
+ \lambda(a) = \beta_0 \beta_1 a^{\beta_1 - 1}
 }
 
 Refer to section 6.1.2. of the the book by Hens et al. (2012) for further details.
 }
 \examples{
 df <- hcv_be_2006[order(hcv_be_2006$dur), ]
-df$t <- df$dur
-df$status <- df$seropositive
-model <- weibull_model(df, t_lab="dur", status_col="seropositive")
+model <- weibull_model(df, age_col="dur", status_col="seropositive")
 plot(model)
 
 }

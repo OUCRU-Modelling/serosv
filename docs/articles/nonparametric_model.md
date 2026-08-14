@@ -93,7 +93,8 @@ lp
 #> Family:  Logistic 
 #> Fitted Degrees of freedom:       6.463 
 #> Residual scale:                  1
-plot(lp)
+plot(lp, foi_ci = TRUE)
+#> Running nonparametric bootstrap for FoI confidence intervals, this may take a while
 ```
 
 ![](nonparametric_model_files/figure-html/unnamed-chunk-3-1.png)

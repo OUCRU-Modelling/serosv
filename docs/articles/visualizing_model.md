@@ -42,7 +42,7 @@ plot(farrington_md)
 to customize some key attributes of the plot.
 
 Current modifiable attributes include color, linetype for
-seroprevalence, foi and fill color for confidence interval
+seroprevalence, foi and fill color for confidence intervals
 
 ``` r
 hav_mod <- polynomial_model(hav_bg_1964, k=3)
@@ -52,7 +52,8 @@ plot(hav_mod) +
   set_plot_style(
     sero = "#3de071",
     foi = "#2f22e0",
-    ci = "#aaf2b2",
+    sero_ci = "#aaf2b2",
+    foi_ci = "cornflowerblue",
     foi_line = "dotted", 
     sero_line = "dotdash"
   )
@@ -75,7 +76,8 @@ further configurations.
 ``` r
 # return gg object
 class(plot(hav_mod))
-#> [1] "gg"     "ggplot"
+#> [1] "ggplot2::ggplot" "ggplot"          "ggplot2::gg"     "S7_object"      
+#> [5] "gg"
 ```
 
 **Examples**
@@ -86,8 +88,8 @@ library(ggplot2)
 # Set x and y limits
 plot(hav_mod) +
   coord_cartesian(xlim = c(0, 50), ylim = c(0, 1.5))
-#> Coordinate system already present. Adding new coordinate system, which will
-#> replace the existing one.
+#> Coordinate system already present.
+#> ℹ Adding new coordinate system, which will replace the existing one.
 ```
 
 ![](visualizing_model_files/figure-html/unnamed-chunk-6-1.png)

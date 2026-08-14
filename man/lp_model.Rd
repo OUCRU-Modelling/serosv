@@ -13,7 +13,8 @@ lp_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
@@ -38,15 +39,21 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
+
+\item{...}{additional arguments to be passed to `locfit()` function that fits the model}
 }
 \value{
-a list of class lp_model with 6 items
+a list of class lp_model with the following items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
-  \item{pi}{fitted locfit object for pi}
-  \item{eta}{fitted locfit object for eta}
+  \item{info}{fitted locfit object for prevalence}
+  \item{eta}{fitted locfit object to estimate the derivative for predictor eta, used for FoI computation}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{nn}{nearest neighbor parameter used by the fitted model}
+  \item{h}{constant bandwidth parameter used by the fitted model}
+  \item{deg}{degree of the local polynomial}
+  \item{kern}{kernel used by the fitted model}
 }
 \description{
 Fit the age-specific seroprevalence to a local polynomial model,
@@ -58,16 +65,16 @@ Consider a linear predictor \eqn{\eta(a)} approximated locally at one particular
 For a general degree \eqn{p}, the linear predictor for a neighbor of \eqn{a_0}, labeled \eqn{a_i} is equivalent to the Taylor approximation
 \deqn{
 \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
-\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
+\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + \cdots + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
 }
 
 \eqn{\eta(a_i)} can be estimated by maximizing
 \deqn{
- \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 ... +
+ \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 \cdots +
  \beta_p(a_i-a_0)^p) \} K_h(a_i - a_0)
 }
 
-The estimator for the \eqn{k}-th derivative of \eqn{\eta(a_0)}, for \eqn{k = 0,1,…,p}
+The estimator for the \eqn{k-th} derivative of \eqn{\eta(a_0)}, for \eqn{k = 0,1,\cdots,p}
 (degree of local polynomial) is thus:
 \deqn{
  \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)

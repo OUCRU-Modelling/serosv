@@ -2,6 +2,7 @@
 #'
 #' @param data input data to fit into the models
 #' @param method method to compare models. Can be one of the built-in methods or a function to compute the returned metrics (see Details).
+#' @param method_args additional arguments to be passed to the method function.
 #' @param ... models to be compared. Must be models created by serosv. If models' names are not provided, indices will be used instead for the `model` column in the returned data.frame.
 #'
 #'
@@ -9,6 +10,8 @@
 #' a data.frame with the following columns
 #'   \item{label}{name or index of the model}
 #'   \item{type}{model type of the given model (a serosv model name)}
+#'   \item{mod_out}{the fitted models}
+#'   \item{plots}{the plots for each of the fitted model}
 #'   \item{metrics columns}{the columns for metrics of comparison, the number of which depends on the function that generate these metrics}
 #'
 #' @details
@@ -40,7 +43,7 @@
 #' # view the model fitted with the whole dataset
 #' comparison_table$plots
 #' @export
-compare_models <- function(data, method="AIC/BIC",...){
+compare_models <- function(data, method="AIC/BIC", method_args=list(), ...){
   list(...) %>%
     imap_dfr(~ {
       # return error if input contains non-serosv models
@@ -63,7 +66,14 @@ compare_models <- function(data, method="AIC/BIC",...){
       assert_that(is.function(metric_func),
                   msg = "Function to compute the metrics must be provided")
 
-      out <- metric_func(data, as_mapper(.x))
+      # out <- metric_func(data, as_mapper(.x))
+      out <- do.call(
+        metric_func,
+        c(
+          list(dat = data, mod_func = as_mapper(.x)),
+          method_args
+        )
+      )
 
       assert_that("data.frame" %in% class(out),
                   msg = "Function to compute the metrics must return a data.frame")
@@ -90,8 +100,8 @@ aic_bic <- function(dat, mod_func){
 
   tibble(
     type = class(out),
-    AIC = aic,
-    BIC = bic,
+    AIC = if (!is.null(aic)) as.numeric(aic) else NA,
+    BIC = if (!is.null(bic)) as.numeric(bic) else NA,
     logLik = if (!is.null(ll)) as.numeric(ll) else NA,
     df = if (!is.null(ll) && !is.null(attr(ll, "df"))) attr(ll, "df") else NA,
     mod_out = list(out),
@@ -103,11 +113,14 @@ aic_bic <- function(dat, mod_func){
 # function to compute metrics from cross validation
 # assess the generalization/prediction of the model
 #' @importFrom stats4 logLik AIC BIC
-#' @importFrom stats predict.glm
+#' @importFrom stats predict.glm dbinom
 #' @import tidyr dplyr pROC
 cv <- function(dat, mod_func, k=4){
+  # resolve no visible binding NOTE during check()
+  type <- NULL
+
   # assign each row of data to each fold
-  idx_fold <- sort(rep(1:k, length.out=nrow(dat)))
+  idx_fold <- sample(rep(1:k, length.out=nrow(dat)))
 
   metrics <- lapply(1:k, \(fold){
     curr_metric <- list()
@@ -120,7 +133,7 @@ cv <- function(dat, mod_func, k=4){
     out <- mod_func(fit_dat)
     curr_metric$type <- class(out)
     # generate prediction
-    pred <- predict(out, data.frame(age=test_dat[,1]), type="response")
+    pred <- predict(out, data.frame(age=test_dat[,1]))
 
     if(out$datatype == "aggregated"){
       # if data is aggregated

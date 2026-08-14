@@ -155,14 +155,9 @@ The function `to_titer()` fits a standard curve for each plate and converts assa
 
 The users can configure the following:
 
--   `model` either the name of a built-in model (`"4PL"` for 4 parameters log-logistic model) or a named list with 2 items `"mod"` and `"quantify_ci"`. Section [Custom models] will provide more details on these functions.
-
-<!-- -->
-
+-   `model` either the name of a built-in model (`"4PL"` for 4 parameters log-logistic model) or a named list with 2 items `"mod"` and `"quantify_ci"`. Section [Custom models](#custom-mod) will provide more details on these functions.
 -   `ci` confidence interval of the titer estimate (default to `.95` for 95% CI)
-
 -   `negative_control` whether to include the result for negative controls
-
 -   (optionally) `positive_threshold` the threshold of titer for sample to be considered positive. If provided, the output will include serostatus
 
 ```{r}

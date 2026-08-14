@@ -37,13 +37,13 @@ print.farrington_model <- function(x, ...){
 #' @importFrom purrr compact
 #' @export
 print.hierarchical_bayesian_model <- function(x, ...){
-  pars <- intersect(c("alpha1", "alpha2", "alpha3"), rownames(x$info))
-  fitted_pars <- x$info[pars,  "mean"]
+  pars <- intersect(c("alpha1", "alpha2", "alpha3"), rownames(summary(x$info)$summary))
+  fitted_pars <- summary(x$info)$summary[pars,  "mean"]
   # get the CrI
-  lower_pars <- x$info[pars,  "2.5%"]
-  upper_pars <- x$info[pars,  "97.5%"]
+  lower_pars <- summary(x$info)$summary[pars,  "2.5%"]
+  upper_pars <- summary(x$info)$summary[pars,  "97.5%"]
   # get the sd
-  sd_pars <- purrr::compact(x$info[pars,  "sd"])
+  sd_pars <- purrr::compact(summary(x$info)$summary[pars,  "sd"])
 
   cat("Hierarchical Bayesian model \n\n")
   cat("Input type: ", x$datatype, "\n")

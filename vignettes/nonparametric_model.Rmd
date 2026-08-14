@@ -88,7 +88,10 @@ To fit a local estimation by polynomials, use `lp_model()` function with model p
 ```{r}
 lp <- lp_model(mump, kern="tcub", nn = 0.5, deg=2)
 lp
-plot(lp)
+plot(
+  lp, foi_ci = TRUE,
+  ncpus = 2 # limit used cores for vignette building
+)
 ```
 
 The users can also provide `h` or `nn` as a numeric vector, in which case the package will use the parameter value that minimize the generalized cross-validation (GCV) criterion.

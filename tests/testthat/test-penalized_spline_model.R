@@ -57,3 +57,46 @@ test_that("penalized_spline_model works with aggregated data", {
 
   expect_no_error(suppressWarnings(penalized_spline_model(df)))
 })
+
+test_that("test utility functions for penalized_spline_model", {
+  df <- transform_data(
+    parvob19_be_2001_2003,
+    stratum_col = "age", status_col = "seropositive"
+  )
+
+  glmm_model <- penalized_spline_model(
+    df, status_col = "seropositive", s = "tp", framework = "glmm"
+  )
+  pl_model <- penalized_spline_model(
+    df, status_col = "seropositive", s = "tp", framework = "pl"
+  )
+
+  # test plot function
+  expect_no_error(plot(glmm_model, foi_ci=TRUE, ncpus=2))
+  expect_no_error(plot(pl_model, foi_ci=TRUE, ncpus=2))
+
+  # test print function
+  expect_no_error(capture.output(print(glmm_model)))
+  expect_no_error(capture.output(print(pl_model)))
+
+  # test predict function
+  expect_equal(
+    as.vector(
+      predict(glmm_model, newdata = data.frame(
+        age = glmm_model$df$age
+      ))
+    ),
+    as.vector(glmm_model$sp),
+    tolerance = 0.001
+  )
+  expect_equal(
+    as.vector(
+      predict(pl_model, newdata = data.frame(
+        age = pl_model$df$age
+      ))
+    ),
+    as.vector(pl_model$sp),
+    tolerance = 0.001
+  )
+
+})

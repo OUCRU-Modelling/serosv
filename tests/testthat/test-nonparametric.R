@@ -30,3 +30,26 @@ test_that("lp_model returns expected results", {
   expect_no_error(compute_ci.lp_model(model))
   expect_no_error(plot(model))
 })
+
+test_that("test utility functions for lp_model", {
+  model <- lp_model(
+    mumps_uk_1986_1987,
+    nn=0.7, kern="tcub"
+  )
+
+  # test plot function
+  expect_no_error(plot(model, foi_ci=TRUE, ncpus=2))
+
+  # test print function
+  expect_no_error(
+    capture.output(print(model))
+  )
+
+  # test predict function
+  expect_equal(
+    predict(model, newdata = data.frame(
+      age = model$df$age
+    )),
+    model$sp
+  )
+})

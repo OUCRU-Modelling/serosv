@@ -19,7 +19,6 @@ test_that("test methods for correcting prevalence", {
     out_freq <- correct_prevalence(data, bayesian = FALSE, init_se=0.9, init_sp = 0.8)
   )
 
-
   # test plot functions for both approaches
   expect_no_error(plot_corrected_prev(out_freq))
   expect_no_error(plot_corrected_prev(out_bayesian))

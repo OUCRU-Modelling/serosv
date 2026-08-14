@@ -36,15 +36,15 @@ hierarchical_bayesian_model(
 \item{iter}{number of iterations}
 }
 \value{
-a list of class hierarchical_bayesian_model with 6 items
+a list of class hierarchical_bayesian_model with the following items
   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
   \item{df}{the dataframe used for fitting the model}
-  \item{type}{type of bayesian model far2, far3 or log_logistic}
-  \item{info}{parameters for the fitted model}
+  \item{type}{type of bayesian model "far2", "far3" or "log_logistic"}
+  \item{info}{a stanfit object for the fitted result}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
   \item{sp_func}{function to compute seroprevalence given age and model parameters}
-  \item{foi}{function to compute force of infection given age and model parameters}
+  \item{foi_func}{function to compute force of infection given age and model parameters}
 }
 \description{
 Fit age-stratified seroprevalence to parametric hierarchical Bayesian models.

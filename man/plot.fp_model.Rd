@@ -4,10 +4,16 @@
 \alias{plot.fp_model}
 \title{plot() overloading for fractional polynomial model}
 \usage{
-\method{plot}{fp_model}(x, ...)
+\method{plot}{fp_model}(x, cex = 20, foi_ci = FALSE, ci_df = NULL, ...)
 }
 \arguments{
 \item{x}{the fractional polynomial model object.}
+
+\item{cex}{adjust size of the datapoints.}
+
+\item{foi_ci}{whether to plot the CI of the Force of Infection}
+
+\item{ci_df}{a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.}
 
 \item{...}{arbitrary params.}
 }

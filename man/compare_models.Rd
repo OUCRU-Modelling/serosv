@@ -4,12 +4,14 @@
 \alias{compare_models}
 \title{Generate table of metrics for model comparison}
 \usage{
-compare_models(data, method = "AIC/BIC", ...)
+compare_models(data, method = "AIC/BIC", method_args = list(), ...)
 }
 \arguments{
 \item{data}{input data to fit into the models}
 
 \item{method}{method to compare models. Can be one of the built-in methods or a function to compute the returned metrics (see Details).}
+
+\item{method_args}{additional arguments to be passed to the method function.}
 
 \item{...}{models to be compared. Must be models created by serosv. If models' names are not provided, indices will be used instead for the `model` column in the returned data.frame.}
 }
@@ -17,6 +19,8 @@ compare_models(data, method = "AIC/BIC", ...)
 a data.frame with the following columns
   \item{label}{name or index of the model}
   \item{type}{model type of the given model (a serosv model name)}
+  \item{mod_out}{the fitted models}
+  \item{plots}{the plots for each of the fitted model}
   \item{metrics columns}{the columns for metrics of comparison, the number of which depends on the function that generate these metrics}
 }
 \description{

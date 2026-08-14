@@ -31,6 +31,9 @@ Useful links:
 
 Authors:
 
+- Anh Phan Truong Quynh <anhptq@oucru.org>
+  ([ORCID](https://orcid.org/0009-0000-2129-435X))
+
 - Nguyen Pham Nguyen The <nguyenpnt@oucru.org>
   ([ORCID](https://orcid.org/0000-0002-0356-2776))
 

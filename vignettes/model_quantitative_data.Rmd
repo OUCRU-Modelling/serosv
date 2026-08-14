@@ -64,7 +64,6 @@ To fit the antibody data, use `mixture_model` function
 
 ```{r}
 df <- vzv_be_2001_2003[vzv_be_2001_2003$age < 40.5,]
-df <- df[order(df$age),]
 data <- df$VZVmIUml
 model <- mixture_model(antibody_level = data)
 print(model)

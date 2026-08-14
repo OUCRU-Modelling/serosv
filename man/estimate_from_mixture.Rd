@@ -11,7 +11,8 @@ estimate_from_mixture(
   mixture_model,
   s = "ps",
   sp = 83,
-  monotonize = TRUE
+  monotonize = FALSE,
+  ...
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ estimate_from_mixture(
 \item{sp}{smoothing parameter}
 
 \item{monotonize}{whether to monotonize seroprevalence (default to TRUE)}
+
+\item{...}{additional arguments to be passed to `gam()` function that fits the model}
 }
 \value{
 a list of class estimated_from_mixture with the following items

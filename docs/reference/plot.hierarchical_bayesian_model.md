@@ -6,7 +6,7 @@ plot() overloading for hierarchical_bayesian_model
 
 ``` r
 # S3 method for class 'hierarchical_bayesian_model'
-plot(x, ...)
+plot(x, cex = 20, ...)
 ```
 
 ## Arguments
@@ -14,6 +14,10 @@ plot(x, ...)
 - x:
 
   hierarchical_bayesian_model object created by serosv.
+
+- cex:
+
+  adjust size of the datapoints.
 
 - ...:
 

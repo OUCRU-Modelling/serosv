@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A local polynomial model. — lp_model"><meta name="description" content="Fit the age-specific seroprevalence to a local polynomial model,
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A local polynomial model. — lp_model"><meta name="description" content="Fit the age-specific seroprevalence to a local polynomial model,
 where the linear predictor is approximated locally at one particular age."><meta property="og:description" content="Fit the age-specific seroprevalence to a local polynomial model,
 where the linear predictor is approximated locally at one particular age."><meta property="og:image" content="https://oucru-modelling.github.io/serosv/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -15,7 +15,7 @@ where the linear predictor is approximated locally at one particular age."><meta
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,8 @@ where the linear predictor is approximated locally at one particular age.</p>
 <span>  age_col <span class="op">=</span> <span class="st">"age"</span>,</span>
 <span>  pos_col <span class="op">=</span> <span class="st">"pos"</span>,</span>
 <span>  tot_col <span class="op">=</span> <span class="st">"tot"</span>,</span>
-<span>  status_col <span class="op">=</span> <span class="st">"status"</span></span>
+<span>  status_col <span class="op">=</span> <span class="st">"status"</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,27 +120,43 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 <dt id="arg-status-col">status_col<a class="anchor" aria-label="anchor" href="#arg-status-col"></a></dt>
 <dd><p>name of the `status` column (default status_col="status").</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>additional arguments to be passed to `locfit()` function that fits the model</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a list of class lp_model with 6 items</p>
+    <p>a list of class lp_model with the following items</p>
 <dl><dt>datatype</dt>
 <dd><p>type of datatype used for model fitting (aggregated or linelisting)</p></dd>
 
   <dt>df</dt>
 <dd><p>the dataframe used for fitting the model</p></dd>
 
-  <dt>pi</dt>
-<dd><p>fitted locfit object for pi</p></dd>
+  <dt>info</dt>
+<dd><p>fitted locfit object for prevalence</p></dd>
 
   <dt>eta</dt>
-<dd><p>fitted locfit object for eta</p></dd>
+<dd><p>fitted locfit object to estimate the derivative for predictor eta, used for FoI computation</p></dd>
 
   <dt>sp</dt>
 <dd><p>seroprevalence</p></dd>
 
   <dt>foi</dt>
 <dd><p>force of infection</p></dd>
+
+  <dt>nn</dt>
+<dd><p>nearest neighbor parameter used by the fitted model</p></dd>
+
+  <dt>h</dt>
+<dd><p>constant bandwidth parameter used by the fitted model</p></dd>
+
+  <dt>deg</dt>
+<dd><p>degree of the local polynomial</p></dd>
+
+  <dt>kern</dt>
+<dd><p>kernel used by the fitted model</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -148,14 +165,14 @@ Default value is 0.7, unless either h is provided, in which case the default is 
 <p>For a general degree \(p\), the linear predictor for a neighbor of \(a_0\), labeled \(a_i\) is equivalent to the Taylor approximation
 $$
 \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
-\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
+\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + \cdots + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
 $$</p>
 <p>\(\eta(a_i)\) can be estimated by maximizing
 $$
- \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 ... +
+ \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 \cdots +
  \beta_p(a_i-a_0)^p) \} K_h(a_i - a_0)
 $$</p>
-<p>The estimator for the \(k\)-th derivative of \(\eta(a_0)\), for \(k = 0,1,…,p\)
+<p>The estimator for the \(k-th\) derivative of \(\eta(a_0)\), for \(k = 0,1,\cdots,p\)
 (degree of local polynomial) is thus:
 $$
  \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)
@@ -207,7 +224,7 @@ tatistics for Biology and Health. Springer New York.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

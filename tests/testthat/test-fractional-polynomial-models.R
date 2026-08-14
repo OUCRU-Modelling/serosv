@@ -18,10 +18,20 @@ test_that("fp_model returns same result as in the book (Hepatitis A (BG))", {
 
   expect_equal(actual_coefs, expected_coefs)
   expect_equal(actual_D, expected_D)
+})
 
-  # make sure utilities work
-  expect_no_error(compute_ci.fp_model(model))
-  expect_no_error(plot(model))
+test_that("test utility functions for fp_model", {
+  model <- fp_model(hav_bg_1964,
+    p=c(1.9, 2.0), link="logit"
+  )
+
+  expect_equal(
+    model$sp,
+    predict(model, data.frame(age = hav_bg_1964$age))
+  )
+  expect_no_error(capture.output(print(model)))
+  expect_no_error(compute_ci(model))
+  expect_no_error(plot(model, foi_ci=TRUE, ncpus=2))
 })
 
 

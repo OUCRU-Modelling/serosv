@@ -306,6 +306,8 @@ parvob19 |>
   : Compute confidence interval for fractional polynomial model
 - [`compute_ci(`*`<lp_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.lp_model.md)
   : Compute confidence interval for local polynomial model
+- [`compute_ci(`*`<farrington_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.farrington_model.md)
+  : Compute confidence interval for Farrington model
 - [`compute_ci(`*`<weibull_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.weibull_model.md)
   : Compute confidence interval for Weibull model
 - [`compute_ci(`*`<penalized_spline_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.penalized_spline_model.md)
@@ -316,6 +318,9 @@ parvob19 |>
   : Compute confidence interval for time age model
 - [`compute_ci(`*`<hierarchical_bayesian_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.md)
   : Compute 95% credible interval for hierarchical Bayesian model
+- [`compute_ci(`*`<estimate_from_mixture>`*`)`](https://oucru-modelling.github.io/serosv/reference/compute_ci.estimate_from_mixture.md)
+  : Compute confidence interval for the prevalence estimate from mixture
+  model
 - [`predict(`*`<age_time_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.age_time_model.md)
   : Predict from the age_time_mdoel
 - [`predict(`*`<farrington_model>`*`)`](https://oucru-modelling.github.io/serosv/reference/predict.farrington_model.md)

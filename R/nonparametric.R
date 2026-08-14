@@ -9,16 +9,16 @@
 #' For a general degree \eqn{p}, the linear predictor for a neighbor of \eqn{a_0}, labeled \eqn{a_i} is equivalent to the Taylor approximation
 #' \deqn{
 #' \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
-#' \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
+#' \frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + \cdots + \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p
 #' }
 #'
 #' \eqn{\eta(a_i)} can be estimated by maximizing
 #' \deqn{
-#'  \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 ... +
+#'  \Sigma_{i=1}^{N} \ell_i \{Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2 \cdots +
 #'  \beta_p(a_i-a_0)^p) \} K_h(a_i - a_0)
 #' }
 #'
-#' The estimator for the \eqn{k}-th derivative of \eqn{\eta(a_0)}, for \eqn{k = 0,1,…,p}
+#' The estimator for the \eqn{k-th} derivative of \eqn{\eta(a_0)}, for \eqn{k = 0,1,\cdots,p}
 #' (degree of local polynomial) is thus:
 #' \deqn{
 #'  \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}_k(a_0)
@@ -58,6 +58,7 @@
 #' @param pos_col name of the `pos` column (default pos_col="pos").
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
+#' @param ... additional arguments to be passed to `locfit()` function that fits the model
 #'
 #' @examples
 #' df <- mumps_uk_1986_1987
@@ -71,18 +72,23 @@
 #' @importFrom graphics par
 #' @importFrom stats fitted
 #'
-#' @return a list of class lp_model with 6 items
+#' @return a list of class lp_model with the following items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
-#'   \item{pi}{fitted locfit object for pi}
-#'   \item{eta}{fitted locfit object for eta}
+#'   \item{info}{fitted locfit object for prevalence}
+#'   \item{eta}{fitted locfit object to estimate the derivative for predictor eta, used for FoI computation}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{nn}{nearest neighbor parameter used by the fitted model}
+#'   \item{h}{constant bandwidth parameter used by the fitted model}
+#'   \item{deg}{degree of the local polynomial}
+#'   \item{kern}{kernel used by the fitted model}
 #' @seealso [locfit::locfit()] for more information on the fitted locfit object
 #'
 #' @export
 lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
-                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                     ...) {
   if (all(nn==0) & all(h==0))  {
     # default nn from lp()
     nn <- 0.7
@@ -107,7 +113,8 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
       nn = nn,
       h = h,
       family="binomial",
-      kern=kern
+      kern=kern,
+      ...
     )
 
     nn <- best_param$nn
@@ -117,15 +124,19 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
   # print(paste0("nn: ", nn))
   # print(paste0("h: ", h))
 
-  model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern)
+  model$info  <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, ...)
   model$nn <- nn
   model$h <- h
   model$deg <- deg
   model$kern <- kern
-  model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1)
+  model$eta <- locfit(y~lp(age, deg=deg, nn=nn, h=h), family="binomial", kern=kern, deriv=1, ...)
   model$sp  <- fitted(model$info)
+  # note that:
+  # fitted(model$eta) would return derivative on predictor scale
+  # fitted(model$eta) would return response scale
+  # the formulation λ(a)=η′(a)π(a) is for logit link case
   model$foi <- fitted(model$eta)*fitted(model$info) # λ(a)=η′(a)π(a)
-  model$df  <- list(age=age, pos=pos, tot=tot)
+  model$df  <- data.frame(age=age, pos=pos, tot=tot)
 
   class(model) <- "lp_model"
   model
@@ -136,7 +147,7 @@ lp_model <- function(data, kern="tcub", nn=0, h=0, deg=2,
 # h - range of values for constant bandwidth
 # if both nn and h are given, select either best nn or h, whichever gives the lowest GCV
 #' @import tidyr dplyr locfit
-best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial"){
+best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial", ...){
   # helper function to get df and GCV
   summary.gcvplot <- function(object, ...){
     z <- cbind(object$df, object$values)
@@ -162,7 +173,8 @@ best_lp_params <- function(data, nn=0, h=0, kern="tcub",deg=2, family="binomial"
       kern = kern,
       family = family,
       alpha = alpha,
-      data=data
+      data=data,
+      ...
     )
 
     gcv_out <- cbind(par_vals, gcv_out$values)

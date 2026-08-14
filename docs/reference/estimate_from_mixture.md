@@ -13,7 +13,8 @@ estimate_from_mixture(
   mixture_model,
   s = "ps",
   sp = 83,
-  monotonize = TRUE
+  monotonize = FALSE,
+  ...
 )
 ```
 
@@ -47,6 +48,11 @@ estimate_from_mixture(
 - monotonize:
 
   whether to monotonize seroprevalence (default to TRUE)
+
+- ...:
+
+  additional arguments to be passed to \`gam()\` function that fits the
+  model
 
 ## Value
 

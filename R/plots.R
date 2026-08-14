@@ -1,7 +1,8 @@
 #' Helper to adjust styling of a plot
 #'
 #' @param sero color for seroprevalence line
-#' @param ci color for confidence interval
+#' @param sero_ci color for confidence intervals of seroprevalence
+#' @param foi_ci color for confidence intervals of FoI
 #' @param foi color for force of infection line
 #' @param sero_line linetype for seroprevalence line
 #' @param foi_line linetype for force of infection line
@@ -9,7 +10,7 @@
 #'
 #' @return list of updated aesthetic values
 #' @export
-set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc0328", sero_line = "solid", foi_line = "dashed", xlabel = "Age"){
+set_plot_style <- function(sero = "blueviolet", sero_ci = "royalblue1", foi = "#fc0328", foi_ci="#fc0328", sero_line = "solid", foi_line = "dashed", xlabel = "Age"){
     list(
       scale_colour_manual(
         values = c("sero" = sero, "foi" = foi)
@@ -18,9 +19,9 @@ set_plot_style <- function(sero = "blueviolet", ci = "royalblue1", foi = "#fc032
         values = c("sero" = sero_line, "foi" = foi_line)
       ),
       scale_fill_manual(
-        values = c("ci" =ci)
+        values = c("sero CI" = sero_ci, "foi CI"=foi_ci)
       ),
-      labs(x=xlabel, linetype = "Line", colour = "Line", fill="Fill color")
+      labs(x=xlabel, linetype = "Line", colour = "Color", fill="Fill color")
     )
 }
 
@@ -62,7 +63,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
   if (is(sero, "data.frame")){
     if("ymax" %in% colnames(sero)){
       plot <- plot + geom_smooth(aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
-                                     fill = "ci"), data=sero,
+                                     fill = "sero CI"), data=sero,
                                  stat="identity",lwd=0.5)
     }else{
       # --- Handle cases where CI for seroprevalence is not computable & length of age for foi differs from provided age vector
@@ -90,7 +91,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
           ymax = ymax/scale_foi,
           col = "foi",
           linetype = "foi",
-          fill = "ci"
+          fill = "foi CI"
         ),
         data = foi,
         stat = "identity",
@@ -141,29 +142,34 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #' plot() overloading for polynomial model
 #'
 #' @param x the polynomial model object
-#' @param ... arbitrary params.
+#' @param cex adjust size of the datapoints
+#' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
+#' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
 #' @return ggplot object
 #' @export
-plot.polynomial_model <- function(x, ...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ci_df = NULL, ...) {
+  # out.DF <- compute_ci(x)
+  #
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI
+  #   foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- as.numeric(x$foi)
+  # }
 
-  out.DF <- compute_ci(x)
-
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI
-    foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
-  }else if (x$datatype == "aggregated"){
-    foi <- as.numeric(x$foi)
-  }
+  out_ci <- if (is.null(ci_df)) compute_ci.default(x, foi_ci=foi_ci, ...) else ci_df
 
   to_plot <- plot_data(x)
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = foi, cex = cex)
+    plot_util(
+      age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
+      sero = out_ci[[1]], foi = out_ci[[2]], cex = cex)
   })
 
 }
@@ -173,32 +179,26 @@ plot.polynomial_model <- function(x, ...) {
 #### Farrington model ####
 #' plot() overloading for Farrington model
 #'
-#' @param x the Farrington model object.
-#' @param ... arbitrary params.
+#' @param x the Farrington model object
+#' @param cex adjust size of the datapoints
+#' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
+#' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
 #' @importFrom graphics plot
 #'
 #' @return ggplot object
 #' @export
-plot.farrington_model <- function(x,...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-  # out.DF <- compute_ci(x)
-
+plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ci_df = NULL, ...) {
   to_plot <- plot_data(x)
 
-
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI & sero
-    foi <- data.frame(x = x$df$age, y = x$foi)
-    sero <- data.frame(x = x$df$age, y = x$sp)
-  }else if (x$datatype == "aggregated"){
-    foi <- x$foi
-    sero <- x$sp
-  }
+  ci_out <- if(is.null(ci_df))
+    compute_ci.farrington_model(x, foi_ci = foi_ci, ...)
+  else ci_df
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = sero, foi = foi, cex = cex)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = ci_out[[1]], foi = ci_out[[2]], cex = cex)
   })
 }
 
@@ -206,6 +206,9 @@ plot.farrington_model <- function(x,...) {
 #' plot() overloading for Weibull model
 #'
 #' @param x the Weibull model object.
+#' @param cex adjust size of the datapoints
+#' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -213,25 +216,26 @@ plot.farrington_model <- function(x,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.weibull_model <- function(x, ...) {
+plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ci_df=NULL,...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
 
-  out.DF <- compute_ci.weibull_model(x)
+  out_ci <- if(is.null(ci_df))
+    compute_ci.weibull_model(x, foi_ci = foi_ci, ...)
+  else ci_df
 
   to_plot <- plot_data(x)
 
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI & sero
-    foi <- data.frame(x = x$df$age, y = x$foi)
-  }else if (x$datatype == "aggregated"){
-    foi <- x$foi
-  }
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI & sero
+  #   foi <- data.frame(x = x$df$age, y = x$foi)
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- x$foi
+  # }
 
   suppressMessages(
     returned_plot <- plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
-                               sero = out.DF, foi = data.frame(x = x$df$age, y = x$foi), cex = cex) +
+                               sero = out_ci[[1]], foi = out_ci[[2]], cex = cex) +
       set_plot_style(xlabel = "Exposure time")
   )
 
@@ -242,6 +246,9 @@ plot.weibull_model <- function(x, ...) {
 #' plot() overloading for fractional polynomial model
 #'
 #' @param x the fractional polynomial model object.
+#' @param cex adjust size of the datapoints.
+#' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -249,14 +256,20 @@ plot.weibull_model <- function(x, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.fp_model <- function(x,...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.fp_model <- function(x, cex=20, foi_ci=FALSE, ci_df = NULL, ...) {
+  # out.DF <- compute_ci.fp_model(x)
 
-  out.DF <- compute_ci.fp_model(x)
+  out_ci <- if(is.null(ci_df)) compute_ci.fp_model(x, foi_ci=foi_ci, ...)
+    else ci_df
   to_plot <- plot_data(x)
 
+  # with(x$df, {
+  #   plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = x$foi, cex = cex)
+  # })
+
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = x$foi, cex = cex)
+    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot,
+              sero = out_ci[[1]], foi = out_ci[[2]], cex = cex)
   })
 }
 
@@ -266,6 +279,9 @@ plot.fp_model <- function(x,...) {
 #' plot() overloading for local polynomial model
 #'
 #' @param x the local polynomial model object.
+#' @param cex adjust size of the datapoints.
+#' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -273,21 +289,29 @@ plot.fp_model <- function(x,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.lp_model <- function(x, ...) {
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-
-  out.DF <- compute_ci.lp_model(x)
+plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ci_df=NULL, ...) {
+  out_ci <- if(is.null(ci_df))
+    compute_ci.lp_model(x, foi_ci=foi_ci, ...)
+  else
+    ci_df
   to_plot <- plot_data(x)
 
-  if(x$datatype == "linelisting"){
-    # use pre-aggregated age for FOI
-    foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
-  }else if (x$datatype == "aggregated"){
-    foi <- x$foi
-  }
+  # if(x$datatype == "linelisting"){
+  #   # use pre-aggregated age for FOI
+  #   foi <- data.frame(x = x$df$age, y = as.numeric(x$foi))
+  # }else if (x$datatype == "aggregated"){
+  #   foi <- x$foi
+  # }
 
   with(x$df, {
-    plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = out.DF, foi = foi, cex=cex)
+    plot_util(
+      age = to_plot$age,
+      pos = to_plot$pos,
+      tot = to_plot$tot,
+      sero = out_ci[[1]],
+      foi = out_ci[[2]],
+      cex = cex
+    )
   })
 }
 
@@ -295,6 +319,8 @@ plot.lp_model <- function(x, ...) {
 #' plot() overloading for hierarchical_bayesian_model
 #'
 #' @param x hierarchical_bayesian_model object created by serosv.
+#' @param cex adjust size of the datapoints.
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -302,13 +328,12 @@ plot.lp_model <- function(x, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.hierarchical_bayesian_model <- function(x,  ...){
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-
-  out.DF <- compute_ci.hierarchical_bayesian_model(x)
+plot.hierarchical_bayesian_model <- function(x, cex=20, ci_df=NULL, ...){
+  out_ci <- if(is.null(ci_df)) compute_ci.hierarchical_bayesian_model(x, ...)
+    else ci_df
 
   with(x$df, {
-    plot_util(age = age, pos = pos, tot = tot, sero = out.DF, foi = x$foi, cex=cex)
+    plot_util(age = age, pos = pos, tot = tot, sero = out_ci[[1]], foi = out_ci[[2]], cex=cex)
   })
 }
 
@@ -317,6 +342,9 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #' plot() overloading for penalized spline
 #'
 #' @param x the penalized_spline_model object
+#' @param cex adjust size of the datapoints.
+#' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -324,9 +352,9 @@ plot.hierarchical_bayesian_model <- function(x,  ...){
 #'
 #' @return ggplot object
 #' @export
-plot.penalized_spline_model <- function(x, ...){
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
-  ci <- compute_ci.penalized_spline_model(x)
+plot.penalized_spline_model <- function(x, cex=20, foi_ci=FALSE, ci_df=NULL, ...){
+  ci <- if(is.null(ci_df)) compute_ci.penalized_spline_model(x, foi_ci=foi_ci, ...)
+    else ci_df
 
   out.DF <- ci[[1]]
   out.FOI <- ci[[2]]
@@ -344,6 +372,7 @@ plot.penalized_spline_model <- function(x, ...){
 #' plot() overloading for mixture model
 #'
 #' @param x the mixture_model
+#'
 #' @param ... arbitrary params.
 #' @importFrom graphics plot
 #' @import ggplot2
@@ -403,19 +432,24 @@ plot.mixture_model <- function(x, ...){
 #' plot() overloading for result of estimate_from_mixture
 #'
 #' @param x the mixture_model
-#' @param ... arbitrary params.
+#' @param cex adjust size of the datapoints
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
+#' @param ... arbitrary params
 #' @importFrom graphics plot
 #' @import ggplot2
 #'
 #' @return ggplot object
 #'
 #' @export
-plot.estimate_from_mixture <- function(x, ... ){
-  cex <- if (is.null(list(...)[["cex"]])) 20 else list(...)$cex
+plot.estimate_from_mixture <- function(x, cex=20, ci_df=NULL, ...){
+  # work around to resolve no visible binding note NOTE during check()
+  foi_estimates <- sero_estimates <- y <- ymax <- ymin <- NULL
+
   age <- x$df$age
 
   returned_plot <- ggplot()
 
+  # if prevalence computed using threshold is available -> use that as datapoints
   if(!is.null(x$df$threshold_status)){
     aggregated <- transform_data(
       data.frame(
@@ -424,45 +458,55 @@ plot.estimate_from_mixture <- function(x, ... ){
       )
     )
     # resolve no visible binding note
-    age <- pos <- tot <- NULL
+    pos <- tot <- NULL
 
     returned_plot <-  returned_plot +
       geom_point(aes( x = age, y = pos/tot, size = cex*(pos)/max(tot) ), data = aggregated,
                  shape = 1, show.legend = FALSE)
   }
 
+  ci <- if(is.null(ci_df)) compute_ci.estimate_from_mixture(x, ...) else
+    ci_df
+
   # resolve no visible binding note
   foi <- foi_x <- NULL
   returned_plot <- returned_plot +
-    geom_line(aes(x = x$sp$age, y = x$sp$sp, col = "sero", linetype = "sero")) +
-    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi)
+    geom_smooth(
+      aes(x = x, y = y, ymin = ymin, ymax = ymax, col = "sero", linetype="sero",
+                fill = "sero CI"),
+      data=ci, stat="identity",lwd=0.5) +
+    geom_line(aes(x = foi_x, y = foi, col = "foi", linetype = "foi"), data=x$foi) +
+    coord_cartesian(xlim=c(0,max(age)), ylim=c(0, 1)) +
+    scale_y_continuous(
+      name = "Seroprevalence",
+      sec.axis = sec_axis(~.*1, name = " Force of infection") # apply no scaling for now
+    )
 
-  returned_plot + set_plot_style() + labs(x = "Age", y="Seroprevalence")
+  returned_plot + set_plot_style() + labs(x = "Age")
 }
 
 # ------- Plot age time varying seroprevalence ----------
 #' Plot output for age_time_model
 #'
-#' @param x - a `age_time_model` object
-#' @param ... arbitrary params.
-#' Supported options include:
-#'   \itemize{
-#'     \item \code{facet}: Whether to facet the plot by group.
-#'     \item \code{modtype}: Which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}.
-#'     \item \code{le}: Number of bins used to generate the x-axis; higher values produce smoother curves.
-#'     \item \code{cex}: Adjusts the size of data points (only when \code{facet = TRUE}).
-#'   }
+#' @param x a `age_time_model` object
+#' @param facet whether to facet the plot by group
+#' @param modtype specify which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}
+#' @param le number of bins used to generate the x-axis; higher values produce smoother curves
+#' @param cex adjust size of the datapoints (only when \code{facet = TRUE})
+#' @param foi_ci foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
+#' @param ... arbitrary params
 #'
 #' @importFrom graphics plot
 #' @import ggplot2 assertthat tidyr
 #'
 #' @return ggplot object
 #' @export
-plot.age_time_model <- function(x, ...){
-  # check whether user specify facet
-  facet <- if (is.null(list(...)[["facet"]])) TRUE else list(...)$facet
-  cex <- if (is.null(list(...)[["cex"]])) 10 else list(...)$cex
-  le <- if (is.null(list(...)[["le"]])) 100 else list(...)$le
+plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE,
+                                modtype="monotonized", foi_ci=FALSE,
+                                ci_df = NULL, ...){
+  # work around to resolve no visible binding note NOTE during check()
+  sp_df <- foi_df <- df <- age <- pos <- tot <- y <- ymin <- ymax <- seroprev <- NULL
 
   assert_that(
     is.logical(facet),
@@ -470,14 +514,15 @@ plot.age_time_model <- function(x, ...){
   )
 
   # check which type of model user wants to visualize
-  modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
   assert_that(
     modtype == "monotonized" | modtype == "non-monotonized",
     msg = "modtype argument must be eithers 'monotonized' or 'non-monotonized'"
   )
 
   # compute the CI for sp
-  out <- compute_ci.age_time_model(x, modtype = modtype, le = le)
+  out <- if(is.null(ci_df))
+    compute_ci.age_time_model(x, modtype = modtype, le = le, foi_ci=foi_ci, ...) else
+    ci_df
 
   # get seroprev data and foi data for plotting
   sp_dat <- out %>% select(!!sym(x$grouping_col), sp_df) %>% unnest(sp_df)
@@ -500,13 +545,23 @@ plot.age_time_model <- function(x, ...){
     geom_smooth(aes(
       x = x, y = y, ymin=ymin, ymax=ymax,
       color = if(facet) "sero" else as.factor(!!sym(x$grouping_col)),
-      fill = if(facet) "ci" else as.factor(!!sym(x$grouping_col))
+      fill = if(facet) "sero CI" else as.factor(!!sym(x$grouping_col))
     ), stat = "identity", lwd=0.5, alpha=0.2, data = sp_dat) +
-    geom_line(aes(
-      x = x, y = y, color = if(facet) "foi" else as.factor(!!sym(x$grouping_col))
-    ), linetype = "dashed", data = foi_dat) +
     ylim(c(0, 1)) +
-    if (facet)
+    (
+      if(!foi_ci)
+        geom_line(aes(
+          x = x, y = y, color = if(facet) "foi" else as.factor(!!sym(x$grouping_col))
+        ), linetype = "dashed", data = foi_dat)
+      else
+        geom_smooth(aes(
+          x = x, y = y, ymin=ymin, ymax=ymax,
+          color = if(facet) "foi" else as.factor(!!sym(x$grouping_col)),
+          fill = if(facet) "foi CI" else as.factor(!!sym(x$grouping_col))
+        ), linetype = "dashed", stat = "identity", lwd=0.5, alpha=0.2, data = foi_dat)
+    ) +
+    (
+      if (facet)
       list(
         geom_point(
           aes(x = age, y = seroprev, size = cex*pos/max(tot)), shape = 1,
@@ -517,8 +572,8 @@ plot.age_time_model <- function(x, ...){
         facet_wrap(vars(!!sym(x$grouping_col)))
       ) else
         labs(color = x$grouping_col, fill = x$grouping_col)
+    )
 }
-
 
 #### GCV values ####
 #' Plotting GCV values with respect to different nn-s and h-s parameters.
@@ -590,6 +645,10 @@ plot_gcv <- function(age, pos, tot, nn_seq, h_seq, kern="tcub", deg=2) {
 #' @return ggplot object
 #' @export
 plot_corrected_prev <- function(x, y=NULL, facet=FALSE){
+  # work around to resolve no visible binding note NOTE during check()
+  age <- sero <- label <- sero_lwr <- sero_upr <- standard_curve_df <- NULL
+  antitoxin_df <- logc <- median <- lower <- upper <- result <- concentration <- NULL
+
   dat <- x$df
   corrected_dat <- x$corrected_se %>% mutate(label = paste0("estimated prevalence"))
   corrected_dat2 <- NULL

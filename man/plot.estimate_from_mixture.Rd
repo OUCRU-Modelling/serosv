@@ -4,12 +4,16 @@
 \alias{plot.estimate_from_mixture}
 \title{plot() overloading for result of estimate_from_mixture}
 \usage{
-\method{plot}{estimate_from_mixture}(x, ...)
+\method{plot}{estimate_from_mixture}(x, cex = 20, ci_df = NULL, ...)
 }
 \arguments{
 \item{x}{the mixture_model}
 
-\item{...}{arbitrary params.}
+\item{cex}{adjust size of the datapoints}
+
+\item{ci_df}{a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.}
+
+\item{...}{arbitrary params}
 }
 \value{
 ggplot object

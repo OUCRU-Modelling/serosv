@@ -4,16 +4,28 @@
 \alias{compute_ci.hierarchical_bayesian_model}
 \title{Compute 95\% credible interval for hierarchical Bayesian model}
 \usage{
-\method{compute_ci}{hierarchical_bayesian_model}(x, ...)
+\method{compute_ci}{hierarchical_bayesian_model}(x, ci = 0.95, le = 100, ...)
 }
 \arguments{
 \item{x}{serosv models}
 
+\item{ci}{confidence level for the interval}
+
+\item{le}{length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL}
+
 \item{...}{arbitrary arguments}
 }
 \value{
-list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+a list of 2 data frames:
+  \itemize{
+    \item seroprevalence estimates with columns: \code{x} (age),
+      \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+      (lower and upper credible interval bounds)
+    \item FoI estimates with columns: \code{x} (age), \code{y}
+      (fitted FoI), \code{ymin} and
+      \code{ymax} (lower and upper credible interval bounds)
+ }
 }
 \description{
-Compute 95\% credible interval for hierarchical Bayesian model
+Return CrI for Seroprevalence and Force of Infection via parameters' posterior distributions.
 }

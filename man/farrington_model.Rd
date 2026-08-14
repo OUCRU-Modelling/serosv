@@ -8,20 +8,25 @@ farrington_model(
   data,
   start,
   fixed = list(),
+  lower = list(beta = 1e-06, alpha = 0, gamma = 0),
+  upper = list(beta = Inf, alpha = Inf, gamma = Inf),
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 }
 \arguments{
 \item{data}{the input data frame, must either have columns for `age`, `pos`, `tot` (for aggregated data) OR `age`, `status` (for linelisting data)}
 
-\item{start}{Named list of vectors or single vector.
-Initial values for optimizer.}
+\item{start}{Named list of vectors or single vector. Initial values for optimizer.}
 
-\item{fixed}{Named list of vectors or single vector.
-Parameter values to keep fixed during optimization.}
+\item{fixed}{Named list of vectors or single vector. Parameter values to keep fixed during optimization.}
+
+\item{lower}{Named list of vectors or single vector. Lowerbound for parameter values during optimization.}
+
+\item{upper}{Named list of vectors or single vector. Upperbound for parameter values during optimization.}
 
 \item{age_col}{name of the `age` column (default age_col="age").}
 
@@ -30,6 +35,8 @@ Parameter values to keep fixed during optimization.}
 \item{tot_col}{name of the `tot` column (default tot_col="tot").}
 
 \item{status_col}{name of the `status` column (default status_col="status").}
+
+\item{...}{additional arguments to be passed to `mle()` function that fits the model}
 }
 \value{
 a list of class farrington_model with 5 items
@@ -38,6 +45,8 @@ a list of class farrington_model with 5 items
   \item{info}{fitted "mle" object}
   \item{sp}{seroprevalence}
   \item{foi}{force of infection}
+  \item{sp_mod}{model for seroprevalence as a function}
+  \item{foi_mod}{model for FoI as a function}
 }
 \description{
 Fit age-stratified seroprevalence data using the Farrington (1990) model, which assumes the

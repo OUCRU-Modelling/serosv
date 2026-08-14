@@ -33,7 +33,6 @@ Pediatr 161, 588-593 (2002).
 
 ``` r
 library(dplyr)
-#> Warning: package ‘dplyr’ was built under R version 4.3.1
 #> 
 #> Attaching package: ‘dplyr’
 #> The following objects are masked from ‘package:stats’:

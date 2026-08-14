@@ -15,7 +15,8 @@ lp_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 ```
 
@@ -63,9 +64,14 @@ lp_model(
 
   name of the \`status\` column (default status_col="status").
 
+- ...:
+
+  additional arguments to be passed to \`locfit()\` function that fits
+  the model
+
 ## Value
 
-a list of class lp_model with 6 items
+a list of class lp_model with the following items
 
 - datatype:
 
@@ -75,13 +81,14 @@ a list of class lp_model with 6 items
 
   the dataframe used for fitting the model
 
-- pi:
+- info:
 
-  fitted locfit object for pi
+  fitted locfit object for prevalence
 
 - eta:
 
-  fitted locfit object for eta
+  fitted locfit object to estimate the derivative for predictor eta,
+  used for FoI computation
 
 - sp:
 
@@ -91,6 +98,22 @@ a list of class lp_model with 6 items
 
   force of infection
 
+- nn:
+
+  nearest neighbor parameter used by the fitted model
+
+- h:
+
+  constant bandwidth parameter used by the fitted model
+
+- deg:
+
+  degree of the local polynomial
+
+- kern:
+
+  kernel used by the fitted model
+
 ## Details
 
 Consider a linear predictor \\\eta(a)\\ approximated locally at one
@@ -99,15 +122,15 @@ particular value \\a_0\\.
 For a general degree \\p\\, the linear predictor for a neighbor of
 \\a_0\\, labeled \\a_i\\ is equivalent to the Taylor approximation \$\$
 \eta(a_i) = \eta(a_0) + \eta^{(1)}(a_0)(a_i - a_0) +
-\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + ... +
+\frac{\eta^{(2)}(a_0)}{2}(a_i - a_0)^2 + \cdots +
 \frac{\eta^{(p)}(a_0)}{p!}(a_i - a_0)^p \$\$
 
 \\\eta(a_i)\\ can be estimated by maximizing \$\$ \Sigma\_{i=1}^{N}
 \ell_i \\Y_i, g^{-1} (\beta_0 + \beta_1(a_i-a_0)+ \beta_2(a_i-a_0)^2
-... + \beta_p(a_i-a_0)^p) \\ K_h(a_i - a_0) \$\$
+\cdots + \beta_p(a_i-a_0)^p) \\ K_h(a_i - a_0) \$\$
 
-The estimator for the \\k\\-th derivative of \\\eta(a_0)\\, for \\k =
-0,1,…,p\\ (degree of local polynomial) is thus: \$\$
+The estimator for the \\k-th\\ derivative of \\\eta(a_0)\\, for \\k =
+0,1,\cdots,p\\ (degree of local polynomial) is thus: \$\$
 \hat{\eta}^{(k)}(a_0) = k!\hat{\beta}\_k(a_0) \$\$
 
 The estimator for the prevalence at age \\a_0\\ is then given by \$\$

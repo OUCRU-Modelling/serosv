@@ -58,7 +58,7 @@ $$
 \eta = \textbf{X}\beta + \textbf{Zu}
 $$
 
-Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $\textbf{u} = [u_1 u_2 ... u_k]^T$ are the regression with corresponding design matrices
+Where $\eta = [\eta(a_i) ... \eta(a_N) ]^T$, $\beta = [\beta_0 \beta_1 .... \beta_p]^T$, and $\textbf{u} = [u_1 u_2 ... u_k]^T$ are the regression coefficients with corresponding design matrices
 
 $$
 \textbf{X} = \begin{bmatrix}
@@ -136,7 +136,7 @@ pl
 ```
 
 ```{r, fig.width=7, fig.height=4}
-plot(pl)
+plot(pl, foi_ci=FALSE)
 ```
 
 ------------------------------------------------------------------------
@@ -173,5 +173,8 @@ glmm
 ```
 
 ```{r, fig.width=7, fig.height=4}
-plot(glmm)
+plot(
+  glmm, foi_ci = TRUE, 
+  ncpus = 2 # limit used cores for vignette building
+)
 ```

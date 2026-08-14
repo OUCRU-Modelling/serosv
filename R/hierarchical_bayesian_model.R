@@ -68,15 +68,15 @@
 #' @importFrom rstan sampling summary
 #' @importFrom boot inv.logit
 #'
-#' @return a list of class hierarchical_bayesian_model with 6 items
+#' @return a list of class hierarchical_bayesian_model with the following items
 #'   \item{datatype}{type of datatype used for model fitting (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
-#'   \item{type}{type of bayesian model far2, far3 or log_logistic}
-#'   \item{info}{parameters for the fitted model}
+#'   \item{type}{type of bayesian model "far2", "far3" or "log_logistic"}
+#'   \item{info}{a stanfit object for the fitted result}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
 #'   \item{sp_func}{function to compute seroprevalence given age and model parameters}
-#'   \item{foi}{function to compute force of infection given age and model parameters}
+#'   \item{foi_func}{function to compute force of infection given age and model parameters}
 #' @export
 #'
 #' @examples
@@ -120,14 +120,14 @@ hierarchical_bayesian_model <- function(data,
     stop('Model is not defined. Please choose "far3", "far2" or "log_logistic"')
   }
 
-  model$info <- summary(fit)$summary
+  model$info <- fit
 
   theta <- list()
 
   if (type == "far3"){
-    alpha1 <- model$info["alpha1",c("mean")]
-    alpha2 <- model$info["alpha2",c("mean")]
-    alpha3 <- model$info["alpha3",c("mean")]
+    alpha1 <- summary(model$info)$summary["alpha1",c("mean")]
+    alpha2 <- summary(model$info)$summary["alpha2",c("mean")]
+    alpha3 <- summary(model$info)$summary["alpha3",c("mean")]
 
     theta$sp_func <- \(age, alpha1, alpha2, alpha3){
       1 - exp((alpha1/alpha2)*age*exp(-alpha2*age)+
@@ -145,8 +145,8 @@ hierarchical_bayesian_model <- function(data,
   }
 
   if (type == "far2"){
-    alpha1 <- model$info["alpha1",c("mean")]
-    alpha2 <- model$info["alpha2",c("mean")]
+    alpha1 <- summary(model$info)$summary["alpha1",c("mean")]
+    alpha2 <- summary(model$info)$summary["alpha2",c("mean")]
 
     theta$sp_func <- \(age, alpha1, alpha2){
       1-exp((alpha1 / alpha2) * age * exp(-alpha2 * age) +
@@ -162,8 +162,8 @@ hierarchical_bayesian_model <- function(data,
   }
 
   if (type == "log_logistic"){
-    alpha1 <- model$info["alpha1",c("mean")]
-    alpha2 <- model$info["alpha2",c("mean")]
+    alpha1 <- summary(model$info)$summary["alpha1",c("mean")]
+    alpha2 <- summary(model$info)$summary["alpha2",c("mean")]
 
     theta$sp_func <- \(age, alpha1, alpha2){
       inv.logit(alpha2+alpha1*log(age))

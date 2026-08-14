@@ -22,7 +22,8 @@
 #' @return a list of 3 items
 #'   \item{info}{estimated parameters (when `bayesian = TRUE`) or formula to compute corrected prevalence (when `bayesian = FALSE`)}
 #'   \item{df}{data.frame of input data (in aggregated form) with the 95\% confidence interval for apparent (i.e. observed) seroprevalence}
-#'   \item{corrected_sero}{data.frame containing age, the corresponding estimated seroprevalance with 95\% confidence/credible interval, and adjusted tot and pos}
+#'   \item{corrected_se}{data.frame containing age, the corresponding estimated seroprevalance with 95\% confidence/credible interval, and adjusted tot and pos}
+#'   \item{method}{method for prevalence correction (frequentist or bayesian)}
 #' @export
 #'
 #' @examples

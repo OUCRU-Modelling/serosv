@@ -18,9 +18,9 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Nonparametric model">
 </head>
 <body>
@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/linelisting_vs_aggregated.html">Input data</a></li>
-    <li><a class="dropdown-item" href="../articles/sir_model.html">SIR model</a></li>
     <li><a class="dropdown-item" href="../articles/parametric_model.html">Parametric models</a></li>
     <li><a class="dropdown-item" href="../articles/nonparametric_model.html">Nonparametric model</a></li>
     <li><a class="dropdown-item" href="../articles/semiparametric_model.html">Semiparametric model</a></li>
@@ -179,8 +178,9 @@ parameter</p></li>
 <span><span class="co">#&gt; Family:  Logistic </span></span>
 <span><span class="co">#&gt; Fitted Degrees of freedom:       6.463 </span></span>
 <span><span class="co">#&gt; Residual scale:                  1</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lp</span>, foi_ci <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Running nonparametric bootstrap for FoI confidence intervals, this may take a while</span></span></code></pre></div>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
 <p>The users can also provide <code>h</code> or <code>nn</code> as a
 numeric vector, in which case the package will use the parameter value
 that minimize the generalized cross-validation (GCV) criterion.</p>
@@ -188,13 +188,13 @@ that minimize the generalized cross-validation (GCV) criterion.</p>
 <code class="sourceCode R"><span><span class="co"># ----- Tune nearest neighbor (nn) parameter</span></span>
 <span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span><span class="op">)</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ----- Tune bandwidth (h) parameter</span></span>
 <span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">25</span><span class="op">)</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" width="700"></p>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" alt="" width="700"></p>
 <p>Alternatively, use <code><a href="../reference/plot_gcv.html">plot_gcv()</a></code> to show GCV curves for the
 nearest neighbor method (left) and constant bandwidth (right) for manual
 parameter selection.</p>
@@ -204,19 +204,19 @@ parameter selection.</p>
 <span>   nn_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span>, by<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>   h_seq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">25</span>, by<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span> <span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="672"></p>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
 <p>Based on the plot, we can then fit the model using the parameter
 value that give the lowest GCV (<code>nn = 0.3</code> and
 <code>h = 14</code>)</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, nn <span class="op">=</span> <span class="fl">0.3</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700"></p>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/lp_model.html">lp_model</a></span><span class="op">(</span><span class="va">mump</span>, kern<span class="op">=</span><span class="st">"tcub"</span>, h <span class="op">=</span> <span class="fl">14</span>, deg<span class="op">=</span><span class="fl">2</span><span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" width="700"></p>
+<p><img src="nonparametric_model_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="" width="700"></p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Hens2012" class="csl-entry">
 Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
@@ -237,7 +237,7 @@ New York. <a href="https://doi.org/10.1007/978-1-4614-4072-7" class="external-li
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

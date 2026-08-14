@@ -6,8 +6,9 @@
 \usage{
 set_plot_style(
   sero = "blueviolet",
-  ci = "royalblue1",
+  sero_ci = "royalblue1",
   foi = "#fc0328",
+  foi_ci = "#fc0328",
   sero_line = "solid",
   foi_line = "dashed",
   xlabel = "Age"
@@ -16,9 +17,11 @@ set_plot_style(
 \arguments{
 \item{sero}{color for seroprevalence line}
 
-\item{ci}{color for confidence interval}
+\item{sero_ci}{color for confidence intervals of seroprevalence}
 
 \item{foi}{color for force of infection line}
+
+\item{foi_ci}{color for confidence intervals of FoI}
 
 \item{sero_line}{linetype for seroprevalence line}
 

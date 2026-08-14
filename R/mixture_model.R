@@ -123,6 +123,7 @@ mixture_model <- function (antibody_level, breaks=40, pi=c(0.2, 0.8), mu=c(2,6),
 #' @param sp smoothing parameter
 #' @param threshold_status sero status using threshold approach in line listing (optional, for visualization and comparison only)
 #' @param monotonize whether to monotonize seroprevalence (default to TRUE)
+#' @param ... additional arguments to be passed to `gam()` function that fits the model
 #'
 #' @importFrom mgcv gam
 #' @importFrom stats approx gaussian
@@ -137,7 +138,10 @@ mixture_model <- function (antibody_level, breaks=40, pi=c(0.2, 0.8), mu=c(2,6),
 #'  [mgcv::gam()] for more information about the fitted gam object
 #'
 #' @export
-estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, mixture_model, s="ps", sp=83, monotonize=TRUE){
+estimate_from_mixture <- function(age, antibody_level,
+                                  threshold_status = NULL, mixture_model,
+                                  s="ps", sp=83, monotonize=FALSE,
+                                  ...){
   # Helper funciton to compute derivative of mu(a) aka. mu'(a)
   differentiate_mu<-function(x,mu)
   {
@@ -166,7 +170,9 @@ estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, 
   mu_i <- mixture_model$info$parameters$mu[2]
 
   # Fit mu(a)
-  model$info <- gam(log_antibody ~ s(age, bs = "ps", sp=83), family = gaussian())
+  model$info <- gam(log_antibody ~ s(age, bs = s, sp=sp), family = gaussian(), ...)
+  model$mu_s <- mu_s
+  model$mu_i <- mu_i
 
   # making sure age range is enough for a smooth estimation
   threshold <- 20
@@ -195,7 +201,7 @@ estimate_from_mixture <- function(age, antibody_level, threshold_status = NULL, 
   model$foi <- compute_dermu$dermu/(mu_i - compute_dermu$mu)
   model$foi <- data.frame(
     foi_x = compute_dermu$grid,
-    foi = model$foi/2 #not sure y the /2, but it works
+    foi = model$foi
   )
 
   # save fitted df

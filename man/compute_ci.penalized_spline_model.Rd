@@ -4,18 +4,31 @@
 \alias{compute_ci.penalized_spline_model}
 \title{Compute confidence interval for penalized_spline_model}
 \usage{
-\method{compute_ci}{penalized_spline_model}(x, ci = 0.95, ...)
+\method{compute_ci}{penalized_spline_model}(x, ci = 0.95, le = 100, foi_ci = FALSE, ...)
 }
 \arguments{
 \item{x}{serosv models}
 
-\item{ci}{confidence interval}
+\item{ci}{confidence level for the interval}
+
+\item{le}{length of age sequence for computing confidence interval, default to inputted age sequence for model fitting if NULL}
+
+\item{foi_ci}{whether to compute CI for FoI (default to FALSE)}
 
 \item{...}{arbitrary arguments}
 }
 \value{
-list of confidence interval for seroprevalence and foi Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
+a list of 2 data frames:
+  \itemize{
+    \item seroprevalence estimates with columns: \code{x} (age),
+      \code{y} (fitted seroprevalence), \code{ymin} and \code{ymax}
+      (lower and upper confidence interval bounds)
+    \item FoI estimates with columns: \code{x} (age), \code{y}
+      (fitted FoI), and if \code{foi_ci = TRUE}, \code{ymin} and
+      \code{ymax} (lower and upper confidence interval bounds)
+ }
 }
 \description{
-Compute confidence interval for penalized_spline_model
+Computes CI for Seroprevalence from model standard errors, and (optionally)
+for Force of Infection via nonparametric bootstrap.
 }

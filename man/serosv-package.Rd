@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Anh Phan Truong Quynh \email{anhptq@oucru.org} (\href{https://orcid.org/0009-0000-2129-435X}{ORCID})
   \item Nguyen Pham Nguyen The \email{nguyenpnt@oucru.org} (\href{https://orcid.org/0000-0002-0356-2776}{ORCID})
   \item Long Bui Thanh
   \item Tuyen Huynh \email{tuyenhn@oucru.org}

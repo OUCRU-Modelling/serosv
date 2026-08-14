@@ -30,6 +30,7 @@ formulate <- function(p) {
 #' @param mc indicates if the returned model should be monotonic.
 #' @param degree the maximum degree (i.e. number of power terms) to search for the best model. Recommended to be <= 2.
 #' @param link the link function. Defaulted to "logit".
+#' @param ... additional arguments to be passed to `glm()` function that fits the model
 #'
 #' @return list of 3 elements:
 #'   \item{p}{The best power for fp model.}
@@ -40,13 +41,14 @@ formulate <- function(p) {
 #' @import dplyr tidyr
 #' @importFrom purrr pmap_dfr
 find_best_fp_powers <- function(data,
-                                p, mc, degree, link="logit"){
+                                p, mc, degree, link="logit", ...){
   age <- data$age
   pos <- data$pos
   tot <- data$tot
 
   best_mod <- NULL # best model
   best_p <- NULL # best powers (p vector) for the given degree
+  . <- NULL # resolve no visible binding NOTE
 
   # Starting from the lowest degree
   # Get the best combinations of powers p
@@ -61,12 +63,14 @@ find_best_fp_powers <- function(data,
 
     # fit model with all the combinations of p and degree
     mods <- p_combis %>%
-      pmap_dfr(\(...){
-        curr_p <- as.numeric(c(...))
+      split(seq_len(nrow(.))) %>% # split into rows
+      map_dfr(\(combis){
+        curr_p <- as.numeric(c(combis))
 
         curr_mod <- glm(
           as.formula(formulate(curr_p)),
-          family=binomial(link=link)
+          family=binomial(link=link),
+          ...
         )
 
         # only accept the parameters if the model converged
@@ -156,15 +160,18 @@ find_best_fp_powers <- function(data,
 #' @param tot_col name of the `tot` column (default tot_col="tot").
 #' @param status_col name of the `status` column (default status_col="status").
 #' @param monotonic whether the returned model should be monotonic (if a search is specified)
+#' @param ... additional arguments to be passed to `glm()` function that fits the model
 #'
 #' @importFrom stats predict as.formula
 #'
-#' @return a list of class fp_model with 5 items
+#' @return a list of class fp_model with 7 items
 #'   \item{datatype}{type of data used for fitting model (aggregated or linelisting)}
 #'   \item{df}{the dataframe used for fitting the model}
 #'   \item{info}{a fitted glm model}
+#'   \item{p}{powers used for the model}
 #'   \item{sp}{seroprevalence}
 #'   \item{foi}{force of infection}
+#'   \item{pars}{other model configurations}
 #' @seealso
 #' [stats::glm()] for more information on glm object
 #'
@@ -179,7 +186,8 @@ find_best_fp_powers <- function(data,
 #'
 #' @export
 fp_model <- function(data,p,monotonic=FALSE,link="logit",
-                     age_col="age",pos_col="pos", tot_col="tot", status_col="status") {
+                     age_col="age",pos_col="pos", tot_col="tot", status_col="status",
+                     ...) {
   model <- list()
 
   data <- check_input(data, stratum_col=age_col,pos_col=pos_col, tot_col=tot_col, status_col=status_col)
@@ -192,13 +200,15 @@ fp_model <- function(data,p,monotonic=FALSE,link="logit",
   if(is.numeric(p)){
     model$info <- glm(
       as.formula(formulate(p)),
-      family=binomial(link=link)
+      family=binomial(link=link),
+      ...
     )
     model$p <- p
   }else if(is.list(p) && all(c("p_range", "degree") %in% names(p))){
     out <- find_best_fp_powers(
       data = data.frame(age=age, pos=pos, tot=tot),
-      p = p$p_range, degree = p$degree, mc = monotonic, link = link
+      p = p$p_range, degree = p$degree, mc = monotonic, link = link,
+      ...
     )
     model$p <- out$p
     model$info <- out$model
@@ -213,7 +223,11 @@ fp_model <- function(data,p,monotonic=FALSE,link="logit",
     t=age,
     sp=model$info$fitted.values
   )
-  model$df <- list(age=age, pos=pos, tot=tot)
+  model$df <- data.frame(age=age, pos=pos, tot=tot)
+  model$pars <- list(
+    monotonic = monotonic,
+    link = link
+  )
 
   class(model) <- "fp_model"
   model

@@ -15,7 +15,8 @@
 #' [stats::predict.glm()] for more information on the predict function
 #' @export
 predict.polynomial_model <- function(object, newdata=NULL, ...){
-  predict.glm(object$info, newdata, ...)
+  # return seroprevalence
+  1 - predict.glm(object$info, newdata, type="response", ...)
 }
 
 #' Prediction for serosv fractional polynomial model
@@ -30,8 +31,8 @@ predict.polynomial_model <- function(object, newdata=NULL, ...){
 #' [stats::predict.glm()] for more information on the predict function
 #' @export
 predict.fp_model <- function(object, newdata=NULL, ...){
-
-  predict.glm(object$info,newdata=newdata, ...)
+  # return seroprevalence
+  predict.glm(object$info,newdata=newdata, type="response", ...)
 }
 
 #' Prediction for serosv Weibull model
@@ -46,7 +47,7 @@ predict.fp_model <- function(object, newdata=NULL, ...){
 #' [stats::predict.glm()] for more information on the predict function
 #' @export
 predict.weibull_model <- function(object, newdata=NULL, ...){
-  predict.glm(object$info,data.frame("log(t)" = newdata$`log(t)`), ...)
+  predict.glm(object$info,data.frame("age" = newdata$age),type="response", ...)
 }
 
 
@@ -59,7 +60,7 @@ predict.weibull_model <- function(object, newdata=NULL, ...){
 #' @return prediction output
 #' @export
 predict.lp_model <- function(object, newdata=NULL,...){
-  predict(object$info, data.frame(age = newdata[[1]]), ...)
+  predict(object$info, data.frame(age = newdata$age), type="response", ...)
 }
 
 
@@ -83,7 +84,7 @@ predict.penalized_spline_model <- function(object, newdata=NULL,...){
     gam_obj <- object$info$gam
   }
 
-  predict.gam(gam_obj, newdata, ...)
+  predict.gam(gam_obj, newdata, type="response", ...)
 }
 
 #' Prediction for serosv Farrington model
@@ -95,15 +96,14 @@ predict.penalized_spline_model <- function(object, newdata=NULL,...){
 #' @return prediction output
 #' @export
 predict.farrington_model <- function(object, newdata=NULL,...){
-  alpha <- object$info@coef[1]
-  beta  <- object$info@coef[2]
-  gamma <- object$info@coef[3]
+  alpha <- object$info@fullcoef[1]
+  beta  <- object$info@fullcoef[2]
+  gamma <- object$info@fullcoef[3]
 
-  1-exp(
-    (alpha/beta)*newdata[[1]]*exp(-beta*newdata[[1]])
-    +(1/beta)*((alpha/beta)-gamma)*(exp(-beta*newdata[[1]])-1)
-    -gamma*newdata[[1]])
+  object$sp_mod(newdata[[1]], alpha, beta, gamma)
 }
+
+
 
 #' Predict from an hierarchical bayesian model
 #'
@@ -115,34 +115,35 @@ predict.farrington_model <- function(object, newdata=NULL,...){
 #' @return list of confidence interval for seroprevalence and foi. Each confidence interval dataframe with 4 variables, x and y for the fitted values and ymin and ymax for the confidence interval
 #' @export
 predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
-  out_x <- object$df$age
+  # out_x <- object$df$age
+  out_x <- newdata[[1]]
   out.DF <- NULL
 
   if (object$type == "far3"){
-    alpha1 <- object$info["alpha1", "50%"]
-    alpha2 <- object$info["alpha2", "50%"]
-    alpha3 <- object$info["alpha3", "50%"]
+    alpha1 <- summary(object$info)$summary["alpha1", "50%"]
+    alpha2 <- summary(object$info)$summary["alpha2", "50%"]
+    alpha3 <- summary(object$info)$summary["alpha3", "50%"]
 
     out.DF <- data.frame(
       x = out_x,
-      y = object$sp_func(out_x, alpha1, alpha2, alpha3),
+      y = object$sp_func(out_x, alpha1, alpha2, alpha3)
     )
   }else if(object$type == "far2"){
-    alpha1 <- object$info["alpha1", "50%"]
-    alpha2 <- object$info["alpha2", "50%"]
+    alpha1 <- summary(object$info)$summary["alpha1", "50%"]
+    alpha2 <- summary(object$info)$summary["alpha2", "50%"]
 
     out.DF <- data.frame(
       x = out_x,
-      y = object$sp_func(out_x, alpha1, alpha2),
+      y = object$sp_func(out_x, alpha1, alpha2)
     )
 
   }else if(object$type == "log_logistic"){
-    alpha1 <- object$info["alpha1", "50%"]
-    alpha2 <- object$info["alpha2", "50%"]
+    alpha1 <- summary(object$info)$summary["alpha1", "50%"]
+    alpha2 <- summary(object$info)$summary["alpha2", "50%"]
 
     out.DF <- data.frame(
       x = out_x,
-      y = object$sp_func(out_x, alpha1, alpha2),
+      y = object$sp_func(out_x, alpha1, alpha2)
     )
   }else{
     warning('Expect model type to be one of the following: "far3", "far2", "log_logistic"')
@@ -166,6 +167,7 @@ predict.hierarchical_bayesian_model <- function(object, newdata=NULL, ...){
 predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
   # resolve no visible binding note
   df <- monotonized_info <- monotonized_ci_mod <- age <- info <- fit <- se.fit <- sp_df <- foi_df <- NULL
+  data <- age_df <- NULL
 
   # check which type of model user wants to predict
   modtype <- if (is.null(list(...)[["modtype"]])) "monotonized" else list(...)$modtype
@@ -197,7 +199,7 @@ predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
       join_by(!!sym(object$grouping_col))
     )
 
-  # --- use the monotonized model for prediction and ci-----
+  ### --- use the monotonized model for prediction and ci-----
   if(modtype == "monotonized"){
     out <- out %>%
       mutate(
@@ -211,7 +213,7 @@ predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
         })
       )
   }else{
-    # --- if user specify non-monotonized then simply compute CI from gam model-----
+    ### --- if user specify non-monotonized then simply compute CI from gam model-----
     out <- out %>%
       mutate(
         sp_df = map2(info, age_df, \(mod, grid){
@@ -233,7 +235,7 @@ predict.age_time_model <- function(object, newdata, modtype="monotonized", ...){
       )
   }
 
-  # --- finally, compute FOI -----
+  ### --- finally, compute FOI -----
   out <- out %>%
     mutate(
       foi_df = map2(age_df, sp_df, \(grid, sp){

@@ -48,7 +48,7 @@ plot(farrington_md)
 
 `serosv` offers the function `set_plot_style()` to customize some key attributes of the plot.
 
-Current modifiable attributes include color, linetype for seroprevalence, foi and fill color for confidence interval
+Current modifiable attributes include color, linetype for seroprevalence, foi and fill color for confidence intervals
 
 ```{r}
 hav_mod <- polynomial_model(hav_bg_1964, k=3)
@@ -58,7 +58,8 @@ plot(hav_mod) +
   set_plot_style(
     sero = "#3de071",
     foi = "#2f22e0",
-    ci = "#aaf2b2",
+    sero_ci = "#aaf2b2",
+    foi_ci = "cornflowerblue",
     foi_line = "dotted", 
     sero_line = "dotdash"
   )
