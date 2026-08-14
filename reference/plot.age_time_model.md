@@ -6,28 +6,36 @@ Plot output for age_time_model
 
 ``` r
 # S3 method for class 'age_time_model'
-plot(x, ...)
+plot(x, cex = 10, le = 100, facet = TRUE, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  \- a \`age_time_model\` object
+  a \`age_time_model\` object
+
+- cex:
+
+  adjust size of the datapoints (only when `facet = TRUE`)
+
+- le:
+
+  number of bins used to generate the x-axis; higher values produce
+  smoother curves
+
+- facet:
+
+  whether to facet the plot by group
 
 - ...:
 
-  arbitrary params. Supported options include:
+  arbitrary params
 
-  - `facet`: Whether to facet the plot by group.
+- modtype:
 
-  - `modtype`: Which model to plot, either `"monotonized"` or
-    `"non-monotonized"`.
-
-  - `le`: Number of bins used to generate the x-axis; higher values
-    produce smoother curves.
-
-  - `cex`: Adjusts the size of data points (only when `facet = TRUE`).
+  specify which model to plot, either `"monotonized"` or
+  `"non-monotonized"`
 
 ## Value
 

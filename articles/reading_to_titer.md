@@ -191,14 +191,9 @@ The users can configure the following:
   log-logistic model) or a named list with 2 items `"mod"` and
   `"quantify_ci"`. Section [Custom models](#custom-mod) will provide
   more details on these functions.
-
-&nbsp;
-
 - `ci` confidence interval of the titer estimate (default to `.95` for
   95% CI)
-
 - `negative_control` whether to include the result for negative controls
-
 - (optionally) `positive_threshold` the threshold of titer for sample to
   be considered positive. If provided, the output will include
   serostatus
@@ -267,16 +262,16 @@ out %>%
     ## # Groups:   plate_id [5]
     ##    plate_id sample_id result lower median upper positive
     ##       <int> <chr>      <dbl> <dbl>  <dbl> <dbl> <lgl>   
-    ##  1        1 S001        4.00 -1.71     NA    NA TRUE    
-    ##  2        1 S001        4.00 -1.73     NA    NA TRUE    
-    ##  3        1 S001        4.00 -1.68     NA    NA TRUE    
-    ##  4        1 S006        4.02 -1.54     NA    NA TRUE    
-    ##  5        1 S006        4.00 -1.73     NA    NA TRUE    
-    ##  6        1 S006        3.99 -1.78     NA    NA TRUE    
-    ##  7        1 S011        4.00 -1.74     NA    NA TRUE    
-    ##  8        1 S011        3.99 -1.79     NA    NA TRUE    
-    ##  9        1 S011        4.00 -1.71     NA    NA TRUE    
-    ## 10        1 S016        4.00 -1.70     NA    NA TRUE    
+    ##  1        1 S001        4.00 0.973     NA    NA TRUE    
+    ##  2        1 S001        4.00 1.88      NA    NA TRUE    
+    ##  3        1 S001        4.00 4.20      NA    NA TRUE    
+    ##  4        1 S006        4.02 1.45      NA    NA TRUE    
+    ##  5        1 S006        4.00 1.87      NA    NA TRUE    
+    ##  6        1 S006        3.99 3.35      NA    NA TRUE    
+    ##  7        1 S011        4.00 0.912     NA    NA TRUE    
+    ##  8        1 S011        3.99 1.63      NA    NA TRUE    
+    ##  9        1 S011        4.00 3.89      NA    NA TRUE    
+    ## 10        1 S016        4.00 0.991     NA    NA TRUE    
     ## # ℹ 140 more rows
 
 The columns for titer estimates are

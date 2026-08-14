@@ -18,9 +18,9 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Modeling directly from antibody levels">
 </head>
 <body>
@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serosv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,7 +133,6 @@ seroprevalence and FOI</p></li>
 <p>To fit the antibody data, use <code>mixture_model</code> function</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">vzv_be_2001_2003</span><span class="op">[</span><span class="va">vzv_be_2001_2003</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;</span> <span class="fl">40.5</span>,<span class="op">]</span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>,<span class="op">]</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">$</span><span class="va">VZVmIUml</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mixture_model.html">mixture_model</a></span><span class="op">(</span>antibody_level <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
@@ -146,7 +145,7 @@ seroprevalence and FOI</p></li>
 <span><span class="co">#&gt;  Susceptible=2.349, Infected=6.439</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="700"></p>
+<p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
 <p>sero-prevalence and FOI can then be esimated using function
 <code>estimate_from_mixture</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -159,16 +158,14 @@ seroprevalence and FOI</p></li>
 <span><span class="co">#&gt; Link function: identity </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Formula:</span></span>
-<span><span class="co">#&gt; log_antibody ~ s(age, bs = "ps", sp = 83)</span></span>
+<span><span class="co">#&gt; log_antibody ~ s(age, bs = s, sp = sp)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Estimated degrees of freedom:</span></span>
 <span><span class="co">#&gt; 5.13  total = 6.13 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; GCV score: 2.056333</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">est_mixture</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: No shared levels found between `names(values)` of the manual scale and the</span></span>
-<span><span class="co">#&gt; data's <span style="color: #00BB00;">fill</span> values.</span></span></code></pre></div>
-<p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">est_mixture</span><span class="op">)</span></span></code></pre></div>
+<p><img src="model_quantitative_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Hens2012" class="csl-entry">
 Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and
@@ -189,7 +186,7 @@ New York. <a href="https://doi.org/10.1007/978-1-4614-4072-7" class="external-li
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -11,6 +11,7 @@ to_titer(
   model = "4PL",
   positive_threshold = NULL,
   ci = 0.95,
+  ref_conc = 10,
   negative_control = TRUE
 )
 ```
@@ -39,6 +40,11 @@ to_titer(
 
   confidence interval for the titer estimates (default is .95 i.e., 95%
   CI)
+
+- ref_conc:
+
+  reference concentration of the antitoxin (i.e. concentration of
+  antitoxin before dilution)
 
 - negative_control:
 

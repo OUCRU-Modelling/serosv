@@ -5,7 +5,7 @@ Generate table of metrics for model comparison
 ## Usage
 
 ``` r
-compare_models(data, method = "AIC/BIC", ...)
+compare_models(data, method = "AIC/BIC", method_args = list(), ...)
 ```
 
 ## Arguments
@@ -18,6 +18,10 @@ compare_models(data, method = "AIC/BIC", ...)
 
   method to compare models. Can be one of the built-in methods or a
   function to compute the returned metrics (see Details).
+
+- method_args:
+
+  additional arguments to be passed to the method function.
 
 - ...:
 
@@ -36,6 +40,14 @@ a data.frame with the following columns
 - type:
 
   model type of the given model (a serosv model name)
+
+- mod_out:
+
+  the fitted models
+
+- plots:
+
+  the plots for each of the fitted model
 
 - metrics columns:
 
@@ -65,25 +77,17 @@ comparison_table <- suppressWarnings(
     farrington = ~farrington_model(.x, start=list(alpha=0.3,beta=0.1,gamma=0.03))
   )
 )
+#> Error in map2(.x, vec_index(.x), .f, ...): ℹ In index: 3.
+#> ℹ With name: farrington.
+#> Caused by error in `mutate()`:
+#> ℹ In argument: `plots = list(plot(out) + ggtitle(paste("Fitted model
+#>   using", class(out))))`.
+#> Caused by error in `quantile.default()`:
+#> ! missing values and NaN's not allowed if 'na.rm' is FALSE
 # view table of metrics
 comparison_table
-#> # A tibble: 3 × 6
-#>   label               mse logloss type                   mod_out    plots 
-#>   <chr>             <dbl>   <dbl> <chr>                  <list>     <list>
-#> 1 polynomial_mod   0.554    287.  polynomial_model       <plynml_m> <gg>  
-#> 2 penalized_spline 0.0151    26.6 penalized_spline_model <pnlzd_s_> <gg>  
-#> 3 farrington       0.0181    33.6 farrington_model       <frrngtn_> <gg>  
+#> Error: object 'comparison_table' not found
 # view the model fitted with the whole dataset
 comparison_table$plots
-#> [[1]]
-
-#> 
-#> [[2]]
-
-#> 
-#> [[3]]
-#> Warning: No shared levels found between `names(values)` of the manual scale and the
-#> data's fill values.
-
-#> 
+#> Error: object 'comparison_table' not found
 ```

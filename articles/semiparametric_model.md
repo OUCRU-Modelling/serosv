@@ -33,7 +33,7 @@ In matrix notation, the mean structure model for \\\eta(a_i)\\ becomes
 
 Where \\\eta = \[\eta(a_i) ... \eta(a_N) \]^T\\, \\\beta = \[\beta_0
 \beta_1 .... \beta_p\]^T\\, and \\\textbf{u} = \[u_1 u_2 ... u_k\]^T\\
-are the regression with corresponding design matrices
+are the regression coefficients with corresponding design matrices
 
 \\ \textbf{X} = \begin{bmatrix} 1 & a_1 & a_1^2 & ... & a_1^p \\ 1 & a_2
 & a_2^2 & ... & a_2^p \\ \vdots & \vdots & \vdots & \dots & \vdots \\ 1
@@ -121,7 +121,7 @@ pl
 #> Link function: logit 
 #> 
 #> Formula:
-#> spos ~ s(age, bs = s, sp = sp)
+#> pos ~ s(age, bs = s, sp = sm_p)
 #> 
 #> Estimated degrees of freedom:
 #> 6.16  total = 7.16 
@@ -130,7 +130,7 @@ pl
 ```
 
 ``` r
-plot(pl)
+plot(pl, foi_ci=FALSE)
 ```
 
 ![](semiparametric_model_files/figure-html/unnamed-chunk-3-1.png)
@@ -213,7 +213,7 @@ glmm
 #> Link function: logit 
 #> 
 #> Formula:
-#> spos ~ s(age, bs = s, sp = sp)
+#> pos ~ s(age, bs = s, sp = sm_p)
 #> 
 #> Estimated degrees of freedom:
 #> 6.45  total = 7.45 
@@ -224,7 +224,14 @@ glmm
 ```
 
 ``` r
-plot(glmm)
+plot(glmm, foi_ci=TRUE)
+#> Running nonparametric bootstrap for FoI confidence intervals, this may take a while
+#> 
+#>  Maximum number of PQL iterations:  20
+#> iteration 1
+#> iteration 2
+#> iteration 3
+#> iteration 4
 ```
 
 ![](semiparametric_model_files/figure-html/unnamed-chunk-5-1.png)

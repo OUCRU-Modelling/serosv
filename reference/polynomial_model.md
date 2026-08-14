@@ -13,7 +13,8 @@ polynomial_model(
   age_col = "age",
   pos_col = "pos",
   tot_col = "tot",
-  status_col = "status"
+  status_col = "status",
+  ...
 )
 ```
 
@@ -28,31 +29,36 @@ polynomial_model(
 - k:
 
   degree of the polynomial. (k=1 for Muench model, k=2 for Griffith
-  model, k=3 for Grenfell model).
+  model, k=3 for Grenfell model)
 
 - link:
 
-  link function (default link="log").
+  link function (default link="log")
 
 - age_col:
 
-  name of the \`age\` column (default age_col="age").
+  name of the \`age\` column (default age_col="age")
 
 - pos_col:
 
-  name of the \`pos\` column (default pos_col="pos").
+  name of the \`pos\` column (default pos_col="pos")
 
 - tot_col:
 
-  name of the \`tot\` column (default tot_col="tot").
+  name of the \`tot\` column (default tot_col="tot")
 
 - status_col:
 
-  name of the \`status\` column (default status_col="status").
+  name of the \`status\` column (default status_col="status")
+
+- ...:
+
+  additional arguments to be passed to \`glm()\` function that fits the
+  model
 
 ## Value
 
-a list of class polynomial_model with 5 items
+a list of class polynomial_model with the following items
 
 - datatype:
 
@@ -73,6 +79,14 @@ a list of class polynomial_model with 5 items
 - foi:
 
   force of infection
+
+- foi_mod:
+
+  function to compute FoI given a vector of age and estimated parameters
+
+- k:
+
+  degree of the fitted model
 
 ## Details
 

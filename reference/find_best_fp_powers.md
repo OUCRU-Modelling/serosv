@@ -5,7 +5,7 @@ Return the best powers for a given degree
 ## Usage
 
 ``` r
-find_best_fp_powers(data, p, mc, degree, link = "logit")
+find_best_fp_powers(data, p, mc, degree, link = "logit", ...)
 ```
 
 ## Arguments

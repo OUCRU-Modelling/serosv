@@ -28,6 +28,8 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compare_models.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.age_time_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.default.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.estimate_from_mixture.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.farrington_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.fp_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.glmm_ps_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/compute_ci.hierarchical_bayesian_model.html</loc></url>
@@ -56,6 +58,8 @@
 <url><loc>https://oucru-modelling.github.io/serosv/reference/mixture_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/mseir_model.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/mumps_uk_1986_1987.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/nonparametric_bootstrapping.html</loc></url>
+<url><loc>https://oucru-modelling.github.io/serosv/reference/parametric_bootstrapping.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/parvob19_be_2001_2003.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/parvob19_ew_1996.html</loc></url>
 <url><loc>https://oucru-modelling.github.io/serosv/reference/parvob19_fi_1997_1998.html</loc></url>

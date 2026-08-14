@@ -71,7 +71,7 @@ age_time_model(
 
 ## Value
 
-a list of class time_age_model with 4 items
+a list of class time_age_model with the following items
 
 - out:
 
@@ -89,6 +89,14 @@ a list of class time_age_model with 4 items
   a boolean indicating whether the data is monotonized across age or
   cohort
 
+- monotonize_method:
+
+  method for monotonization over time (either "scam" or "pava")
+
 - datatype:
 
   whether the input data is aggregated or line-listing data
+
+- ci:
+
+  condifence level for the confidence interval computation

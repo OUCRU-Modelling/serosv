@@ -35,6 +35,3 @@ orange = result too low, red = result too high)
 
 These sample grids are arranged in columns where each column represent
 samples from a plate
-
-The figure below demonstrates the interpretation of the plot.
-![](figures/interpret_titer_qc.png)

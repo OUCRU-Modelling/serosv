@@ -7,8 +7,9 @@ Helper to adjust styling of a plot
 ``` r
 set_plot_style(
   sero = "blueviolet",
-  ci = "royalblue1",
+  sero_ci = "royalblue1",
   foi = "#fc0328",
+  foi_ci = "#fc0328",
   sero_line = "solid",
   foi_line = "dashed",
   xlabel = "Age"
@@ -21,13 +22,17 @@ set_plot_style(
 
   color for seroprevalence line
 
-- ci:
+- sero_ci:
 
-  color for confidence interval
+  color for confidence intervals of seroprevalence
 
 - foi:
 
   color for force of infection line
+
+- foi_ci:
+
+  color for confidence intervals of FoI
 
 - sero_line:
 
