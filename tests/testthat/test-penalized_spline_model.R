@@ -72,8 +72,8 @@ test_that("test utility functions for penalized_spline_model", {
   )
 
   # test plot function
-  expect_no_error(plot(glmm_model, foi_ci=TRUE, ncpus=1))
-  expect_no_error(plot(pl_model, foi_ci=TRUE, ncpus=1))
+  expect_no_error(plot(glmm_model, foi_ci=TRUE, ncpus=2))
+  expect_no_error(plot(pl_model, foi_ci=TRUE, ncpus=2))
 
   # test print function
   expect_no_error(capture.output(print(glmm_model)))

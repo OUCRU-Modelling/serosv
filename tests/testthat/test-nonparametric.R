@@ -38,7 +38,7 @@ test_that("test utility functions for lp_model", {
   )
 
   # test plot function
-  expect_no_error(plot(model, foi_ci=TRUE, ncpus=1))
+  expect_no_error(plot(model, foi_ci=TRUE, ncpus=2))
 
   # test print function
   expect_no_error(

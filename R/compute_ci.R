@@ -74,7 +74,10 @@ nonparametric_bootstrapping <- function(mod, refit_func,
       foi_pred <- est_foi(newdat[[1]], sp_pred)
 
       as.numeric(foi_pred)
-    }, error = \(e){
+    },
+    # treat warning the same way as error
+    warning = \(w) stop(conditionMessage(w)),
+    error = \(e){
       message("failed to refit model: ", e)
       # impute with NA in case of error
       # set lenght of impute to be nrow - 2 since that would be the
@@ -828,7 +831,7 @@ compute_ci.penalized_spline_model <- function(x,ci = 0.95, le=100, foi_ci=FALSE,
 #' @export
 compute_ci.age_time_model <- function(x, ci=0.95, le = 100, foi_ci = TRUE, modtype = "monotonized", ...){
   # resolve no visible binding note
-  df <- monotonized_info <- monotonized_ci_mod <- age <- info <- fit <- se.fit <- sp_df <- foi_df <- NULL
+  df <- monotonized_info <- monotonized_ci_mod <- age <- info <- fit <- se.fit <- sp_df <- foi_df <- y <-  NULL
 
   # check which type of model user wants to visualize
   assert_that(

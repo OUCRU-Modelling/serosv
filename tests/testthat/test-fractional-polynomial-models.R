@@ -31,7 +31,7 @@ test_that("test utility functions for fp_model", {
   )
   expect_no_error(capture.output(print(model)))
   expect_no_error(compute_ci(model))
-  expect_no_error(plot(model, foi_ci=TRUE, ncpus=1))
+  expect_no_error(plot(model, foi_ci=TRUE, ncpus=2))
 })
 
 

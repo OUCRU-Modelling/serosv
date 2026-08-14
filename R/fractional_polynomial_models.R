@@ -48,6 +48,7 @@ find_best_fp_powers <- function(data,
 
   best_mod <- NULL # best model
   best_p <- NULL # best powers (p vector) for the given degree
+  . <- NULL # resolve no visible binding NOTE
 
   # Starting from the lowest degree
   # Get the best combinations of powers p

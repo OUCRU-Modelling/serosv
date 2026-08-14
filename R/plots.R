@@ -144,6 +144,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #' @param x the polynomial model object
 #' @param cex adjust size of the datapoints
 #' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
@@ -151,7 +152,7 @@ plot_util <- function(age, pos, tot, sero, foi, scale_foi=1, cex = 20){
 #'
 #' @return ggplot object
 #' @export
-plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
+plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ci_df = NULL, ...) {
   # out.DF <- compute_ci(x)
   #
   # if(x$datatype == "linelisting"){
@@ -161,7 +162,7 @@ plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
   #   foi <- as.numeric(x$foi)
   # }
 
-  out_ci <- compute_ci.default(x, foi_ci=foi_ci, ...)
+  out_ci <- if (is.null(ci_df)) compute_ci.default(x, foi_ci=foi_ci, ...) else ci_df
 
   to_plot <- plot_data(x)
 
@@ -181,6 +182,7 @@ plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #' @param x the Farrington model object
 #' @param cex adjust size of the datapoints
 #' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params
 #' @import ggplot2
 #' @importFrom methods is
@@ -188,10 +190,12 @@ plot.polynomial_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ...) {
+plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ci_df = NULL, ...) {
   to_plot <- plot_data(x)
 
-  ci_out <- compute_ci.farrington_model(x, foi_ci = foi_ci, ...)
+  ci_out <- if(is.null(ci_df))
+    compute_ci.farrington_model(x, foi_ci = foi_ci, ...)
+  else ci_df
 
   with(x$df, {
     plot_util(age = to_plot$age, pos = to_plot$pos, tot = to_plot$tot, sero = ci_out[[1]], foi = ci_out[[2]], cex = cex)
@@ -204,6 +208,7 @@ plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #' @param x the Weibull model object.
 #' @param cex adjust size of the datapoints
 #' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -211,11 +216,13 @@ plot.farrington_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
+plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ci_df=NULL,...) {
   # df_ <- transform_data(x$df$t, x$df$spos)
   # names(df_)[names(df_) == "t"] <- "exposure"
 
-  out_ci <- compute_ci.weibull_model(x, foi_ci = foi_ci, ...)
+  out_ci <- if(is.null(ci_df))
+    compute_ci.weibull_model(x, foi_ci = foi_ci, ...)
+  else ci_df
 
   to_plot <- plot_data(x)
 
@@ -241,6 +248,7 @@ plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #' @param x the fractional polynomial model object.
 #' @param cex adjust size of the datapoints.
 #' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom methods is
@@ -248,10 +256,11 @@ plot.weibull_model <- function(x, cex=20, foi_ci=TRUE, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.fp_model <- function(x, cex=20, foi_ci=FALSE,...) {
+plot.fp_model <- function(x, cex=20, foi_ci=FALSE, ci_df = NULL, ...) {
   # out.DF <- compute_ci.fp_model(x)
 
-  out_ci <- compute_ci.fp_model(x, foi_ci=foi_ci, ...)
+  out_ci <- if(is.null(ci_df)) compute_ci.fp_model(x, foi_ci=foi_ci, ...)
+    else ci_df
   to_plot <- plot_data(x)
 
   # with(x$df, {
@@ -272,6 +281,7 @@ plot.fp_model <- function(x, cex=20, foi_ci=FALSE,...) {
 #' @param x the local polynomial model object.
 #' @param cex adjust size of the datapoints.
 #' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -279,8 +289,11 @@ plot.fp_model <- function(x, cex=20, foi_ci=FALSE,...) {
 #'
 #' @return ggplot object
 #' @export
-plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ...) {
-  out_ci <- compute_ci.lp_model(x, foi_ci=foi_ci, ...)
+plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ci_df=NULL, ...) {
+  out_ci <- if(is.null(ci_df))
+    compute_ci.lp_model(x, foi_ci=foi_ci, ...)
+  else
+    ci_df
   to_plot <- plot_data(x)
 
   # if(x$datatype == "linelisting"){
@@ -307,6 +320,7 @@ plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ...) {
 #'
 #' @param x hierarchical_bayesian_model object created by serosv.
 #' @param cex adjust size of the datapoints.
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -314,8 +328,9 @@ plot.lp_model <- function(x, cex=20, foi_ci=FALSE, ...) {
 #'
 #' @return ggplot object
 #' @export
-plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
-  out_ci <- compute_ci.hierarchical_bayesian_model(x, ...)
+plot.hierarchical_bayesian_model <- function(x, cex=20, ci_df=NULL, ...){
+  out_ci <- if(is.null(ci_df)) compute_ci.hierarchical_bayesian_model(x, ...)
+    else ci_df
 
   with(x$df, {
     plot_util(age = age, pos = pos, tot = tot, sero = out_ci[[1]], foi = out_ci[[2]], cex=cex)
@@ -329,6 +344,7 @@ plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
 #' @param x the penalized_spline_model object
 #' @param cex adjust size of the datapoints.
 #' @param foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params.
 #' @import ggplot2
 #' @importFrom graphics plot
@@ -336,8 +352,9 @@ plot.hierarchical_bayesian_model <- function(x, cex=20, ...){
 #'
 #' @return ggplot object
 #' @export
-plot.penalized_spline_model <- function(x, cex=20, foi_ci=FALSE, ...){
-  ci <- compute_ci.penalized_spline_model(x, foi_ci=foi_ci, ...)
+plot.penalized_spline_model <- function(x, cex=20, foi_ci=FALSE, ci_df=NULL, ...){
+  ci <- if(is.null(ci_df)) compute_ci.penalized_spline_model(x, foi_ci=foi_ci, ...)
+    else ci_df
 
   out.DF <- ci[[1]]
   out.FOI <- ci[[2]]
@@ -355,6 +372,7 @@ plot.penalized_spline_model <- function(x, cex=20, foi_ci=FALSE, ...){
 #' plot() overloading for mixture model
 #'
 #' @param x the mixture_model
+#'
 #' @param ... arbitrary params.
 #' @importFrom graphics plot
 #' @import ggplot2
@@ -415,6 +433,7 @@ plot.mixture_model <- function(x, ...){
 #'
 #' @param x the mixture_model
 #' @param cex adjust size of the datapoints
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params
 #' @importFrom graphics plot
 #' @import ggplot2
@@ -422,7 +441,7 @@ plot.mixture_model <- function(x, ...){
 #' @return ggplot object
 #'
 #' @export
-plot.estimate_from_mixture <- function(x, cex=20, ... ){
+plot.estimate_from_mixture <- function(x, cex=20, ci_df=NULL, ...){
   # work around to resolve no visible binding note NOTE during check()
   foi_estimates <- sero_estimates <- y <- ymax <- ymin <- NULL
 
@@ -446,7 +465,8 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
                  shape = 1, show.legend = FALSE)
   }
 
-  ci <- compute_ci.estimate_from_mixture(x, ...)
+  ci <- if(is.null(ci_df)) compute_ci.estimate_from_mixture(x, ...) else
+    ci_df
 
   # resolve no visible binding note
   foi <- foi_x <- NULL
@@ -474,6 +494,7 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
 #' @param le number of bins used to generate the x-axis; higher values produce smoother curves
 #' @param cex adjust size of the datapoints (only when \code{facet = TRUE})
 #' @param foi_ci foi_ci whether to plot the CI of the Force of Infection
+#' @param ci_df a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.
 #' @param ... arbitrary params
 #'
 #' @importFrom graphics plot
@@ -481,7 +502,9 @@ plot.estimate_from_mixture <- function(x, cex=20, ... ){
 #'
 #' @return ggplot object
 #' @export
-plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotonized", foi_ci=FALSE, ...){
+plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE,
+                                modtype="monotonized", foi_ci=FALSE,
+                                ci_df = NULL, ...){
   # work around to resolve no visible binding note NOTE during check()
   sp_df <- foi_df <- df <- age <- pos <- tot <- y <- ymin <- ymax <- seroprev <- NULL
 
@@ -497,7 +520,9 @@ plot.age_time_model <- function(x, cex=10, le=100, facet=TRUE, modtype="monotoni
   )
 
   # compute the CI for sp
-  out <- compute_ci.age_time_model(x, modtype = modtype, le = le, foi_ci=foi_ci, ...)
+  out <- if(is.null(ci_df))
+    compute_ci.age_time_model(x, modtype = modtype, le = le, foi_ci=foi_ci, ...) else
+    ci_df
 
   # get seroprev data and foi data for plotting
   sp_dat <- out %>% select(!!sym(x$grouping_col), sp_df) %>% unnest(sp_df)

@@ -4,12 +4,14 @@
 \alias{plot.hierarchical_bayesian_model}
 \title{plot() overloading for hierarchical_bayesian_model}
 \usage{
-\method{plot}{hierarchical_bayesian_model}(x, cex = 20, ...)
+\method{plot}{hierarchical_bayesian_model}(x, cex = 20, ci_df = NULL, ...)
 }
 \arguments{
 \item{x}{hierarchical_bayesian_model object created by serosv.}
 
 \item{cex}{adjust size of the datapoints.}
+
+\item{ci_df}{a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.}
 
 \item{...}{arbitrary params.}
 }

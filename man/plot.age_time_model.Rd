@@ -11,6 +11,7 @@
   facet = TRUE,
   modtype = "monotonized",
   foi_ci = FALSE,
+  ci_df = NULL,
   ...
 )
 }
@@ -26,6 +27,8 @@
 \item{modtype}{specify which model to plot, either \code{"monotonized"} or \code{"non-monotonized"}}
 
 \item{foi_ci}{foi_ci whether to plot the CI of the Force of Infection}
+
+\item{ci_df}{a precomputed output for CIs from `serosv::compute_ci()`. If `NULL`, the function will be called to compute CIs before plotting.}
 
 \item{...}{arbitrary params}
 }
